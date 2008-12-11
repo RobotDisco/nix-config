@@ -1,0 +1,33 @@
+Host  *
+  User          gdcosta
+  ForwardX11    no
+  ForwardAgent  no
+
+
+Host  *.uwaterloo.ca
+  ForwardX11    yes
+  ForwardAgent  yes
+
+
+Host booji
+  HostName      216.16.247.6
+  User          gdcosta
+  LocalForward  33890 10.167.10.163:3389
+  ForwardAgent  yes
+
+
+Host acek
+  HostName  acek.csclub.uwaterloo.ca
+
+Host caffeine
+  HostName  caffeine.csclub.uwaterloo.ca
+
+Host taurine
+  HostName  taurine.csclub.uwaterloo.ca
+
+Host natural
+  HostName  natural-flavours.csclub.uwaterloo.ca
+
+Host artificial
+  HostName  artificial-flavours.csclub.uwaterloo.ca
+
