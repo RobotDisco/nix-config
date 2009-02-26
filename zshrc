@@ -10,15 +10,15 @@ bindkey -e
 # Add user-supplied programs to our environment
 if [[ -d $HOME/bin ]] ; then
   typeset -U path
-  export path = ($path $HOME/bin)
+  path+=$HOME/bin
 fi
 if [[ -d $HOME/sr/coroner ]] ; then
   typeset -U path
-  export path = ($PATH $HOME/sr/coroner)
+  path+=$HOME/sr/coroner
 fi
 if [[ -d $HOME/man  ]] ; then
   typeset -U manpath
-  export manpath = ($manpath $HOME/man)
+  manpath+=$HOME/man
 fi
 
 # Perforce setup
@@ -38,7 +38,7 @@ else
 fi
 
 
-#Workflow aliases and functions
+## Workflow aliases and functions ##
 cgrep () {
 	find . -iname '*.[ch]' -or -iname '*.[ch]pp' -print0 | xargs -0 grep -n $1
 }
@@ -49,8 +49,8 @@ jgrep () {
 	find . -iname '*.java' -print0 | xargs -0 grep -n $1
 }
 
-#alias 2xx_install='cd bgm && make && cd .. && cp wdir/2xx.CHK_dbg /cygdrive/c/Inetpub/wwwroot'
+alias sustain_rdp='rdesktop -u gaelan.dcosta -d CF-CAL -p - sustain-1'
 
-#Mundane aliases
+## Mundane aliases ##
 alias ls='ls --color=auto -Fh'
 alias grep='grep --color'
