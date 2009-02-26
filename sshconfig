@@ -1,20 +1,10 @@
-Host  *
-  User          gdcosta
-  ForwardX11    no
-  ForwardAgent  no
-
-
-Host  *.uwaterloo.ca
-  ForwardX11    yes
-  ForwardAgent  yes
-
 Host booji
   HostName      216.16.247.6
   LocalForward  33890 sustain-1:3389
   ForwardAgent  yes
 
 Host sustain-1
-  User  gaelan.dcosta
+  User gaelan.dcosta
 
 Host acek
   HostName  acek.csclub.uwaterloo.ca
@@ -30,4 +20,14 @@ Host natural
 
 Host artificial
   HostName  artificial-flavours.csclub.uwaterloo.ca
+
+Host *.uwaterloo.ca
+  ForwardX11    yes
+  ForwardAgent  yes
+
+Host *
+  User          gdcosta
+  ForwardX11    no
+  ForwardAgent  no
+
 
