@@ -6,6 +6,10 @@ Host booji
 Host sustain-1
   User gaelan.dcosta
 
+Host bluecoat
+  HostName  10.167.10.163
+  User      gaelan
+
 Host acek
   HostName  acek.csclub.uwaterloo.ca
 
@@ -23,7 +27,7 @@ Host artificial
 
 Host *
   User          gdcosta
-  ForwardX11    yes
-  ForwardAgent  yes
+  ForwardX11    no
+  ForwardAgent  no
 
 
