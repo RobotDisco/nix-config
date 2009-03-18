@@ -37,7 +37,6 @@ else
   export PERL_HOME=/usr/bin
 fi
 
-
 ## Workflow aliases and functions ##
 cgrep () {
 	find . -iname '*.[ch]' -or -iname '*.[ch]pp' -print0 | xargs -0 grep -n $1
@@ -50,6 +49,8 @@ jgrep () {
 }
 
 alias sustain_rdp='rdesktop -u gaelan.dcosta -d CF-CAL -p - sustain-1'
+alias 2xx_install='cp wdir/2xx.chk_dbg /var/www/2xx.img'
+alias 2xx_rinstall='cp wdir/2xx.chk_rls /var/www/2xx.img'
 
 ## Mundane aliases ##
 alias ls='ls --color=auto -Fh'
