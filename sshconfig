@@ -1,13 +1,12 @@
 Host booji
   HostName      216.16.247.6
   LocalForward  33890 sustain-1:3389
-  ForwardAgent  yes
 
 Host sustain-1
   User gaelan.dcosta
 
 Host bluecoat
-  HostName  10.167.10.163
+  HostName  10.167.0.163
   User      gaelan
 
 Host acek
@@ -27,7 +26,7 @@ Host artificial
 
 Host *
   User          gdcosta
-  ForwardX11    no
-  ForwardAgent  no
+  ForwardX11    yes
+  ForwardAgent  yes
 
 
