@@ -6,6 +6,12 @@ setopt appendhistory autocd nomatch extendedglob
 unsetopt beep notify
 bindkey -e
 # End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/gaelan/.zshrc'
+
+autoload -Uz compinit
+compinit
+#end of lines added by compinstall
 
 # Add user-supplied programs to our environment
 if [[ -d $HOME/bin ]] ; then
@@ -48,7 +54,7 @@ jgrep () {
 	find . -iname '*.java' -print0 | xargs -0 grep -n $1
 }
 
-alias sustain_rdp='rdesktop -u gaelan.dcosta -d CF-CAL -p - sustain-1'
+alias sustain_rdp='rdesktop -u gaelan.dcosta -f -d CF-CAL -p - sustain-1'
 alias 2xx_install='cp wdir/2xx.chk_dbg /var/www/2xx.img'
 alias 2xx_rinstall='cp wdir/2xx.chk_rls /var/www/2xx.img'
 
