@@ -38,9 +38,9 @@ export PRODUCTS=cf_2xx.bind
 
 # Almost a universal truth -- platform dependant
 if [[ $(uname -o) == "Cygwin" ]] ; then
-  export PERL_HOME=c:/Perl/bin
+  export PERL_HOME=c:/Perl
 else
-  export PERL_HOME=/usr/bin
+  export PERL_HOME=/usr
 fi
 
 ## Workflow aliases and functions ##
