@@ -1,5 +1,8 @@
+#!/bin/sh
+
 numlockx on
 display -window root -backdrop ~/.xmonad/bg
 xscreensaver -no-splash &
 pulseaudio -D &
-xmonad
+parcellite -d &
+exec xmonad
