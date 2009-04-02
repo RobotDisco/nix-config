@@ -4,6 +4,7 @@ Host booji
 
 Host sustain-1
   User gaelan.dcosta
+  HostName sustain-1.waterloo.bluecoat.com
 
 Host bluecoat
   HostName  10.167.0.163
