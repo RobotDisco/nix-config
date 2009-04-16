@@ -15,8 +15,8 @@ myManageHook = composeAll [ className =? "Amarok"     --> doF (W.shift "3:fun")
                           , className =? "Evolution"  --> doF (W.shift "2:webmail")
                           ]
 
-main = dzen $ \conf -> xmonad $ conf
-   { terminal    = "uxterm"
+main = xmobar $ \conf -> xmonad $ conf
+   { terminal    = "urxvt"
     , focusedBorderColor = "blue"
     , workspaces = myWorkspaces
     -- Consider my workspace preferences above plus my desire for dzen
