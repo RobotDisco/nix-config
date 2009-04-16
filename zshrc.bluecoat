@@ -73,9 +73,9 @@ jgrep () {
 }
 
 alias sustain_rdp='rdesktop -u gaelan.dcosta -g 1024x768 -d CF-CAL -p - sustain-1.waterloo.bluecoat.com'
-alias 2xx='cp wdir/2xx.chk_dbg /var/www/2xx.img'
-alias 2xxr='cp wdir/2xx.chk_rls /var/www/2xx.img'
-alias 32scorp='cp ../bin/x86/sgos_native/debug/gcc/sysimg/prototype/system.si /var/www/2xx.img'
-alias 64scorp='cp ../bin/x86_64/sgos_native/debug/gcc/sysimg/prototype/system.si /var/www/2xx.img'
+alias 2xx='cp wdir/210.chk_dbg /var/www/210.img'
+alias 2xxr='cp wdir/210.chk_rls /var/www/210.img'
+alias 32scorp='cp ../bin/x86/sgos_native/debug/gcc/sysimg/prototype/system.si /var/www/210.img'
+alias 64scorp='cp ../bin/x86_64/sgos_native/debug/gcc/sysimg/prototype/system.si /var/www/210.img'
 
 
