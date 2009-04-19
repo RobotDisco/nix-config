@@ -1,18 +1,23 @@
 import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
+import XMonad.Layout.IM
+import XMonad.Layout.NoBorders
+import XMonad.Layout.PerWorkspace
 
 import qualified XMonad.StackSet  as W
 import qualified Data.Map         as M
 import qualified Data.List        as L
+import Data.Ratio ((%))
 
-myWorkspaces = ["1:code", "2:webmail", "3:serialchat", "4:fun"] ++ map show [5..9]
+myWorkspaces = ["1:code", "2:web", "3:IM", "4:fun", "5:mail", "6:sgos"] ++ map show [7..9]
+
+myLayouts = onWorkspace "3:IM" (gridIM (1%4) (ClassName "Pidgin")) $ layoutHook defaultConfig
 
 -- I want these particular applications on particular workspaces
-myManageHook = composeAll [ className =? "Amarok"     --> doF (W.shift "3:fun")
-                          , className =? "Pidgin"     --> doF (W.shift "3:fun")
-                          , className =? "Firefox"    --> doF (W.shift "2:webmail")
-                          , className =? "Evolution"  --> doF (W.shift "2:webmail")
+myManageHook = composeAll [ className =? "Quodlibet"  --> doF (W.shift "3:fun")
+                          , className =? "Pidgin"     --> doF (W.shift "3:chat")
+                          , className =? "Navigator"  --> doF (W.shift "2:web")
                           ]
 
 main = xmobar $ \conf -> xmonad $ conf
@@ -22,7 +27,7 @@ main = xmobar $ \conf -> xmonad $ conf
     -- Consider my workspace preferences above plus my desire for dzen
     , manageHook = myManageHook <+> manageDocks <+> manageHook defaultConfig
     -- Avoid covering up dzen and other statusbars.
-    , layoutHook = avoidStruts $ layoutHook defaultConfig
+    , layoutHook = avoidStruts $ myLayouts
     , modMask = mod4Mask -- Rebind Mod to the Windows key
     -- We will be using dzen2
     --, logHook = dynamicLogDzen
