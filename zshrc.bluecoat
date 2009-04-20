@@ -61,15 +61,26 @@ fi
 alias ls='ls --color=auto -Fh'
 alias grep='grep -n --color'
 
+## Music-ripping aliases ##
+alias cda_rip="icedax -paranoia -B dev=/dev/cdrom"
+alias cda_enc="find -name '*.wav' -execdir oggenc -q 6 {} +"
+cda_cmp () {
+	echo -n "WAV: "
+	find . -name '*.wav' -print | wc -l
+	echo -n "Ogg: "
+	find . -name '*.ogg' -print | wc -l
+}
+alias cda_rm="find -not -name '*.ogg' -delete"
+
 ## Workflow aliases and functions ##
 cgrep () {
-	find . -iname '*.[ch]' -or -iname '*.[ch]pp' -print0 | xargs -0 grep $1
+	find . -iname '*.[ch]' -or -iname '*.[ch]pp' -print0 | xargs -0 grep $1 {}
 }
 hgrep () {
-	find . -iname '*.h' -or -iname '*.hpp' -print0 | xargs -0 grep $1
+	find . -iname '*.h' -or -iname '*.hpp' -print0 | xargs -0 grep $1 {}
 }
 jgrep () {
-	find . -iname '*.java' -print0 | xargs -0 grep $1
+	find . -iname '*.java' -print0 | xargs -0 grep $1 {}
 }
 
 alias sustain_rdp='rdesktop -u gaelan.dcosta -g 1024x768 -d CF-CAL -p - sustain-1.waterloo.bluecoat.com'
