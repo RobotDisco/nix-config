@@ -38,7 +38,7 @@ export QUIETBLD=1
 export CL_CODEVIEW=1
 export LINK_UTESTS=1
 export CL_OBJTYPE="release_ca"
-export PRODUCTS="cf_2xx.bind"
+export PRODUCTS="cf_210.bind"
 
 ## Universal Truths ... (Scorpius)
 export BLD_DEBUG=1
