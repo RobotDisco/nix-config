@@ -57,9 +57,10 @@ if [[ $(uname -o) == "Linux" ]] ; then
 	export BUILD_SKIP_DIRS="loader dos_boot"
 fi
 
+## Male ls and grep perform just the way I want them to.
 ## Mundane aliases ##
+export GREP_OPTIONS='--color=auto --line-number'
 alias ls='ls --color=auto -Fh'
-alias grep='grep -n --color'
 
 ## Music-ripping aliases ##
 alias cda_rip="icedax -paranoia -B dev=/dev/cdrom"
@@ -74,13 +75,13 @@ alias cda_rm="find -not -name '*.ogg' -delete"
 
 ## Workflow aliases and functions ##
 cgrep () {
-	find . -iname '*.[ch]' -or -iname '*.[ch]pp' -print0 | xargs -0 grep $1 {}
+	find . -depth \( -iname '*.[ch]' -or -iname '*.[ch]pp' \) -type f -print0 | xargs -0 grep $1
 }
 hgrep () {
-	find . -iname '*.h' -or -iname '*.hpp' -print0 | xargs -0 grep $1 {}
+	find . -depth \( -iname '*.h' -or -iname '*.hpp' \) -type f -print0 | xargs -0 grep $1
 }
 jgrep () {
-	find . -iname '*.java' -print0 | xargs -0 grep $1 {}
+	find . -iname '*.java' -type f -print0 | xargs -0 grep $1
 }
 
 alias sustain_rdp='rdesktop -u gaelan.dcosta -g 1024x768 -d CF-CAL -p - sustain-1.waterloo.bluecoat.com'
