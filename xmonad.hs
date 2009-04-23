@@ -5,7 +5,6 @@ import XMonad.Layout.IM
 import XMonad.Layout.NoBorders
 import XMonad.Layout.PerWorkspace
 
-import qualified XMonad.StackSet  as W
 import qualified Data.Map         as M
 import qualified Data.List        as L
 import Data.Ratio ((%))
@@ -15,9 +14,10 @@ myWorkspaces = ["1:code", "2:web", "3:IM", "4:fun", "5:mail", "6:sgos"] ++ map s
 myLayouts = onWorkspace "3:IM" (gridIM (1%4) (ClassName "Pidgin")) $ layoutHook defaultConfig
 
 -- I want these particular applications on particular workspaces
-myManageHook = composeAll [ className =? "Quodlibet"  --> doF (W.shift "3:fun")
-                          , className =? "Pidgin"     --> doF (W.shift "3:chat")
-                          , className =? "Navigator"  --> doF (W.shift "2:web")
+myManageHook = composeAll [ className =? "Quodlibet"  --> doShift "3:fun"
+                          , className =? "Pidgin"     --> doShift "3:IM"
+                          , className =? "Grand Paradiso" --> doShift "2:web"
+                          , className =? "IceWeasel" --> doShift "2:web"
                           ]
 
 main = xmobar $ \conf -> xmonad $ conf
@@ -25,7 +25,7 @@ main = xmobar $ \conf -> xmonad $ conf
     , focusedBorderColor = "blue"
     , workspaces = myWorkspaces
     -- Consider my workspace preferences above plus my desire for dzen
-    , manageHook = myManageHook <+> manageDocks <+> manageHook defaultConfig
+    , manageHook = myManageHook <+> manageDocks
     -- Avoid covering up dzen and other statusbars.
     , layoutHook = avoidStruts $ myLayouts
     , modMask = mod4Mask -- Rebind Mod to the Windows key
