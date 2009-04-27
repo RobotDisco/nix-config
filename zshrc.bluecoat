@@ -53,15 +53,15 @@ else
 	export PERL_HOME=/usr
 fi
 
-if [[ $(uname -o) == "Linux" ]] ; then
+if [[ $(uname -o) == "Linux" || $(uname -o) == "GNU/Linux" ]] ; then
 	export BUILD_SKIP_DIRS="loader dos_boot"
 fi
 
-## Male ls and grep perform just the way I want them to.
+## Make ls and grep perform just the way I want them to.
 ## Mundane aliases ##
 export GREP_OPTIONS='--color=auto --line-number'
 alias ls='ls --color=auto -Fh'
-
+#
 ## Music-ripping aliases ##
 alias cda_rip="icedax -paranoia -B dev=/dev/cdrom"
 alias cda_enc="find -name '*.wav' -execdir oggenc -q 6 {} +"
@@ -71,7 +71,7 @@ cda_cmp () {
 	echo -n "Ogg: "
 	find . -name '*.ogg' -print | wc -l
 }
-alias cda_rm="find -not -name '*.ogg' -delete"
+alias cda_clean="find -not -name '*.ogg' -delete"
 
 ## Workflow aliases and functions ##
 cgrep () {
@@ -86,8 +86,7 @@ jgrep () {
 
 alias sustain_rdp='rdesktop -u gaelan.dcosta -g 1024x768 -d CF-CAL -p - sustain-1.waterloo.bluecoat.com'
 alias 2xx='cp wdir/210.chk_dbg /var/www/210.img'
-alias 2xxr='cp wdir/210.chk_rls /var/www/210.img'
+alias 2xxr='cp wdir/210.rls_dbg /var/www/210.img'
 alias 32scorp='cp ../bin/x86/sgos_native/debug/gcc/sysimg/prototype/system.si /var/www/210.img'
 alias 64scorp='cp ../bin/x86_64/sgos_native/debug/gcc/sysimg/prototype/system.si /var/www/210.img'
-
 
