@@ -14,9 +14,9 @@ myWorkspaces = ["1:code", "2:web", "3:IM", "4:fun", "5:mail", "6:sgos"] ++ map s
 myLayouts = onWorkspace "3:IM" (gridIM (1%4) (ClassName "Pidgin")) $ layoutHook defaultConfig
 
 -- I want these particular applications on particular workspaces
-myManageHook = composeAll [ className =? "Quodlibet"  --> doShift "3:fun"
+myManageHook = composeAll [ className =? "quodlibet"  --> doShift "4:fun"
                           , className =? "Pidgin"     --> doShift "3:IM"
-                          , className =? "Grand Paradiso" --> doShift "2:web"
+                          , className =? "Gran Paradiso" --> doShift "2:web"
                           , className =? "IceWeasel" --> doShift "2:web"
                           ]
 
