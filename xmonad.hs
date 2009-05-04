@@ -17,7 +17,8 @@ myLayouts = onWorkspace "3:IM" (gridIM (1%7) (Role "buddy_list")) $ layoutHook d
 myManageHook = composeAll [ className =? "quodlibet"  --> doShift "4:fun"
                           , className =? "Pidgin"     --> doShift "3:IM"
                           , className =? "Gran Paradiso" --> doShift "2:web"
-                          , className =? "IceWeasel" --> doShift "2:web"
+                          , className =? "Iceweasel" --> doShift "2:web"
+													, className =? "Evolution" --> doShift "5:mail"
                           ]
 
 main = xmobar $ \conf -> xmonad $ conf
