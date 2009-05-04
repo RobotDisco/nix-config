@@ -11,7 +11,7 @@ import Data.Ratio ((%))
 
 myWorkspaces = ["1:code", "2:web", "3:IM", "4:fun", "5:mail", "6:sgos"] ++ map show [7..9]
 
-myLayouts = onWorkspace "3:IM" (gridIM (1%4) (ClassName "Pidgin")) $ layoutHook defaultConfig
+myLayouts = onWorkspace "3:IM" (gridIM (1%7) (Role "buddy_list")) $ layoutHook defaultConfig
 
 -- I want these particular applications on particular workspaces
 myManageHook = composeAll [ className =? "quodlibet"  --> doShift "4:fun"
