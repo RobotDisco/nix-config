@@ -17,7 +17,7 @@ myLayouts = onWorkspace "3:IM" (gridIM (1%4) (ClassName "Pidgin")) $ layoutHook 
 myManageHook = composeAll [ className =? "quodlibet"  --> doShift "4:fun"
                           , className =? "Pidgin"     --> doShift "3:IM"
                           , className =? "Gran Paradiso" --> doShift "2:web"
-                          , className =? "IceWeasel" --> doShift "2:web"
+                          , className =? "Iceweasel" --> doShift "2:web"
                           ]
 
 main = xmobar $ \conf -> xmonad $ conf
