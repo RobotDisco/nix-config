@@ -18,6 +18,7 @@ myManageHook = composeAll [ className =? "quodlibet"  --> doShift "4:fun"
                           , className =? "Pidgin"     --> doShift "3:IM"
                           , className =? "Gran Paradiso" --> doShift "2:web"
                           , className =? "Iceweasel" --> doShift "2:web"
+													, className =? "Evolution" --> doShift "5:mail"
                           ]
 
 main = xmobar $ \conf -> xmonad $ conf

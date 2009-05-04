@@ -18,6 +18,10 @@ if [[ -d $HOME/bin ]] ; then
   typeset -U path
   path+=$HOME/bin
 fi
+if [[ -d $HOME/.cabal/bin ]] ; then
+	typeset -U path
+	path+=$HOME/.cabal/bin
+fi
 if [[ -d $HOME/sr/coroner ]] ; then
   typeset -U path
   path+=$HOME/sr/coroner
