@@ -1,0 +1,18 @@
+Config { font = "xft:Bitstream Vera Sans Mono-10"
+       , bgColor = "black"
+       , fgColor = "grey"
+       , position = Top
+       , commands = [ Run StdinReader
+                    , Run Network "wlan0" [] 50
+                    , Run Cpu [] 50
+                    , Run Memory [] 50 
+                    , Run Swap [] 50
+                    , Run CoreTemp ["-t","Temp: <core0>|<core1>C"] 50
+                    , Run Battery [] 300
+                    , Run Weather "CYYZ" ["-t","<skyCondition> <tempC>C (%hour%)","-H","25","-L","15","-l","-h","orange","-n","-l","lightblue"] 36000
+                    , Run Date ["%a","%b","%d","%Y","*","%T"] "date" 10
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "%StdinReader% }{ %wlan0% | %cpu% | %memory% * %swap% | %coretemp% | %battery% | %CYYZ% | <fc=#ee9a00>%date%</fc>"
+       }

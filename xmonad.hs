@@ -4,6 +4,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Layout.IM
 import XMonad.Layout.NoBorders
 import XMonad.Layout.PerWorkspace
+import XMonad.Util.Run
 
 import qualified Data.Map         as M
 import qualified Data.List        as L
@@ -21,15 +22,17 @@ myManageHook = composeAll [ className =? "quodlibet"  --> doShift "4:fun"
 													, className =? "Evolution" --> doShift "5:mail"
                           ]
 
-main = xmobar $ \conf -> xmonad $ conf
-   { terminal    = "urxvt"
-    , focusedBorderColor = "blue"
-    , workspaces = myWorkspaces
-    -- Consider my workspace preferences above plus my desire for dzen
-    , manageHook = myManageHook <+> manageDocks
-    -- Avoid covering up dzen and other statusbars.
-    , layoutHook = avoidStruts $ myLayouts
-    , modMask = mod4Mask -- Rebind Mod to the Windows key
-    -- We will be using dzen2
-    --, logHook = dynamicLogDzen
-   }
+main = do
+		h <- spawnPipe "xmobar" 		
+		xmonad $ defaultConfig
+			{ terminal    = "urxvt"
+			, focusedBorderColor = "blue"
+			, workspaces = myWorkspaces
+			-- Consider my workspace preferences above plus my desire for dzen
+			, manageHook = myManageHook <+> manageDocks
+			-- Avoid covering up dzen and other statusbars.
+			, layoutHook = avoidStruts $ myLayouts
+			, modMask = mod4Mask -- Rebind Mod to the Windows key
+			-- Pipe our statusbar info to Xmonad
+			, logHook = dynamicLogWithPP $ sjanssenPP { ppOutput = hPutStrLn h }
+			}
