@@ -1,7 +1,7 @@
 Config { font = "-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
-       , bgColor = "black"
+			 , bgColor = "black"
        , fgColor = "grey"
-       , position = Bottom
+       , position = Top
        , lowerOnStart = True
        , commands = [ Run StdinReader
                     , Run Network "wlan0" [] 50
@@ -9,7 +9,7 @@ Config { font = "-misc-fixed-*-*-*-*-10-*-*-*-*-*-*-*"
                     , Run Memory [] 50 
                     , Run Swap [] 50
                     , Run Battery [] 300
-                    , Run Weather "CYYZ" ["-t","<skyCondition> <tempC>C (<hour>)","-H","25","-L","15","-h","orange","-l","lightblue"] 36000
+                    , Run Weather "CYYZ" ["-t","<skyCondition> <tempC>C (<hour>)","-H","25","-L","15","-l","-h","orange","-n","-l","lightblue"] 36000
                     , Run Date "%a %b %d %Y * %T" "date" 10
                     ]
        , sepChar = "%"
