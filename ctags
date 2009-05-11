@@ -1,0 +1,6 @@
+--extra=+q
+--fields=+afiKnsSzt
+--if0=yes
+--tag-relative=yes
+--C++-kinds=+p
+--C-kinds=+p
