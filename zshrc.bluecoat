@@ -13,6 +13,11 @@ autoload -Uz compinit
 compinit
 #end of lines added by compinstall
 
+# Pretty prompt
+autoload -U promptinit
+promptinit
+prompt bigfade
+
 # Add user-supplied programs to our environment
 if [[ -d $HOME/bin ]] ; then
   typeset -U path
@@ -64,8 +69,9 @@ fi
 # I like colours
 alias grep='grep --color=auto --line-number'
 alias ls='ls --color=auto -Fh'
+alias pacman='pacman-color'
 
-# I run xmonad, no systray for me
+# I use XMonad, I have no systray.
 alias wicd-client='wicd-client -n'
 
 # Music-ripping aliases
@@ -96,5 +102,3 @@ alias 32scorp='cp ../bin/x86/sgos_native/debug/gcc/sysimg/prototype/system.si /v
 alias 64scorp='cp ../bin/x86_64/sgos_native/debug/gcc/sysimg/prototype/system.si /var/www/210.img'
 alias cscfiles="find . -depth \( -iname '*.[ch]' -or -iname '*.[ch]pp' \) -type f -print > cscope.files"
 alias cscgen='cscope -b -q -k -i cscope.files -f cscope'
-	
-
