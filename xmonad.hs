@@ -18,6 +18,7 @@ myManageHook = composeAll [ className =? "Quodlibet"  --> doShift "4:fun"
                           , className =? "Gran Paradiso" --> doShift "2:web"
                           , className =? "Iceweasel" --> doShift "2:web"
                           , className =? "Evolution" --> doShift "5:mail"
+													, className =? "MPlayer" --> doFloat
                           ]
 
 main = do
@@ -34,7 +35,7 @@ main = do
     -- Pipe our statusbar info to Xmonad
     , logHook = dynamicLogWithPP $ xmobarPP { ppOutput = hPutStrLn h }
     } `additionalKeysP`
-    [ ("M-k", spawn "xkill")
+    [ ("M-\\", spawn "xkill")
     , ("M-v", spawn "pavucontrol")
     ]
   
