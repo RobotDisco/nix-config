@@ -49,6 +49,7 @@ export BLD_LISTING_FILES=1
 # Almost a universal truth -- platform dependant
 if [[ $(uname -o) == "Cygwin" ]] ; then
   export PERL_HOME=c:/Perl
+  export TERM=xterm-color # Cygwin is hobo re: urxvt
 else
 	export PERL_HOME=/usr
 fi
