@@ -1,3 +1,14 @@
+" When started as "evim", evim.vim will already have these settings
+if v:progname =~? "evim"
+  finish
+endif
+
+set backup " We like backups
+
+" CTRL-U in insert mode deletes a lot. Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+" inoremap <C-U> <C-G>u<C-U>
+
 set nocompatible "Use Vim defaults instead of 100% vi compatibility
 set backspace=indent,eol,start  " more powerful backspacing.
 
@@ -29,29 +40,37 @@ endif
 " line enables syntax highlighting by default.
 syntax on
 
-" If using a dark background within the editing area and syntax highlighting
-" turn on this option as well
 " Also, prettify my user interface. Tee hee, LOTR or something.
-set background=dark
 colorscheme desert
-
-" Uncomment the following to have Vim jump to the last position when
-" reopening a file
-if has("autocmd")
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal! g'\"" | endif
-endif
 
 " Uncomment the following to have Vim load indentation rules and plugins
 " according to the detected filetype.
 if has("autocmd")
   filetype plugin indent on
+
+  " Put these in an autocmd group, so we can delete them easily.
+  augroup vimrcEx
+  au!
+
+  " Uncomment the following to have Vim jump to the last position when
+  " reopening a file
+  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+  
+  " For all text files set 'textwidth to 78 characters.
+  autocmd FileType text setlocal textwidth=78
+
+  augroup END
+else
+  set autoindent
 endif
 
-if has('gui_running')
-  " Make shift-insert work like in Xterm
-  map <S-Insert> <MiddleMouse>
-  map! <S-Insert> <MiddleMouse>
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+    \ | wincmd p | diffthis
 endif
 
 " The following are commented out as they cause vim to behave a lot
@@ -62,9 +81,16 @@ set ignorecase	" Do case insensitive matching
 set smartcase		" Do smart case matching
 set incsearch		" Incremental search
 set hlsearch		" Highlight seach terms
-set autowrite		" Automatically save before commands like :next and :make
+"set autowrite		" Automatically save before commands like :next and :make
 "set hidden     " Hide buffers when they are abandoned
-set mouse=a			" Enable mouse usage (all modes) in terminals
+if has('mouse')
+  set mouse=a		" Enable mouse usage (all modes) in terminals that support it.
+	set mousehide " Hide the mouse when typing text
+	
+  " Make shift-insert work like in Xterm
+  map <S-Insert> <MiddleMouse>
+  map! <S-Insert> <MiddleMouse>
+endif
 
 " Source a global configuration file if available
 " XXX Deprecated, please move your changes here in /etc/vim/vimrc
@@ -72,13 +98,22 @@ if filereadable("/etc/vim/vimrc.local")
   source /etc/vim/vimrc.local
 endif
 
-" Why spaces over tabs? Two reasons:
-"   1. http://www.jwz.org/doc/tabs-vs-spaces.html
-"   2. Haskell programming
-"   3. Eventually someone (even I) will fuck up using tabs.
-" That being said, I prefer mod-2 indents.
+" I prefer mod-2 indents.
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
-set expandtab
+set noexpandtab
+set copyindent " For the love of God, preserve the previous line's indent rules
+
+" Perforce
+let g:p4Presets = 'p4proxy.waterloo.bluecoat.com:1666 gaelan_4_2 gaelan.dcosta,
+			\p4proxy.waterloo.bluecoat.com:1666 gaelan_4_3 gaelan.dcosta,
+			\p4proxy.waterloo.bluecoat.com:1666 gaelan_5_2 gaelan.dcosta,
+			\p4proxy.waterloo.bluecoat.com:1666 gaelan_5_3 gaelan.dcosta,
+			\p4proxy.waterloo.bluecoat.com:1666 gaelan_5_4 gaelan.dcosta,
+			\p4proxy.waterloo.bluecoat.com:1666 gaelan_legacy gaelan.dcosta,
+			\p4proxy.waterloo.bluecoat.com:1666 gaelan_scorpius gaelan.dcosta'
+
+
+
 

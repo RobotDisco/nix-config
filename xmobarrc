@@ -1,0 +1,19 @@
+Config { font = "xft:Terminus-9"
+			 , bgColor = "black"
+       , fgColor = "grey"
+       , position = Top
+       , lowerOnStart = True
+       , commands = [ Run StdinReader
+                    , Run Network "wlan0" ["-t","<dev>: <rx>_ * <tx>^"] 50
+                    , Run Cpu ["-H","90","-L","80","-n","orange","-h","yellow"] 50
+										, Run CoreTemp ["-t","<core0>C * <core1>C","-H","65","-L","60","-h","yellow","-n","orange"] 50
+                    , Run Memory ["-t","Mem: <usedratio>%","-H","95","-L","80","-n","orange","-h","yellow"] 50 
+                    , Run Swap ["-t","Sw: <usedratio>","-H","95","-L","80","-n","orange","-h","yellow"] 50
+                    , Run Battery ["-H","30","-L","10","-h","green","-l","red"] 300
+                    , Run Weather "CYYZ" ["-t","<skyCondition> <tempC>C","-H","25","-L","13","-h","orange","-l","lightblue"] 36000
+                    , Run Date "%a %b %d %Y * %T" "date" 10
+                    ]
+       , sepChar = "%"
+       , alignSep = "}{"
+       , template = "%StdinReader% }{ %wlan0% | %cpu% - %coretemp% | %memory% * %swap% | %battery% | %CYYZ% | <fc=red>%date%</fc>"
+       }

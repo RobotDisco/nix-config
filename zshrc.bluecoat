@@ -13,10 +13,19 @@ autoload -Uz compinit
 compinit
 #end of lines added by compinstall
 
+# Pretty prompt
+autoload -U promptinit
+promptinit
+prompt bigfade
+
 # Add user-supplied programs to our environment
 if [[ -d $HOME/bin ]] ; then
   typeset -U path
   path+=$HOME/bin
+fi
+if [[ -d $HOME/.cabal/bin ]] ; then
+	typeset -U path
+	path+=$HOME/.cabal/bin
 fi
 if [[ -d $HOME/sr/coroner ]] ; then
   typeset -U path
@@ -62,7 +71,8 @@ fi
 ## Mundane aliases ##
 export GREP_OPTIONS='--color=auto --line-number'
 alias ls='ls --color=auto -Fh'
-#
+alias pacman='pacman-color'
+
 ## Music-ripping aliases ##
 alias cda_rip="icedax -paranoia -B dev=/dev/cdrom"
 alias cda_enc="find -name '*.wav' -execdir oggenc -q 6 {} +"
