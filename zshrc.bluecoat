@@ -83,6 +83,7 @@ cda_cmp () {
 	find . -name '*.ogg' -print | wc -l
 }
 alias cda_clean="find -not -name '*.ogg' -delete"
+alias bcsi_sync='rsync -avHAX --delete ~/Music bluecoat:'
 
 ## Workflow aliases and functions ##
 cgrep () {
