@@ -95,6 +95,10 @@ hgrep () {
 jgrep () {
 	find . -iname '*.java' -type f -print0 | xargs -0 grep $1
 }
+p4client () {
+	export P4CLIENT=$1
+}
+
 alias sustain_rdp='rdesktop -u gaelan.dcosta -g 1024x768 -d CF-CAL -p - sustain-1.waterloo.bluecoat.com'
 alias 2xx='cp wdir/210.chk_dbg /var/www/210.img'
 alias 2xxr='cp wdir/210.rls_dbg /var/www/210.img'
