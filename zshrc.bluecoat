@@ -58,6 +58,7 @@ export BLD_LISTING_FILES=1
 # Almost a universal truth -- platform dependant
 if [[ $(uname -o) == "Cygwin" ]] ; then
   export PERL_HOME=c:/Perl
+  export TERM=xterm-color # Cygwin is hobo re: urxvt
 else
 	export PERL_HOME=/usr
 fi
@@ -84,6 +85,7 @@ cda_cmp () {
 	find . -name '*.ogg' -print | wc -l
 }
 alias cda_clean="find -not -name '*.ogg' -delete"
+alias bcsi_sync='rsync -avHAX --delete ~/Music bluecoat:'
 
 # Workflow aliases and functions
 cgrep () {
