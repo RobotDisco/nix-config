@@ -10,7 +10,7 @@ import XMonad.Util.EZConfig
 
 import Data.Ratio ((%))
 
-myWorkspaces = ["1:code", "2:web", "3:IM", "4:fun", "5:mail"] ++ map show [6..9]
+myWorkspaces = ["1:code", "2:web", "3:IM", "4:fun", "5:mail"] ++ map show [6..8] ++ ["9:float"]
 
 myLayouts = onWorkspace "3:IM" (gridIM (1%7) (Role "buddy_list")) $ smartBorders $ layoutHook defaultConfig
 
@@ -21,6 +21,7 @@ myManageHook = composeAll [ className =? "Quodlibet"  --> doShift "4:fun"
                           , className =? "Iceweasel" --> doShift "2:web"
                           , className =? "Evolution" --> doShift "5:mail"
 													, className =? "MPlayer" --> doFloat
+													, className =? "Bochs" --> (doFloat <+> doShift "0:float")
                           ]
 
 main = do
