@@ -85,6 +85,7 @@ cda_cmp () {
 	find . -name '*.ogg' -print | wc -l
 }
 alias cda_clean="find -not -name '*.ogg' -delete"
+#alias cda_gain="find ~/Music -type d -exec aacgain -q -a '{}/*.m4a' \;" #\&\& vorbisgain -f -s -a \"{}/*.ogg\" \;"
 alias bcsi_sync='rsync -avHAX --delete ~/Music bluecoat:'
 
 # Workflow aliases and functions
@@ -100,8 +101,15 @@ jgrep () {
 p4client () {
 	export P4CLIENT=$1
 }
+sbochs () {
+	pushd
+	cd ~/sr/coroner
+	bochs -r $1
+	popd
+}
 
 alias sustain_rdp='rdesktop -u gaelan.dcosta -g 1024x768 -d CF-CAL -p - sustain-1.waterloo.bluecoat.com'
+alias sgdb='~/sr/coroner/gdb'
 alias 2xx='cp wdir/210.chk_dbg /var/www/210.img'
 alias 2xxr='cp wdir/210.rls_dbg /var/www/210.img'
 alias 32scorp='cp ../bin/x86/sgos_native/debug/gcc/sysimg/prototype/system.si /var/www/210.img'

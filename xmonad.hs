@@ -10,7 +10,7 @@ import XMonad.Util.EZConfig
 
 import Data.Ratio ((%))
 
-myWorkspaces = ["1:code", "2:web", "3:IM", "4:fun", "5:mail", "6:xbmc"] ++ map show [7..9]
+myWorkspaces = ["1:code", "2:web", "3:IM", "4:fun", "5:mail", "6:xbmc"] ++ map show [7..8] ++ ["9:float"]
 
 myLayouts = onWorkspace "3:IM" (gridIM (1%7) (Role "buddy_list")) $ onWorkspace "6:xbmc" Full $ smartBorders $ layoutHook defaultConfig
 
@@ -22,6 +22,7 @@ myManageHook = composeAll [ className =? "Quodlibet"  --> doShift "4:fun"
                           , className =? "Evolution" --> doShift "5:mail"
                           , className =? "MPlayer" --> doFloat
                           , className =? "xbmc.bin" --> doShift "6:xbmc"
+                          , className =? "Bochs" --> doShift "9:float"
                           ]
 
 main = do
@@ -42,5 +43,6 @@ main = do
     } `additionalKeysP`
     [ ("M-\\", spawn "xkill")
     , ("M-v", spawn "pavucontrol")
+    , ("M-n", spawn "wicd-client -n")
     ]
   
