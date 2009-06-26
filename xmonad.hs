@@ -21,7 +21,7 @@ myManageHook = composeAll [ className =? "Quodlibet"  --> doShift "4:fun"
                           , className =? "Iceweasel" --> doShift "2:web"
                           , className =? "Evolution" --> doShift "5:mail"
 													, className =? "MPlayer" --> doFloat
-													, className =? "Bochs" --> (doFloat <+> doShift "0:float")
+                          , className =? "Bochs" --> doShift "9:float"
                           ]
 
 main = do
@@ -42,5 +42,6 @@ main = do
     } `additionalKeysP`
     [ ("M-\\", spawn "xkill")
     , ("M-v", spawn "pavucontrol")
+    , ("M-n", spawn "wicd-client -n")
     ]
   
