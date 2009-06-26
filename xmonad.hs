@@ -10,9 +10,9 @@ import XMonad.Util.EZConfig
 
 import Data.Ratio ((%))
 
-myWorkspaces = ["1:code", "2:web", "3:IM", "4:fun", "5:mail"] ++ map show [6..9]
+myWorkspaces = ["1:code", "2:web", "3:IM", "4:fun", "5:mail", "6:xbmc"] ++ map show [7..9]
 
-myLayouts = onWorkspace "3:IM" (gridIM (1%7) (Role "buddy_list")) $ smartBorders $ layoutHook defaultConfig
+myLayouts = onWorkspace "3:IM" (gridIM (1%7) (Role "buddy_list")) $ onWorkspace "6:xbmc" Full $ smartBorders $ layoutHook defaultConfig
 
 -- I want these particular applications on particular workspaces
 myManageHook = composeAll [ className =? "Quodlibet"  --> doShift "4:fun"
@@ -20,7 +20,8 @@ myManageHook = composeAll [ className =? "Quodlibet"  --> doShift "4:fun"
                           , className =? "Gran Paradiso" --> doShift "2:web"
                           , className =? "Iceweasel" --> doShift "2:web"
                           , className =? "Evolution" --> doShift "5:mail"
-													, className =? "MPlayer" --> doFloat
+                          , className =? "MPlayer" --> doFloat
+                          , className =? "xbmc.bin" --> doShift "6:xbmc"
                           ]
 
 main = do
@@ -36,8 +37,8 @@ main = do
     , modMask = mod4Mask -- Rebind Mod to the Windows key
     -- Pipe our statusbar info to Xmonad
     , logHook = dynamicLogWithPP $ xmobarPP { ppOutput = hPutStrLn h }
-		-- Hack for Java programs to display properly
-		, startupHook = setWMName "LG3D"
+    -- Hack for Java programs to display properly
+    , startupHook = setWMName "LG3D"
     } `additionalKeysP`
     [ ("M-\\", spawn "xkill")
     , ("M-v", spawn "pavucontrol")
