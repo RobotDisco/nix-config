@@ -4,3 +4,4 @@
 --tag-relative=yes
 --C++-kinds=+p
 --C-kinds=+p
+--Python-kinds=+cfm
