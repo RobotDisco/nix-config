@@ -1,0 +1,5 @@
+#!/bin/sh
+
+## Get kdiff3 to work with Perforce
+
+kdiff3 -o $4 $1 $2 $3
