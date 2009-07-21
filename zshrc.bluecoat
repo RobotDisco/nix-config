@@ -2,7 +2,9 @@
 HISTFILE=~/.zsh_history
 HISTSIZE=2000
 SAVEHIST=2000
-setopt appendhistory autocd nomatch extendedglob
+setopt appendhistory banghist histverify histignoredups
+setopt autocd extendedglob
+setopt monitor
 unsetopt beep notify
 bindkey -e
 # End of lines configured by zsh-newuser-install
@@ -17,6 +19,9 @@ compinit
 autoload -U promptinit
 promptinit
 prompt bigfade
+
+# ZSH's xarg, with blackjack
+autoload -U zargs
 
 # Add user-supplied programs to our environment
 if [[ -d $HOME/bin ]] ; then
