@@ -75,6 +75,9 @@ alias grep='grep --color=auto --line-number'
 alias ls='ls --color=auto -Fh'
 alias pacman='pacman-color'
 
+# Firefox is a hobo sometimes
+alias kill_firefox="kill $(pgrep firefox)"
+
 # Music-ripping aliases
 alias cda_rip="icedax -paranoia -B dev=/dev/cdrom"
 alias cda_enc="find -name '*.wav' -execdir oggenc -q 6 {} +"
