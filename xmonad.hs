@@ -19,7 +19,8 @@ myLayouts = onWorkspace "3:IM" (gridIM (1%7) (Role "buddy_list")) $ onWorkspace 
 -- I want these particular applications on particular workspaces
 myManageHook = composeAll [ className =? "Quodlibet"  --> doShift "4:fun"
                           , className =? "Pidgin"     --> doShift "3:IM"
-                          , className =? "Navigator" --> doShift "2:web"
+                          , className =? "Shiretoko" --> doShift "2:web"
+                          , className =? "IceWeasel" --> doShift "2:web"
                           , className =? "Evolution" --> doShift "5:mail"
                           , className =? "MPlayer" --> doFloat
                           , className =? "xbmc.bin" --> doShift "6:xbmc"
@@ -46,6 +47,7 @@ main = do
     , startupHook = setWMName "LG3D"
     } `additionalKeysP`
     [ ("M-\\", spawn "xkill")
+    , ("M-f", spawn "firefox")
     , ("M-v", spawn "pavucontrol")
     , ("M-n", spawn "wicd-client -n")
     ]
