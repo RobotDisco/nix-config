@@ -81,42 +81,47 @@ alias ls='ls --color=auto -Fh'
 alias pacman='pacman-color'
 
 # Firefox is a hobo sometimes
-alias kill_firefox="kill $(pgrep firefox)"
+kill_firefox () {
+	kill $(pgrep firefox)
+}
 
 # Music-ripping aliases
 alias cda_rip="icedax -paranoia -B dev=/dev/cdrom"
-alias cda_enc="find -name '*.wav' -execdir oggenc -q 6 {} +"
+alias cda_ogg="find -name '*.wav' -execdir oggenc -q 6 {} +"
+alias cda_mp3="find -name '*.wav' -execdir lame --vbr-new -V 2 --replaygain-thorough {} \;"
+
 cda_cmp () {
-	echo -n "WAV: "
-	find . -name '*.wav' -print | wc -l
+	echo -n "FLAC: "
+	find . -name '*.flac' -print | wc -l
+	echo -n "M4A: "
+	find . -name '*.m4a' -print | wc -l
+	echo -n "MP3: "
+	find . -name '*.mp3' -print | wc -l
 	echo -n "Ogg: "
 	find . -name '*.ogg' -print | wc -l
+	echo -n "WAV: "
+	find . -name '*.wav' -print | wc -l
 }
-alias cda_clean="find -not -name '*.ogg' -delete"
+alias cda_clean="find \( -name '*.wav' -or -name '*.inf' \) -delete"
 #alias cda_gain="find ~/Music -type d -exec aacgain -q -a '{}/*.m4a' \;" #\&\& vorbisgain -f -s -a \"{}/*.ogg\" \;"
 alias bcsi_sync='rsync -avHAX --delete ~/Music bluecoat:'
 
 # Workflow aliases and functions
-p4client2fsdir () { # Convert my p4client scheme to my filesystem scheme
-	return $(echo $1 | cut -d_ -f2- -)
+p42fs () { # Convert my p4client scheme to my filesystem scheme
+	if [[ -z $P4CLIENT ]]; then
+		return 1
+	fi
+	echo ~/proj/$(echo $P4CLIENT | cut -d_ -f2-)
 }
 
 cdproj () {
-	pushd # Save old address, in case we turn out to fail changing directory.
-	if [$1 != ""]; then
-		cd ~/proj/$1
-	elif [$P4CLIENT != ""]; then
-	  TO_DIR="~/proj/$(p4client2fsdir $1)"
-		cd $TO_DIR
-		if [[$(pwd) != $TO_DIR]]; then
-			popd
-			return 1
-		fi
+	TO_DIR = $(p42fs)
+	if [[ -d $TO_DIR ]]; then
+		cd $TO_DIR 
 	else
-		 popd
-		 return 1
+		echo "$0: Assumed directory non-existant, check \$P4CLIENT"
+		return 1
 	fi
-	return 0
 }
 cgrep () {
 	find . -depth \( -iname '*.[ch]' -or -iname '*.[ch]pp' \) -type f -print0 | xargs -0 grep $1
@@ -128,7 +133,11 @@ jgrep () {
 	find . -iname '*.java' -type f -print0 | xargs -0 grep $1
 }
 p4client () {
-	export P4CLIENT=$1
+	if [[ -z $1 ]]; then
+		echo $P4CLIENT
+	else
+		export P4CLIENT=gaelan_$1
+	fi
 }
 sbochs () {
 	pushd

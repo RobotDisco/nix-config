@@ -1,10 +1,8 @@
 ; This is where we store our custom plugins
 (add-to-list 'load-path "~/.elisp/ljupdate")
-(add-to-list 'load-path "~/.elisp/color-theme-6.6.0")
 
 ; Load these at startup
 (require 'ljupdate)
-(require 'color-theme)
 
 ; Why spaces over tabs?
 ; 1) http://www.jwz.org/doc/tabs-vs-spaces.html
@@ -15,8 +13,18 @@
 (setq indent-tab-mode nil)
 
 ; Make emacs pretty!
-(color-theme-initialize)
+(require 'color-theme)
+(setq color-theme-is-global t)
 (color-theme-subtle-hacker)
+
+; CEDET
+; Load as much of CEDET as we possibly can
+(semantic-load-enable-excessive-code-helpers)
+; Needed for intellisense
+(require 'semantic-ia)
+
+; Enable EDE functionality
+(global-ede-mode 1)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom -- don't edit or cut/paste it!
