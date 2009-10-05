@@ -11,7 +11,7 @@ display -window root -backdrop ~/.xmonad/bg
 # Run essential applications
 xscreensaver -no-splash &
 urxvtd -q -f -o &
-parcellite -d &
+parcellite -dn &
 
 if [ -d "$HOME/.cabal/bin" ]; then
 	PATH=$PATH:$HOME/.cabal/bin
