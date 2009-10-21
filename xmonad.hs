@@ -48,8 +48,10 @@ main = do
     } `additionalKeysP`
     [ ("M-\\", spawn "xkill")
     , ("M-f", spawn "firefox")
+    , ("M-z", spawn "gvim")
     , ("M-v", spawn "pavucontrol")
     , ("M-n", spawn "wicd-client -n")
+    , ("M-x", spawn "xscreensaver-command -lock")
     ]
   
 -- | Strip xmobar markup. Useful to remove ppHidden color from ppUrgent
