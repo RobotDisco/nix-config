@@ -5,7 +5,7 @@ Config { font = "xft:Terminus-9"
        , lowerOnStart = True
        , commands = [ Run StdinReader
                     , Run Com "~/bin/xmobar-check-vpn.sh" [] "vpn" 100
-                    , Run Com "iwgetid" ["--raw"] "essid" 100
+                    , Run Com "~/bin/xmobar-get-essid.sh" [] "essid" 100
                     , Run Network "wlan0" ["-t","<rx>_ <tx>^"] 50
                     , Run Cpu ["-H","90","-L","80","-n","orange","-h","yellow"] 50
                     , Run CoreTemp ["-t","<core0>C * <core1>C","-H","65","-L","60","-h","yellow","-n","orange"] 50
