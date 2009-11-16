@@ -115,9 +115,16 @@ p42fs () { # Convert my p4client scheme to my filesystem scheme
 }
 
 cdproj () {
-	TO_DIR = $(p42fs)
+	if [[ ! -z $1 ]]; then
+		p4client $1
+	fi
+
+  TO_DIR=$(p42fs)
 	if [[ -d $TO_DIR ]]; then
 		cd $TO_DIR 
+		if [[ $P4CLIENT == 'gaelan_scorpius' ]]; then
+			cd main/src
+		fi
 	else
 		echo "$0: Assumed directory non-existant, check \$P4CLIENT"
 		return 1
@@ -148,9 +155,9 @@ sbochs () {
 
 alias sustain_rdp='rdesktop -u gaelan.dcosta -g 1024x768 -d CF-CAL -p - sustain-1.waterloo.bluecoat.com'
 alias sgdb='~/sr/coroner/gdb'
-alias 2xx='cdproj && cp wdir/210.chk_dbg /var/www/210.img; popd'
-alias 2xxr='cdproj && cp wdir/210.rls_dbg /var/www/210.img; popd'
-alias 32scorp='cdproj && cp main/bin/x86/sgos_native/debug/gcc/sysimg/prototype/system.si /var/www/210.img; popd'
-alias 64scorp='cdproj && cp ../bin/x86_64/sgos_native/debug/gcc/sysimg/prototype/system.si /var/www/210.img; popd'
+alias 2xx='pushd $(p42fs) && cp wdir/210.chk_dbg /var/www/210.img; popd'
+alias 2xxr='pushd $(p42fs) && cp wdir/210.rls_dbg /var/www/210.img; popd'
+alias 32scorp='pushd $(p42fs) && cp main/bin/x86/sgos_native/debug/gcc/sysimg/prototype/system.si /var/www/210.img; popd'
+alias 64scorp='pushd $(p42fs) && cp ../bin/x86_64/sgos_native/debug/gcc/sysimg/prototype/system.si /var/www/210.img; popd'
 alias cscfiles="find . -depth \( -iname '*.[ch]' -or -iname '*.[ch]pp' \) -type f -print > cscope.files"
 alias cscgen='cscope -b -q -k -i cscope.files -f cscope'
