@@ -12,9 +12,9 @@ import XMonad.Util.EZConfig
 import Data.List (isPrefixOf)
 import Data.Ratio ((%))
 
-myWorkspaces = ["1:code", "2:web", "3:IM", "4:fun", "5:mail", "6:xbmc"] ++ map show [7..8] ++ ["9:float"]
+myWorkspaces = ["1:code", "2:web", "3:IM", "4:fun", "5:mail"] ++ map show [6..8] ++ ["9:float"]
 
-myLayouts = onWorkspace "3:IM" (gridIM (1%7) (Role "buddy_list")) $ onWorkspace "6:xbmc" Full $ smartBorders $ layoutHook defaultConfig
+myLayouts = onWorkspace "3:IM" (gridIM (1%7) (Role "buddy_list")) $ smartBorders $ layoutHook defaultConfig
 
 -- I want these particular applications on particular workspaces
 myManageHook = composeAll [ className =? "Quodlibet"  --> doShift "4:fun"
@@ -23,7 +23,6 @@ myManageHook = composeAll [ className =? "Quodlibet"  --> doShift "4:fun"
                           , className =? "IceWeasel" --> doShift "2:web"
                           , className =? "Evolution" --> doShift "5:mail"
                           , className =? "MPlayer" --> doFloat
-                          , className =? "xbmc.bin" --> doShift "6:xbmc"
                           , className =? "Bochs" --> doShift "9:float"
                           ]
 
@@ -53,19 +52,4 @@ main = do
     , ("M-n", spawn "wicd-client -n")
     , ("M-x", spawn "xscreensaver-command -lock")
     ]
-  
--- | Strip xmobar markup. Useful to remove ppHidden color from ppUrgent
---   field. For example:
---
--- >     , ppHidden          = xmobarColor "gray20" "" . wrap "<" ">"
--- >     , ppUrgent          = xmobarColor "dark orange" "" .  xmobarStrip
-xmobarStrip :: String -> String
-xmobarStrip = strip [] where
-    strip keep x
-      | null x                 = keep
-      | "<fc="  `isPrefixOf` x = strip keep (drop 1 . dropWhile (/= '>') $ x)
-      | "</fc>" `isPrefixOf` x = strip keep (drop 5  x)
-      | '<' == head x          = strip (keep ++ "<") (tail x)
-      | otherwise              = let (good,x') = span (/= '<') x
-                                 in strip (keep ++ good) x'
 

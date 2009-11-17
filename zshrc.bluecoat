@@ -86,9 +86,9 @@ kill_firefox () {
 }
 
 # Music-ripping aliases
-alias cda_rip="icedax -paranoia -B dev=/dev/cdrom"
+alias cda_rip="cdparanoia -B"
 alias cda_ogg="find -name '*.wav' -execdir oggenc -q 6 {} +"
-alias cda_mp3="find -name '*.wav' -execdir lame --vbr-new -V 2 --replaygain-thorough {} \;"
+alias cda_mp3="find -name '*.wav' -execdir lame --vbr-new -V 2 --replaygain-accurate {} \;"
 
 cda_cmp () {
 	echo -n "FLAC: "
@@ -105,6 +105,7 @@ cda_cmp () {
 alias cda_clean="find \( -name '*.wav' -or -name '*.inf' \) -delete"
 #alias cda_gain="find ~/Music -type d -exec aacgain -q -a '{}/*.m4a' \;" #\&\& vorbisgain -f -s -a \"{}/*.ogg\" \;"
 alias bcsi_sync='rsync -avHAX --delete ~/Music bluecoat:'
+alias penis_sync='rsync -avHAX --delete ~/Music/* media_penis:/media/pirated/Music/Gaelan'
 
 # Workflow aliases and functions
 p42fs () { # Convert my p4client scheme to my filesystem scheme
