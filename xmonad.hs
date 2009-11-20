@@ -22,7 +22,6 @@ myManageHook = composeAll [ className =? "Quodlibet" --> doShift "music"
                           , className =? "MPlayer" --> doShift "movie"
                           , className =? "xbmc.bin" --> doShift "movie"
                           , className =? "Bochs" --> doIgnore
->>>>>>> ec5cfdeee8e05cc8e7637c919d0e41f67d4913ba
                           ]
 
 main = xmonad $ kde4Config
