@@ -19,6 +19,7 @@ myManageHook = composeAll [ className =? "Quodlibet" --> doShift "music"
                           , className =? "Shiretoko" --> doShift "web"
                           , className =? "IceWeasel" --> doShift "web"
                           , className =? "Evolution" --> doShift "mail"
+													, className =? "Thunderbird" --> doShift "mail"
                           , className =? "MPlayer" --> doShift "movie"
                           , className =? "xbmc.bin" --> doShift "movie"
                           , className =? "Bochs" --> doIgnore
