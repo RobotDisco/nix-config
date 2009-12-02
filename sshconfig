@@ -2,7 +2,7 @@ Host booji
   HostName      216.16.247.6
   LocalForward  33890 sustain-1:3389
 
-Host media-penis
+Host media_penis
 	User gaelan
 	HostName 192.168.1.105
 
@@ -12,7 +12,7 @@ Host sustain-1
 
 Host bluecoat
   User      gaelan
-  HostName  gaelan.waterloo.bluecoat.com
+  HostName  10.167.0.139
 
 Host acek
   HostName  acek.csclub.uwaterloo.ca

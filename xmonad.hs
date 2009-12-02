@@ -10,10 +10,12 @@ import Data.Ratio ((%))
 
 myWorkspaces = ["code", "web", "chat", "music", "mail", "movie", "float"]
 
-myLayouts = smartBorders $ onWorkspace "chat" (gridIM (1%7) (Role "buddy_list")) $ onWorkspace "movie" Full $ layoutHook kde4Config
+myLayouts = smartBorders $ onWorkspace "chat" (gridIM (1%7) (ClassName "Kopete")) $ onWorkspace "movie" Full $ layoutHook kde4Config
 
 -- I want these particular applications on particular workspaces
 myManageHook = composeAll [ className =? "Quodlibet" --> doShift "music"
+													, className =? "Amarok" --> doShift "music"
+													, className =? "Songbird" --> doShift "music"
                           , className =? "Pidgin" --> doShift "chat"
 													, className =? "Kopete" --> doShift "chat"
                           , className =? "Shiretoko" --> doShift "web"
