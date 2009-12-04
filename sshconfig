@@ -1,5 +1,5 @@
 Host booji
-  HostName      216.16.247.6
+  HostName      216.16.246.232
   LocalForward  33890 sustain-1:3389
 
 Host media_penis
