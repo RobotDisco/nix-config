@@ -28,10 +28,6 @@ if [[ -d $HOME/bin ]] ; then
   typeset -U path
   path+=$HOME/bin
 fi
-if [[ -d $HOME/.cabal/bin ]] ; then
-	typeset -U path
-	path+=$HOME/.cabal/bin
-fi
 if [[ -d $HOME/sr/coroner ]] ; then
   typeset -U path
   path+=$HOME/sr/coroner
@@ -40,6 +36,11 @@ if [[ -d $HOME/man  ]] ; then
   typeset -U manpath
   manpath+=$HOME/man
 fi
+
+# I like colours
+export GREP_OPTIONS="--color=auto --line-number"
+alias ls="ls --color=auto -Fh"
+alias pacman="pacman-color"
 
 # Just in case we have real 'vi', prefer sane 'vim'
 export EDITOR=vim
@@ -77,11 +78,6 @@ fi
 
 # I use XMonad, I have no systray.
 alias wicd-client='wicd-client -n'
-
-# I like colours
-alias grep='grep --color=auto --line-number'
-alias ls='ls --color=auto -Fh'
-alias pacman='pacman-color'
 
 # Firefox is a hobo sometimes
 kill_firefox () {
@@ -133,6 +129,7 @@ cdproj () {
 		return 1
 	fi
 }
+
 cgrep () {
 	find . -depth \( -iname '*.[ch]' -or -iname '*.[ch]pp' \) -type f -print0 | xargs -0 grep $1
 }
@@ -149,18 +146,14 @@ p4client () {
 		export P4CLIENT=gaelan_$1
 	fi
 }
-sbochs () {
-	pushd
-	cd ~/sr/coroner
-	bochs -r $1
-	popd
-}
 
-alias sustain_rdp='rdesktop -u gaelan.dcosta -g 1024x768 -d CF-CAL -p - sustain-1.waterloo.bluecoat.com'
-alias sgdb='~/sr/coroner/gdb'
-alias 2xx='pushd $(p42fs) && cp wdir/210.chk_dbg /srv/http/210.img; popd'
-alias 2xxr='pushd $(p42fs) && cp wdir/210.rls_dbg /srv/http/210.img; popd'
-alias 32scorp='pushd $(p42fs) && cp main/bin/x86/sgos_native/debug/gcc/sysimg/prototype/system.si /srv/http/210.img; popd'
-alias 64scorp='pushd $(p42fs) && cp ../bin/x86_64/sgos_native/debug/gcc/sysimg/prototype/system.si /srv/http/210.img; popd'
+alias sustain_rdp="rdesktop -u gaelan.dcosta -g 1024x768 -d CF-CAL -p - sustain-1.internal.cacheflow.com"
+alias sgdb="~/sr/coroner/gdb"
+alias 2xx="pushd $(p42fs) && cp wdir/210.chk_dbg /srv/http/210.img; popd"
+alias 2xxr="pushd $(p42fs) && cp wdir/210.rls_dbg /srv/http/210.img; popd"
+alias 32scorp="pushd $(p42fs) && cp main/bin/x86/sgos_native/debug/gcc/sysimg/prototype/system.si /srv/http/210.img; popd"
+alias 64scorp="pushd $(p42fs) && cp ../bin/x86_64/sgos_native/debug/gcc/sysimg/prototype/system.si /srv/http/210.img; popd"
 alias cscfiles="find . -depth \( -iname '*.[ch]' -or -iname '*.[ch]pp' \) -type f -print > cscope.files"
-alias cscgen='cscope -b -q -k -i cscope.files -f cscope'
+alias cscgen="cscope -b -q -k -i cscope.files -f cscope"
+alias vizshrc="vim ~/.zshrc"
+alias rezshrc="source ~/.zshrc"
