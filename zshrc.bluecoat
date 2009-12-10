@@ -38,7 +38,6 @@ if [[ -d $HOME/man  ]] ; then
 fi
 
 # I like colours
-export GREP_OPTIONS="--color=auto --line-number"
 alias ls="ls --color=auto -Fh"
 alias pacman="pacman-color"
 
@@ -132,14 +131,15 @@ cdproj () {
 }
 
 cgrep () {
-	find . -depth \( -iname '*.[ch]' -or -iname '*.[ch]pp' \) -type f -print0 | xargs -0 grep $1
+	find . -depth \( -iname '*.[ch]' -or -iname '*.[ch]pp' \) -type f -print0 | xargs -0 grep --color=auto --line-number $1
 }
 hgrep () {
-	find . -depth \( -iname '*.h' -or -iname '*.hpp' \) -type f -print0 | xargs -0 grep $1
+	find . -depth \( -iname '*.h' -or -iname '*.hpp' \) -type f -print0 | xargs -0 grep --color=auto --line-number $1
 }
 jgrep () {
-	find . -iname '*.java' -type f -print0 | xargs -0 grep $1
+	find . -iname '*.java' -type f -print0 | xargs -0 grep --color=auto --line-number $1
 }
+
 p4client () {
 	if [[ -z $1 ]]; then
 		echo $P4CLIENT
