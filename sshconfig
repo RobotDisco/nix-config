@@ -8,11 +8,11 @@ Host media_penis
 
 Host sustain-1
   User gaelan.dcosta
-  HostName sustain-1.internal.cacheflow.com
+  HostName	10.169.0.140
 
 Host bluecoat
   User      gaelan
-  HostName  gaelan.internal.cacheflow.com
+  HostName  10.167.0.139
 
 Host ascorbic
 	HostName	ascorbic-acid.csclub.uwaterloo.ca
