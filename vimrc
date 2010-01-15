@@ -102,7 +102,7 @@ endif
 set tabstop=2
 set shiftwidth=2
 set softtabstop=2
-set noexpandtab
+set expandtab
 set copyindent " For the love of God, preserve the previous line's indent rules
 
 " Perforce
@@ -114,6 +114,6 @@ let g:p4Presets = 'p4proxy.waterloo.bluecoat.com:1666 gaelan_4_2 gaelan.dcosta,
 			\p4proxy.waterloo.bluecoat.com:1666 gaelan_legacy gaelan.dcosta,
 			\p4proxy.waterloo.bluecoat.com:1666 gaelan_scorpius gaelan.dcosta'
 
-
-
-
+" Eclim
+let g:EclimHome = '/usr/share/vim/vimfiles/eclim'
+let g:EclimEclipseHome = '/usr/share/eclipse'
