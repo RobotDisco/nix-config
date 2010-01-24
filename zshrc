@@ -15,65 +15,20 @@ autoload -Uz compinit
 compinit
 #end of lines added by compinstall
 
+# ZSH's xarg, with blackjack
+# autoload -U zargs
+
 # Pretty prompt
 autoload -U promptinit
 promptinit
 prompt bigfade
-
-# ZSH's xarg, with blackjack
-autoload -U zargs
-
-# Add user-supplied programs to our environment
-if [[ -d $HOME/bin ]] ; then
-  typeset -U path
-  path+=$HOME/bin
-fi
-if [[ -d $HOME/sr/coroner ]] ; then
-  typeset -U path
-  path+=$HOME/sr/coroner
-fi
-if [[ -d $HOME/man  ]] ; then
-  typeset -U manpath
-  manpath+=$HOME/man
-fi
 
 # I like colours
 alias ls="ls --color=auto -Fh"
 alias pacman="pacman-color"
 
 # Just in case we have real 'vi', prefer sane 'vim'
-export EDITOR=vim
-
-# Perforce setup
-export P4PORT=p4proxy.waterloo.bluecoat.com:1666
-export P4USER=gaelan.dcosta
-export P4DIFF=kdiff3
-export P4MERGE=p4kdiff3merge
-
-# Universal Truths about our Bluecoat Dev environment ## (pre-Scorpius)
-export QUIETBLD=1
-export CL_CODEVIEW=1
-export LINK_UTESTS=1
-export CL_OBJTYPE="release_ca"
-export PRODUCTS="cf_210.bind"
-
-# Universal Truths ... (Scorpius)
-export BLD_DEBUG=1
-export BLD_QUIET=1
-export BLD_TRACE="all"
-export BLD_LISTING_FILES=1
-
-# Almost a universal truth -- platform dependant
-if [[ $(uname -o) == "Cygwin" ]] ; then
-  export PERL_HOME=c:/Perl
-  export TERM=xterm-color # Cygwin is hobo re: urxvt
-else
-	export PERL_HOME=/usr
-fi
-
-if [[ $(uname -o) == "Linux" || $(uname -o) == "GNU/Linux" ]] ; then
-	export BUILD_SKIP_DIRS="loader dos_boot"
-fi
+alias vi="vim"
 
 # I use XMonad, I have no systray.
 alias wicd-client='wicd-client -n'
@@ -158,3 +113,6 @@ alias cscfiles="find . -depth \( -iname '*.[ch]' -or -iname '*.[ch]pp' \) -type 
 alias cscgen="cscope -b -q -k -i cscope.files -f cscope"
 alias vizshrc="vim ~/.zshrc"
 alias rezshrc="source ~/.zshrc"
+alias vizprofile="vim ~/.zprofile"
+alias rezprofile="source ~/.zprofile"
+
