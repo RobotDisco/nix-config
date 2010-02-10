@@ -1,13 +1,17 @@
 # Add user-supplied programs to our environment
-if [[ -d $HOME/bin ]] ; then
+if [[ -d $HOME/bin ]]; then
   typeset -U path
   path+=$HOME/bin
 fi
-if [[ -d $HOME/sr/coroner ]] ; then
+if [[ -d $HOME/.cabal/bin ]]; then
+  typeset -U path
+  path+=$HOME/.cabal/bin
+fi
+if [[ -d $HOME/sr/coroner ]]; then
   typeset -U path
   path+=$HOME/sr/coroner
 fi
-if [[ -d $HOME/man  ]] ; then
+if [[ -d $HOME/man  ]]; then
   typeset -U manpath
   manpath+=$HOME/man
 fi
