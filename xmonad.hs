@@ -22,9 +22,9 @@ myManageHook = composeAll [ className =? "Quodlibet" --> doShift "music"
 													, className =? "Songbird" --> doShift "music"
                           , className =? "Pidgin" --> doShift "chat"
 													, className =? "Kopete" --> doShift "chat"
-                          , className =? "Shiretoko" --> doShift "web"
+                          , className =? "Namoroka" --> doShift "web"
                           , className =? "IceWeasel" --> doShift "web"
-                          , className =? "chromium" --> doShift "web"
+                          , className =? "Chromium" --> doShift "web"
                           , className =? "Evolution" --> doShift "mail"
 													, className =? "Thunderbird-bin" --> doShift "mail"
                           , className =? "MPlayer" --> doShift "movie"
@@ -52,6 +52,7 @@ main = do
     [ ("M-\\", spawn "xkill")
     , ("M-F", spawn "firefox")
     , ("M-f", spawn "chromium")
+    , ("M-s", spawn "/home/gaelan/slickedit/bin/vs")
     , ("M-z", spawn "gvim")
     , ("M-n", spawn "wicd-client -n")
     , ("M-x", spawn "xscreensaver-command -lock")
