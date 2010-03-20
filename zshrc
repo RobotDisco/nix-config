@@ -57,8 +57,10 @@ cda_cmp () {
 }
 alias cda_clean="find \( -name '*.wav' -or -name '*.inf' \) -delete"
 #alias cda_gain="find ~/Music -type d -exec aacgain -q -a '{}/*.m4a' \;" #\&\& vorbisgain -f -s -a \"{}/*.ogg\" \;"
-alias bcsi_sync='rsync -avHAX --delete ~/Music bluecoat:'
-alias penis_sync='rsync -avHAX --delete ~/Music/* media_penis:/media/pirated/Music/Gaelan'
+alias bcsi_sync="rsync --exclude \"\$RECYCLE.BIN\" --exclude \"RRBackups\" --exclude \"System Volume Information\" --fake-super -avHAX --delete /cygdrive/M/* bluecoat:"
+alias bcsi_preview='bcsi_sync -n'
+alias penis_sync="rsync --exclude \"\$RECYCLE.BIN\" --exclude \"RRBackups\" --exclude \"System Volume Information\" --fake-super -avHAX --delete /cygdrive/M/* media_penis:/media/pirated/Music/Gaelan"
+alias penis_preview='penis_sync -n'
 
 # Workflow aliases and functions
 p42fs () { # Convert my p4client scheme to my filesystem scheme
@@ -104,11 +106,10 @@ p4client () {
 }
 
 alias sustain_rdp="rdesktop -u gaelan.dcosta -g 1024x768 -d CF-CAL -p - sustain-1.internal.cacheflow.com"
-alias sgdb="~/sr/coroner/gdb"
 function 2xx () { pushd $(p42fs) && cp wdir/210.chk_dbg /srv/http/210.img; popd }
 function 2xxr () { pushd $(p42fs) && cp wdir/210.rls_dbg /srv/http/210.img; popd }
-function 32scorp () { pushd $(p42fs) && cp main/bin/x86/sgos_native/debug/gcc/sysimg/prototype/system_gdb.si /srv/http/210.img; popd }
-function 64scorp () { pushd $(p42fs) && cp ../bin/x86_64/sgos_native/debug/gcc/sysimg/prototype/system_gdb.si /srv/http/210.img; popd }
+function 32scorp () { pushd $(p42fs) && cp ../bin/x86/sgos_native/debug/gcc_v4.4.2/sysimg/prototype/system_gdb.si /srv/http/210.img; popd }
+function 64scorp () { pushd $(p42fs) && cp ../bin/x86_64/sgos_native/debug/gcc_v4.4.2/sysimg/prototype/system_gdb.si /srv/http/210.img; popd }
 alias cscfiles="find . -depth \( -iname '*.[ch]' -or -iname '*.[ch]pp' \) -type f -print > cscope.files"
 alias cscgen="cscope -b -q -k -i cscope.files -f cscope"
 alias vizshrc="vim ~/.zshrc"

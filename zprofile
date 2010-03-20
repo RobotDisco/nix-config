@@ -1,13 +1,21 @@
 # Add user-supplied programs to our environment
-if [[ -d $HOME/bin ]] ; then
+if [[ -d $HOME/bin ]]; then
   typeset -U path
   path+=$HOME/bin
 fi
-if [[ -d $HOME/sr/coroner ]] ; then
+if [[ -d $HOME/.cabal/bin ]]; then
+  typeset -U path
+  path+=$HOME/.cabal/bin
+fi
+if [[ -d $HOME/slickedit/bin ]]; then
+  typeset -U path
+  path+=$HOME/slickedit/bin
+fi
+if [[ -d $HOME/sr/coroner ]]; then
   typeset -U path
   path+=$HOME/sr/coroner
 fi
-if [[ -d $HOME/man  ]] ; then
+if [[ -d $HOME/man  ]]; then
   typeset -U manpath
   manpath+=$HOME/man
 fi
@@ -18,8 +26,8 @@ export EDITOR=vim
 # Perforce setup
 export P4PORT=p4proxy.waterloo.bluecoat.com:1666
 export P4USER=gaelan.dcosta
-export P4DIFF=kdiff3
-export P4MERGE=p4kdiff3merge
+export P4DIFF="vsdiff -r1 -r2"
+export P4MERGE="vsmerge -smart"
 
 # Universal Truths about our Bluecoat Dev environment ## (pre-Scorpius)
 export QUIETBLD=1
@@ -33,6 +41,7 @@ export BLD_DEBUG=1
 export BLD_QUIET=1
 export BLD_TRACE="all"
 export BLD_LISTING_FILES=1
+export KNL_ENABLE_DEBUG_ASSERTIONS=1
 
 # Almost a universal truth -- platform dependant
 if [[ $(uname -o) == "Cygwin" ]] ; then

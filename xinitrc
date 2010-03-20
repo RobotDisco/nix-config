@@ -13,8 +13,5 @@ xscreensaver -no-splash &
 urxvtd -q -f -o &
 parcellite -dn &
 
-if [ -d "$HOME/.cabal/bin" ]; then
-	PATH=$PATH:$HOME/.cabal/bin
-fi
 
 exec xmonad
