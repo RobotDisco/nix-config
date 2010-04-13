@@ -11,6 +11,10 @@ if [[ -d $HOME/slickedit/bin ]]; then
   typeset -U path
   path+=$HOME/slickedit/bin
 fi
+if [[ -d $HOME/proj/scorpius/main/scripts ]]; then
+  typeset -U path
+  path+=$HOME/proj/scorpius/main/scripts
+fi
 if [[ -d $HOME/sr/coroner ]]; then
   typeset -U path
   path+=$HOME/sr/coroner
@@ -26,8 +30,8 @@ export EDITOR=vim
 # Perforce setup
 export P4PORT=p4proxy.waterloo.bluecoat.com:1666
 export P4USER=gaelan.dcosta
-export P4DIFF="vsdiff -r1 -r2"
-export P4MERGE="vsmerge -smart"
+export P4DIFF=kdiff3
+export P4MERGE=p4kdiff3merge
 
 # Universal Truths about our Bluecoat Dev environment ## (pre-Scorpius)
 export QUIETBLD=1
