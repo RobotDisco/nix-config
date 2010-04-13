@@ -57,9 +57,10 @@ cda_cmp () {
 }
 alias cda_clean="find \( -name '*.wav' -or -name '*.inf' \) -delete"
 #alias cda_gain="find ~/Music -type d -exec aacgain -q -a '{}/*.m4a' \;" #\&\& vorbisgain -f -s -a \"{}/*.ogg\" \;"
-alias bcsi_sync="rsync --exclude \"\$RECYCLE.BIN\" --exclude \"RRBackups\" --exclude \"System Volume Information\" --fake-super -avHAX --delete /cygdrive/M/* bluecoat:"
+
+alias bcsi_sync='rsync --exclude "\$RECYCLE.BIN/" --exclude "RRbackups/" --exclude "System Volume Information/" --fake-super -avHAX --delete-after /cygdrive/M/* bluecoat:'
 alias bcsi_preview='bcsi_sync -n'
-alias penis_sync="rsync --exclude \"\$RECYCLE.BIN\" --exclude \"RRBackups\" --exclude \"System Volume Information\" --fake-super -avHAX --delete /cygdrive/M/* media_penis:/media/pirated/Music/Gaelan"
+alias penis_sync='rsync --exclude "\$RECYCLE.BIN/" --exclude "RRbackups/" --exclude "System Volume Information/" --fake-super -avHAX --delete-after /cygdrive/M/* media_penis:/media/pirated/Music/Gaelan'
 alias penis_preview='penis_sync -n'
 
 # Workflow aliases and functions

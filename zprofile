@@ -1,21 +1,18 @@
 # Add user-supplied programs to our environment
-if [[ -d $HOME/bin ]]; then
-  typeset -U path
-  path+=$HOME/bin
-fi
-if [[ -d $HOME/.cabal/bin ]]; then
-  typeset -U path
-  path+=$HOME/.cabal/bin
-fi
-if [[ -d $HOME/slickedit/bin ]]; then
-  typeset -U path
-  path+=$HOME/slickedit/bin
-fi
-if [[ -d $HOME/sr/coroner ]]; then
-  typeset -U path
-  path+=$HOME/sr/coroner
-fi
-if [[ -d $HOME/man  ]]; then
+add-to-path () {
+  if [[ -d $1 ]]; then
+    typeset -Ug path
+    path+=$1
+  fi
+}
+
+add-to-path $HOME/bin
+add-to-path $HOME/.cabal/bin
+add-to-path $HOME/slickedit/bin
+add-to-path $HOME/sr/coroner
+unfunction add-to-path
+
+if [[ -d $HOME/man ]]; then
   typeset -U manpath
   manpath+=$HOME/man
 fi
