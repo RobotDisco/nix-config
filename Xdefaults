@@ -4,9 +4,9 @@ URxvt.background: black
 URxvt.foreground: white
 URxvt.cursorColor: green
 URxvt.underlineColor: yellow
-URxvt.font: xft:Anonymous Pro:pixelsize=12:autoalias=false
-URxvt.boldFont: xft:Anonymous:bold:pixelsize=12:autoalias=false
+URxvt.font: xft:Anonymous:pixelsize=14:autoalias=false
+URxvt.boldFont: xft:Anonymous:bold:pixelsize=14:autoalias=false
 URxvt.perl-ext-common: default, tabbed
 URxvt.visualBell: true
 URxvt.cursorBlink: true
-URxvt.urlLauncher: chromium
+URxvt.urlLaunche: chromium

@@ -79,9 +79,6 @@ cdproj () {
   TO_DIR=$(p42fs)
 	if [[ -d $TO_DIR ]]; then
 		cd $TO_DIR 
-		if [[ $P4CLIENT == 'gaelan_scorpius' ]]; then
-			cd main/src
-		fi
 	else
 		echo "$0: Assumed directory non-existant, check \$P4CLIENT"
 		return 1
@@ -109,8 +106,8 @@ p4client () {
 alias sustain_rdp="rdesktop -u gaelan.dcosta -g 1024x768 -d CF-CAL -p - sustain-1.internal.cacheflow.com"
 function 2xx () { pushd $(p42fs) && cp wdir/210.chk_dbg /srv/http/210.img; popd }
 function 2xxr () { pushd $(p42fs) && cp wdir/210.rls_dbg /srv/http/210.img; popd }
-function 32scorp () { pushd $(p42fs) && cp ../bin/x86/sgos_native/debug/gcc_v4.4.2/sysimg/prototype/system_gdb.si /srv/http/210.img; popd }
-function 64scorp () { pushd $(p42fs) && cp ../bin/x86_64/sgos_native/debug/gcc_v4.4.2/sysimg/prototype/system_gdb.si /srv/http/210.img; popd }
+function 32scorp () { pushd $(p42fs) && cp bin/x86/sgos_native/debug/gcc_v4.4.2/sysimg/prototype/system_gdb.si /srv/http/210.img; popd }
+function 64scorp () { pushd $(p42fs) && cp bin/x86_64/sgos_native/debug/gcc_v4.4.2/sysimg/prototype/system_gdb.si /srv/http/210.img; popd }
 alias cscfiles="find . -depth \( -iname '*.[ch]' -or -iname '*.[ch]pp' \) -type f -print > cscope.files"
 alias cscgen="cscope -b -q -k -i cscope.files -f cscope"
 alias vizshrc="vim ~/.zshrc"

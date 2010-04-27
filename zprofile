@@ -37,9 +37,7 @@ export PRODUCTS="cf_210.bind"
 # Universal Truths ... (Scorpius)
 export BLD_DEBUG=1
 export BLD_QUIET=1
-export BLD_TRACE="all"
-export BLD_LISTING_FILES=1
-export KNL_ENABLE_DEBUG_ASSERTIONS=1
+export BLD_TRACE="compile, link"
 
 # Almost a universal truth -- platform dependant
 if [[ $(uname -o) == "Cygwin" ]] ; then
