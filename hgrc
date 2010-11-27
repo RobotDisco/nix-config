@@ -1,0 +1,7 @@
+[extensions]
+hgext.convert =
+hgext.bookmarks =
+hggit = /users/gdcosta/src/hg-git/hggit
+
+[ui]
+username = "Gaelan D'costa <gdcosta@gmail.com>"
