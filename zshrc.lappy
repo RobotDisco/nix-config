@@ -28,6 +28,9 @@ PS1='[\u@\h \W]\$ '
 # Just in case we have real 'vi', prefer sane 'vim'
 alias vi="vim"
 
+#Upload music to work machine
+alias bcsi_music_sync="rsync -avHAX /srv/music gaelan@10.167.0.139:Music"
+
 # Add RVM functionality for managing Ruby versions locally
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
