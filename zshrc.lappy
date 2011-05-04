@@ -9,7 +9,7 @@ setopt alwaystoend nobeep
 # Expansion and Globbing options
 setopt extendedglob
 # History options
-setopt nohistbeep hist_fnctl_lock hist_lex_words histverify hist_find_no_dups hist_ignore_all_dups
+setopt nohistbeep hist_fcntl_lock hist_lex_words histverify hist_find_no_dups hist_ignore_all_dups
 # Input/Output options
 setopt correct rm_star_wait
 # Job Control options
@@ -33,7 +33,7 @@ alias ls="ls --color=auto -Fh"
 alias pacman="pacman-color"
 
 # Have an informative prompt
-PS1='[%u@%h %W]%$ '
+PS1='[!%h %4>..>%n%<<@%4>..>%m%<< %~]%# '
 
 # Just in case we have real 'vi', prefer sane 'vim'
 alias vi="vim"
