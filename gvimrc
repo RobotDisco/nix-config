@@ -1,4 +1,4 @@
 set background=dark
 colorscheme desert
 
-set guifont=Anonymous\ 11
+set guifont=Anonymous\ Pro\ 13

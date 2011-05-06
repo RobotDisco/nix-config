@@ -1,3 +1,5 @@
 [user]
 	email = code@thelambdacalculus.net
 	name = The Lambda Calculus
+[color]
+	ui = auto
