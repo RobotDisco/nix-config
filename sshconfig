@@ -1,35 +1,28 @@
-Host media_penis
-  User gaelan
-	HostName 192.168.1.105
-Host bluecoat
-  User gaelan
-  HostName  10.167.0.139
-
-Host booji
-  HostName      216.16.246.232
-  LocalForward  33890 sustain-1:3389
+Host work
+	User gaelan
+	HostName  10.167.0.139
+Host sg
+	User admin
+	HostName  10.169.3.49
 
 Host coreserver-sv
-  User gaelan.dcosta
-  HostName coreserver-sv.bluecoat.com
+	User  gaelan.dcosta
+	HostName  coreserver-sv.bluecoat.com
 Host coreserver
-  User gaelan.dcosta
-  HostName core-image-server.waterloo.bluecoat.com
-Host sustain-1
-  User gaelan.dcosta
-  HostName	10.169.0.140
+	User  gaelan.dcosta
+	HostName  core-image-server.waterloo.bluecoat.com
 
 Host ascorbic
-	HostName	ascorbic-acid.csclub.uwaterloo.ca
+	HostName  ascorbic-acid.csclub.uwaterloo.ca
 Host caffeine
-  HostName	caffeine.csclub.uwaterloo.ca
+	HostName  caffeine.csclub.uwaterloo.ca
 Host corn-syrup
-	HostName	corn-syrup.csclub.uwaterloo.ca
+	HostName  corn-syrup.csclub.uwaterloo.ca
 Host potassium
-	HostName	potassium-citrate.csclub.uwaterloo.ca
+	HostName  potassium-citrate.csclub.uwaterloo.ca
 Host taurine
-  HostName  taurine.csclub.uwaterloo.ca
+	HostName  taurine.csclub.uwaterloo.ca
 
 User gdcosta
-ForwardX11    yes
+ForwardX11  yes
 ForwardAgent  yes
