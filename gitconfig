@@ -1,3 +1,6 @@
+[core]
+	autocrlf = input
+	safecrlf = true
 [user]
 	email = code@thelambdacalculus.net
 	name = The Lambda Calculus
