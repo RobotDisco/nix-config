@@ -1,6 +1,6 @@
 Host work
 	User gaelan
-	HostName  10.167.0.139
+	HostName	10.167.0.139
 Host sg
 	User admin
 	HostName  10.169.3.49

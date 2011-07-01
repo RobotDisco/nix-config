@@ -21,3 +21,6 @@ done
 unfunction add-to-path
 unset profile
 
+# I want to edit everything in gvim
+export EDITOR=gvim
+export VISUAL=gvim
