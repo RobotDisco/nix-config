@@ -41,6 +41,10 @@ alias vi="vim"
 #Upload music to work machine
 alias bcsi_music_sync="rsync --exclude \"lost+found\" -avHAX /srv/music/* gaelan@10.167.0.139:Music"
 
+# Audio conversion
+alias rip_to_flac="cdparanoia -B && flac --best -V *.wav && rm *.wav"
+alias flac_to_ogg="oggenc -q 6 *.flac"
+
 # Add RVM functionality for managing Ruby versions locally
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
