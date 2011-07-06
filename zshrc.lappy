@@ -39,7 +39,7 @@ PS1='[!%h %4>..>%n%<<@%4>..>%m%<< %~]%# '
 alias vi="vim"
 
 #Upload music to work machine
-alias bcsi_music_sync="rsync --exclude \"lost+found\" -avHAX /srv/music/* gaelan@10.167.0.139:Music"
+alias bcsi_music_sync="rsync --exclude \"lost+found\" -avHAX /srv/music/* gaelan@work:Music"
 
 # Audio conversion
 alias rip_to_flac="cdparanoia -B && flac --best -V *.wav && rm *.wav"
