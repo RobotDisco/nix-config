@@ -1,0 +1,48 @@
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.zsh_history
+HISTSIZE=2000
+SAVEHIST=2000
+# Changing Directories options
+setopt autocd
+# Completion options
+setopt alwaystoend nobeep
+# Expansion and Globbing options
+setopt extendedglob
+# History options
+setopt nohistbeep hist_fcntl_lock hist_lex_words histverify hist_find_no_dups hist_ignore_all_dups
+# Input/Output options
+setopt correct rm_star_wait
+# Job Control options
+setopt auto_continue long_list_jobs
+# Prompting options
+setopt transient_rprompt 
+
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+zstyle :compinstall filename '/home/gaelan/.zshrc'
+
+autoload -Uz compinit
+compinit
+#end of lines added by compinstall
+
+# ZSH's xarg, with blackjack
+# autoload -U zargs
+
+# I like colours
+alias ls="ls --color=auto -Fh"
+alias pacman="pacman-color"
+
+# Have an informative prompt
+PS1='[!%h %4>..>%n%<<@%4>..>%m%<< %~]%# '
+
+# Just in case we have real 'vi', prefer sane 'vim'
+alias vi="vim"
+
+# Add RVM functionality for managing Ruby versions locally
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+alias vizshrc="vim ~/.zshrc"
+alias rezshrc="source ~/.zshrc"
+alias vizprofile="vim ~/.zprofile"
+alias rezprofile="source ~/.zprofile"
+

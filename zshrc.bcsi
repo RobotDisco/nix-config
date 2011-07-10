@@ -1,31 +1,5 @@
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.zsh_history
-HISTSIZE=2000
-SAVEHIST=2000
-setopt appendhistory banghist histverify histignoredups
-setopt autocd extendedglob
-setopt monitor
-unsetopt beep notify
-bindkey -e
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/gaelan/.zshrc'
-
-autoload -Uz compinit
-compinit
-#end of lines added by compinstall
-
-# ZSH's xarg, with blackjack
-# autoload -U zargs
-
-# I like colours
-alias ls="ls --color=auto -Fh"
-
-# Have an informative prompt
-PS1='[\u@\h \W]\$ '
-
-# Just in case we have real 'vi', prefer sane 'vim'
-alias vi="vim"
+# Source common files
+source ~/.zshrc.common
 
 cgrep () {
 	find . -depth \( -iname '*.[ch]' -or -iname '*.[ch]pp' \) -type f -print0 | xargs -0 grep --color=auto --line-number $1
@@ -36,9 +10,4 @@ hgrep () {
 jgrep () {
 	find . -iname '*.java' -type f -print0 | xargs -0 grep --color=auto --line-number $1
 }
-
-alias vizshrc="vim ~/.zshrc"
-alias rezshrc="source ~/.zshrc"
-alias vizprofile="vim ~/.zprofile"
-alias rezprofile="source ~/.zprofile"
 
