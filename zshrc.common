@@ -30,6 +30,7 @@ compinit
 
 # I like colours
 alias ls="ls --color=auto -Fh"
+alias grep="grep --color=auto"
 alias pacman="pacman-color"
 
 # Have an informative prompt
