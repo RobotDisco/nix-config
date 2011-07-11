@@ -2,6 +2,9 @@
 HISTFILE=~/.zsh_history
 HISTSIZE=2000
 SAVEHIST=2000
+
+autoload -U is-at-least;
+
 # Changing Directories options
 setopt autocd
 # Completion options
