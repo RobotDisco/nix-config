@@ -2,7 +2,8 @@
 source ~/.zshrc.common
 
 #Upload music to work machine
-alias bcsi_music_sync="rsync --delete-after --exclude \"lost+found\" -avHAX /srv/music/* gaelan@work:Music"
+alias bcsi_music_sync="rsync --delete --exclude \"lost+found\" -avHAX /srv/music/* gaelan@work:Music"
+alias penis_music_sync="rsync --delete --exclude \"lost+found\" -avHAX /srv/music/* gaelan@sacred-chao:/media/Archive/Music"
 
 # Audio conversion
 alias rip_to_flac="cdparanoia -B && flac --best -V *.wav && rm *.wav"
