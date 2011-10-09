@@ -1,16 +1,9 @@
-Host work
-	User gaelan
-	HostName	10.167.0.139
-Host sg
-	User admin
-	HostName  10.169.3.49
-
-Host coreserver-sv
-	User  gaelan.dcosta
-	HostName  coreserver-sv.bluecoat.com
-Host coreserver
-	User  gaelan.dcosta
-	HostName  core-image-server.waterloo.bluecoat.com
+Host dev1
+	User gaelan.dcosta
+	HostName dev1.kontagent.com
+Host gaelan
+	User wand
+	HostName  gaelan.dev.kt-engineering.com
 
 Host ascorbic
 	HostName  ascorbic-acid.csclub.uwaterloo.ca
