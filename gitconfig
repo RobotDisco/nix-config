@@ -1,5 +1,6 @@
 [core]
 	safecrlf = true
+	editor = gvim -f
 [user]
 	email = code@thelambdacalculus.net
 	name = The Lambda Calculus
