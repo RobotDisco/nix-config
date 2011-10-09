@@ -1,0 +1,6 @@
+*~
+*.swap
+*.pyc
+*.pyo
+.idea/tasks.xml
+.idea/workspace.xml

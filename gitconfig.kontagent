@@ -1,0 +1,14 @@
+[core]
+	safecrlf = true
+	editor = gvim -f
+	excludesfile = ~/Code/dotfiles/gitignore
+[github]
+	name = gaelan-dcosta
+[user]
+	email = gaelan.dcosta@kontagent.com
+	name = Gaelan D'costa
+[color]
+	ui = auto
+[branch "develop"]
+	mergeoptions = --no-ff
+

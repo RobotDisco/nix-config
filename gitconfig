@@ -1,6 +1,9 @@
 [core]
 	safecrlf = true
 	editor = gvim -f
+	excludesfile = ~/Code/dotfiles/gitignore
+[github]
+	name = TheLambdaCalculus
 [user]
 	email = code@thelambdacalculus.net
 	name = The Lambda Calculus
