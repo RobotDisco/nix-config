@@ -12,7 +12,8 @@ setopt alwaystoend nobeep
 # Expansion and Globbing options
 setopt extendedglob
 # History options
-setopt nohistbeep hist_fcntl_lock histverify hist_find_no_dups hist_ignore_all_dups
+setopt nohistbeep histverify hist_find_no_dups hist_ignore_all_dups
+is-at-least 4.3.9 && setopt hist_fcntl_lock
 is-at-least 4.3.11 && setopt hist_lex_words
 # Input/Output options
 setopt correct rm_star_wait
