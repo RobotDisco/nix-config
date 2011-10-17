@@ -9,6 +9,6 @@
 	name = Gaelan D'costa
 [color]
 	ui = auto
-[branch "develop"]
+[branch "develop-upstream"]
 	mergeoptions = --no-ff
 
