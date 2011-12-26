@@ -39,7 +39,8 @@ alias grep="grep --color=auto"
 alias pacman="pacman-color"
 
 # Have an informative prompt
-PS1='[!%h %4>..>%n%<<@%4>..>%m%<< %~]%# '
+PS1='[!%h %n@%m %~]
+%# '
 
 # Just in case we have real 'vi', prefer sane 'vim'
 alias vi="vim"
