@@ -99,9 +99,9 @@ if filereadable("/etc/vim/vimrc.local")
 endif
 
 " I prefer mod-2 indents.
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
-set noexpandtab
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
 set copyindent " For the love of God, preserve the previous line's indent rules
 

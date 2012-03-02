@@ -9,3 +9,5 @@ alias penis_music_sync="rsync --delete --exclude \"lost+found\" -avHAX /srv/musi
 alias rip_to_flac="cdparanoia -B && flac --best -V *.wav && rm *.wav"
 alias flac_to_ogg="oggenc -q 6 *.flac"
 
+# Use my preferred Java JDK
+export JAVA_HOME=/home/gaelan/Software/jdk1.6.0_30

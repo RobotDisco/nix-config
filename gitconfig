@@ -3,10 +3,10 @@
 	editor = gvim -f
 	excludesfile = ~/Code/dotfiles/gitignore
 [github]
-	name = TheLambdaCalculus
+	name = NaleagDeco
 [user]
-	email = code@thelambdacalculus.net
-	name = The Lambda Calculus
+	email = gdcosta@gmail.com
+	name = Gaelan D'costa
 [color]
 	ui = auto
 
