@@ -1,0 +1,13 @@
+{
+	"color_scheme": "Packages/Color Scheme - Default/Cobalt.tmTheme",
+	"spell_check": true,
+	"translate_tabs_to_spaces": true,
+	"indent_to_bracket": "true",
+	"highlight_line": true,
+	"scroll_past_end": false,
+	"indent_guide_options": ["draw_normal", "draw_active"],
+	"trim_trailing_white_space_on_save": true,
+    "ensure_newline_at_eof_on_save": true,
+    "auto_complete_commit_on_tab": true,
+    "ignored_packages": ["Vintage"]
+}
