@@ -10,3 +10,5 @@
 [color]
 	ui = auto
 
+[push]
+	default = upstream
