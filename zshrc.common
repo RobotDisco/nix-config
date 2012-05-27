@@ -6,7 +6,7 @@ SAVEHIST=2000
 autoload -U is-at-least;
 
 # Changing Directories options
-setopt autocd
+setopt autocd autopushd
 # Completion options
 setopt alwaystoend nobeep
 # Expansion and Globbing options
@@ -44,6 +44,9 @@ PS1='[!%h %n@%m %~]
 
 # Just in case we have real 'vi', prefer sane 'vim'
 alias vi="vim"
+
+# We prefer hub to git
+eval "$(hub alias -s)"
 
 # Add RVM functionality for managing Ruby versions locally
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
