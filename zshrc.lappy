@@ -1,5 +1,5 @@
 # Source common files
-source ~/.zshrc.common
+source ~/Code/dotfiles/zshrc.common
 
 #Upload music to work machine
 alias bcsi_music_sync="rsync --delete --exclude \"lost+found\" -avHAX /srv/music/* gaelan@work:Music"
