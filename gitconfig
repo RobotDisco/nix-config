@@ -12,3 +12,5 @@
 
 [push]
 	default = upstream
+[hub]
+	host = git.kontagent.com
