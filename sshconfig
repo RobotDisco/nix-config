@@ -1,18 +1,6 @@
 Host dev1
 	User gaelan.dcosta
 	HostName dev1.kontagent.com
-Host gaelan-tech
-	User wand
-	HostName  gaelan-tech.dev.kt-engineering.com
-	IdentityFile ~/.ssh/id_rsa.kontagent
-Host gaelan-ui
-	User gaelan-ui.dev.kt-engineering.com
-	User wand
-	IdentityFile ~/.ssh/id_rsa.kontagent
-Host gaelan-qm
-	User gaelan-qm.dev.kt-engineering.com
-	User wand
-	IdentityFile ~/.ssh/id_rsa.kontagent
 
 Host ascorbic
 	HostName  ascorbic-acid.csclub.uwaterloo.ca
