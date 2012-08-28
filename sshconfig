@@ -2,6 +2,16 @@ Host dev1
 	User gaelan.dcosta
 	HostName dev1.kontagent.com
 
+Host dashboard
+	User wand
+	HostName localhost
+	Port 2222
+
+Host dashboard-sf
+	User wand
+	HostName  gaelan-dcosta-sf.dev.kt-engineering.com
+	
+
 Host ascorbic
 	HostName  ascorbic-acid.csclub.uwaterloo.ca
 Host caffeine

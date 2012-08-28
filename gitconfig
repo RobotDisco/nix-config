@@ -1,7 +1,7 @@
 [core]
-	safecrlf = true
-	editor = gvim -f
-	excludesfile = ~/Code/dotfiles/gitignore
+	autocrlf = input
+	editor = subl -w
+	excludesfile = /Users/gaelan/.gitignore_global
 [github]
 	name = NaleagDeco
 [user]
@@ -9,8 +9,21 @@
 	name = Gaelan D'costa
 [color]
 	ui = auto
-
 [push]
 	default = upstream
 [hub]
 	host = git.kontagent.com
+[diff]
+	external = "/Applications/DeltaWalker.app/Contents/MacOS/git-diff"
+[merge]
+	tool = deltawalker
+[mergetool]
+	keepBackup = true
+[mergetool  "deltawalker"]
+	cmd = '/Applications/DeltaWalker.app/Contents/MacOS/git-merge' "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+[difftool "sourcetree"]
+	cmd = "/Applications/DeltaWalker.app/Contents/MacOS/dw "
+	path = 
+[mergetool "sourcetree"]
+	cmd = "/Applications/DeltaWalker.app/Contents/MacOS/dw "
+	trustExitCode = true
