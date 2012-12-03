@@ -13,17 +13,15 @@
 	default = upstream
 [hub]
 	host = git.kontagent.com
+[difftool "Kaleidoscope"]
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [diff]
-	external = "/Applications/DeltaWalker.app/Contents/MacOS/git-diff"
-[merge]
-	tool = deltawalker
+	tool = Kaleidoscope
+[difftool]
+	prompt = false
+[mergetool "Kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
 [mergetool]
-	keepBackup = true
-[mergetool  "deltawalker"]
-	cmd = '/Applications/DeltaWalker.app/Contents/MacOS/git-merge' "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
-[difftool "sourcetree"]
-	cmd = "/Applications/DeltaWalker.app/Contents/MacOS/dw "
-	path = 
-[mergetool "sourcetree"]
-	cmd = "/Applications/DeltaWalker.app/Contents/MacOS/dw "
-	trustExitCode = true
+	prompt = false
+[merge]
+	tool = Kaleidoscope

@@ -1,9 +1,13 @@
 {
 	"auto_complete_commit_on_tab": true,
-	"color_scheme": "Packages/Color Scheme - Default/Cobalt.tmTheme",
+	"theme": "Soda Light.sublime-theme",
 	"ensure_newline_at_eof_on_save": true,
 	"font_size": 10,
 	"highlight_line": true,
+	"ignored_packages":
+	[
+		"Vintage"
+	],
 	"indent_guide_options":
 	[
 		"draw_normal",

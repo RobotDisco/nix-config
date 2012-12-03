@@ -10,7 +10,11 @@ Host dashboard
 Host dashboard-sf
 	User wand
 	HostName  gaelan-dcosta-sf.dev.kt-engineering.com
-	
+
+Host intranet-dev
+	User wand
+	HostName intranet.dev.kt-engineering.com
+
 
 Host ascorbic
 	HostName  ascorbic-acid.csclub.uwaterloo.ca
