@@ -28,5 +28,5 @@ Host taurine
 	HostName  taurine.csclub.uwaterloo.ca
 
 User gdcosta
-ForwardX11  yes
+ForwardX11  no
 ForwardAgent  yes
