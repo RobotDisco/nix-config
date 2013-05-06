@@ -3,7 +3,12 @@ Host dev1
 	HostName dev1.kontagent.com
 
 Host dashboard
+    HostName gaelan-dcosta.dev.kt-engineering.com
 	User wand
+	HostName wand
+
+Host dashboard-local
+	User vagrant
 	HostName localhost
 	Port 2222
 

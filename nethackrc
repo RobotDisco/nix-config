@@ -1,1 +1,1 @@
-OPTIONS=!autopickup,autoquiver,catname:Spot,dogname:Bowser,extmenu,fruit:pomegranate,horsename:Trigger,menustyle:c,showexp,standout,time,color,large_font,fullscreen,ascii_map,wraptext
+OPTIONS=!autopickup,catname:Spot,dogname:Bowser,color,extmenu,fruit:pomegranate,fullscreen,hilite_pet,horsename:Trigger,lit_corridor,showexp,sparkle,standout,time,wraptext
