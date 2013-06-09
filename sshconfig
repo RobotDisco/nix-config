@@ -20,6 +20,13 @@ Host intranet-dev
 	User wand
 	HostName intranet.dev.kt-engineering.com
 
+Host xen-to
+	User root
+	HostName xen5.tor.kontagent.com
+
+Host docs-staging
+	User wand
+	HostName 10.51.1.185
 
 Host ascorbic
 	HostName  ascorbic-acid.csclub.uwaterloo.ca
