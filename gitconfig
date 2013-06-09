@@ -4,6 +4,8 @@
 	excludesfile = /Users/gaelan/.gitignore_global
 [github]
 	name = NaleagDeco
+	user = NaleagDeco
+	token = 58e61393fca33be8de748fe18ec561af0c36f6c1
 [user]
 	email = gdcosta@gmail.com
 	name = Gaelan D'costa
@@ -13,6 +15,12 @@
 	default = upstream
 [hub]
 	host = git.kontagent.com
+[difftool "sourcetree"]
+	cmd = /usr/local/bin/ksdiff -w \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /usr/local/bin/ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustExitCode = true
 [difftool "Kaleidoscope"]
 	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [diff]
@@ -24,12 +32,5 @@
 	trustExitCode = true
 [mergetool]
 	prompt = false
-	keepBackup = true
 [merge]
 	tool = Kaleidoscope
-[difftool "sourcetree"]
-	cmd = /usr/local/bin/ksdiff -w \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /usr/local/bin/ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
-	trustExitCode = true
