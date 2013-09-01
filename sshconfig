@@ -1,33 +1,3 @@
-Host dev1
-	User gaelan.dcosta
-	HostName dev1.kontagent.com
-
-Host dashboard
-    HostName gaelan-dcosta.dev.kt-engineering.com
-	User wand
-	HostName wand
-
-Host dashboard-local
-	User vagrant
-	HostName localhost
-	Port 2222
-
-Host dashboard-sf
-	User wand
-	HostName  gaelan-dcosta-sf.dev.kt-engineering.com
-
-Host intranet-dev
-	User wand
-	HostName intranet.dev.kt-engineering.com
-
-Host xen-to
-	User root
-	HostName xen5.tor.kontagent.com
-
-Host docs-staging
-	User wand
-	HostName 10.51.1.185
-
 Host ascorbic
 	HostName  ascorbic-acid.csclub.uwaterloo.ca
 Host caffeine
