@@ -1,6 +1,6 @@
 [core]
 	autocrlf = input
-	editor = subl -w
+    #editor = subl -w
 	excludesfile = /Users/gaelan/.gitignore_global
 [github]
 	name = NaleagDeco
