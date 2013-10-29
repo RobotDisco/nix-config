@@ -1,3 +1,8 @@
+Host ix
+    HostName ix.local
+    User pi
+    ForwardAgent yes
+
 Host ascorbic
 	HostName  ascorbic-acid.csclub.uwaterloo.ca
 Host caffeine
@@ -11,4 +16,4 @@ Host taurine
 
 User gdcosta
 ForwardX11  no
-ForwardAgent  yes
+ForwardAgent no
