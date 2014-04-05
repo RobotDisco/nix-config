@@ -1,7 +1,10 @@
 (require 'cask "~/.cask/cask.el")
 (cask-initialize)
 
-(menu-bar-mode nil)
+(tool-bar-mode nil)
+
+(global-auto-revert-mode t)
+(show-paren-mode t)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -45,5 +48,7 @@
 (add-hook 'python-mode-hook 'jedi:setup)
 
 (global-set-key (kbd "C-x g") 'magit-status)
+
+(add-hook 'before-save-hook 'whitespace-cleanup)
 
 (setq inhibit-splash-screen t)
