@@ -16,6 +16,7 @@
 (depends-on "feature-mode")
 (depends-on "jedi")
 (depends-on "exec-path-from-shell")
+(depends-on "virtualenvwrapper")
 (depends-on "cider")
 (depends-on "clojure-test-mode")
 (depends-on "clojure-mode")

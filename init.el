@@ -47,6 +47,11 @@
 
 (add-hook 'python-mode-hook 'jedi:setup)
 
+(require 'virtualenvwrapper)
+(venv-initialize-interactive-shells)
+(venv-initialize-eshell)
+(setq venv-location "~/.virtualenvs/")
+
 ;; Cider
 (add-hook 'cider-mode-hook 'cider-turn=-on-eldoc-mode)
 (add-hook 'cider-repl-mode-hook 'smartparens-strict-mode)
