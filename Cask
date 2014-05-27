@@ -1,6 +1,7 @@
 (source gnu)
 (source melpa)
 
+(depends-on "ack-and-a-half")
 (depends-on "cask")
 (depends-on "magit")
 (depends-on "projectile")
