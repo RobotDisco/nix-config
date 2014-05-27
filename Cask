@@ -21,3 +21,4 @@
 (depends-on "clojure-test-mode")
 (depends-on "clojure-mode")
 (depends-on "ac-nrepl")
+(depends-on "guru-mode")

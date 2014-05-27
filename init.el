@@ -6,6 +6,8 @@
 (global-auto-revert-mode t)
 (show-paren-mode t)
 
+(guru-global-mode t)
+
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (when (memq window-system '(mac ns))
