@@ -1,4 +1,4 @@
-(require 'cask "~/.cask/cask.el")
+(require 'cask)
 (cask-initialize)
 
 (tool-bar-mode nil)
