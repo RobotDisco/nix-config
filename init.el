@@ -33,11 +33,11 @@
 ;; Show the current function name in the header line
 (which-function-mode)
 (setq-default header-line-format
-	      '((which-func-mode ("" which-func-format " "))))
+              '((which-func-mode ("" which-func-format " "))))
 (setq mode-line-misc-info
-	    ;; We remove Which Function Mode from the mode line, because it's mostly
-	    ;; invisible here anyway.
-	    (assq-delete-all 'which-func-mode mode-line-misc-info))
+            ;; We remove Which Function Mode from the mode line, because it's mostly
+            ;; invisible here anyway.
+            (assq-delete-all 'which-func-mode mode-line-misc-info))
 
 (projectile-global-mode)
 
@@ -50,21 +50,21 @@
 
 (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
 (add-hook 'emacs-lisp-mode-hook (lambda ()
-				  (smartparens-strict-mode t)
-				  (rainbow-delimiters-mode t)
-				  (turn-on-eldoc-mode)
-				  (rainbow-mode)
-				  (setq mode-name "EL")))
+                                  (smartparens-strict-mode t)
+                                  (rainbow-delimiters-mode t)
+                                  (turn-on-eldoc-mode)
+                                  (rainbow-mode)
+                                  (setq mode-name "EL")))
 (add-hook 'ielm-mode-hook (lambda()
-			    (smartparens-strict-mode t)
-			    (rainbow-delimiters-mode t)
-			    (whitespace-mode nil)
-			    (turn-on-eldoc-mode)))
+                            (smartparens-strict-mode t)
+                            (rainbow-delimiters-mode t)
+                            (whitespace-mode nil)
+                            (turn-on-eldoc-mode)))
 
 (require 'smartparens-config)
 
 (add-hook 'prog-mode-hook (lambda ()
-			    (smartparens-mode t)))
+                            (smartparens-mode t)))
 (add-hook 'prog-mode-hook 'flycheck-mode)
 
 (add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
@@ -101,65 +101,26 @@
 (eval-after-load "cider"
   '(define-key cider-mode-map (kbd "C-c C-d") 'ac-nrepl-popup-doc))
 
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[gj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
+
+(setq rbenv-installation-dir "/usr/local")
+(global-rbenv-mode)
+
+;; Dash at point
+(autoload 'dash-at-point "dash-at-point"
+  "Search the word at point with Dash." t nil)
+(global-set-key (kbd "C-c d") 'dash-at-point)
+(global-set-key (kbd "C-c e") 'dash-at-point-with-docset)
 
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "M-/") 'hippie-expand)
-
-;; Smartparens key bindings
-
-;;;;;;;;;;;;;;;;;;;;;;;;
-;; keybinding management
-
-(define-key sp-keymap (kbd "C-M-f") 'sp-forward-sexp)
-(define-key sp-keymap (kbd "C-M-b") 'sp-backward-sexp)
-(define-key sp-keymap (kbd "C-M-d") 'sp-down-sexp)
-(define-key sp-keymap (kbd "C-M-a") 'sp-backward-down-sexp)
-(define-key sp-keymap (kbd "C-M-e") 'sp-up-sexp)
-(define-key sp-keymap (kbd "C-M-u") 'sp-backward-up-sexp)
-(define-key sp-keymap (kbd "C-M-n") 'sp-next-sexp)
-(define-key sp-keymap (kbd "C-M-p") 'sp-previous-sexp)
-(define-key sp-keymap (kbd "C-S-a") 'sp-beginning-of-sexp)
-(define-key sp-keymap (kbd "C-S-d") 'sp-end-of-sexp)
-
-(define-key sp-keymap (kbd "C-M-k") 'sp-kill-sexp)
-(define-key sp-keymap (kbd "C-- C-M-k") 'sp-backward-kill-sexp)
-
-(define-key sp-keymap (kbd "C-M-w") 'sp-copy-sexp)
-(define-key sp-keymap (kbd "C-- C-M-w") 'sp-backward-copy-sexp)
-
-(define-key sp-keymap (kbd "M-<delete>") 'sp-unwrap-sexp)
-(define-key sp-keymap (kbd "M-<backspace>") 'sp-backward-unwrap-sexp)
-
-(define-key sp-keymap (kbd "C-M-t") 'sp-transpose-sexp)
-
-(define-key sp-keymap (kbd "M-D") 'sp-splice-sexp)
-(define-key sp-keymap (kbd "C-M-<delete>") 'sp-splice-sexp-killing-forward)
-(define-key sp-keymap (kbd "C-M-<backspace>") 'sp-splice-sexp-killing-backward)
-(define-key sp-keymap (kbd "C-S-<backspace>") 'sp-splice-sexp-killing-around)
-
-(define-key sp-keymap (kbd "C-<right>") 'sp-forward-slurp-sexp)
-(define-key sp-keymap (kbd "C-<left>") 'sp-forward-barf-sexp)
-(define-key sp-keymap (kbd "C-M-<left>") 'sp-backward-slurp-sexp)
-(define-key sp-keymap (kbd "C-M-<right>") 'sp-backward-barf-sexp)
-
-(define-key sp-keymap (kbd "C-M-]") 'sp-select-next-thing)
-(define-key sp-keymap (kbd "C-[") 'sp-select-previous-thing)
-
-(define-key sp-keymap (kbd "C-]") 'sp-select-next-thing-exchange)
-(define-key sp-keymap (kbd "C-- C-]" 'sp-select-previous-thing-exchange))
-
-(define-key sp-keymap (kbd "M-F") 'sp-forward-symbol)
-(define-key sp-keymap (kbd "M-B") 'sp-backward-symbol)
-
-(define-key sp-keymap (kbd "H-t") 'sp-prefix-tag-object)
-(define-key sp-keymap (kbd "H-p") 'sp-prefix-pair-object)
-(define-key sp-keymap (kbd "H-s c") 'sp-convolute-sexp)
-(define-key sp-keymap (kbd "H-s a") 'sp-absorb-sexp)
-(define-key sp-keymap (kbd "H-s e") 'sp-emit-sexp)
-(define-key sp-keymap (kbd "H-s p") 'sp-add-to-previous-sexp)
-(define-key sp-keymap (kbd "H-s n") 'sp-add-to-next-sexp)
-(define-key sp-keymap (kbd "H-s j") 'sp-join-sexp)
-(define-key sp-keymap (kbd "H-s s") 'sp-split-sexp)
+(sp-use-smartparens-bindings)
 
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
