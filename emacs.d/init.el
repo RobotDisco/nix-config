@@ -1,7 +1,10 @@
 (require 'cask)
 (cask-initialize)
 
-(tool-bar-mode nil)
+(tool-bar-mode -1)
+
+(line-number-mode t)
+(column-number-mode t)
 
 (global-auto-revert-mode t)
 (show-smartparens-global-mode t)
@@ -33,11 +36,11 @@
 ;; Show the current function name in the header line
 (which-function-mode)
 (setq-default header-line-format
-              '((which-func-mode ("" which-func-format " "))))
+	      '((which-func-mode ("" which-func-format " "))))
 (setq mode-line-misc-info
-            ;; We remove Which Function Mode from the mode line, because it's mostly
-            ;; invisible here anyway.
-            (assq-delete-all 'which-func-mode mode-line-misc-info))
+	    ;; We remove Which Function Mode from the mode line, because it's mostly
+	    ;; invisible here anyway.
+	    (assq-delete-all 'which-func-mode mode-line-misc-info))
 
 (projectile-global-mode)
 
@@ -50,21 +53,21 @@
 
 (add-to-list 'auto-mode-alist '("Cask\\'" . emacs-lisp-mode))
 (add-hook 'emacs-lisp-mode-hook (lambda ()
-                                  (smartparens-strict-mode t)
-                                  (rainbow-delimiters-mode t)
-                                  (turn-on-eldoc-mode)
-                                  (rainbow-mode)
-                                  (setq mode-name "EL")))
+				  (smartparens-strict-mode t)
+				  (rainbow-delimiters-mode t)
+				  (turn-on-eldoc-mode)
+				  (rainbow-mode)
+				  (setq mode-name "EL")))
 (add-hook 'ielm-mode-hook (lambda()
-                            (smartparens-strict-mode t)
-                            (rainbow-delimiters-mode t)
-                            (whitespace-mode nil)
-                            (turn-on-eldoc-mode)))
+			    (smartparens-strict-mode t)
+			    (rainbow-delimiters-mode t)
+			    (whitespace-mode nil)
+			    (turn-on-eldoc-mode)))
 
 (require 'smartparens-config)
 
 (add-hook 'prog-mode-hook (lambda ()
-                            (smartparens-mode t)))
+			    (smartparens-mode t)))
 (add-hook 'prog-mode-hook 'flycheck-mode)
 
 (add-to-list 'auto-mode-alist '("\.feature$" . feature-mode))
@@ -123,5 +126,32 @@
 (sp-use-smartparens-bindings)
 
 (add-hook 'before-save-hook 'whitespace-cleanup)
+
+;; LaTeX configuration
+ (setq TeX-parse-self t) ; Enable parse on load.
+(setq TeX-auto-save t) ; Enable parse on save.
+(setq-default TeX-master nil) ; Query for master file.
+(setq TeX-PDF-mode t) ; Use PDF instead of DVI for output
+
+(when (eq system-type 'darwin)
+  (setq TeX-view-program-selection
+	'((output-dvi "DVI Viewer")
+	  (output-pdf "PDF Viewer")
+	  (output-html "HTML Viewer")))
+  (setq TeX-view-program-list
+	'(("DVI Viewer" "open %o")
+	  ("PDF Viewer" "open %o")
+	  ("HTML Viewer" "open %o"))))
+
+(defun gaelan-kill-other-buffers ()
+  "Kill all buffers bu the current one.
+Doesn't mess with special buffers."
+  (interactive)
+  (-each
+      (->> (buffer-list)
+	(-filter #'buffer-file-name)
+	(--remove (eql (current-buffer) it)))
+    #'kill-buffer))
+(global-set-key (kbd "C-c k") 'gaelan-kill-other-buffers)
 
 (setq inhibit-splash-screen t)
