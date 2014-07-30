@@ -29,3 +29,4 @@
 (depends-on "haml-mode")
 (depends-on "web-mode")
 (depends-on "dash-at-point")
+(depends-on "elm-mode")
