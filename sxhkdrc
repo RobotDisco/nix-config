@@ -1,0 +1,25 @@
+# Web browser Back/Forward shortcuts
+{@F1,@F2}
+  xte 'keydown Alt_L' 'key {Left,Right}' 'keyup Alt_L'
+ 
+# Web browser Refresh shortcut
+@F3
+  xte 'keydown Control_L' 'key r' 'keyup Control_L'
+ 
+# Awesome WM maximize current window
+# Adjust as necessary for different window managers
+@F4
+  xte 'keydown Super_L' 'key m' 'keyup Super_L'
+ 
+# Awesome WM move one desktop right
+@F5
+  xte 'keydown Super_L' 'key Right' 'keyup Super_L'
+ 
+{F6,F7}
+  xbacklight -{dec,inc} 10
+ 
+F8
+  amixer set Master toggle
+ 
+{F9,F10}
+  amixer set Master 10{-,+} unmute
