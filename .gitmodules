@@ -1,0 +1,6 @@
+[submodule "prelude"]
+	path = prelude
+	url = https://github.com/RobotDisco/prelude.git
+[submodule "prezto"]
+	path = prezto
+	url = https://github.com/RobotDisco/prezto.git
