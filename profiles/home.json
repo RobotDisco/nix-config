@@ -1,0 +1,13 @@
+{
+  "symlinks": {
+    "src/gitconfig": ".gitconfig",
+    "src/sshconfig": ".ssh/config",
+    "src/authorized_keys", ".ssh/authorized_keys",
+    "src/profiles.clj", ".lein/profiles.clj",
+    "src/vimrc": ".vimrc",
+    "src/gvimrc": ".gvimrc",
+    "prezto": ".zprezto",
+    "prelude": ".emacs.d"
+  }
+}
+
