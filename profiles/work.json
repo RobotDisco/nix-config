@@ -7,17 +7,11 @@
     "src/vimrc": ".vimrc",
     "src/gvimrc": ".gvimrc",
     "prezto": ".zprezto",
-    "prelude": ".emacs.d",
-    "prezto/runcoms/zlogin": ".zlogin",
-    "prezto/runcoms/zlogout": ".zlogout",
-    "prezto/runcoms/zpreztorc": ".zpreztorc",
-    "prezto/runcoms/zprofile": ".zprofile",
-    "prezto/runcoms/zshenv": ".zshenv",
-    "prezto/runcoms/zshrc": ".zshrc"
+    "prelude": ".emacs.d"
   },
   "context": {
     "git_name": "Gaelan D'costa",
-    "git_email": "gdcosta@gmail.com"
+    "git_email": "gaelan@tulip.io"
   }
 }
 
