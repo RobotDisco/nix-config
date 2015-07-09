@@ -15,9 +15,10 @@ function fish_greeting
 end
 
 # Emacs cask support and some nice aliases
-if test -d "$HOME/.cask"
+if type -f "cask" > /dev/null
     set PATH $PATH "$HOME/.cask/bin"
 
+    alias ca='cask'
     alias cai='cask install'
     alias cau='cask update'
     alias caI='cask init'
@@ -32,11 +33,11 @@ if test (uname) = "Darwin"
     alias brewi='brew install'
     alias brews='brew search'
     alias brewu='brew upgrade'
-    alias brewU='brew update and brew upgrade'
+    alias brewU='brew update ;and brew upgrade'
     alias brewx='brew remove'
 
     # Homebrew Cask
-    alias cask='brew cask'
+    alias bcask='brew cask'
     alias caskc='brew cask cleanup --outdated'
     alias caskC='brew cask cleanup'
     alias caski='brew cask install'
