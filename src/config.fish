@@ -45,3 +45,9 @@ if test (uname) = "Darwin"
     alias casks='brew cask search'
     alias caskx='brew cask uninstall'
 end
+
+# Emacs
+set EDITOR "emacsclient --alternate-editor vim"
+
+# RBEnv support
+status --is-interactive; and . (rbenv init -|psub)
