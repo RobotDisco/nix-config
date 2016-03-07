@@ -1,9 +1,3 @@
-[submodule "prelude"]
-	path = prelude
-	url = https://github.com/RobotDisco/prelude.git
-[submodule "prezto"]
-	path = prezto
-	url = https://github.com/RobotDisco/prezto.git
 [submodule "tulip"]
 	path = tulip
 	url = tulipadmin@internal.well.prod:git/dotfiles.git
