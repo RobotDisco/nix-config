@@ -71,4 +71,4 @@ function init --on-event init_fasd
 end
 
 # ops/arc support from work
-set PATH $PATH ~/workspace/dev_scripts/arcanist/bin ~/workspace/ops/bin ~/bin
+set PATH $PATH ~/workspace/dev_scripts/arcanist/bin ~/bin
