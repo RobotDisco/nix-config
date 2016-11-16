@@ -24,6 +24,10 @@
   :if (memq window-system '(mac ns))
   :config (exec-path-from-shell-initialize))
 
+;; Use Anonymous Pro as default font
+(add-to-list 'default-frame-alist
+	     '(font . "Anonymous Pro-14"))
+
 ;; Solarized looks gross in console-mode
 (use-package solarized-theme
   :if window-system
