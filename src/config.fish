@@ -47,7 +47,7 @@ if test (uname) = "Darwin"
 end
 
 # Emacs
-set EDITOR "emacsclient --alternate-editor vim"
+set -x EDITOR "emacsclient"
 
 # RBEnv support
 status --is-interactive; and . (rbenv init -|psub)
