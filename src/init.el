@@ -78,34 +78,6 @@
   :config
   (projectile-global-mode))
 
-(use-package skewer-mode
-  :init
-  (use-package js2-mode
-    :mode "\\.js\\'")
-  :config
-  (add-hook 'js2-mode-hook 'skewer-mode)
-  (add-hook 'css-mode-hook 'skewer-css-mode)
-  (add-hook 'html-mode-hook 'skewer-html-mode))
-
-(use-package php-mode
-  :mode "\\.php\\'"
-  :interpreter "php"
-  ;; The following leverages templates? I don't know what those are
-  ;; :init (eval-after-load 'php-mode
-  ;;         '(require 'php-ext))
-  )
-
-(use-package web-mode
-  :mode (("\\.phtml\\'" . web-mode)
-	 ("\\.tpl\\.php\\'" . web-mode)
-	 ("\\.[agj]sp\'" . web-mode)
-	 ("\\.as[cp]x\\'" . web-mode)
-	 ("\\.erb\\'" . web-mode)
-	 ("\\.mustache\\'" . web-mode)
-	 ("\\.handlebars\\'" . web-mode)
-	 ("\\.djhtml\\'" . web-mode)
-	 ("\\.jsx\\'" . web-mode)))
-
 (use-package rainbow-delimiters
   :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
@@ -120,21 +92,13 @@
 (use-package flycheck
   :config (add-hook 'after-init-hook #'global-flycheck-mode))
 
-(use-package twittering-mode)
-
 (use-package cider)
 
 (use-package inf-clojure
   :config
   (add-hook 'clojure-mode-hook 'inf-clojure-minor-mode))
 
-(use-package haskell-mode
-  :config
-  (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation))
-
 (use-package scala-mode2)
-
-(use-package markdown-mode)
 
 (use-package smartparens-config
   :ensure smartparens
@@ -173,27 +137,6 @@
 
 ;; enable y/n prompts instead of yes/no
 (fset 'yes-or-no-p 'y-or-n-p)
-
-;; Avy for quick-jumping between words in a file
-(use-package avy
-  :config (avy-setup-default)
-  :bind (("C-:" . avy-goto-char)
-	 ("C-'" . avy-goto-char-2)
-	 ("M-g g" . avy-goto-line)
-	 ("M-g w" . avy-goto-word-1)
-	 ("M-g e" . avy-goto-word-0)))
-
-;; Ace-jump-window mode for quickly jumping between buffers
-(use-package ace-window
-  :bind ("M-p" . ace-window))
-
-;; Multiple cursors
-;; If multiple-cursors while searching is needed, consider phi-search
-(use-package multiple-cursors
-  :bind (("C-S-c C-S-c" . mc/edit-lines)
-	 ("C->" . mc/mark-next-like-this)
-	 ("C-<" . mc/mark-previous-like-this)
-	 ("C-c C-<" . mc/mark-all-like-this)))
 
 ;; enable undo-tree
 (use-package undo-tree
@@ -234,8 +177,5 @@ point reaches the beginning or end of the buffer, stop there."
 
 ;; Revert buffers that have been changed outside emacs
 (global-auto-revert-mode)
-
-;; Save open files and window locations
-(desktop-save-mode 1)
 
 ;; Random hacks of kindness
