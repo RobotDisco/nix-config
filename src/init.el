@@ -54,13 +54,15 @@
   (flx-ido-mode 1)
   (setq ido-enable-flex-matching t)
   (use-package ido-ubiquitous
-    :config (ido-ubiquitous-mode 1))
-  (use-package smex
+    :config (ido-ubiquitous-mode 1)))
+
+;; Make M-x leverage ido
+(use-package smex
     :config (smex-initialize)
     :bind (("M-x" . smex)
 	   ("M-X" . smex-major-mode-commands)
 	   ;; The traditional M-x we all know and love
-	   ("C-c C-c M-x" . execute-extended-command))))
+	   ("C-c C-c M-x" . execute-extended-command)))
 
 ;; A better buffer menu
 (use-package ibuffer
@@ -177,3 +179,17 @@ point reaches the beginning or end of the buffer, stop there."
 (global-auto-revert-mode)
 
 ;; Random hacks of kindness
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (undo-tree smartparens use-package solarized-theme smex smart-mode-line rainbow-delimiters projectile neotree magit inf-clojure ido-ubiquitous guru-mode ggtags flycheck flx-ido exec-path-from-shell editorconfig company cider ag))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
