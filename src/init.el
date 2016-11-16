@@ -98,8 +98,6 @@
   :config
   (add-hook 'clojure-mode-hook 'inf-clojure-minor-mode))
 
-(use-package scala-mode2)
-
 (use-package smartparens-config
   :ensure smartparens
   :config
