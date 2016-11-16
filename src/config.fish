@@ -8,15 +8,15 @@ end
 
 # If fortune exists and this is an interactive shell, print a pithy quote
 function fish_greeting
-    if type -f "fortune" > /dev/null
+    if type -f "fortune" > /dev/null ^&1
 	fortune -s
 	echo
     end
 end
 
 # Emacs cask support and some nice aliases
-if type -f "cask" > /dev/null
-    set PATH $PATH "$HOME/.cask/bin"
+if type -f "cask" >/dev/null ^/dev/null
+    set -x PATH $PATH "$HOME/.cask/bin"
 
     alias ca='cask'
     alias cai='cask install'
