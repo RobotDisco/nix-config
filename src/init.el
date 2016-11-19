@@ -68,6 +68,11 @@
 	   ;; The traditional M-x we all know and love
 	   ("C-c C-c M-x" . execute-extended-command)))
 
+;; Show available key bindings
+(use-package which-key
+  :config
+  (which-key-mode))
+
 ;; A better buffer menu
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer))
