@@ -99,10 +99,14 @@
   :config (add-hook 'after-init-hook #'global-flycheck-mode))
 
 (use-package cider)
-
-(use-package inf-clojure
+(use-package clj-refactor
   :config
-  (add-hook 'clojure-mode-hook 'inf-clojure-minor-mode))
+  (defun clj-refactor-mode-hook ()
+    (clj-refactor-mode 1)
+    (yas-minor-mode 1)
+    ;; This choice of keybinding leaves cider-macroexpand-1 unbound
+    (cljr-add-keybindings-with-prefix "C-c C-m"))
+  (add-hook 'clojure-mode-hook #'clj-refactor-mode-hook))
 
 (use-package smartparens-config
   :ensure smartparens
