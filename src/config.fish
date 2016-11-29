@@ -47,7 +47,8 @@ if test (uname) = "Darwin"
 end
 
 # Emacs
-set -x EDITOR "emacsclient"
+set -x EDITOR "emacsclient -a vim"
+set -x VISUAL $EDITOR
 
 # RBEnv support
 status --is-interactive; and . (rbenv init -|psub)
@@ -71,4 +72,4 @@ function init --on-event init_fasd
 end
 
 # ops/arc support from work
-set PATH $PATH ~/workspace/dev_scripts/arcanist/bin ~/bin
+set -x PATH $PATH ~/workspace/dev_scripts/arcanist/bin ~/bin
