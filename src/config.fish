@@ -57,19 +57,25 @@ status --is-interactive; and . (rbenv init -|psub)
 status --is-interactive; and . (pyenv init -|psub)
 
 # FASD support
-function init --on-event init_fasd
-  if not available fasd
-    echo "🍒  Please install 'fasd' first!"
-  else
-    function -e fish_preexec _run_fasd
-      fasd --proc (fasd --sanitize "$argv") > "/dev/null" 2>&1
+if type -q fasd
+    function __run_fasd -e fish_preexec
+      command fasd --proc (command fasd --sanitize "$argv" | tr ' ' \n) > "/dev/null" 2>&1
     end
 
     function j
       cd (fasd -d -e 'printf %s' "$argv")
     end
-  end
+else
+    echo "🍒  Please install 'fasd' first!"
 end
 
 # ops/arc support from work
 set -x PATH $PATH ~/workspace/dev_scripts/arcanist/bin ~/bin
+
+function old_ssh
+    command ssh -F ~/.ssh/config.old "$argv"
+end
+
+function new_ssh
+    command ssh -F ~/.ssh/config.new "$argv"
+end
