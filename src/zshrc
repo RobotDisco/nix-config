@@ -1,0 +1,24 @@
+# Created by newuser for 5.3.1
+
+# FASD aliases
+alias a='fasd -a'        # any
+alias s='fasd -si'       # show / search / select
+alias d='fasd -d'        # directory
+alias f='fasd -f'        # file
+alias sd='fasd -sid'     # interactive directory selection
+alias sf='fasd -sif'     # interactive file selection
+alias z='fasd_cd -d'     # cd, same functionality as j in autojump
+alias zz='fasd_cd -d -i' # cd with interactive selection
+
+# Activate FASD
+eval "$(fasd --init auto)"
+
+# Activate rbenv and pyenv
+eval "$(rbenv init -)"
+eval "$(pyenv init -)"
+
+## Make ZSH use the good parts of FISH
+source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Fish-like syntax highlighting. Must be at the end of .zshrc
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
