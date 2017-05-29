@@ -103,6 +103,18 @@
 (use-package flycheck
   :config (add-hook 'after-init-hook #'global-flycheck-mode))
 
+;; Ruby
+(use-package rbenv
+  :config (global-rbenv-mode))
+(use-package ruby-tools)
+
+;; Common Lisp
+(load (expand-file-name "~/.quicklisp/slime-helper.el"))
+;; Replace "sbcl" with the path to your implementation
+(setq inferior-lisp-program "sbcl")
+(setq slime-contribs '(slime-fancy))
+
+;; Clojure
 (use-package cider)
 (use-package clj-refactor
   :config
@@ -111,6 +123,10 @@
     (yas-minor-mode 1)
     ;; This choice of keybinding leaves cider-macroexpand-1 unbound
     (cljr-add-keybindings-with-prefix "C-c C-m"))
+  (setq cider-cljs-lein-repl
+      "(do (require 'figwheel-sidecar.repl-api)
+	   (figwheel-sidecar.repl-api/start-figwheel!)
+	   (figwheel-sidecar.repl-api/cljs-repl))")
   (add-hook 'clojure-mode-hook #'clj-refactor-mode-hook))
 
 (use-package smartparens-config
