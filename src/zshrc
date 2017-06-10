@@ -1,5 +1,15 @@
 # Created by newuser for 5.3.1
 
+# Emacs is my editor
+export EDITOR='emacs'
+export VISUAL=$EDITOR
+alias e=$EDITOR
+
+# Include ~/bin in PATH
+if [ -d ~/bin ]; then
+    export PATH=$PATH:~/bin
+fi
+
 # FASD aliases
 alias a='fasd -a'        # any
 alias s='fasd -si'       # show / search / select
@@ -9,6 +19,10 @@ alias sd='fasd -sid'     # interactive directory selection
 alias sf='fasd -sif'     # interactive file selection
 alias z='fasd_cd -d'     # cd, same functionality as j in autojump
 alias zz='fasd_cd -d -i' # cd with interactive selection
+
+# Helpers for editing/refreshing .zshrc
+alias erc='e ~/.zshrc'
+alias rrc='source ~/.zshrc'
 
 # Activate FASD
 eval "$(fasd --init auto)"
