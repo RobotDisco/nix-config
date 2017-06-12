@@ -87,7 +87,7 @@
   (use-package ag)
   (use-package ggtags)
   :config
-  (projectile-global-mode))
+  (projectile-mode))
 
 (use-package rainbow-delimiters
   :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
@@ -105,7 +105,7 @@
 
 ;; Ruby
 (use-package rbenv
-  :config (global-rbenv-mode))
+  :config (add-hook 'ruby-mode-hook #'rbenv-mode))
 (use-package ruby-tools)
 
 ;; Common Lisp
@@ -189,6 +189,36 @@
   (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
 
+;; use eslint with web-mode for jsx files
+(flycheck-add-mode 'javascript-eslint 'web-mode)
+
+;; Modern JavaScript
+(use-package js2-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-jsx-mode))
+  (add-to-list 'interpreter-mode-alist '("node" . js2-jsx-mode)))
+
+(use-package json-mode
+  :config (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode)))
+
+(use-package flycheck-flow
+  :config
+  (add-hook 'javascript-mode-hook 'flycheck-mode)
+  (flycheck-add-next-checker 'javascript-flow 'javascript-flow-coverage 'javascript-eslint)
+  (eval-after-load 'company
+    '(add-to-list 'company-backends 'company-flow)))
+
+(use-package flow-minor-mode
+  :config
+  (add-hook 'js2-mode-hook 'flow-minor-enable-automatically)
+  (flycheck-add-mode 'javascript-flow 'flow-minor-mode)
+  (flycheck-add-mode 'javascript-eslint 'flow-minor-mode))
+
+;; disable jshint since we prefer eslint checking
+(setq-default flycheck-disabled-checkers
+  (append flycheck-disabled-checkers
+    '(javascript-jshint)))
+
 ;; Org mode
 (use-package org
   :config
@@ -199,14 +229,14 @@
 
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 (defun smarter-move-beginning-of-line (arg)
-  "Move point back to intendation or beginning of line
+  "Move point back to indentation or beginning of line.
 
 Move point to the first non-whitespace character on this line.
 If point is already there, move to the beginning of the line.
 Effectively toggle between the first non-whitespace character and
 the beginning of the line.
 
-If ARG is not nil or 1, move forward ARG - 1 lines first. If
+If ARG is not nil or 1, move forward ARG - 1 lines first.  If
 point reaches the beginning or end of the buffer, stop there."
   (interactive "^p")
   (setq arg (or arg 1))
@@ -228,3 +258,17 @@ point reaches the beginning or end of the buffer, stop there."
 (global-auto-revert-mode)
 
 ;; Random hacks of kindness
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (json-mode flycheck-flow company-flow flow-minor-mode 4clojure js2-mode yaml-mode which-key web-mode use-package undo-tree solarized-theme smex smartparens smart-mode-line ruby-tools robe rbenv rainbow-delimiters projectile notmuch neotree markdown-mode magit macrostep inf-clojure ido-ubiquitous guru-mode ggtags flycheck flx-ido exec-path-from-shell editorconfig cyberpunk-theme company-anaconda clj-refactor ag))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
