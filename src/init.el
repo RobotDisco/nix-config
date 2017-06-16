@@ -150,6 +150,12 @@
     (with-current-buffer buffer
       ad-do-it)))
 
+;; function to edit init file
+(defun edit-init-file ()
+  "Open the init file."
+  (interactive)
+  (find-file user-init-file))
+
 ;; Delete trailing whitespace from lines/buffer before every save
 (use-package whitespace
   :config
