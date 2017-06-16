@@ -168,8 +168,8 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; enable undo-tree
-(use-package undo-tree
-  :config (global-undo-tree-mode))
+;; (use-package undo-tree
+;;  :config (global-undo-tree-mode))
 
 ;; Save recent files
 (use-package recentf
