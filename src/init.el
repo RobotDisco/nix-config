@@ -171,6 +171,19 @@
 ;; (use-package undo-tree
 ;;  :config (global-undo-tree-mode))
 
+(use-package anaconda-mode
+  :config
+  (add-hook 'python-mode-hook 'anaconda-mode)
+  (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+  (use-package company-anaconda
+    :config
+    (eval-after-load "company"
+      '(add-to-list 'company-backends 'company-anaconda))))
+
+(use-package pyenv-mode
+  :config
+  (add-hook 'python-mode-hook 'pyenv-mode))
+
 ;; Save recent files
 (use-package recentf
   :config
