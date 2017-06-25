@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+git clone tulipadmin@internal.well.prod:git/$1

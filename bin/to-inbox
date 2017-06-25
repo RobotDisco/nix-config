@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+if [ -z "${1}" ] || [ -z "${2}" ]; then
+    echo "Usage: inbox 'title' 'description'"
+    exit 1
+fi
+
+file=$(mktemp)
+
+echo "
+{
+    \"title\": \"${1}\",
+    \"description\": \"${2}\",
+    \"projectPHIDs\": [\"PHID-PROJ-gurqssurklz6ohb3weex\"],
+    \"priority\": 50
+}" > ${file}
+cat ${file} | arc call-conduit maniphest.createtask && rm ${file}
