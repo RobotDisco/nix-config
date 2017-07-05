@@ -109,10 +109,10 @@
 (use-package ruby-tools)
 
 ;; Common Lisp
-(load (expand-file-name "~/.quicklisp/slime-helper.el"))
+;; (load (expand-file-name "~/.quicklisp/slime-helper.el"))
 ;; Replace "sbcl" with the path to your implementation
-(setq inferior-lisp-program "sbcl")
-(setq slime-contribs '(slime-fancy))
+;; (setq inferior-lisp-program "sbcl")
+;; (setq slime-contribs '(slime-fancy))
 
 ;; Clojure
 (use-package cider)
@@ -244,7 +244,30 @@
   (global-set-key "\C-cl" 'org-store-link)
   (global-set-key "\C-ca" 'org-agenda)
   (global-set-key "\C-cc" 'org-capture)
-  (global-set-key "\C-cb" 'org-iswitchb))
+  (global-set-key "\C-cb" 'org-iswitchb)
+  (setq org-agenda-files '("~/gtd/inbox.org"
+			   "~/gtd/personal-gtd.org"
+			   "~/gtd/work-gtd.org"
+			   "~/gtd/personal-tickler.org"
+			   "~/gtd/work-tickler.org"))
+  (setq org-capture-templates '(("t" "Todo [inbox]" entry
+				 (file+headline "~/gtd/inbox.org" "Tasks")
+				 "* TODO %i%?")
+				("PT" "Personal Ticker" entry
+				 (file+headline "~/gtd/personal-ticker.org" "Personal Ticker")
+				 "* %i%? \n %U")
+				("WT" "Work Tickler" entry
+				 (file+headline "~/gtd/work-tickler.org" "Work Tickler")
+				 "* %i%? \n %U")))
+  (setq org-refile-targets '(("~/gtd/personal-gtd.org" :maxlevel . 3)
+			     ("~/gtd/work-gtd.org" :maxlevel . 3)
+			     ("~/gtd/personal-someday.org" :level . 1)
+			     ("~/gtd/work-someday.org" :level . 1)
+			     ("~/gtd/personal-tickler.org" :maxlevel . 2)
+			     ("~/gtd/work-tickler.org" :maxlevel . 2)))
+  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+  (setq org-tags-alist '(sequence "@office-to(t)" "@office-kw(k)" "@home(h)" "@phone(p)" "@lappy(l)" "@online(o)" "current(c)")))
+
 
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 (defun smarter-move-beginning-of-line (arg)
