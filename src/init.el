@@ -245,28 +245,34 @@
   (global-set-key "\C-ca" 'org-agenda)
   (global-set-key "\C-cc" 'org-capture)
   (global-set-key "\C-cb" 'org-iswitchb)
-  (setq org-agenda-files '("~/gtd/inbox.org"
-			   "~/gtd/personal-gtd.org"
-			   "~/gtd/work-gtd.org"
-			   "~/gtd/personal-tickler.org"
-			   "~/gtd/work-tickler.org"))
-  (setq org-capture-templates '(("t" "Todo [inbox]" entry
-				 (file+headline "~/gtd/inbox.org" "Tasks")
+  (setq org-agenda-files (list "~/webdav/gtd/personal-gtd.org"
+			       "~/webdav/gtd/work-gtd.org"
+			       "~/webdav/gtd/personal-tickler.org"
+			       "~/webdav/gtd/work-tickler.org"))
+  (setq org-capture-templates '(("p" "Personal INBOX" entry
+				 (file+headline "~/webdav/gtd/personal-gtd.org" "INBOX")
 				 "* TODO %i%?")
-				("PT" "Personal Ticker" entry
-				 (file+headline "~/gtd/personal-ticker.org" "Personal Ticker")
+				("w" "Work INBOX" entry
+				 (file+headline "~/webdav/gtd/work-gtd.org" "INBOX")
+				 "* TODO %i%?")
+				("P" "Personal Ticker" entry
+				 (file "~/webdav/gtd/personal-ticker.org")
 				 "* %i%? \n %U")
-				("WT" "Work Tickler" entry
-				 (file+headline "~/gtd/work-tickler.org" "Work Tickler")
+				("W" "Work Tickler" entry
+				 (file "~/webdav/gtd/work-tickler.org")
 				 "* %i%? \n %U")))
-  (setq org-refile-targets '(("~/gtd/personal-gtd.org" :maxlevel . 3)
-			     ("~/gtd/work-gtd.org" :maxlevel . 3)
-			     ("~/gtd/personal-someday.org" :level . 1)
-			     ("~/gtd/work-someday.org" :level . 1)
-			     ("~/gtd/personal-tickler.org" :maxlevel . 2)
-			     ("~/gtd/work-tickler.org" :maxlevel . 2)))
+  (setq org-refile-targets '(("~/webdav/gtd/personal-gtd.org" :maxlevel . 3)
+			     ("~/webdav/gtd/work-gtd.org" :maxlevel . 3)
+			     ("~/webdav/gtd/personal-someday.org" :level . 1)
+			     ("~/webdav/gtd/work-someday.org" :level . 1)
+			     ("~/webdav/gtd/personal-tickler.org" :maxlevel . 2)
+			     ("~/webdav/gtd/work-tickler.org" :maxlevel . 2)))
   (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-  (setq org-tags-alist '(sequence "@office-to(t)" "@office-kw(k)" "@home(h)" "@phone(p)" "@lappy(l)" "@online(o)" "current(c)")))
+  (setq org-tag-alist '((sequence "@phone(p)" "@lappy(l)" "@online(i)" "@email(e)" "errands(r)")))
+  (setq org-directory "~/webdav/gtd")
+  (setq org-mobile-directory "~/webdav/gtd/mobileorg")
+  (setq org-mobile-inbox-for-pull "~/webdav/gtd/inbox.org"))
+
 
 
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
