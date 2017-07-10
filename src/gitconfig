@@ -2,9 +2,7 @@
 	autocrlf = input
 	editor = vim
 [user]
-	email = <%= git_email %>
-	name = <%= git_name %>
+	email = gdcosta@gmail.com
+	name = "Gaelan D'costa"
 [hub]
 	protocol = https
-[credential]
-	helper = osxkeychain
