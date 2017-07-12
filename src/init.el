@@ -57,7 +57,7 @@
   :config
   (flx-ido-mode 1)
   (setq ido-enable-flex-matching t)
-  (use-package ido-ubiquitous
+  (use-package ido-completing-read+
     :config (ido-ubiquitous-mode 1)))
 
 ;; Make M-x leverage ido
