@@ -245,20 +245,20 @@
   (global-set-key "\C-ca" 'org-agenda)
   (global-set-key "\C-cc" 'org-capture)
   (global-set-key "\C-cb" 'org-iswitchb)
-  (setq org-agenda-files (list "~/webdav/gtd/personal-gtd.org"
-			       "~/webdav/gtd/work-gtd.org"
-			       "~/webdav/gtd/personal-tickler.org"
-			       "~/webdav/gtd/work-tickler.org"))
-  (setq org-capture-templates '(("p" "Personal INBOX" entry
-				 (file+headline "~/webdav/gtd/personal-gtd.org" "INBOX")
+  (setq org-directory "~/webdav/gtd")
+  (setq org-mobile-directory "~/webdav/gtd/mobileorg")
+  (setq org-mobile-inbox-for-pull "~/webdav/gtd/inbox.org")
+  (setq org-agenda-files '("~/webdav/gtd/personal-gtd.org"
+			   "~/webdav/gtd/work-gtd.org"
+			   "~/webdav/gtd/personal-tickler.org"
+			   "~/webdav/gtd/work-tickler.org"))
+  (setq org-capture-templates '(("i" "Inbox" entry
+				 (file "~/webdav/gtd/inbox.org")
 				 "* TODO %i%?")
-				("w" "Work INBOX" entry
-				 (file+headline "~/webdav/gtd/work-gtd.org" "INBOX")
-				 "* TODO %i%?")
-				("P" "Personal Ticker" entry
-				 (file "~/webdav/gtd/personal-ticker.org")
+				("p" "Personal Tickler" entry
+				 (file "~/webdav/gtd/personal-tickler.org")
 				 "* %i%? \n %U")
-				("W" "Work Tickler" entry
+				("w" "Work Tickler" entry
 				 (file "~/webdav/gtd/work-tickler.org")
 				 "* %i%? \n %U")))
   (setq org-refile-targets '(("~/webdav/gtd/personal-gtd.org" :maxlevel . 3)
@@ -267,11 +267,8 @@
 			     ("~/webdav/gtd/work-someday.org" :level . 1)
 			     ("~/webdav/gtd/personal-tickler.org" :maxlevel . 2)
 			     ("~/webdav/gtd/work-tickler.org" :maxlevel . 2)))
-  (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-  (setq org-tag-alist '((sequence "@phone(p)" "@lappy(l)" "@online(i)" "@email(e)" "errands(r)")))
-  (setq org-directory "~/webdav/gtd")
-  (setq org-mobile-directory "~/webdav/gtd/mobileorg")
-  (setq org-mobile-inbox-for-pull "~/webdav/gtd/inbox.org"))
+  (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+  (setq org-tag-alist '((:startgroup . nil) ("@home" . ?h) ("@office-to" . ?t) ("@office-kw" . ?k) ("@phone" . ?p) ("@lappy" . ?l) ("@online" . ?i) ("@email" . ?e) ("@errand" . ?r) ("@waitingfor" . ?w) (:endgroup . nil))))
 
 
 
