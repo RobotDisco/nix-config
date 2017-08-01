@@ -254,7 +254,7 @@
     (setq org-agenda-files (list (concat org-directory "personal-gtd.org")
 				 (concat org-directory "work-gtd.org")
 				 (concat org-directory "personal-tickler.org")
-				 (concat org-directory "~/webdav/gtd/work-tickler.org")))
+				 (concat org-directory "work-tickler.org")))
     (setq org-capture-templates `(("i" "Inbox" entry
 				   (file ,(concat org-directory "inbox.org"))
 				   "* TODO %i%?")
