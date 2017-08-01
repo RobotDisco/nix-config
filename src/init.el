@@ -241,34 +241,37 @@
 ;; Org mode
 (use-package org
   :config
-  (global-set-key "\C-cl" 'org-store-link)
-  (global-set-key "\C-ca" 'org-agenda)
-  (global-set-key "\C-cc" 'org-capture)
-  (global-set-key "\C-cb" 'org-iswitchb)
-  (setq org-directory "~/webdav/gtd")
-  (setq org-mobile-directory "~/webdav/gtd/mobileorg")
-  (setq org-mobile-inbox-for-pull "~/webdav/gtd/inbox.org")
-  (setq org-agenda-files '("~/webdav/gtd/personal-gtd.org"
-			   "~/webdav/gtd/work-gtd.org"
-			   "~/webdav/gtd/personal-tickler.org"
-			   "~/webdav/gtd/work-tickler.org"))
-  (setq org-capture-templates '(("i" "Inbox" entry
-				 (file "~/webdav/gtd/inbox.org")
-				 "* TODO %i%?")
-				("p" "Personal Tickler" entry
-				 (file "~/webdav/gtd/personal-tickler.org")
-				 "* %i%? \n %U")
-				("w" "Work Tickler" entry
-				 (file "~/webdav/gtd/work-tickler.org")
-				 "* %i%? \n %U")))
-  (setq org-refile-targets '(("~/webdav/gtd/personal-gtd.org" :maxlevel . 3)
-			     ("~/webdav/gtd/work-gtd.org" :maxlevel . 3)
-			     ("~/webdav/gtd/personal-someday.org" :level . 1)
-			     ("~/webdav/gtd/work-someday.org" :level . 1)
-			     ("~/webdav/gtd/personal-tickler.org" :maxlevel . 2)
-			     ("~/webdav/gtd/work-tickler.org" :maxlevel . 2)))
-  (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-  (setq org-tag-alist '((:startgroup . nil) ("@home" . ?h) ("@office-to" . ?t) ("@office-kw" . ?k) ("@phone" . ?p) ("@lappy" . ?l) ("@online" . ?i) ("@email" . ?e) ("@errand" . ?r) ("@waitingfor" . ?w) (:endgroup . nil))))
+  (let ((gaelan-org-prefix (if (eql system-type 'darwin)
+			      (file-name-as-directory "/Volumes/webdav/")
+			    (file-name-as-directory "~/webdav/"))))
+    (global-set-key "\C-cl" 'org-store-link)
+    (global-set-key "\C-ca" 'org-agenda)
+    (global-set-key "\C-cc" 'org-capture)
+    (global-set-key "\C-cb" 'org-iswitchb)
+    (setq org-directory (file-name-as-directory (concat gaelan-org-prefix "gtd")))
+    (setq org-mobile-directory (file-name-as-directory (concat org-directory "mobileorg")))
+    (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
+    (setq org-agenda-files (list (concat org-directory "personal-gtd.org")
+				 (concat org-directory "work-gtd.org")
+				 (concat org-directory "personal-tickler.org")
+				 (concat org-directory "~/webdav/gtd/work-tickler.org")))
+    (setq org-capture-templates `(("i" "Inbox" entry
+				   (file ,(concat org-directory "inbox.org"))
+				   "* TODO %i%?")
+				  ("p" "Personal Tickler" entry
+				   (file ,(concat org-directory "personal-tickler.org"))
+				   "* %i%? \n %U")
+				  ("w" "Work Tickler" entry
+				   (file ,(concat org-directory "work-tickler.org"))
+				   "* %i%? \n %U")))
+    (setq org-refile-targets `((,(concat org-directory "personal-gtd.org") :maxlevel . 3)
+			       (,(concat org-directory "work-gtd.org") :maxlevel . 3)
+			       (,(concat org-directory "personal-someday.org") :level . 1)
+			       (,(concat org-directory "work-someday.org") :level . 1)
+			       (,(concat org-directory "personal-tickler.org") :maxlevel . 2)
+			       (,(concat org-directory "work-tickler.org") :maxlevel . 2)))
+    (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+    (setq org-tag-alist '((:startgroup . nil) ("@home" . ?h) ("@office-to" . ?t) ("@office-kw" . ?k) ("@phone" . ?p) ("@lappy" . ?l) ("@online" . ?i) ("@email" . ?e) ("@errand" . ?r) ("@waitingfor" . ?w) (:endgroup . nil)))))
 
 
 
