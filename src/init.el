@@ -238,17 +238,17 @@
   (append flycheck-disabled-checkers
     '(javascript-jshint)))
 
-;; Org mode
-(use-package org
-  :config
-  (let ((gaelan-org-prefix (if (eql system-type 'darwin)
-			      (file-name-as-directory "/Volumes/webdav/")
-			    (file-name-as-directory "~/webdav/"))))
+(let ((gaelan-webdav-prefix (if (eql system-type 'darwin)
+			     (file-name-as-directory "/Volumes/webdav/")
+			   (file-name-as-directory "~/webdav/"))))
+  ;; Org mode
+  (use-package org
+    :config
     (global-set-key "\C-cl" 'org-store-link)
     (global-set-key "\C-ca" 'org-agenda)
     (global-set-key "\C-cc" 'org-capture)
     (global-set-key "\C-cb" 'org-iswitchb)
-    (setq org-directory (file-name-as-directory (concat gaelan-org-prefix "gtd")))
+    (setq org-directory (file-name-as-directory (concat gaelan-webdav-prefix "gtd")))
     (setq org-mobile-directory (file-name-as-directory (concat org-directory "mobileorg")))
     (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
     (setq org-agenda-files (list (concat org-directory "personal-gtd.org")
@@ -271,8 +271,11 @@
 			       (,(concat org-directory "personal-tickler.org") :maxlevel . 2)
 			       (,(concat org-directory "work-tickler.org") :maxlevel . 2)))
     (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-    (setq org-tag-alist '((:startgroup . nil) ("@home" . ?h) ("@officeto" . ?t) ("@officekw" . ?k) ("@phone" . ?p) ("@lappy" . ?l) ("@online" . ?i) ("@email" . ?e) ("@errand" . ?r) ("@waitingfor" . ?w) (:endgroup . nil)))))
+    (setq org-tag-alist '((:startgroup . nil) ("@home" . ?h) ("@officeto" . ?t) ("@officekw" . ?k) ("@phone" . ?p) ("@lappy" . ?l) ("@online" . ?i) ("@email" . ?e) ("@errand" . ?r) ("@waitingfor" . ?w) (:endgroup . nil))))
 
+  (use-package org-journal
+    :config
+    (setq org-journal-dir (file-name-as-directory (concat gaelan-webdav-prefix "journal")))))
 
 
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
