@@ -1,6 +1,5 @@
 [core]
 	autocrlf = input
-	editor = vim
 [user]
 	email = gdcosta@gmail.com
 	name = "Gaelan D'costa"
