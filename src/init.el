@@ -271,7 +271,7 @@
 			       (,(concat org-directory "personal-tickler.org") :maxlevel . 2)
 			       (,(concat org-directory "work-tickler.org") :maxlevel . 2)))
     (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-    (setq org-tag-alist '((:startgroup . nil) ("@home" . ?h) ("@office-to" . ?t) ("@office-kw" . ?k) ("@phone" . ?p) ("@lappy" . ?l) ("@online" . ?i) ("@email" . ?e) ("@errand" . ?r) ("@waitingfor" . ?w) (:endgroup . nil)))))
+    (setq org-tag-alist '((:startgroup . nil) ("@home" . ?h) ("@officeto" . ?t) ("@officekw" . ?k) ("@phone" . ?p) ("@lappy" . ?l) ("@online" . ?i) ("@email" . ?e) ("@errand" . ?r) ("@waitingfor" . ?w) (:endgroup . nil)))))
 
 
 
