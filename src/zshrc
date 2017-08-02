@@ -32,7 +32,12 @@ eval "$(rbenv init -)"
 eval "$(pyenv init -)"
 
 ## Make ZSH use the good parts of FISH
-source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# Fish-like syntax highlighting. Must be at the end of .zshrc
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [[ `uname` == 'Darwin' ]]; then
+    source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    # Fish-like syntax highlighting. Must be at the end of .zshrc
+    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+else
+    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+    # Fish-like syntax highlighting. Must be at the end of .zshrc
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
