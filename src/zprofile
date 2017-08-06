@@ -1,0 +1,6 @@
+export XKB_DEFAULT_OPTIONS=ctrl:nocaps
+PS1='[\u@\h \W]$ '
+
+if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
+  exec sway
+fi
