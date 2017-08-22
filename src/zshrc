@@ -5,6 +5,9 @@ export EDITOR='emacs'
 export VISUAL=$EDITOR
 alias e=$EDITOR
 
+# If vim doesn't exist, invoke vi instead
+command -v vim --help >/dev/null 2>&1 || alias vim=vi
+
 # Include ~/bin in PATH
 if [ -d ~/bin ]; then
     export PATH=$PATH:~/bin
