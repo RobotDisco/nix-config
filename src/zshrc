@@ -8,6 +8,15 @@ alias e=$EDITOR
 # If vim doesn't exist, invoke vi instead
 command -v vim --help >/dev/null 2>&1 || alias vim=vi
 
+# Command history
+HISTSIZE=1000
+SAVEHIST=1000
+HISTFILE=~/.zsh_history
+setopt append_history
+setopt extended_history
+setopt hist_ignore_dups
+setopt hist_expire_dups_first
+
 # Include ~/bin in PATH
 if [ -d ~/bin ]; then
     export PATH=$PATH:~/bin
