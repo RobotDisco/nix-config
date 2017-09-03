@@ -220,19 +220,6 @@
 (use-package json-mode
   :config (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode)))
 
-(use-package flycheck-flow
-  :config
-  (add-hook 'javascript-mode-hook 'flycheck-mode)
-  (flycheck-add-next-checker 'javascript-flow 'javascript-flow-coverage 'javascript-eslint)
-  (eval-after-load 'company
-    '(add-to-list 'company-backends 'company-flow)))
-
-(use-package flow-minor-mode
-  :config
-  (add-hook 'js2-mode-hook 'flow-minor-enable-automatically)
-  (flycheck-add-mode 'javascript-flow 'flow-minor-mode)
-  (flycheck-add-mode 'javascript-eslint 'flow-minor-mode))
-
 ;; disable jshint since we prefer eslint checking
 (setq-default flycheck-disabled-checkers
   (append flycheck-disabled-checkers
