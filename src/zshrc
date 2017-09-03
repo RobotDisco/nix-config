@@ -37,11 +37,11 @@ alias erc='e ~/.zshrc'
 alias rrc='source ~/.zshrc'
 
 # Activate FASD
-eval "$(fasd --init auto)"
+command -v fasd >/dev/null 2>&1 && eval "$(fasd --init auto)"
 
 # Activate rbenv and pyenv
-eval "$(rbenv init -)"
-eval "$(pyenv init -)"
+command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
+command -v pyenv >/dev/null 2>&1 && eval "$(pyenv init -)"
 
 ## Make ZSH use the good parts of FISH
 if [[ `uname` == 'Darwin' ]]; then
