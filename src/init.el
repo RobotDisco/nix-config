@@ -157,10 +157,10 @@
   (find-file user-init-file))
 
 ;; Delete trailing whitespace from lines/buffer before every save
-(use-package whitespace
-  :config
-  (add-hook 'before-save-hook 'whitespace-cleanup)
-  (whitespace-mode))
+;; (use-package whitespace
+;;  :config
+;;  (add-hook 'before-save-hook 'whitespace-cleanup)
+;;  (whitespace-mode))
 
 ;; Disable default chrome
 (tool-bar-mode -1)
@@ -266,10 +266,11 @@
 				   "* %i%? \n %U")))
     (setq org-refile-targets `((,(concat org-directory "personal-gtd.org") :maxlevel . 3)
 			       (,(concat org-directory "work-gtd.org") :maxlevel . 3)
-			       (,(concat org-directory "personal-someday.org") :level . 1)
-			       (,(concat org-directory "work-someday.org") :level . 1)
-			       (,(concat org-directory "personal-tickler.org") :maxlevel . 2)
-			       (,(concat org-directory "work-tickler.org") :maxlevel . 2)))
+			       (,(concat org-directory "personal-someday.org") :level . 2)
+			       (,(concat org-directory "work-someday.org") :level . 2)
+			       (,(concat org-directory "personal-tickler.org") :level . 2)
+			       (,(concat org-directory "work-tickler.org") :level . 2)))
+    (setq org-refile-use-outline-path 'file)
     (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
     (setq org-tag-alist '((:startgroup . nil) ("@home" . ?h) ("@officeto" . ?t) ("@officekw" . ?k) ("@phone" . ?p) ("@lappy" . ?l) ("@online" . ?i) ("@email" . ?e) ("@errand" . ?r) ("@waitingfor" . ?w) (:endgroup . nil))))
 
@@ -308,6 +309,7 @@ point reaches the beginning or end of the buffer, stop there."
 ;; Revert buffers that have been changed outside emacs
 (global-auto-revert-mode)
 
+
 ;; Random hacks of kindness
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -316,7 +318,7 @@ point reaches the beginning or end of the buffer, stop there."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (json-mode flycheck-flow company-flow flow-minor-mode 4clojure js2-mode yaml-mode which-key web-mode use-package undo-tree solarized-theme smex smartparens smart-mode-line ruby-tools robe rbenv rainbow-delimiters projectile notmuch neotree markdown-mode magit macrostep inf-clojure ido-ubiquitous guru-mode ggtags flycheck flx-ido exec-path-from-shell editorconfig cyberpunk-theme company-anaconda clj-refactor ag))))
+    (php-mode json-mode flycheck-flow company-flow flow-minor-mode 4clojure js2-mode yaml-mode which-key web-mode use-package undo-tree solarized-theme smex smartparens smart-mode-line ruby-tools robe rbenv rainbow-delimiters projectile notmuch neotree markdown-mode magit macrostep inf-clojure ido-ubiquitous guru-mode ggtags flycheck flx-ido exec-path-from-shell editorconfig cyberpunk-theme company-anaconda clj-refactor ag))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
