@@ -1,5 +1,5 @@
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
-PS1='[\u@\h \W]$ '
+export PS1='[\u@\h \W]$ '
 
 if command -v keychain >/dev/null 2>&1; then
   keychain --eval --agents ssh id_rsa id_rsa.work
