@@ -19,6 +19,10 @@
   (require 'use-package))
 (require 'bind-key)
 
+;; Use keychain to load SSH keys
+(use-package keychain-environment
+  :config (keychain-refresh-environment))
+
 ;; Add OSX path when run graphically
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
@@ -305,7 +309,7 @@ point reaches the beginning or end of the buffer, stop there."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (php-mode json-mode flycheck-flow company-flow flow-minor-mode 4clojure js2-mode yaml-mode which-key web-mode use-package undo-tree solarized-theme smex smartparens smart-mode-line ruby-tools robe rbenv rainbow-delimiters projectile notmuch neotree markdown-mode magit macrostep inf-clojure ido-ubiquitous guru-mode ggtags flycheck flx-ido exec-path-from-shell editorconfig cyberpunk-theme company-anaconda clj-refactor ag))))
+    (keychain-environment php-mode json-mode flycheck-flow company-flow flow-minor-mode 4clojure js2-mode yaml-mode which-key web-mode use-package undo-tree solarized-theme smex smartparens smart-mode-line ruby-tools robe rbenv rainbow-delimiters projectile notmuch neotree markdown-mode magit macrostep inf-clojure ido-ubiquitous guru-mode ggtags flycheck flx-ido exec-path-from-shell editorconfig cyberpunk-theme company-anaconda clj-refactor ag))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
