@@ -20,6 +20,10 @@ set $right l
 set $term urxvtc
 # Your preferred application launcher
 set $menu dmenu_run
+# Your preferred browser
+set $browser chromium
+# Your preferred editor
+set $editor emacsclient -a '' -c
 
 ### Output configuration
 #
@@ -48,6 +52,15 @@ output * bg ~/art/firelink_shrine.jpg fill
 # Read `man 5 sway-input` for more information about this section.
 
 ### Key bindings
+#
+# Shortcuts:
+#
+    # start chrome
+    bindsym $mod+p exec $browser
+
+    # start emacs
+    bindsym $mod+o exec $editor
+
 #
 # Basics:
 #
