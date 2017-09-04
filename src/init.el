@@ -30,7 +30,7 @@
 
 ;; Solarized looks gross in console-mode
 (use-package solarized-theme
-  :if window-system
+  ;; :if window-system
   :config (load-theme 'solarized-dark t))
 
 (use-package smart-mode-line
