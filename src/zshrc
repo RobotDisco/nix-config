@@ -1,7 +1,7 @@
 # Created by newuser for 5.3.1
 
 # Emacs is my editor
-export EDITOR='emacsclient --alternate-editor='' -c "$@"'
+export EDITOR='emacsclient --alternate-editor='' -c $@'
 alias e=$EDITOR
 
 # If vim doesn't exist, invoke vi instead
