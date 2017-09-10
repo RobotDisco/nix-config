@@ -57,3 +57,9 @@
 
 !! Font
 URxvt.font: xft:AnonymousPro:size=14
+!! urxvt addons
+URxvt.perl-ext-common: default,url-select,selection-to-clipboard,tabbed
+!! Clickable URLs
+URxvt.keysym.M-u perl:url-select:select_next
+URxvt.url-select-launcher: /usr/bin/xdg-open
+URxvt.url-select.underline: true
