@@ -300,6 +300,11 @@ point reaches the beginning or end of the buffer, stop there."
 ;; Revert buffers that have been changed outside emacs
 (global-auto-revert-mode)
 
+;; Make sure S-u reverts buffer
+(global-set-key (kbd "s-u") #'(lambda ()
+				(interactive)
+				(revert-buffer t nil nil)))
+
 
 ;; Random hacks of kindness
 (custom-set-variables
