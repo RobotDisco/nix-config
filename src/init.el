@@ -234,6 +234,11 @@
 			   (file-name-as-directory "~/webdav/"))))
   ;; Org mode
   (use-package org
+    :commands org-store-link org-agenda org-capture org-iswitchb
+    :bind (("C-c l" . org-store-link)
+	   ("C-c a" . org-agenda)
+	   ("C-c c" . org-capture)
+	   ("C-c b" . org-iswitchb))
     :config
     (global-set-key "\C-cl" 'org-store-link)
     (global-set-key "\C-ca" 'org-agenda)
