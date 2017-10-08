@@ -159,6 +159,7 @@
   "Open the init file."
   (interactive)
   (find-file user-init-file))
+(global-set-key (kbd "C-c i") 'edit-init-file)
 
 ;; Delete trailing whitespace from lines/buffer before every save
 ;; (use-package whitespace
