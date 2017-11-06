@@ -1,5 +1,17 @@
 # Created by newuser for 5.3.1
 
+# Enable Command completion
+autoload -Uz compinit
+compinit
+# Menu-style completion interface
+zstyle ':completion:*' menu select
+
+
+# Enable ZSH prompt
+autoload -Uz promptinit
+promptinit
+prompt redhat
+
 # Emacs is my editor
 export EDITOR='emacsclient --alternate-editor='' -c $@'
 alias e=$EDITOR
