@@ -248,26 +248,20 @@
     (setq org-directory (file-name-as-directory (concat gaelan-webdav-prefix "gtd")))
     (setq org-mobile-directory (file-name-as-directory (concat org-directory "mobileorg")))
     (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
-    (setq org-agenda-files (list (concat org-directory "personal-gtd.org")
-				 (concat org-directory "work-gtd.org")
-				 (concat org-directory "personal-tickler.org")
-				 (concat org-directory "work-tickler.org")))
+    (setq org-agenda-files (list (concat org-directory "gtd.org")
+				 (concat org-directory "tickler.org")))
     (setq org-capture-templates `(("i" "Inbox" entry
 				   (file ,(concat org-directory "inbox.org"))
 				   "* TODO %i%?")
 				  ("p" "Personal Tickler" entry
-				   (file ,(concat org-directory "personal-tickler.org"))
+				   (file+headline ,(concat org-directory "tickler.org") "Personal")
 				   "* %i%? \n %U")
 				  ("w" "Work Tickler" entry
-				   (file ,(concat org-directory "work-tickler.org"))
+				   (file+headline ,(concat org-directory "tickler.org") "Work")
 				   "* %i%? \n %U")))
-    (setq org-refile-targets `((,(concat org-directory "personal-gtd.org") :maxlevel . 3)
-			       (,(concat org-directory "work-gtd.org") :maxlevel . 3)
+    (setq org-refile-targets `((,(concat org-directory "gtd.org") :level . 2)
 			       (,(concat org-directory "personal-someday.org") :level . 2)
-			       (,(concat org-directory "work-someday.org") :level . 2)
-			       (,(concat org-directory "personal-tickler.org") :level . 2)
-			       (,(concat org-directory "work-tickler.org") :level . 2)))
-    (setq org-refile-use-outline-path 'file)
+			       (,(concat org-directory "personal-tickler.org") :level . 2)))
     (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
     (setq org-tag-alist '((:startgroup . nil) ("@home" . ?h) ("@officeto" . ?t) ("@officekw" . ?k) ("@phone" . ?p) ("@lappy" . ?l) ("@online" . ?i) ("@email" . ?e) ("@errand" . ?r) ("@waitingfor" . ?w) (:endgroup . nil))))
 
@@ -320,7 +314,12 @@ point reaches the beginning or end of the buffer, stop there."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (keychain-environment php-mode json-mode flycheck-flow company-flow flow-minor-mode 4clojure js2-mode yaml-mode which-key web-mode use-package undo-tree solarized-theme smex smartparens smart-mode-line ruby-tools robe rbenv rainbow-delimiters projectile notmuch neotree markdown-mode magit macrostep inf-clojure ido-ubiquitous guru-mode ggtags flycheck flx-ido exec-path-from-shell editorconfig cyberpunk-theme company-anaconda clj-refactor ag))))
+    (keychain-environment php-mode json-mode flycheck-flow company-flow flow-minor-mode 4clojure js2-mode yaml-mode which-key web-mode use-package undo-tree solarized-theme smex smartparens smart-mode-line ruby-tools robe rbenv rainbow-delimiters projectile notmuch neotree markdown-mode magit macrostep inf-clojure ido-ubiquitous guru-mode ggtags flycheck flx-ido exec-path-from-shell editorconfig cyberpunk-theme company-anaconda clj-refactor ag)))
+ '(safe-local-variable-values
+   (quote
+    ((cider-cljs-lein-repl . "(do (user/go) (user/cljs-repl))")
+     (cider-refresh-after-fn . "reloaded.repl/resume")
+     (cider-refresh-before-fn . "reloaded.repl/suspend")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
