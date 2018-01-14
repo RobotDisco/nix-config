@@ -255,14 +255,14 @@
 				   "* TODO %i%?")
 				  ("p" "Personal Tickler" entry
 				   (file+headline ,(concat org-directory "tickler.org") "Personal")
-				   "* %i%? \n %U")
+				   "* TODO %i%? \n %U")
 				  ("w" "Work Tickler" entry
 				   (file+headline ,(concat org-directory "tickler.org") "Work")
-				   "* %i%? \n %U")))
-    (setq org-refile-targets `((,(concat org-directory "gtd.org") :level . 2)
-			       (,(concat org-directory "personal-someday.org") :level . 2)
-			       (,(concat org-directory "personal-tickler.org") :level . 2)))
-    (setq org-todo-keywords '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+				   "* TODO %i%? \n %U")))
+    (setq org-refile-targets `((,(concat org-directory "gtd.org") :maxlevel . 2)
+			       (,(concat org-directory "personal-someday.org") :level . 1)
+			       (,(concat org-directory "personal-tickler.org") :level . 1)))
+    (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
     (setq org-tag-alist '((:startgroup . nil) ("@home" . ?h) ("@officeto" . ?t) ("@officekw" . ?k) ("@phone" . ?p) ("@lappy" . ?l) ("@online" . ?i) ("@email" . ?e) ("@errand" . ?r) ("@waitingfor" . ?w) (:endgroup . nil))))
 
   (use-package org-journal
