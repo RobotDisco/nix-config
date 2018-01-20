@@ -151,6 +151,7 @@
   (add-hook 'clojure-mode-hook 'turn-on-smartparens-strict-mode)
   (add-hook 'cider-repl-mode-hook 'turn-on-smartparens-strict-mode)
   (add-hook 'lisp-mode-hook 'turn-on-smartparens-strict-mode)
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-smartparens-strict-mode)
   (sp-use-smartparens-bindings))
 
 ;; Hippie Expand (the best expand?)
