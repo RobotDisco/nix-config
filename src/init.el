@@ -3,8 +3,7 @@
 (setq package-enable-at-startup nil)
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/")
-	("melpa-stable" . "https://stable.melpa.org/packages/")
-	("melpa" . "https://melpa.org/packages/")))
+	("melpa-stable" . "https://stable.melpa.org/packages/")))
 (package-initialize)
 
 ;; Bootstrap 'use-package' if necessary
