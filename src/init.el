@@ -304,24 +304,6 @@ point reaches the beginning or end of the buffer, stop there."
 				(interactive)
 				(revert-buffer t nil nil)))
 
-
-;; Random hacks of kindness
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (keychain-environment php-mode json-mode flycheck-flow company-flow flow-minor-mode 4clojure js2-mode yaml-mode which-key web-mode use-package undo-tree solarized-theme smex smartparens smart-mode-line ruby-tools robe rbenv rainbow-delimiters projectile notmuch neotree markdown-mode magit macrostep inf-clojure ido-ubiquitous guru-mode ggtags flycheck flx-ido exec-path-from-shell editorconfig cyberpunk-theme company-anaconda clj-refactor ag)))
- '(safe-local-variable-values
-   (quote
-    ((cider-cljs-lein-repl . "(do (user/go) (user/cljs-repl))")
-     (cider-refresh-after-fn . "reloaded.repl/resume")
-     (cider-refresh-before-fn . "reloaded.repl/suspend")))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;; Move customizations out of init.el
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
