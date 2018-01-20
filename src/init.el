@@ -53,24 +53,13 @@
 (use-package editorconfig
   :config (editorconfig-mode +1))
 
-;; Use ido everywhere, w/ fuzzy matching
-(use-package flx-ido
-  :init
-  (ido-mode 1)
-  (ido-everywhere 1)
+;; helm
+(use-package helm-config
+  :ensure helm
   :config
-  (flx-ido-mode 1)
-  (setq ido-enable-flex-matching t)
-  (use-package ido-completing-read+
-    :config (ido-ubiquitous-mode 1)))
-
-;; Make M-x leverage ido
-(use-package smex
-    :config (smex-initialize)
-    :bind (("M-x" . smex)
-	   ("M-X" . smex-major-mode-commands)
-	   ;; The traditional M-x we all know and love
-	   ("C-c C-c M-x" . execute-extended-command)))
+  (helm-mode 1)
+  :bind (("M-x" . helm-M-x)
+	 ("C-x C-f" . helm-find-files)))
 
 ;; Show available key bindings
 (use-package which-key
