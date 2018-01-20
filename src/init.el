@@ -120,6 +120,7 @@
 
 ;; Clojure
 (use-package cider
+  :pin melpa-stable
   :config
   (add-hook 'cider-repl-mode-hook #'subword-mode))
 (use-package cider-eval-sexp-fu)
