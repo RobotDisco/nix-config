@@ -148,11 +148,8 @@
   (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
   (add-hook 'clojure-mode-hook 'turn-on-smartparens-strict-mode)
   (add-hook 'cider-repl-mode-hook 'turn-on-smartparens-strict-mode)
-  (sp-use-smartparens-bindings)
-  (sp--populate-keymap '(("C-)" . sp-forward-slurp-sexp)
-			 ("C-}" . sp-forward-barf-sexp)
-			 ("C-(" . sp-backward-slurp-sexp)
-			 ("C-{" . sp-backward-barf-sexp))))
+  (add-hook 'lisp-mode-hook 'turn-on-smartparens-strict-mode)
+  (sp-use-smartparens-bindings))
 
 ;; Hippie Expand (the best expand?)
 (global-set-key "\M- " 'hippie-expand)
