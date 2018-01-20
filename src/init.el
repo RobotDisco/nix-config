@@ -118,7 +118,10 @@
 ;; (setq slime-contribs '(slime-fancy))
 
 ;; Clojure
-(use-package cider)
+(use-package cider
+  :config
+  (add-hook 'cider-repl-mode-hook #'subword-mode))
+(use-package cider-eval-sexp-fu)
 (use-package clj-refactor
   :config
   (defun clj-refactor-mode-hook ()
@@ -131,6 +134,12 @@
 	   (figwheel-sidecar.repl-api/start-figwheel!)
 	   (figwheel-sidecar.repl-api/cljs-repl))")
   (add-hook 'clojure-mode-hook #'clj-refactor-mode-hook))
+(use-package flycheck-clojure
+  :config
+  (eval-after-load 'flycheck '(flycheck-clojure-setup)))
+(use-package flycheck-pos-tip
+  :config
+  (eval-after-load 'flycheck '(setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
 
 (use-package smartparens-config
   :ensure smartparens
@@ -138,6 +147,7 @@
   (show-smartparens-global-mode t)
   (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
   (add-hook 'clojure-mode-hook 'turn-on-smartparens-strict-mode)
+  (add-hook 'cider-repl-mode-hook 'turn-on-smartparens-strict-mode)
   (sp-use-smartparens-bindings)
   (sp--populate-keymap '(("C-)" . sp-forward-slurp-sexp)
 			 ("C-}" . sp-forward-barf-sexp)
