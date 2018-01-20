@@ -64,3 +64,6 @@ else
     # Fish-like syntax highlighting. Must be at the end of .zshrc
     source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
+
+# added by travis gem
+[ -f /home/gaelan/.travis/travis.sh ] && source /home/gaelan/.travis/travis.sh
