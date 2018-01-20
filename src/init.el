@@ -94,7 +94,10 @@
   (projectile-mode))
 
 (use-package rainbow-delimiters
-  :config (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  :ensure cider
+  :config
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode))
 
 (use-package magit
   :bind ("C-x g" . magit-status))
@@ -137,14 +140,22 @@
 	   (figwheel-sidecar.repl-api/cljs-repl))")
   (add-hook 'clojure-mode-hook #'clj-refactor-mode-hook))
 (use-package flycheck-clojure
+  :ensure flycheck
   :config
   (eval-after-load 'flycheck '(flycheck-clojure-setup)))
 (use-package flycheck-pos-tip
+  :ensure flycheck
   :config
   (eval-after-load 'flycheck '(setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+(use-package clojure-cheatsheet
+  :config (eval-after-load 'clojure-mode
+	    '(progn
+	       (define-key clojure-mode-map (kbd "C-c C-h") #'clojure-cheatsheet))))
 
 (use-package smartparens-config
   :ensure smartparens
+  :ensure clojure-mode
+  :ensure cider
   :config
   (show-smartparens-global-mode t)
   (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
