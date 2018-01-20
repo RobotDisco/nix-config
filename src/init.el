@@ -86,7 +86,10 @@
   :ensure cider
   :config
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode))
+  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'lisp-interaction-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'ielm-mode-hook 'rainbow-delimiters-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook 'rainbow-delimiters-mode))
 
 (use-package magit
   :bind ("C-x g" . magit-status))
@@ -150,8 +153,12 @@
   (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
   (add-hook 'clojure-mode-hook 'turn-on-smartparens-strict-mode)
   (add-hook 'cider-repl-mode-hook 'turn-on-smartparens-strict-mode)
+  (add-hook 'scheme-mode-hook 'turn-on-smartparens-strict-mode)
   (add-hook 'lisp-mode-hook 'turn-on-smartparens-strict-mode)
+  (add-hook 'lisp-interaction-mode-hook 'turn-on-smartparens-strict-mode)
   (add-hook 'emacs-lisp-mode-hook 'turn-on-smartparens-strict-mode)
+  (add-hook 'ielm-mode-hook 'turn-on-smartparens-strict-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook 'turn-on-smartparens-strict-mode)
   (sp-use-smartparens-bindings))
 
 ;; Hippie Expand (the best expand?)
