@@ -126,10 +126,6 @@
     (yas-minor-mode 1)
     ;; This choice of keybinding leaves cider-macroexpand-1 unbound
     (cljr-add-keybindings-with-prefix "C-c C-m"))
-  (setq cider-cljs-lein-repl
-      "(do (require 'figwheel-sidecar.repl-api)
-	   (figwheel-sidecar.repl-api/start-figwheel!)
-	   (figwheel-sidecar.repl-api/cljs-repl))")
   (add-hook 'clojure-mode-hook #'clj-refactor-mode-hook))
 (use-package flycheck-clojure
   :ensure flycheck
@@ -140,9 +136,11 @@
   :config
   (eval-after-load 'flycheck '(setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
 (use-package clojure-cheatsheet
-  :config (eval-after-load 'clojure-mode
-	    '(progn
-	       (define-key clojure-mode-map (kbd "C-c C-h") #'clojure-cheatsheet))))
+  :config
+  (eval-after-load 'clojure-mode
+    '(progn
+       (define-key clojure-mode-map (kbd "C-c C-h") #'clojure-cheatsheet)))
+  (setq helm-source-clojure-cheatsheet t))
 
 (use-package smartparens-config
   :ensure smartparens
