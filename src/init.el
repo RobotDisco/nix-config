@@ -192,10 +192,6 @@
 ;; enable y/n prompts instead of yes/no
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; enable undo-tree
-;; (use-package undo-tree
-;;  :config (global-undo-tree-mode))
-
 (use-package anaconda-mode
   :config
   (add-hook 'python-mode-hook 'anaconda-mode)
