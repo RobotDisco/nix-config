@@ -64,6 +64,9 @@
   (require 'helm-config)
   (helm-mode 1)
   (helm-linum-relative-mode 1)
+  ;; Set fuzzy matching everywhere
+  (setq helm-mode-fuzzy-math t)
+  (setq helm-completion-in-region-fuzzy-match t)
   :bind (("M-x" . helm-M-x)
 	 ("C-x C-f" . helm-find-files)))
 
