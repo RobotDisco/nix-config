@@ -54,10 +54,10 @@
   :config (editorconfig-mode +1))
 
 ;; helm
-(use-package helm-config
-  :ensure helm
+(use-package helm
   :config
-  (helm-mode 1)
+  (require 'helm-config)
+  (helm-mode +1)
   :bind (("M-x" . helm-M-x)
 	 ("C-x C-f" . helm-find-files)))
 
