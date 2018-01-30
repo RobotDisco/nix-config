@@ -70,6 +70,9 @@
   :bind (("M-x" . helm-M-x)
 	 ("C-x C-f" . helm-find-files)))
 
+;; pcomplete for fancy (e)shell buffer completion
+(use-package pcomplete-extension)
+
 ;; Show available key bindings
 (use-package which-key
   :config
