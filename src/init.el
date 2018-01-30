@@ -69,6 +69,12 @@
   (setq helm-completion-in-region-fuzzy-match t)
   :bind (("M-x" . helm-M-x)
 	 ("C-x C-f" . helm-find-files)))
+;; See git info, when application, in helm windows
+(use-package helm-ls-git)
+;; Search active key bindings
+(use-package helm-descbinds
+  :diminish helm-descbinds-mode
+  :config (helm-descbinds-mode))
 
 ;; pcomplete for fancy (e)shell buffer completion
 (use-package pcomplete-extension)
