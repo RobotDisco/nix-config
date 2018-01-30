@@ -53,11 +53,17 @@
 (use-package editorconfig
   :config (editorconfig-mode +1))
 
+;; That cool thing Christian has that lets you move to adjacent rows based on
+;; relative position to the current cursor.
+(use-package linum-relative)
+
 ;; helm
 (use-package helm
+  :ensure linum-relative
   :config
   (require 'helm-config)
-  (helm-mode +1)
+  (helm-mode 1)
+  (helm-linum-relative-mode 1)
   :bind (("M-x" . helm-M-x)
 	 ("C-x C-f" . helm-find-files)))
 
@@ -136,6 +142,7 @@
   :config
   (eval-after-load 'flycheck '(setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
 (use-package clojure-cheatsheet
+  :ensure helm
   :config
   (eval-after-load 'clojure-mode
     '(progn
