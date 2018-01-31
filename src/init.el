@@ -70,13 +70,16 @@
   :bind (("M-x" . helm-M-x)
 	 ("C-x C-f" . helm-find-files)
 	 ("M-y" . helm-show-kill-ring)
-	 ("C-x C-b") . helm-mini))
+	 ("C-x C-b" . helm-mini)))
 ;; See git info, when application, in helm windows
-(use-package helm-ls-git)
+(use-package helm-ls-git
+  :ensure helm)
 ;; Search active key bindings
 (use-package helm-descbinds
+  :ensure helm
   :diminish helm-descbinds-mode
   :config (helm-descbinds-mode))
+(use-package helm-tramp-mode)
 
 ;; pcomplete for fancy (e)shell buffer completion
 (use-package pcomplete-extension)
@@ -85,10 +88,6 @@
 (use-package which-key
   :config
   (which-key-mode))
-
-;; A better buffer menu
-(use-package ibuffer
-  :bind ("C-x C-b" . ibuffer))
 
 ;; A file tree mode
 (use-package neotree
