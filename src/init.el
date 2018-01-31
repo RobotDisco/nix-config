@@ -68,7 +68,9 @@
   (setq helm-mode-fuzzy-math t)
   (setq helm-completion-in-region-fuzzy-match t)
   :bind (("M-x" . helm-M-x)
-	 ("C-x C-f" . helm-find-files)))
+	 ("C-x C-f" . helm-find-files)
+	 ("M-y" . helm-show-kill-ring)
+	 ("C-x C-b") . helm-mini))
 ;; See git info, when application, in helm windows
 (use-package helm-ls-git)
 ;; Search active key bindings
