@@ -53,13 +53,8 @@
 (use-package editorconfig
   :config (editorconfig-mode +1))
 
-;; That cool thing Christian has that lets you move to adjacent rows based on
-;; relative position to the current cursor.
-(use-package linum-relative)
-
 ;; helm
 (use-package helm
-  :ensure linum-relative
   :config
   (require 'helm-config)
   (helm-mode 1)
@@ -72,14 +67,16 @@
 	 ("M-y" . helm-show-kill-ring)
 	 ("C-x C-b" . helm-mini)))
 ;; See git info, when application, in helm windows
-(use-package helm-ls-git
-  :ensure helm)
+(use-package helm-ls-git)
 ;; Search active key bindings
 (use-package helm-descbinds
-  :ensure helm
   :diminish helm-descbinds-mode
   :config (helm-descbinds-mode))
-(use-package helm-tramp-mode)
+(use-package helm-tramp)
+
+;; That cool thing Christian has that lets you move to adjacent rows based on
+;; relative position to the current cursor.
+(use-package linum-relative)
 
 ;; pcomplete for fancy (e)shell buffer completion
 (use-package pcomplete-extension)
@@ -102,7 +99,6 @@
   (projectile-mode))
 
 (use-package rainbow-delimiters
-  :ensure cider
   :config
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode)
@@ -147,26 +143,21 @@
     (cljr-add-keybindings-with-prefix "C-c C-m"))
   (add-hook 'clojure-mode-hook #'clj-refactor-mode-hook))
 (use-package flycheck-clojure
-  :ensure flycheck
   :config
   (eval-after-load 'flycheck '(flycheck-clojure-setup)))
 (use-package flycheck-pos-tip
-  :ensure flycheck
   :config
   (eval-after-load 'flycheck '(setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
 (use-package clojure-cheatsheet
-  :ensure helm
   :config
   (eval-after-load 'clojure-mode
     '(progn
        (define-key clojure-mode-map (kbd "C-c C-h") #'clojure-cheatsheet)))
   (setq helm-source-clojure-cheatsheet t))
 
-(use-package smartparens-config
-  :ensure smartparens
-  :ensure clojure-mode
-  :ensure cider
+(use-package smartparens
   :config
+  (require 'smartparens-config)
   (show-smartparens-global-mode t)
   (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
   (add-hook 'clojure-mode-hook 'turn-on-smartparens-strict-mode)
@@ -217,7 +208,6 @@
   (add-hook 'python-mode-hook 'anaconda-mode)
   (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
   (use-package company-anaconda
-    :ensure company
     :config
     (eval-after-load "company"
       '(add-to-list 'company-backends 'company-anaconda))))
