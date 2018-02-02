@@ -117,6 +117,11 @@
 (use-package flycheck
   :config (add-hook 'after-init-hook #'global-flycheck-mode))
 
+;; Errors hover over point of error, not in separate buffer
+(use-package flycheck-pos-tip
+  :config
+  (eval-after-load 'flycheck '(setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+
 ;; Ruby
 (use-package rbenv
   :config (add-hook 'ruby-mode-hook #'rbenv-mode))
@@ -142,18 +147,10 @@
     ;; This choice of keybinding leaves cider-macroexpand-1 unbound
     (cljr-add-keybindings-with-prefix "C-c C-m"))
   (add-hook 'clojure-mode-hook #'clj-refactor-mode-hook))
+(use-package helm-cider)
 (use-package flycheck-clojure
   :config
   (eval-after-load 'flycheck '(flycheck-clojure-setup)))
-(use-package flycheck-pos-tip
-  :config
-  (eval-after-load 'flycheck '(setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
-(use-package clojure-cheatsheet
-  :config
-  (eval-after-load 'clojure-mode
-    '(progn
-       (define-key clojure-mode-map (kbd "C-c C-h") #'clojure-cheatsheet)))
-  (setq helm-source-clojure-cheatsheet t))
 
 (use-package smartparens
   :config
