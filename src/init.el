@@ -178,17 +178,17 @@
       ad-do-it)))
 
 ;; function to edit init file
-(defun edit-init-file ()
+(defun gaelan-edit-init-file ()
   "Open the init file."
   (interactive)
   (find-file user-init-file))
-(global-set-key (kbd "C-c i") 'edit-init-file)
+(global-set-key (kbd "C-c i") 'gaelan-edit-init-file)
 
 ;; Delete trailing whitespace from lines/buffer before every save
-;; (use-package whitespace
-;;  :config
-;;  (add-hook 'before-save-hook 'whitespace-cleanup)
-;;  (whitespace-mode))
+(use-package whitespace
+  :config
+  (add-hook 'before-save-hook 'whitespace-cleanup)
+  (whitespace-mode))
 
 ;; Disable default chrome
 (tool-bar-mode -1)
@@ -251,7 +251,15 @@
 
 (let ((gaelan-webdav-prefix (if (eql system-type 'darwin)
 			     (file-name-as-directory "/Volumes/webdav/")
-			   (file-name-as-directory "~/webdav/"))))
+			     (file-name-as-directory "~/webdav/")))
+      (gaelan-inbox-file (lambda () (concat org-directory "inbox.org"))))
+  ;; function to edit inbox file
+  (defun gaelan-edit-inbox-file ()
+    "Open inbox"
+    (interactive)
+    (find-file (gaelan-inbox-file)))
+  (global-set-key (kbd "C-c n") 'gaelan-edit-inbox-file)
+
   ;; Org mode
   (use-package org
     :commands org-store-link org-agenda org-capture org-iswitchb
@@ -266,7 +274,7 @@
     (global-set-key "\C-cb" 'org-iswitchb)
     (setq org-directory (file-name-as-directory (concat gaelan-webdav-prefix "gtd")))
     (setq org-mobile-directory (file-name-as-directory (concat org-directory "mobileorg")))
-    (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
+    (setq org-mobile-inbox-for-pull gaelan-inbox-file)
     (setq org-agenda-files (list (concat org-directory "gtd.org")
 				 (concat org-directory "tickler.org")))
     (setq org-capture-templates `(("i" "Inbox" entry
