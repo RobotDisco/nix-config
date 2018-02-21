@@ -147,7 +147,8 @@
     ;; This choice of keybinding leaves cider-macroexpand-1 unbound
     (cljr-add-keybindings-with-prefix "C-c C-m"))
   (add-hook 'clojure-mode-hook #'clj-refactor-mode-hook))
-(use-package helm-cider)
+(use-package helm-cider
+  :config (helm-cider-mode 1))
 (use-package flycheck-clojure
   :config
   (eval-after-load 'flycheck '(flycheck-clojure-setup)))
