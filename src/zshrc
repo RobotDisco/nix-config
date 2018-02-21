@@ -15,7 +15,7 @@ prompt redhat
 # Emacs is my editor
 export EDITOR='emacsclient --alternate-editor='' -c $@'
 alias e=$EDITOR
-alias killemacs=emacsclient -e "(kill-emacs)"
+alias killemacs="emacsclient -e '(kill-emacs)'"
 
 # If vim doesn't exist, invoke vi instead
 command -v vim --help >/dev/null 2>&1 || alias vim=vi
