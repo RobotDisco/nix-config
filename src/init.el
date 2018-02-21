@@ -286,9 +286,9 @@
 				  ("w" "Work Tickler" entry
 				   (file+headline ,(concat org-directory "tickler.org") "Work")
 				   "* TODO %i%? \n %U")))
-    (setq org-refile-targets `((,(concat org-directory "gtd.org") :maxlevel . 2)
-			       (,(concat org-directory "personal-someday.org") :level . 1)
-			       (,(concat org-directory "personal-tickler.org") :level . 1)))
+    (setq org-refile-targets `((,(concat org-directory "gtd.org") :level . 1)
+			       (,(concat org-directory "someday.org") :level . 1)
+			       (,(concat org-directory "tickler.org") :level . 1)))
     (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
     (setq org-tag-alist '((:startgroup . nil) ("@home" . ?h) ("@officeto" . ?t) ("@officekw" . ?k) ("@phone" . ?p) ("@lappy" . ?l) ("@online" . ?i) ("@email" . ?e) ("@errand" . ?r) ("@waitingfor" . ?w) (:endgroup . nil))))
 
