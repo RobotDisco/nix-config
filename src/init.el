@@ -308,6 +308,100 @@
     :config
     (setq org-journal-dir (file-name-as-directory (concat gaelan-webdav-prefix "journal")))))
 
+;; Mail-Utility for Emacs (mu4e)
+;; We assume mu + offlineimap have been setup properly
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
+(require 'mu4e)
+;; use mu4e for e-mail in emacs
+(setq mail-user-agent 'mu4e-user-agent)
+;; maildir
+(setq mu4e-maildir "~/mail")
+(setq mu4e-sent-messages-behavior 'delete)
+(setq mu4e-contexts
+ `( ,(make-mu4e-context
+     :name "Personal"
+     :match-func (lambda (msg) (when msg
+       (string-prefix-p "/personal" (mu4e-message-field msg :maildir))))
+     :vars '(
+       (mu4e-trash-folder . "/personal/trash")
+       (mu4e-refile-folder . "/personal/archive")
+       ))
+   ,(make-mu4e-context
+     :name "Tulip"
+     :match-func (lambda (msg) (when msg
+       (string-prefix-p "/tulip" (mu4e-message-field msg :maildir))))
+     :vars '(
+       (mu4e-trash-folder . "/tulip/trash")
+       (mu4e-refile-folder . "/tulip/archive")
+       ))
+   ))
+
+(use-package mu4e-alert
+  :after (mu4e)
+  :config
+  (setq mu4e-alert-interesting-mail-query
+       (concat "flag:unread maildir:/personal/inbox "
+	       "OR "
+	       "flag:unread maildir:/tulip/inbox"))
+  (mu4e-alert-enable-mode-line-display)
+
+  ;; Call offlineimap to update mail.
+  (setq mu4e-get-mail-command "offlineimap -o")
+
+  ;; I have my "default" parameters from Gmail
+(setq mu4e-sent-folder "/personal/sent"
+      ;; mu4e-sent-messages-behavior 'delete ;; Unsure how this should be configured
+      mu4e-drafts-folder "/personal/drafts"
+      mu4e-trash-folder "/personal/trash"
+      mu4e-refile-folder "/personal/archive"
+      user-mail-address "gdcosta@gmail.com"
+      smtpmail-default-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587)
+
+;; Now I set a list of
+(defvar my-mu4e-account-alist
+  '(("Personal"
+     (mu4e-sent-folder "/personal/sent")
+     (mu4e-drafts-folder "/personal/drafts")
+     (user-mail-address "gdcosta@gmail.com")
+     (smtpmail-smtp-user "gaelan")
+     (smtpmail-local-domain "gmail.com")
+     (smtpmail-default-smtp-server "smtp.gmail.com")
+     (smtpmail-smtp-server "smtp.gmail.com")
+     (smtpmail-smtp-service 587))
+    ;; Include any other accounts here ...
+    ("Tulip"
+     (mu4e-sent-folder "/tulip/sent")
+     (mu4e-drafts-folder "/tulip/drafts")
+     (user-mail-address "gaelan@tulip.com")
+     (smtpmail-smtp-user "gaelan")
+     (smtpmail-local-domain "tulip.com")
+     (smtpmail-default-smtp-server "smtp.gmail.com")
+     (smtpmail-smtp-server "smtp.gmail.com")
+     (smtpmail-smtp-service 587))))
+
+(defun my-mu4e-set-account ()
+  "Set the account for composing a message.
+   This function is taken from:
+     https://www.djcbsoftware.nl/code/mu/mu4e/Multiple-accounts.html"
+  (let* ((account
+    (if mu4e-compose-parent-message
+	(let ((maildir (mu4e-message-field mu4e-compose-parent-message :maildir)))
+    (string-match "/\\(.*?\\)/" maildir)
+    (match-string 1 maildir))
+      (completing-read (format "Compose with account: (%s) "
+	     (mapconcat #'(lambda (var) (car var))
+	    my-mu4e-account-alist "/"))
+	   (mapcar #'(lambda (var) (car var)) my-mu4e-account-alist)
+	   nil t nil nil (caar my-mu4e-account-alist))))
+   (account-vars (cdr (assoc account my-mu4e-account-alist))))
+    (if account-vars
+  (mapc #'(lambda (var)
+      (set (car var) (cadr var)))
+	account-vars)
+      (error "No email account found"))))
+(add-hook 'mu4e-compose-pre-hook 'my-mu4e-set-account))
 
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 (defun smarter-move-beginning-of-line (arg)
