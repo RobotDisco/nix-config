@@ -182,11 +182,25 @@
   (find-file user-init-file))
 (global-set-key (kbd "C-c i") 'gaelan-edit-init-file)
 
+;; reload init file
+(defun gaelan-reload-init-file ()
+  "Reload the init file."
+  (interactive)
+  (load-file user-init-file))
+(global-set-key (kbd "C-c r") 'gaelan-reload-init-file)
+
+;; Save recent files list every 5 minutes, inhibit output
+(require 'recentf)
+(run-at-time (* 5 60) nil
+	     (lambda ()
+	       (let ((inhibit-message t))
+		 (recentf-save-list))))
+
+
 ;; Delete trailing whitespace from lines/buffer before every save
 (use-package whitespace
   :config
-  (add-hook 'before-save-hook 'whitespace-cleanup)
-  (whitespace-mode))
+  (add-hook 'before-save-hook 'whitespace-cleanup))
 
 ;; Disable default chrome
 (tool-bar-mode -1)
