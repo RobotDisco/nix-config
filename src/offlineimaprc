@@ -1,0 +1,63 @@
+# Sample minimal config file.  Copy this to ~/.offlineimaprc and edit to
+# get started fast.
+
+[general]
+accounts = personal,tulip
+pythonfile = ~/.offlineimap.py
+maxsyncaccounts = 2
+fsync = False
+
+[Account personal]
+localrepository = PersonalLocal
+remoterepository = PersonalGmail
+synclabels = yes
+autorefresh = 5
+
+[Repository PersonalLocal]
+type = GmailMaildir
+localfolders = ~/mail/personal
+nametrans = nametrans_local2gmail
+
+[Repository PersonalGmail]
+type = Gmail
+auth_mechanisms = XOAUTH2
+remoteuser = gdcosta@gmail.com
+nametrans = nametrans_gmail2local
+sslcacertfile = /usr/local/etc/openssl/cert.pem
+oauth2_client_id = 916485256547-umo4nvn00t5bchrf8776odrhrir6h10q.apps.googleusercontent.com
+oauth2_client_secret = VH8Otf2SAXd6mIquChEOpfS-
+oauth2_refresh_token = 1/CTHG6fIJ8QybgdP-b3dooO74szZG_nvPevZ6o-36FQkAlcO4ZR9pg8_F9RWqTm5S
+# readonly = True
+postsynchook = mu index --maildir ~/mail
+
+[Account tulip]
+localrepository = TulipLocal
+remoterepository = TulipGmail
+synclabels = yes
+autorefresh = 5
+
+[Repository TulipLocal]
+type = GmailMaildir
+localfolders = ~/mail/tulip
+nametrans = nametrans_local2gmail
+
+[Repository TulipGmail]
+type = Gmail
+auth_mechanisms = XOAUTH2
+remoteuser = gaelan@tulip.io
+nametrans = nametrans_gmail2local
+sslcacertfile = /usr/local/etc/openssl/cert.pem
+oauth2_client_id = 916485256547-umo4nvn00t5bchrf8776odrhrir6h10q.apps.googleusercontent.com
+oauth2_client_secret = VH8Otf2SAXd6mIquChEOpfS-
+oauth2_refresh_token = 1/J-EBLlPQunkjqx-kfreY6WbRYRr-4uZNvQUZpFJh6FoypOmfG2NzsoUKEAUMdH5l
+# readonly = True
+postsynchook = mu index --maildir ~/mail
+
+# [mbnames]
+# enabled = yes
+# filename = ~/.mutt/muttrc.mailboxes
+# header = "mailboxes "
+# peritem = "+%(accountname)s/%(foldername)s"
+# sep = " "
+# footer = "\n"
+# incremental = no
