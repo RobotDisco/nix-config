@@ -4,7 +4,8 @@
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/")
 	("melpa-stable" . "https://stable.melpa.org/packages/")
-	("melpa" . "https://melpa.org/packages/")))
+	("melpa" . "https://melpa.org/packages/")
+	("marmalade" . "https://marmalade-repo.org/packages/")))
 (package-initialize)
 
 ;; Bootstrap 'use-package' if necessary
