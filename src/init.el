@@ -308,7 +308,7 @@
     (global-set-key "\C-cb" 'org-iswitchb)
     (setq org-directory (file-name-as-directory (concat gaelan-webdav-prefix "gtd")))
     (setq org-mobile-directory (file-name-as-directory (concat org-directory "mobileorg")))
-    (setq org-mobile-inbox-for-pull gaelan-inbox-file)
+    (setq org-mobile-inbox-for-pull (funcall gaelan-inbox-file))
     (setq org-agenda-files (list (concat org-directory "gtd.org")
 				 (concat org-directory "tickler.org")))
     (setq org-capture-templates `(("i" "Inbox" entry
