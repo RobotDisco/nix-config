@@ -2,7 +2,7 @@ export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 export PS1='[\u@\h \W]$ '
 
 if [[ `uname` == 'Darwin' ]]; then
-   SSH_KEYS="id_rsa"
+   SSH_KEYS="id_rsa 674E1FC171DDC73E3217C844E8F9D7F62537F60E"
 else
    SSH_KEYS="id_rsa id_rsa.work 0117D404E009B6817189A58935DA535955C3F33E"
 fi
