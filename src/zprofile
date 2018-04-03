@@ -4,9 +4,9 @@ export PS1='[\u@\h \W]$ '
 if [[ `uname` == 'Darwin' ]]; then
    SSH_KEYS="id_rsa"
 else
-   SSH_KEYS="id_rsa id_rsa.work"
+   SSH_KEYS="id_rsa id_rsa.work 0117D404E009B6817189A58935DA535955C3F33E"
 fi
-command -v keychain >/dev/null 2>&1 && eval "$(keychain --quiet --agents ssh --eval $=SSH_KEYS)"
+command -v keychain >/dev/null 2>&1 && eval "$(keychain --quiet --agents gpg,ssh --eval $=SSH_KEYS)"
 
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
 #  exec sway
