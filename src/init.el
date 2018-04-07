@@ -270,22 +270,30 @@
 (flycheck-add-mode 'javascript-eslint 'web-mode)
 
 ;; Modern JavaScript
-(use-package js2-mode
-  :config
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-jsx-mode))
-  (add-to-list 'interpreter-mode-alist '("node" . js2-jsx-mode)))
+(use-package js2-mode)
+
+(use-package rjsx-mode
+  :config (add-to-list 'auto-mode-alist '("\\.js\\'" . rjsx-mode)))
 
 (use-package json-mode
   :config (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode)))
 
 ;; disable jshint since we prefer eslint checking
 (setq-default flycheck-disabled-checkers
-  (append flycheck-disabled-checkers
-    '(javascript-jshint)))
+	      (append flycheck-disabled-checkers
+		      '(javascript-jshint)))
+
+(use-package skewer-mode
+  :config
+  (add-hook 'js2-mode-hook 'skewer-mode)
+  (add-hook 'css-mode-hook 'skewer-css-mode)
+  (add-hook 'html-mode-hook 'skewer-html-mode))
+
+;; Org mode (GTD and the like)
 
 (let ((gaelan-webdav-prefix (if (eql system-type 'darwin)
-			     (file-name-as-directory "/Volumes/webdav/")
-			     (file-name-as-directory "~/webdav/")))
+				(file-name-as-directory "/Volumes/webdav/")
+			      (file-name-as-directory "~/webdav/")))
       (gaelan-inbox-file (lambda () (concat org-directory "inbox.org"))))
   ;; function to edit inbox file
   (defun gaelan-edit-inbox-file ()
