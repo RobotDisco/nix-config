@@ -79,6 +79,16 @@
 ;; relative position to the current cursor.
 (use-package linum-relative)
 
+;; Jump around to text efficiently
+(use-package ace-jump-mode
+  :config
+  :bind (("C-:" . avy-goto-char)
+	 ("C-'" . avy-goto-char-2)
+	 ("M-g f" . avy-goto-line)
+	 ("M-g w" . avy-goto-word-1)
+	 ("M-g e" . avy-goto-word-0)))
+
+
 ;; pcomplete for fancy (e)shell buffer completion
 (use-package pcomplete-extension)
 
@@ -153,37 +163,17 @@
   :config
   (eval-after-load 'flycheck '(flycheck-clojure-setup)))
 
-(use-package parinfer
-  :ensure t
-  :bind
-  (("C-," . parinfer-toggle-mode))
-  :init
-  (progn
-    (setq parinfer-extensions
-	  '(defaults       ; should be included.
-	    pretty-parens  ; different paren styles for different modes.
-	    ;; evil           ; If you use Evil.
-	    ;; lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
-	    paredit        ; Introduce some paredit commands.
-	    smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-	    smart-yank))   ; Yank behavior depend on mode.
-    (add-hook 'clojure-mode-hook #'parinfer-mode)
-    (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
-    (add-hook 'common-lisp-mode-hook #'parinfer-mode)
-    (add-hook 'scheme-mode-hook #'parinfer-mode)
-    (add-hook 'lisp-mode-hook #'parinfer-mode)))
-
 (use-package smartparens
   :config
   (require 'smartparens-config)
   (show-smartparens-global-mode t)
   (add-hook 'prog-mode-hook 'turn-on-smartparens-mode)
-  ; (add-hook 'clojure-mode-hook 'turn-on-smartparens-strict-mode)
+					; (add-hook 'clojure-mode-hook 'turn-on-smartparens-strict-mode)
   (add-hook 'cider-repl-mode-hook 'turn-on-smartparens-strict-mode)
-  ; (add-hook 'scheme-mode-hook 'turn-on-smartparens-strict-mode)
-  ; (add-hook 'lisp-mode-hook 'turn-on-smartparens-strict-mode)
+					; (add-hook 'scheme-mode-hook 'turn-on-smartparens-strict-mode)
+					; (add-hook 'lisp-mode-hook 'turn-on-smartparens-strict-mode)
   (add-hook 'lisp-interaction-mode-hook 'turn-on-smartparens-strict-mode)
-  ; (add-hook 'emacs-lisp-mode-hook 'turn-on-smartparens-strict-mode)
+					; (add-hook 'emacs-lisp-mode-hook 'turn-on-smartparens-strict-mode)
   (add-hook 'ielm-mode-hook 'turn-on-smartparens-strict-mode)
   (add-hook 'eval-expression-minibuffer-setup-hook 'turn-on-smartparens-strict-mode)
   (sp-use-smartparens-bindings))
@@ -328,11 +318,11 @@
 				  ("w" "Work Tickler" entry
 				   (file+headline ,(concat org-directory "tickler.org") "Work")
 				   "* TODO %i%? \n %U")))
-    (setq org-refile-targets `((,(concat org-directory "gtd.org") :level . 1)
+    (setq org-refile-targets `((,(concat org-directory "gtd.org") :maxlevel . 2)
 			       (,(concat org-directory "someday.org") :level . 1)
 			       (,(concat org-directory "tickler.org") :level . 1)))
     (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-    (setq org-tag-alist '((:startgroup . nil) ("@home" . ?h) ("@officeto" . ?t) ("@officekw" . ?k) ("@phone" . ?p) ("@lappy" . ?l) ("@online" . ?i) ("@email" . ?e) ("@errand" . ?r) ("@waitingfor" . ?w) (:endgroup . nil))))
+    (setq org-tag-alist '((:startgroup . nil) ("@home" . ?h) ("@officeto" . ?t) ("@officekw" . ?k) ("@phone" . ?p) ("@lappy" . ?l) ("@online" . ?i) ("@email" . ?e) ("@errand" . ?r) (:endgroup . nil))))
 
   (use-package org-journal
     :config
