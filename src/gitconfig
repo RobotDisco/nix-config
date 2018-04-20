@@ -1,5 +1,6 @@
 [core]
 	autocrlf = input
+	editor = "emacsclient -t -a''"
 [user]
 	email = gdcosta@gmail.com
 	name = "Gaelan D'costa"

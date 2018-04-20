@@ -13,7 +13,7 @@ promptinit
 prompt redhat
 
 # Emacs is my editor
-export EDITOR='emacsclient --alternate-editor='' -c $@'
+export EDITOR="emacsclient --alternate-editor=''"
 alias e=$EDITOR
 alias killemacs="emacsclient -e '(kill-emacs)'"
 
