@@ -75,6 +75,9 @@
   :config (helm-descbinds-mode))
 (use-package helm-tramp)
 
+;; Bind imenu to a useful key
+(global-set-key (kbd "M-i") 'imenu)
+
 ;; That cool thing Christian has that lets you move to adjacent rows based on
 ;; relative position to the current cursor.
 (use-package linum-relative)
