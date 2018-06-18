@@ -272,15 +272,7 @@
 
 (let ((gaelan-webdav-prefix (if (eql system-type 'darwin)
 				(file-name-as-directory "/Volumes/webdav/")
-			      (file-name-as-directory "~/webdav/")))
-      (gaelan-inbox-file (lambda () (concat org-directory "inbox.org"))))
-  ;; function to edit inbox file
-  (defun gaelan-edit-inbox-file ()
-    "Open inbox"
-    (interactive)
-    (find-file (gaelan-inbox-file)))
-  (global-set-key (kbd "C-c n") 'gaelan-edit-inbox-file)
-
+			      (file-name-as-directory "~/webdav/"))))
   ;; Org mode
   (use-package org
     :commands org-store-link org-agenda org-capture org-iswitchb
@@ -295,7 +287,7 @@
     (global-set-key "\C-cb" 'org-iswitchb)
     (setq org-directory (file-name-as-directory (concat gaelan-webdav-prefix "gtd")))
     (setq org-mobile-directory (file-name-as-directory (concat org-directory "mobileorg")))
-    (setq org-mobile-inbox-for-pull (funcall gaelan-inbox-file))
+    (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
     (setq org-agenda-files (list (concat org-directory "gtd.org")
 				 (concat org-directory "tickler.org")))
     (setq org-capture-templates `(("i" "Inbox" entry
