@@ -307,7 +307,7 @@
     (setq org-todo-keywords '((sequence
 			       "TODO(t)"
 			       "NEXT(n)"
-			       "STARTED(n)"
+			       "STARTED(s)"
 			       "WAITING(w)"
 			       "|"
 			       "DONE(d)"
