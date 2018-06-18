@@ -290,6 +290,8 @@
     (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
     (setq org-agenda-files (list (concat org-directory "gtd.org")
 				 (concat org-directory "tickler.org")))
+    (setq org-agenda-custom-commands
+	  '(("n" "Next tasks" todo "NEXT|STARTED")))
     (setq org-capture-templates `(("i" "Inbox" entry
 				   (file ,(concat org-directory "inbox.org"))
 				   "* TODO %i%?")
