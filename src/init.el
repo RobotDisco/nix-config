@@ -328,7 +328,17 @@
 
   (use-package org-journal
     :config
-    (setq org-journal-dir (file-name-as-directory (concat gaelan-webdav-prefix "journal")))))
+    (setq org-journal-dir (file-name-as-directory (concat gaelan-webdav-prefix "journal"))))
+
+  (use-package org-wiki
+    :config
+    (setq org-wiki-location-list
+      (list
+       (concat gaelan-webdav-prefix
+	       "theknowledge/personal")    ;; First wiki (root directory) is the default.
+       (concat gaelan-webdav-prefix
+	       "theknowledge/tulip")))
+    (setq org-wiki-location (car org-wiki-location-list))))
 
 ;; Mail-Utility for Emacs (mu4e)
 ;; We assume mu + offlineimap have been setup properly
