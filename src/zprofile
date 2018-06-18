@@ -6,7 +6,7 @@ if [[ `uname` == 'Darwin' ]]; then
 else
    SSH_KEYS="id_rsa id_rsa.work 00822AA51EC93E807C6455A5C2939E67E9265504"
 fi
-command -v keychain >/dev/null 2>&1 && eval "$(keychain --quiet --agents gpg,ssh --eval $=SSH_KEYS)"
+command -v keychain >/dev/null 2>&1 && eval "$(keychain --quiet --agents gpg,ssh --inherit any --eval $=SSH_KEYS)"
 
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
 #  exec sway
