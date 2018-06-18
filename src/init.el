@@ -190,20 +190,6 @@
     (with-current-buffer buffer
       ad-do-it)))
 
-;; function to edit init file
-(defun gaelan-edit-init-file ()
-  "Open the init file."
-  (interactive)
-  (find-file user-init-file))
-(global-set-key (kbd "C-c i") 'gaelan-edit-init-file)
-
-;; reload init file
-(defun gaelan-reload-init-file ()
-  "Reload the init file."
-  (interactive)
-  (load-file user-init-file))
-(global-set-key (kbd "C-c r") 'gaelan-reload-init-file)
-
 ;; Save recent files list every 5 minutes, inhibit output
 (require 'recentf)
 (run-at-time (* 5 60) nil
