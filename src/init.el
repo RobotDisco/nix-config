@@ -302,8 +302,29 @@
     (setq org-refile-targets `((,(concat org-directory "gtd.org") :maxlevel . 2)
 			       (,(concat org-directory "someday.org") :level . 1)
 			       (,(concat org-directory "tickler.org") :level . 1)))
-    (setq org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-    (setq org-tag-alist '((:startgroup . nil) ("@home" . ?h) ("@officeto" . ?t) ("@officekw" . ?k) ("@phone" . ?p) ("@lappy" . ?l) ("@online" . ?i) ("@email" . ?e) ("@errand" . ?r) (:endgroup . nil))))
+    (setq org-todo-keywords '((sequence
+			       "TODO(t)"
+			       "NEXT(n)"
+			       "STARTED(n)"
+			       "WAITING(w)"
+			       "|"
+			       "DONE(d)"
+			       "CANCELLED(c)")))
+    (setq org-tag-alist '((:startgroup . nil)
+			  ("@home" . ?h)
+			  ("@officeto" . ?t)
+			  ("@officekw" . ?k)
+			  ("@phone" . ?p)
+			  ("@lappy" . ?l)
+			  ("@online" . ?i)
+			  ("@email" . ?e)
+			  ("@errand" . ?r)
+			  (:endgroup . nil)))
+    (setq org-highest-priority ?A)
+    (setq org-default-priority ?C)
+    (setq org-lowest-priority ?D)
+    (setq org-enforce-todo-checkbox-dependencies t)
+    (setq org-agenda-dim-blocked-tasks t))
 
   (use-package org-journal
     :config
