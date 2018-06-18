@@ -346,6 +346,9 @@
 ;; We assume mu + offlineimap have been setup properly
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
 (require 'mu4e)
+(setq mu4e-mu-binary (if (eql system-type 'darwin)
+			 "/usr/local/bin/mu"
+		       "/usr/bin/mu"))
 ;; use mu4e for e-mail in emacs
 (setq mail-user-agent 'mu4e-user-agent)
 ;; maildir
