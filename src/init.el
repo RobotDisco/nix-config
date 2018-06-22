@@ -349,6 +349,8 @@
 (setq mu4e-mu-binary (if (eql system-type 'darwin)
 			 "/usr/local/bin/mu"
 		       "/usr/bin/mu"))
+;; Call offlineimap to update mail.
+(setq mu4e-get-mail-command "offlineimap")
 ;; use mu4e for e-mail in emacs
 (setq mail-user-agent 'mu4e-user-agent)
 ;; maildir
