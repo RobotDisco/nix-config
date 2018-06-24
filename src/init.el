@@ -20,14 +20,14 @@
   (require 'use-package))
 (require 'bind-key)
 
-;; Use keychain to load SSH keys
-(use-package keychain-environment
-  :config (keychain-refresh-environment))
-
 ;; Add OSX path when run graphically
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns x))
   :config (exec-path-from-shell-initialize))
+
+;; Use keychain to load SSH keys
+(use-package keychain-environment
+  :config (keychain-refresh-environment))
 
 ;; Use Anonymous Pro as default font
 (add-to-list 'default-frame-alist
