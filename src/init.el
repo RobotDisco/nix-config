@@ -335,12 +335,21 @@
     :config
     (setq org-journal-dir (file-name-as-directory (concat gaelan-webdav-prefix "journal"))))
 
-  (use-package org-wiki
+  (use-package quelpa
     :config
+    (quelpa '(org-wiki
+	      :url "https://raw.githubusercontent.com/caiorss/org-wiki/master/org-wiki.el"
+	      :fetcher url)))
+
+  (use-package org-wiki
+    :after quelpa
+    :ensure nil
+    :init
     (setq org-wiki-location-list
       (list
+       ;; First wiki (root directory) is the default.
        (concat gaelan-webdav-prefix
-	       "theknowledge/personal")    ;; First wiki (root directory) is the default.
+	       "theknowledge/personal")
        (concat gaelan-webdav-prefix
 	       "theknowledge/tulip")))
     (setq org-wiki-location (car org-wiki-location-list))))
