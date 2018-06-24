@@ -34,9 +34,9 @@
 	     '(font . "Anonymous Pro-14"))
 
 ;; Solarized looks gross in console-mode
-(use-package solarized-theme
+(use-package cyberpunk-theme
   ;; :if window-system
-  :config (load-theme 'solarized-dark t))
+  :config (load-theme 'cyberpunk t))
 
 (use-package smart-mode-line
   :init (setq sml/no-confirm-load-theme t)
