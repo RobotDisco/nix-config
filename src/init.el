@@ -56,13 +56,14 @@
 
 ;; helm
 (use-package helm
+  :init
+  (setq helm-mode-fuzzy-math t)
+  (setq helm-completion-in-region-fuzzy-match t)
   :config
   (require 'helm-config)
   (helm-mode 1)
   (helm-linum-relative-mode 1)
   ;; Set fuzzy matching everywhere
-  (setq helm-mode-fuzzy-math t)
-  (setq helm-completion-in-region-fuzzy-match t)
   :bind (("M-x" . helm-M-x)
 	 ("C-x C-f" . helm-find-files)
 	 ("M-y" . helm-show-kill-ring)
@@ -84,7 +85,6 @@
 
 ;; Jump around to text efficiently
 (use-package ace-jump-mode
-  :config
   :bind (("C-:" . avy-goto-char)
 	 ("C-'" . avy-goto-char-2)
 	 ("M-g f" . avy-goto-line)
@@ -104,11 +104,12 @@
 (use-package neotree
   :bind ("<f8>" . neotree-toggle))
 
+;; Helpful file/code search utils
+(use-package ag)
+(use-package ggtags)
 ;; Project manager (i.e. any VCS repo)
 (use-package projectile
-  :init
-  (use-package ag)
-  (use-package ggtags)
+  :after (ag ggtags)
   :config
   (projectile-mode))
 
@@ -217,11 +218,13 @@
 (use-package anaconda-mode
   :config
   (add-hook 'python-mode-hook 'anaconda-mode)
-  (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
-  (use-package company-anaconda
-    :config
-    (eval-after-load "company"
-      '(add-to-list 'company-backends 'company-anaconda))))
+  (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
+
+(use-package company-anaconda
+  :after anaconda-mode
+  :config
+  (eval-after-load "company"
+    '(add-to-list 'company-backends 'company-anaconda)))
 
 (use-package pyenv-mode
   :config
