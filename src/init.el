@@ -363,11 +363,15 @@
 		       "/usr/bin/mu"))
 ;; Call offlineimap to update mail.
 (setq mu4e-get-mail-command "offlineimap")
+;; Update mail every five minutes
+(setq mu4e-update-interval 300)
 ;; use mu4e for e-mail in emacs
 (setq mail-user-agent 'mu4e-user-agent)
 ;; maildir
 (setq mu4e-maildir "~/mail")
 (setq mu4e-sent-messages-behavior 'delete)
+;; Place queued emails in ~/mail/sendqueue
+(setq smtpmail-queue-dir "~/mail/sendqueue")
 (setq mu4e-contexts
  `( ,(make-mu4e-context
      :name "Personal"
