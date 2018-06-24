@@ -372,24 +372,51 @@
 (setq mu4e-sent-messages-behavior 'delete)
 ;; Place queued emails in ~/mail/sendqueue
 (setq smtpmail-queue-dir "~/mail/sendqueue")
+;; Because GmailIMAP downloads a copy of an email for each label, dedupe
+(setq mu4e-headers-skip-duplicates t)
 (setq mu4e-contexts
  `( ,(make-mu4e-context
      :name "Personal"
      :match-func (lambda (msg) (when msg
        (string-prefix-p "/personal" (mu4e-message-field msg :maildir))))
-     :vars '(
-       (mu4e-trash-folder . "/personal/trash")
-       (mu4e-refile-folder . "/personal/archive")
-       ))
+     :vars '((mu4e-drafts-folder . "/personal/drafts")
+	     (mu4e-refile-folder . "/personal/archive")
+	     (mu4e-sent-folder . "/personal/sent")
+	     (mu4e-trash-folder . "/personal/trash")
+	     (message-send-mail-function . 'smtpmail-send-it)
+	     (smtpmail-smtp-user . "gdcosta")
+	     (smtpmail-local-domain . "gmail.com")
+	     (smtpmail-smtp-server . "smtp.gmail.com")
+	     (smtpmail-smtp-service . 587)
+	     (user-mail-address . "gdcosta@gmail.com")
+	     (user-full-name . "Gaelan D'costa")))
    ,(make-mu4e-context
      :name "Tulip"
      :match-func (lambda (msg) (when msg
        (string-prefix-p "/tulip" (mu4e-message-field msg :maildir))))
-     :vars '(
-       (mu4e-trash-folder . "/tulip/trash")
-       (mu4e-refile-folder . "/tulip/archive")
-       ))
-   ))
+     :vars '((mu4e-drafts-folder . "/tulip/drafts")
+	     (mu4e-refile-folder . "/tulip/archive")
+	     (mu4e-sent-folder . "/tulip/sent")
+	     (mu4e-trash-folder . "/tulip/trash")
+	     (message-send-mail-function . 'smtpmail-send-it)
+	     (smtpmail-smtp-user . "gaelan")
+	     (smtpmail-local-domain . "tulip.com")
+	     (smtpmail-smtp-server . "smtp.gmail.com")
+	     (smtpmail-smtp-service . 587)
+	     (user-mail-address . "gaelan@tulip.com")
+	     (user-full-name . "Gaelan D'costa")))))
+;; Ask if mails don't match context matcher functions
+(setq mu4e-context-policy 'ask)
+(setq mu4e-compose-context-policy 'ask)
+;; This sets `mu4e-user-mail-address-list' to the concatenation of all
+;; `user-mail-address' values for all contexts. If you have other mail
+;; addresses as well, you'll need to add those manually.
+(setq mu4e-user-mail-address-list
+      (delq nil
+	    (mapcar (lambda (context)
+		      (when (mu4e-context-vars context)
+			(cdr (assq 'user-mail-address (mu4e-context-vars context)))))
+		    mu4e-contexts)))
 
 (use-package mu4e-alert
   :after (mu4e)
@@ -399,64 +426,6 @@
 	       "OR "
 	       "flag:unread maildir:/tulip/inbox"))
   (mu4e-alert-enable-mode-line-display)
-
-  ;; Call offlineimap to update mail.
-  (setq mu4e-get-mail-command "offlineimap -o")
-
-  ;; I have my "default" parameters from Gmail
-(setq mu4e-sent-folder "/personal/sent"
-      ;; mu4e-sent-messages-behavior 'delete ;; Unsure how this should be configured
-      mu4e-drafts-folder "/personal/drafts"
-      mu4e-trash-folder "/personal/trash"
-      mu4e-refile-folder "/personal/archive"
-      user-mail-address "gdcosta@gmail.com"
-      smtpmail-default-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-service 587)
-
-;; Now I set a list of
-(defvar my-mu4e-account-alist
-  '(("Personal"
-     (mu4e-sent-folder "/personal/sent")
-     (mu4e-drafts-folder "/personal/drafts")
-     (user-mail-address "gdcosta@gmail.com")
-     (smtpmail-smtp-user "gaelan")
-     (smtpmail-local-domain "gmail.com")
-     (smtpmail-default-smtp-server "smtp.gmail.com")
-     (smtpmail-smtp-server "smtp.gmail.com")
-     (smtpmail-smtp-service 587))
-    ;; Include any other accounts here ...
-    ("Tulip"
-     (mu4e-sent-folder "/tulip/sent")
-     (mu4e-drafts-folder "/tulip/drafts")
-     (user-mail-address "gaelan@tulip.com")
-     (smtpmail-smtp-user "gaelan")
-     (smtpmail-local-domain "tulip.com")
-     (smtpmail-default-smtp-server "smtp.gmail.com")
-     (smtpmail-smtp-server "smtp.gmail.com")
-     (smtpmail-smtp-service 587))))
-
-(defun my-mu4e-set-account ()
-  "Set the account for composing a message.
-   This function is taken from:
-     https://www.djcbsoftware.nl/code/mu/mu4e/Multiple-accounts.html"
-  (let* ((account
-    (if mu4e-compose-parent-message
-	(let ((maildir (mu4e-message-field mu4e-compose-parent-message :maildir)))
-    (string-match "/\\(.*?\\)/" maildir)
-    (match-string 1 maildir))
-      (completing-read (format "Compose with account: (%s) "
-	     (mapconcat #'(lambda (var) (car var))
-	    my-mu4e-account-alist "/"))
-	   (mapcar #'(lambda (var) (car var)) my-mu4e-account-alist)
-	   nil t nil nil (caar my-mu4e-account-alist))))
-   (account-vars (cdr (assoc account my-mu4e-account-alist))))
-    (if account-vars
-  (mapc #'(lambda (var)
-      (set (car var) (cadr var)))
-	account-vars)
-      (error "No email account found"))))
-(add-hook 'mu4e-compose-pre-hook 'my-mu4e-set-account))
 
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 (defun smarter-move-beginning-of-line (arg)
