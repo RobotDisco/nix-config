@@ -420,12 +420,17 @@
 
 (use-package mu4e-alert
   :after (mu4e)
-  :config
+  :init
   (setq mu4e-alert-interesting-mail-query
        (concat "flag:unread maildir:/personal/inbox "
 	       "OR "
 	       "flag:unread maildir:/tulip/inbox"))
-  (mu4e-alert-enable-mode-line-display)
+  (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
+  (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display)
+  :config
+  (mu4e-alert-set-default-style (if (eql system-type 'darwin)
+				    'notifier
+				  'notifications)))
 
 ;; http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 (defun smarter-move-beginning-of-line (arg)
