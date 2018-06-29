@@ -13,9 +13,8 @@ promptinit
 prompt redhat
 
 # Emacs is my editor
-export VISUAL="emacsclient --alternate-editor='' -c"
-export EDITOR="emacsclient --alternate-editor='' -t"
-alias e="$VISUAL"
+export GIT_EDITOR="emacsclient --alternate-editor=''"
+export VISUAL="$GIT_EDITOR -n"
 alias killemacs="emacsclient -e '(kill-emacs)'"
 
 # If vim doesn't exist, invoke vi instead
