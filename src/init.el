@@ -364,7 +364,7 @@
 ;; Call offlineimap to update mail.
 (setq mu4e-get-mail-command "offlineimap")
 ;; Update mail every five minutes
-(setq mu4e-update-interval 300)
+;; (setq mu4e-update-interval 300)
 ;; use mu4e for e-mail in emacs
 (setq mail-user-agent 'mu4e-user-agent)
 ;; maildir
@@ -383,7 +383,8 @@
 	     (mu4e-refile-folder . "/personal/archive")
 	     (mu4e-sent-folder . "/personal/sent")
 	     (mu4e-trash-folder . "/personal/trash")
-	     (message-send-mail-function . 'smtpmail-send-it)
+	     (message-send-mail-function . smtpmail-send-it)
+	     (smtpmail-stream-type . starttls)
 	     (smtpmail-smtp-user . "gdcosta")
 	     (smtpmail-local-domain . "gmail.com")
 	     (smtpmail-smtp-server . "smtp.gmail.com")
@@ -398,8 +399,9 @@
 	     (mu4e-refile-folder . "/tulip/archive")
 	     (mu4e-sent-folder . "/tulip/sent")
 	     (mu4e-trash-folder . "/tulip/trash")
-	     (message-send-mail-function . 'smtpmail-send-it)
-	     (smtpmail-smtp-user . "gaelan")
+	     (message-send-mail-function . smtpmail-send-it)
+	     (smtpmail-stream-type . starttls)
+	     (smtpmail-smtp-user . "gaelan@tulip.com")
 	     (smtpmail-local-domain . "tulip.com")
 	     (smtpmail-smtp-server . "smtp.gmail.com")
 	     (smtpmail-smtp-service . 587)
