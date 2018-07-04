@@ -95,6 +95,11 @@
 ;; pcomplete for fancy (e)shell buffer completion
 (use-package pcomplete-extension)
 
+;; Show current function on modeline
+(require 'which-func)
+(add-to-list 'which-func-modes 'org-mode)
+(which-func-mode 1)
+
 ;; Show available key bindings
 (use-package which-key
   :config
@@ -183,7 +188,7 @@
   (sp-use-smartparens-bindings))
 
 ;; Hippie Expand (the best expand?)
-(global-set-key "\M- " 'hippie-expand)
+(global-set-key (kbd "M-/") 'hippie-expand)
 
 ;; Adjust text scale should operate globally
 (defadvice text-scale-adjust (around all-buffers (arg) activate)
