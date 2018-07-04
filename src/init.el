@@ -33,7 +33,7 @@
 (add-to-list 'default-frame-alist
 	     '(font . "Anonymous Pro-14"))
 
-;; Solarized looks gross in console-mode
+;; Hack the Gibson
 (use-package cyberpunk-theme
   ;; :if window-system
   :config (load-theme 'cyberpunk t))
