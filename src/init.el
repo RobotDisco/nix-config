@@ -97,7 +97,6 @@
 
 ;; Show current function on modeline
 (require 'which-func)
-(add-to-list 'which-func-modes 'org-mode)
 (which-func-mode 1)
 
 ;; Show available key bindings
