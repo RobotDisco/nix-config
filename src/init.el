@@ -81,13 +81,17 @@
 
 ;; That cool thing Christian has that lets you move to adjacent rows based on
 ;; relative position to the current cursor.
-(use-package linum-relative)
+(use-package linum-relative
+  :init
+  (setq linum-relative-backend 'display-line-numbers-mode)
+  :config
+  (linum-on))
 
 ;; Jump around to text efficiently
-(use-package ace-jump-mode
+(use-package avy
   :bind (("C-:" . avy-goto-char)
 	 ("C-'" . avy-goto-char-2)
-	 ("M-g f" . avy-goto-line)
+	 ("M-g g" . avy-goto-line)
 	 ("M-g w" . avy-goto-word-1)
 	 ("M-g e" . avy-goto-word-0)))
 
