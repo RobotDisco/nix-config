@@ -318,7 +318,6 @@
     (setq org-todo-keywords '((sequence
 			       "TODO(t)"
 			       "NEXT(n)"
-			       "STARTED(s)"
 			       "WAITING(w)"
 			       "|"
 			       "DONE(d)"
@@ -329,9 +328,11 @@
 			  ("@officekw" . ?k)
 			  ("@phone" . ?p)
 			  ("@lappy" . ?l)
-			  ("@online" . ?i)
-			  ("@email" . ?e)
-			  ("@errand" . ?r)
+			  ("@online" . ?o)
+			  ("@errand" . ?e)
+			  ("@scrum" . ?s)
+			  ("@readreview" . ?r)
+			  ("@catvidq". ?c) ; readlater
 			  (:endgroup . nil)))
     (setq org-highest-priority ?A)
     (setq org-default-priority ?C)
