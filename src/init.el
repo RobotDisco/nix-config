@@ -305,7 +305,7 @@
 	  '(("n" "Next tasks" todo "NEXT|STARTED")))
     (setq org-capture-templates `(("i" "Inbox" entry
 				   (file ,(concat org-directory "inbox.org"))
-				   "* TODO %i%?")
+				   "* %i%?")
 				  ("p" "Personal Tickler" entry
 				   (file+headline ,(concat org-directory "tickler.org") "Personal")
 				   "* TODO %i%? \n %U")
