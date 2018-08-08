@@ -1,5 +1,0 @@
-#!/bin/sh
-
-for i in $(ssh tulipadmin@internal.well.prod ls -1d git/chef-*); do
-    git clone tulipadmin@internal.well.prod:${i}
-done

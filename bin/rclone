@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-git clone restrictedadmin@internal.well.prod:git/$1
