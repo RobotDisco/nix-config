@@ -329,7 +329,7 @@
 			  ("@phone" . ?p)
 			  ("@lappy" . ?l)
 			  ("@online" . ?o)
-			  ("@errand" . ?e)
+			  ("@errands" . ?e)
 			  ("@scrum" . ?s)
 			  ("@1on1". ?1)
 			  ("@counselling" ?c)
