@@ -35,7 +35,7 @@ if [ -d ~/bin ]; then
 fi
 
 # Set Go root directory
-export GOROOT=$HOME/code/go
+export GOPATH=$HOME/code/go
 
 # Include Go toolchain in path
 if [ -d /usr/local/opt/go/libexec/bin ]; then
