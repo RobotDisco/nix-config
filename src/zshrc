@@ -34,6 +34,14 @@ if [ -d ~/bin ]; then
     export PATH=$PATH:~/bin
 fi
 
+# Set Go root directory
+export GOROOT=$HOME/code/go
+
+# Include Go toolchain in path
+if [ -d /usr/local/opt/go/libexec/bin ]; then
+    export PATH=$PATH:/usr/local/opt/go/libexec/bin
+fi
+
 # FASD aliases
 alias a='fasd -a'        # any
 alias s='fasd -si'       # show / search / select
