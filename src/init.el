@@ -22,8 +22,10 @@
 
 ;; Add OSX path when run graphically
 (use-package exec-path-from-shell
-  :if (memq window-system '(mac ns x))
-  :config (exec-path-from-shell-initialize))
+  :if (memq window-system '(mac ns))
+  :config
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "GOPATH"))
 
 ;; Use keychain to load SSH keys
 (use-package keychain-environment
@@ -150,6 +152,15 @@
 (use-package rbenv
   :config (add-hook 'ruby-mode-hook #'rbenv-mode))
 (use-package ruby-tools)
+
+;; Go Lang
+(use-package go-mode
+  :init
+  (setq gofmt-command "goimports")
+  :config
+  (add-hook 'before-save-hook 'gofmt-before-save))
+(use-package company-go)
+(use-package go-guru)
 
 ;; Common Lisp
 ;; (load (expand-file-name "~/.quicklisp/slime-helper.el"))
