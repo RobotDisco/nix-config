@@ -294,7 +294,7 @@
 
 (let ((gaelan-webdav-prefix (if (eql system-type 'darwin)
 				(file-name-as-directory "/Volumes/webdav/")
-			      (file-name-as-directory "~/webdav/"))))
+			      (file-name-as-directory "~/fallcube/webdav/"))))
   ;; Org mode
   (use-package org
     :commands org-store-link org-agenda org-capture org-iswitchb
