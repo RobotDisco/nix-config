@@ -293,8 +293,8 @@
 ;; Org mode (GTD and the like)
 
 (let ((gaelan-webdav-prefix (if (eql system-type 'darwin)
-				(file-name-as-directory "/Volumes/webdav/")
-			      (file-name-as-directory "~/fallcube/webdav/"))))
+				(file-name-as-directory "~/Seafile/emacs/")
+			      (file-name-as-directory "~/fallcube/emacs/"))))
   ;; Org mode
   (use-package org
     :commands org-store-link org-agenda org-capture org-iswitchb
