@@ -329,6 +329,7 @@
     (setq org-todo-keywords '((sequence
 			       "TODO(t)"
 			       "NEXT(n)"
+			       "STARTED(s)"
 			       "WAITING(w)"
 			       "|"
 			       "DONE(d)"
@@ -345,13 +346,23 @@
 			  ("@1on1". ?1)
 			  ("@counselling" ?c)
 			  ("@readreview" . ?r)
-			  ("@catvidq". ?v) ; readlater
+			  ("@vidq". ?v) ; readlater
 			  (:endgroup . nil)))
     (setq org-highest-priority ?A)
     (setq org-default-priority ?C)
     (setq org-lowest-priority ?D)
+    (setq org-agenda-ndays 7)
+    (setq org-deadline-warning-days 14)
+    (setq org-agenda-show-all-dates t)
+    (setq org-agenda-skip-deadline-if-done t)
+    (setq org-agenda-skip-scheduled-if-done t)
     (setq org-enforce-todo-checkbox-dependencies t)
-    (setq org-agenda-dim-blocked-tasks t))
+    (setq org-agenda-dim-blocked-tasks t)
+    (setq org-agenda-custom-commands
+	  '(("c" todo "DONE|CANCELLED" nil)
+	    ("w" todo "WAITING" nil)
+	    ("n" todo "NEXT" nil)
+	    ("p" todo ""))))
 
   (use-package org-journal
     :config
