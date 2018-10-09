@@ -310,7 +310,7 @@
     (setq org-directory (file-name-as-directory (concat gaelan-webdav-prefix "gtd")))
     (setq org-mobile-directory (file-name-as-directory (concat org-directory "mobileorg")))
     (setq org-mobile-inbox-for-pull (concat org-directory "inbox.org"))
-    (setq org-agenda-files (list (concat org-directory "projects.org")
+    (setq org-agenda-files (list (concat org-directory "gtd.org")
 				 (concat org-directory "tickler.org")))
     (setq org-agenda-custom-commands
 	  '(("n" "Next tasks" todo "NEXT|STARTED")))
@@ -323,7 +323,7 @@
 				  ("w" "Work Tickler" entry
 				   (file+headline ,(concat org-directory "tickler.org") "Work")
 				   "* TODO %i%? \n %U")))
-    (setq org-refile-targets `((,(concat org-directory "projects.org") :maxlevel . 2)
+    (setq org-refile-targets `((,(concat org-directory "gtd.org") :maxlevel . 2)
 			       (,(concat org-directory "someday.org") :level . 1)
 			       (,(concat org-directory "tickler.org") :level . 1)))
     (setq org-todo-keywords '((sequence
