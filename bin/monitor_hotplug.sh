@@ -14,18 +14,14 @@ set -o nounset
 
 # Does it look like my external monitors are connected?
 if [[ $(xrandr | grep "^DP-1-2" | grep -c disconnected) -eq 0 ]]; then
-    /usr/bin/xrandr --output DP-1-1 --auto
-    /usr/bin/xrandr --output DP-1-2 --auto --right-of DP-1-1 --rotate left
-    /usr/bin/xrandr --output eDP-1 --off
+    /usr/bin/xrandr --output DP-1-1 --pos 0x0 --auto --primary --right-of DP-1-1 --rotate left --output eDP-1 --off
     source /home/gaelan/.fehbg
     /usr/bin/notify-send --urgency low -t 5000 "Graphics Update" \
 			 "External Monitors connected"
 else
     # We must have unplugged my external monitors, make sure
     # embedded display is enabled
-    /usr/bin/xrandr --output DP-1-1 --off
-    /usr/bin/xrandr --output DP-1-2 --off
-    /usr/bin/xrandr --output eDP-1 --auto
+    /usr/bin/xrandr --output eDP-1 --pos 0x0 --auto --primary --output DP-1-1 --off --output DP-1-2 --off
     source /home/gaelan/.fehbg
     /usr/bin/notify-send --urgency low -t 5000 "Graphics Update" \
 			 "External Monitors disconnected"
