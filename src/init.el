@@ -20,6 +20,22 @@
   (require 'use-package))
 (require 'bind-key)
 
+;; Enable Emacs as a window manager
+(use-package exwm
+  :init
+  (setq exwm-input-global-keys `(,(kbd "s-&") .
+			       (lambda (command)
+				 (interactive (list (read-shell-command "$ ")))
+				 (start-process-shell-command command nil command))))
+  :config
+  (require 'exwm)
+  (require 'exwm-systemtray)
+  (require 'exwm-randr)
+  (require 'exwm-config)
+  (exwm-randr-enable)
+  (exwm-systemtray-enable)
+  (exwm-config-default))
+
 ;; Add OSX path when run graphically
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
@@ -121,7 +137,8 @@
 (use-package projectile
   :after (ag ggtags)
   :config
-  (projectile-mode))
+  (projectile-mode)
+  :bind-keymap ("C-c p" . projectile-command-map))
 
 (use-package rainbow-delimiters
   :config
