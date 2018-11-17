@@ -23,10 +23,47 @@
 ;; Enable Emacs as a window manager
 (use-package exwm
   :init
-  (setq exwm-input-global-keys `(,(kbd "s-&") .
-			       (lambda (command)
-				 (interactive (list (read-shell-command "$ ")))
-				 (start-process-shell-command command nil command))))
+  (setq display-time-default-load-average nil)
+  (display-time-mode t)
+  (display-battery-mode t)
+  (setq exwm-input-global-keys `(
+				 ;; Bind "s-r" to exit char-mode and fullscreen mode.
+				 ([?\s-r] . exwm-reset)
+				 ;; Bind "s-w" to switch workspace interactively.
+				 ([?\s] . exwm-workspace-switch)
+				 ;; Bind "s-0 to s-9" to switch to a workspace by its index.
+				 ,@(mapcar (lambda (i)
+					     `(,(kbd (format "s-%d" i)) .
+					       (lambda ()
+						 (interactive)
+						 (exwm-workspace-switch-create ,i))))
+					   (number-sequence 0 9))
+				 ,[?\s-&] . (lambda (command)
+					      (interactive (list (read-shell-command "$ ")))
+					      (start-process-shell-command command nil command))))
+  ;; C-q send raw input to buffer in line-mode
+  (define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
+  (setq exwm-input-simulation-keys
+	'(
+	  ;; movement
+	  ([?\C-b] . [left])
+	  ([?\M-b] . [C-left])
+	  ([?\C-f] . [right])
+	  ([?\M-f] . [C-right])
+	  ([?\C-p] . [up])
+	  ([?\C-n] . [down])
+	  ([?\C-a] . [home])
+	  ([?\C-e] . [end])
+	  ([?\M-v] . [prior])
+	  ([?\C-v] . [next])
+	  ([?\C-d] . [delete])
+	  ([?\C-k] . [S-end delete])
+	  ;; cut/paste.
+	  ([?\C-w] . [?\C-x])
+	  ([?\M-w] . [?\C-c])
+	  ([?\C-y] . [?\C-v])
+	  ;; search
+	  ([?\C-s] . [?\C-f])))
   :config
   (require 'exwm)
   (require 'exwm-systemtray)
@@ -34,7 +71,7 @@
   (require 'exwm-config)
   (exwm-randr-enable)
   (exwm-systemtray-enable)
-  (exwm-config-default))
+  (exwm-enable))
 
 ;; Add OSX path when run graphically
 (use-package exec-path-from-shell
@@ -167,8 +204,22 @@
 
 ;; Ruby
 (use-package rbenv
-  :config (add-hook 'ruby-mode-hook #'rbenv-mode))
+  :config
+  (global-rbenv-mode))
+(use-package inf-ruby
+  :config
+  (add-to-list 'inf-ruby-implementations' ("pry". "Pry"))
+  (setq inf-ruby-default-implementation "pry"))
+
 (use-package ruby-tools)
+(use-package robe
+  :config
+  (add-mode 'ruby-mode-hook #'robe-mode)
+  (eval-after-load 'company
+    '(push 'company-robe company-backends))
+  (defadvice inf-ruby-console-auto (before activate-rbenv-for-robe activate)
+    (rbenv-use-corresponding)))
+
 
 ;; Go Lang
 (use-package go-mode
@@ -242,6 +293,9 @@
 
 ;; Disable default chrome
 (tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(fringe-mode 1)
 (setq inhibit-startup-message t)
 
 ;; Show a bunch of useful things in the status mode line
