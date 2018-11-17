@@ -20,6 +20,9 @@
   (require 'use-package))
 (require 'bind-key)
 
+;; Start emacs server
+(server-start)
+
 ;; Enable Emacs as a window manager
 (use-package exwm
   :init
