@@ -33,7 +33,7 @@
 				 ;; Bind "s-r" to exit char-mode and fullscreen mode.
 				 ([?\s-r] . exwm-reset)
 				 ;; Bind "s-w" to switch workspace interactively.
-				 ([?\s] . exwm-workspace-switch)
+				 ([?\s-w] . exwm-workspace-switch)
 				 ;; Bind "s-0 to s-9" to switch to a workspace by its index.
 				 ,@(mapcar (lambda (i)
 					     `(,(kbd (format "s-%d" i)) .
@@ -41,11 +41,10 @@
 						 (interactive)
 						 (exwm-workspace-switch-create ,i))))
 					   (number-sequence 0 9))
-				 ,[?\s-&] . (lambda (command)
+				 ;; Bind "s-&" to launch applications
+				 ([?\s-&] . (lambda (command)
 					      (interactive (list (read-shell-command "$ ")))
-					      (start-process-shell-command command nil command))))
-  ;; C-q send raw input to buffer in line-mode
-  (define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
+					      (start-process-shell-command command nil command)))))
   (setq exwm-input-simulation-keys
 	'(
 	  ;; movement
@@ -71,7 +70,8 @@
   (require 'exwm)
   (require 'exwm-systemtray)
   (require 'exwm-randr)
-  (require 'exwm-config)
+  ;; C-q send raw input to buffer in line-mode
+  (define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
   (exwm-randr-enable)
   (exwm-systemtray-enable)
   (exwm-enable))
