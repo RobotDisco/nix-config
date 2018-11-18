@@ -1,0 +1,827 @@
+#+TITLE: Gaelan's Emacs Configuration
+* Acknowledgement
+  This use of org mode for emacs configuration is incredibly indebted to its inspiration over at https://github.com/jethrokuan/.emacs.d
+* Introduction
+  This document is a constant work-in-progress, and will contain the latest updates to my Emacs configuration.
+  If you wish to contact me for any reason, you can reach me at my email: =gdcosta@gmail.com=.
+  #+BEGIN_SRC emacs-lisp :tangle yes
+(setq user-full-name "Gaelan D'costa"
+      user-mail-address "gdcosta@gmail.com")
+  #+END_SRC
+** Pre-initialization: [[https://github.com/jwiegley/use-package/issues/70][use-package]]
+
+   Use-package allows for the isolation of package configuration, while maintaining tidiness and performance.
+
+   Install and configure it (and related dependencies) if they aren't already around.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+    (unless (and (package-installed-p 'use-package)
+		 (package-installed-p 'diminish))
+      (package-refresh-contents)
+      (package-install 'use-package)
+      (package-install 'diminish))
+
+  (eval-when-compile
+    (require 'use-package)
+    (require 'diminish)
+    (require 'bind-key))
+
+  (setq use-package-always-ensure t)
+
+  ;; Always demand if daemon-mode
+  (setq use-package-always-demand (daemonp))
+   #+END_SRC
+
+* Add PATH to shell (on Mac OSX)
+  #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package exec-path-from-shell
+    :ensure f
+    :if (memq window-system '(mac ns))
+    :config
+    (exec-path-from-shell-initialize))
+  #+END_SRC
+* Better Mac OSX keybindings
+  Adjust alt/super placement for mac keyboards
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (setq mac-command-modifier 'meta)
+    (setq mac-option-modifier 'super)
+  #+END_SRC
+* Better defaults
+** Auto Revert
+   Often when switching git branches, files tend to change. By default, Emacs does not revert the buffers affected, which can lead to some confusion. Turn on =auto-revert-mode= globally, so that when the files change, the buffers reflect the latest editions as well.
+
+   NOTE: This can be quite slow, when the changes are massive across branches.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package autorevert
+    :ensure f
+    :diminish t
+    :hook (dired-mode . auto-revert-mode)
+    :config (global-auto-revert-mode +1))
+   #+END_SRC
+** Custom file
+   Using the customize interface can be nice, but it tends to pollute =init.el=. Move all customizations to a separate file.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (setq custom-file "~/.emacs.d/custom.el")
+   #+END_SRC
+** Use y/n over yes/no
+   Less typing required in prompts :)
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (defalias 'yes-or-no-p 'y-or-n-p)
+   #+END_SRC
+** Editing Preferences
+   Use 4 spaces for indentation.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (setq-default tab-width 4)
+  (setq-default js-indent-level 4)
+  (setq-default indent-tabs-mode nil)
+   #+END_SRC
+** Line wrapping for text modes
+   Don't wrap lines for coding. Create a hook that enables wrappping, for text-modes like =org-mode= and =markdown-mode=.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (setq-default truncate-lines t)
+
+  (defun gaelan/truncate-lines-hook ()
+    (setq truncate-lines nil))
+
+  (add-hook 'text-mode-hook 'gaelan/truncate-lines-hook)
+   #+END_SRC
+** Save recent file history periodically
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'recentf)
+     (run-at-time (* 5 60) nil
+                  (lambda ()
+                    (let ((inhibit-message t))
+                      (recentf-save-list))))
+   #+END_SRC
+** Always follow symlinks (don't ask about it)
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq vc-follow-symlinks t)
+   #+END_SRC
+* Appearance
+** Show line and column numbers in the status mode line
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (line-number-mode t)
+     (column-number-mode t)
+   #+END_SRC
+** Font
+   I use Mark Simonson's [[https://www.marksimonson.com/fonts/view/anonymous-pro][Anonymous Pro]]. Other good free alternatives include Source Code Pro, Droid Sans, Inconsolat and Deja Vu Sans Mono.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Use Anonymous Pro as default font
+  (add-to-list 'default-frame-alist '(font . "Anonymous Pro-14"))
+   #+END_SRC
+** Remove UI Chrome
+   Remove toolbars, splash screens, and other things that produce clutter.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(setq inhibit-splash-screen t)
+   #+END_SRC
+** Theme
+   Pretty colours :)
+*** Cyberpunk
+    Hack the Gibson
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package cyberpunk-theme
+    :init
+    (load-theme 'cyberpunk t))
+    #+END_SRC
+*** Solarized (curently not used)
+    #+BEGIN_SRC emacs-lisp :tangle no
+  (use-package solarized-theme
+    :init
+    (load-theme 'solarized-dark t))
+    #+END_SRC
+** Rainbow-delimiters mode
+   Use colours to show matching matching opening/closing parentheses, and also highlight unmatched parentheses.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rainbow-delimiters
+    :hook ((prog-mode-hook
+	    lisp-mode-hook
+	    cider-repl-mode-hook
+	    lisp-interaction-mode-hook
+	    ielm-mode-hook
+	    eval-expression-minibuffer-setup-hook) . rainbow-delimiters-mode))
+   #+END_SRC
+** Mode Line
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package smart-mode-line
+    :init (setq sml/no-confirm-load-theme t)
+    :config (sml/setup))
+   #+END_SRC
+* Custom commands
+** Adjust text size globally (not just for one buffer)
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (defadvice text-scale-adjust (around all-buffers (arg) activate)
+       (do-list (buffer (buffer-list))
+                (with-current-buffer buffer
+                  ad-do-it)))
+   #+END_SRC
+** Sudo-edit the current file by using tramp mode
+   From [[https://www.masteringemacs.org/][Mastering Emacs]]
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (defun sudo ()
+       "Use TRAMP to `sudo' the current buffer."
+       (interactive)
+       (when buffer-file-name
+         (find-alternate-file
+          (concat "/sudo:root@localhost:"
+                  buffer-file-name))))
+   #+END_SRC
+** A smarter move-to-beginning-of-line function
+   http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (defun smarter-move-beginning-of-line (arg)
+       "Move point back to indentation or beginning of line.
+
+     Move point to the first non-whitespace character on this line.
+     If point is already there, move to the beginning of the line.
+     Effectively toggle between the first non-whitespace character and
+     the beginning of the line.
+
+     If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+     point reaches the beginning or end of the buffer, stop there."
+       (interactive "^p")
+       (setq arg (or arg 1))
+
+       ;; Move lines first
+       (when (/= arg 1)
+         (let ((line-move-visual nil))
+           (forward-line (1- arg))))
+
+       (let ((orig-point (point)))
+         (back-to-indentation)
+         (when (= orig-point (point))
+           (move-beginning-of-line 1))))
+
+     (global-set-key [remap move-beginning-of-line]
+             'smarter-move-beginning-of-line)
+   #+END_SRC
+** Revert Buffer shortcut
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     ;; Make sure S-u reverts buffer
+     (global-set-key (kbd "s-u") #'(lambda ()
+                                     (interactive)
+                                     (revert-buffer t nil nil)))
+   #+END_SRC
+* Core Utilities
+** Helm (disabled for now)
+   [[https://github.com/emacs-helm/helm][Helm]] is completion/selection framework that reworks how one navigates in emacs. Some people prefer Ivy for this, or the more traditional Ido which focuses on (optionally fuzzy) completion.
+   #+BEGIN_SRC emacs-lisp :tangle no
+  (use-package helm
+    :bind (("M-x" . helm-M-x)
+           ("C-x C-f" . helm-find-files)
+           ("M-y" . helm-show-kill-ring)
+           ("C-x C-b" . helm-mini))
+    :init
+    (setq helm-mode-fuzzy-match t)
+    (setq helm-completion-in-region-fuzzy-match t)
+    :config
+    (require 'helm-config)
+    (helm-mode 1)
+    (helm-linum-relative-mode 1)
+    ;; Use helm to describe keybindings when typing
+    (use-package helm-descbinds
+      :diminish helm-descbinds-mode
+      :config (helm-descbinds-mode))
+    ;; Use helm when accessing files via tramp as well.
+    (use-package helm-tramp))
+   #+END_SRC
+** Show available keybindings when starting an Emacs command
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package which-key
+       :config (which-key-mode))
+   #+END_SRC
+** NeoTree (file-tree navigator pane)
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package neotree
+       :bind ("<f8>" . neotree-toggle))
+   #+END_SRC
+* Visual Enhancements
+** Whitespace Mode
+   Delete trailing whitespace from lines/buffer before every save
+   Turn on whitespace indicators in programming major modes.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package whitespace
+    :ensure f
+    :diminish whitespace-mode
+    :hook ((prog-mode . whitespace-mode)
+	   (before-save-hook . whitespace-cleanup))
+    :custom
+    (whitespace-line-column 80))
+   #+END_SRC
+** Show Matching Parenthesis
+   Always show matching parenthesis for those surrounding the current eval
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (show-paren-mode 1)
+  (setq show-paren-delay 0)
+   #+END_SRC
+** Show line numbers relative to current line
+   Instead of showing absolute line numbers, show their offset from the current line
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package linum-relative
+       :init
+       ;; Emacs 26 uses a more performant C-based backend than the older linum-mode
+       (setq linum-relative-backend 'display-line-number))
+   #+END_SRC
+** Show current function on modeline
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'which-func)
+     (which-func-mode 1)
+   #+END_SRC
+* Moving Around
+** Don't use arrow keys
+   I am wearning myself off using arrow keys for movement in day-to-day unix tasks
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package guru-mode
+       :config (guru-global-mode +1))
+   #+END_SRC
+** Avy
+   Use avy to move between visible text
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     ;; Jump around to text efficiently
+     (use-package avy
+       :bind (("C-:" . avy-goto-char)
+              ("C-'" . avy-goto-char-2)
+              ("M-g g" . avy-goto-line)
+              ("M-g w" . avy-goto-word-1)
+              ("M-g e" . avy-goto-word-0)))
+   #+END_SRC
+** Dired
+*** Requiring dired
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (require 'dired)
+    #+END_SRC
+*** Dired support in Mac OSX
+    Dired requires GNU ls output, so gls needs to be installed for it to work properly.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (let ((gls "/usr/local/bin/gls"))
+        (if (file-exists-p gls)
+            (setq insert-directory-program gls)))
+    #+END_SRC
+** imenu
+   Use =imenu= mode for zipping around a file via headers and sections
+   Repurpose an otherwise not-very-interesting keybinding (indent-to-tab-stop?)
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (global-set-key (kbd "M-i") 'imenu)
+   #+END_SRC
+* Editing Text
+** Multiple Cursors
+   A port of the multiple-cursor functionality that Sublime Text invented
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package multiple-cursors
+       :bind (("C-M-c" . mc/edit-lines)
+              ("C->" . mc/mark-next-like-this)
+              ("C-<" . mc/mark-previous-like-this)
+              ("C-c C-<" . mc/mark-all-like-this)))
+   #+END_SRC
+** Smartparens
+   S-expression (and surrounding-pairs) editing helper for various languages)
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package smartparens
+       :hook ((prog-mode . smartparens-global-mode)
+              (prog-mode . show-smartparens-global-mode)
+              ((clojure-mode-hook
+                cider-repl-mode-hook
+                lisp-interaction-mode-hook
+                emacs-lisp-mode-hook
+                ielm-mode-hook
+                eval-expression-minibuffer-setup-hook) . turn-on-smartparens-strict-mode))
+       :config
+       (require 'smartparens-config)
+       (sp-use-smartparens-bindings))
+   #+END_SRC
+** Linting with FlyCheck
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package flycheck
+    :config (add-hook 'after-init-hook #'global-flycheck-mode))
+
+  ;; Errors hover over point of error, not in separate buffer
+  (use-package flycheck-pos-tip
+    :after flycheck
+    :hook (flycheck-mode . flycheck-pos-tip-mode))
+   #+END_SRC
+** Autocompletions with Company
+   Company Mode can also do popup documentation displays
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     ;; Auto-completion
+     (use-package company
+       :diminish company-mode
+       :hook (after-init-hook . global-company-mode))
+
+     ;; Documentation popups using company mode
+     (use-package company-quickhelp
+       :after company
+       :hook (company-mode . company-quickhelp-mode))
+   #+END_SRC
+** Hippie Expand
+   A better expand mode
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (bind-key "M-/" 'hippie-expand)
+   #+END_SRC
+* Programming Language Support
+** Generic code tagging
+   We use gnu global, which is better that ctags AFAICT
+   
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package ggtags)
+   #+END_SRC
+** Common Lisp
+   #+BEGIN_SRC emacs-lisp :tangle no
+  (use-package slime
+    :commands slime
+    :custom
+    (inferior-lisp-program "sbcl")
+    (slime-contribs '(slime-fancy)))
+
+  (use-package slime-company
+    :after (slime company)
+    :config (slime-setup '(slime-company)))
+   #+END_SRC
+** Emacs Lisp
+   Emacs lisp doesn't have the nice buffer eval command of other lisp modes
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (bind-key "C-c C-k" 'eval-buffer emacs-lisp-mode-map)
+   #+END_SRC
+** Docker
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package docker
+    :bind ("C-c d" . docker))
+
+  (use-package dockerfile-mode
+    :mode "Dockerfile\\'")
+   #+END_SRC
+** Python
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package anaconda-mode
+    :hook ((python-mode-hook . anaconda-mode)
+           (python-mode-hook . anaconda-eldoc-mode)))
+
+  (use-package company-anaconda
+    :after (company anaconda-mode)
+    :config
+    '(add-to-list 'company-backends 'company-anaconda))
+
+  (use-package pyenv-mode
+    :hook (python-mode-hook pyenv-mode))
+   #+END_SRC
+** HTML
+*** web-mode
+    We want to support languaages that embed themselves into HTML
+    #+BEGIN_SRC emacs-lisp :tangle yes
+   ;; Web mode
+   (use-package web-mode
+     :mode (("\\.phtml\\'" . web-mode)
+	    ("\\.tpl\\.php\\'" . web-mode)
+	    ("\\.[agj]sp\\'" . web-mode)
+	    ("\\.[as[cp]x\\'" . web-mode)
+	    ("\\.erb\\'" . web-mode)
+	    ("\\.mustache\\'" . web-mode)
+	    ("\\.djhtml\\'" . web-mode)
+	    ("\\.html?\\'" . web-mode)
+	    ("\\.js[x]?\\'" . web-mode))
+     :custom
+     (web-mode-enable-css-colorization t)
+     :config
+     (add-to-list 'web-mode-content-types-alist '("jsx" . "\\.js[x]?\\'")))
+    #+END_SRC
+*** emmet-mode
+    Easier way to insert HTML/XML into documents
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package emmet-mode
+    :diminish emmet-mode
+    :hook
+    (web-mode . emmet-mode))
+    #+END_SRC
+** CSS
+*** Rainbow mode
+    Show/update colour previews when specifying a colour spec
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rainbow-mode
+    :diminish rainbow-mode
+    :hook (css-mode . rainbow-mode))
+    #+END_SRC
+** Javascript
+*** js2-mode
+    A nicer editing mode than the builtin one
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package js2-mode
+    :hook (web-hook-mode . js2-minor-mode)
+    :config
+    (setq-default flycheck-disabled-checkers
+		  (append flycheck-disabled-checkers '(javascript-jshint))))
+    #+END_SRC
+*** prettier
+    Prettify javacsript in realtime
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package prettier-js
+    :hook (js2-minor-mode . prettier-js-mode))
+    #+END_SRC
+** TypeScript
+*** typescript-mode
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package typescript-mode
+    :mode ("\\.ts\\'"))
+    #+END_SRC
+*** tide
+    Typescript IDE for Emacs
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package tide
+    :after typescript-mode
+    :hook
+    (before-save . tide-format-before-save)
+    (typescript-mode . (lambda ()
+			 (tide-setup)
+			 (flycheck-mode +1)
+			 (eldoc-mode +!)
+			 (tide-hl-identifier-mode +1)
+			 (company-mode +1))))
+    #+END_SRC
+** JSON
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package json-mode
+    :mode "\\.json\\'")
+   #+END_SRC
+** Markdown
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package markdown-mode
+    :mode "\\.md\\'"
+    :commands (markdown-mode gfm-mode))
+   #+END_SRC
+** Clojure
+*** clojure-mode
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package clojure-mode
+    :mode (("\\.clj\\'" . clojure-mode)
+	   ("\\.boot\\'" . clojure-mode)
+	   ("\\.edn\\'" . clojure-mode)
+	   ("\\.cljs\\'" . clojurescript-mode))
+    :hook
+    ((clojure-mode . eldoc-mode)
+     (clojure-mode . subword-mode)
+     (clojure-mode . cider-mode)))
+    #+END_SRC
+*** cider
+    Emacs slime-equivalent REPL for Clojure
+    #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package cider
+   :pin melpa-stable
+     :after clojure-mode
+     :hook
+     ((cider-repl-mode-hook . company-mode)
+      (cider-repl-mode-hook . subword-mode)
+      (cider-mode . company-mode))
+     :diminish subword-mode
+     :custom
+     (cider-cljs-lein-repl "(do (use 'fighwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
+     :config
+     (cider-repl-toggle-pretty-printing)
+     (use-package cider-eval-sexp-fu))
+    #+END_SRC
+*** clj-refactor
+    #+BEGIN_SRC emacs-lisp :tangle yes
+   (use-package clj-refactor
+     :after (clojure-mode cider)
+     :defines cljr-add-keybindings-with-prefix
+     :diminish clj-refactor-mode
+     :hook ((clojure-mode . clj-refactor-mode)
+	    (cider-mode . clj-refactor-mode))
+     :config
+     ;; This choice of keybinding leaves cider-macroexpand-1 unbound
+     (cljr-add-keybindings-with-prefix "C-c C-m"))
+    #+END_SRC
+*** flycheck support for clojure
+    #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package flycheck
+    :after (fly-check clojure-mode)
+    :config
+    (flycheck-clojure-setup))
+    #+END_SRC
+** YAML
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package yaml-mode
+    :mode ("\\.yaml\\'" . yaml-mode))
+   #+END_SRC
+** Ruby
+*** Support rbenv for ruby version management
+    #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package rbenv
+       :config (global-rbenv-mode))
+    #+END_SRC
+*** Use pry as an inferior REPL if you find it
+    #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package inf-ruby
+       :config
+       (add-to-list 'inf-ruby-implementations '("pry" . "Pry"))
+       (setq inf-ruby-default-implementation "pry"))
+    #+END_SRC
+*** Little helper package, for stuff like flipping between '/" and between strings/symbols
+    #+BEGIN_SRC emacs-lisp :tangle yes
+    (use-package ruby-tools)
+    #+END_SRC
+*** Ruby autocompletion via live inspection
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package robe
+        :after (company rbenv)
+        :hook (ruby-mode-hook . robe-mode)
+        :config
+        (push 'company-robe company-backends)
+        ;; Before activating rube console,
+        ;; use the project's specified ruby version
+        (defadvice inf-ruby-console-auto
+            (before activate-ruby-for-robe activate)
+          (rbenv-use-corresponding)))
+    #+END_SRC
+* PDF support
+  We use [[https://github.com/politza/pdf-tools][pdf-tools]] for PDF viewing, which has first-class support for highlighting and annotations.
+  #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package pdf-tools
+    :mode (("\\.pdf\\'" . pdf-view-mode))
+    :config (pdf-tools-install))
+  #+END_SRC
+* Org Mode
+** Storage prefix
+   All my org files live in a cloud-synced directory that differ between OSX and Linux
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq gaelan-webdav-prefix (if (eql system-type 'darwin)
+                                    (file-name-as-directory "~/Seafile/emacs/")
+                                  (file-name-as-directory "~/fallcube/emacs/")))
+   #+END_SRC
+** Basic org mode configuration
+   Default keybindings for now.
+
+   I used to have my entire workflow defined here (tags, paths, workflows) but I am stepping back and seeing if I can use org-mode more effectively now that I undrestand it a lot better.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package org
+       :commands (org-store-link org-agenda org-capture org-iswitchb)
+       :bind (("C-c l" . org-store-link)
+              ("C-c a" . org-agenda)
+              ("C-c c" . org-capture)
+              ("C-c b" . org-iswitchb)))
+   #+END_SRC
+** Org Journal Mode
+   I use this for bullet-journal-like stuff
+   
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package org-journal
+       :after org
+       :init
+       (setq org-journal-dir
+             (file-name-as-directory (concat gaelan-webdav-prefix "journal"))))
+   #+END_SRC
+* Project Management
+** Version Control
+*** Magit
+   Git utility goodness :)
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package magit
+       :bind ("C-x g" . magit-status))
+   #+END_SRC
+** Projectile
+   Project Manager written by bbatsov :)
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package projectile
+       :config
+       (projectile-mode)
+       :bind-keymap ("C-c p" . projectile-command-map))
+   #+END_SRC
+** Editorconfig
+   If an .editorconfig file exists, use that to influence Emacs' styling settings
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package editorconfig
+        :config (editorconfig-mode +1))
+   #+END_SRC
+* Emacs as an Operating System
+** Window Manager
+   In my quest for a wholly unified computing environment a la Lisp Machines or SmallTalk, I have started using emacs as my window manager :)
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (defun gaelan-exwm-change-screen-hook ()
+       "Gaelan's hook to handle monitor (dis)connects"
+       (let ((xrandr-output-regexp "\n\\(^ ]+\\) connected ")
+             default-output)
+         (with-temp-buffer
+           ;; Calling xrandr to list displays
+           (call-process "xrandr" nil t nil)
+           (goto-char (point-min))
+           ;; Search for the first connected display. we consider this our default
+           (re-search-forward xrandr-output-regexp nil 'noerror)
+           (setq default-output (match-string 1))
+           (forward-line)
+           ;; Is no other monitor connected?
+           (if (not (re-search-forward xrandr-output-regexp nil 'noerror))
+               ;; Cool, activate the default one
+               (call-process "xrandr" nil nil nil "--output" default-output "--auto")
+             ;; Awesome, deactive the default monitor and activate this one.
+             (call-process "xrandr" nil nil nil
+                           "--output" (match-string 1) "--primary" "--auto"
+                           "--output" default-output "--off"))
+           ;; Assign default EXWM workspace to the active monitor
+           (setq exwm-randr-workspace-output-plist (list 0 (match-string 1))))))
+
+     (use-package exwm
+       :init
+       (setq display-time-default-load-average nil)
+       (display-time-mode t)
+       (display-battery-mode t)
+       (setq exwm-input-global-keys
+             `(
+               ;; Bind "s-r" to exit char-mode and fullscreen mode.
+               ([?\s-r] . exwm-reset)
+               ;; Bind "s-w" to switch workspace interactively.
+               ([?\s-w] . exwm-workspace-switch)
+               ;; Bind "s-&" to launch applications
+               ([?\s-&] . (lambda (command)
+                            (interactive (list (read-shell-command "$ ")))
+                            (start-process-shell-command command nil command)))
+               ;; Bind "s-0 to s-9" to switch to a workspace by its index.
+               ,@(mapcar (lambda (i)
+                           `(,(kbd (format "s-%d" i)) .
+                             (lambda ()
+                               (interactive)
+                               (exwm-workspace-switch-create ,i))))
+                         (number-sequence 0 9))))
+       ;; translate emacs keybindings into CUA-like ones for most apps,
+       ;; since most most apps don't observe emacs keybinds
+       ;; and we would like a uniform user experience.
+       (setq exwm-input-simulation-keys
+             '(;; movement
+               ([?\C-b] . [left])
+               ([?\M-b] . [C-left])
+               ([?\C-f] . [right])
+               ([?\M-f] . [C-right])
+               ([?\C-p] . [up])
+               ([?\C-n] . [down])
+               ([?\C-a] . [home])
+               ([?\C-e] . [end])
+               ([?\M-v] . [prior])
+               ([?\C-v] . [next])
+               ([?\C-d] . [delete])
+               ([?\C-k] . [S-end delete])
+               ;; cut/paste.
+               ([?\C-w] . [?\C-x])
+               ([?\M-w] . [?\C-c])
+               ([?\C-y] . [?\C-v])
+               ;; search
+               ([?\C-s] . [?\C-f])))
+       :bind (;; Enter fullscreen mode
+              ("C-c C-f" . exwm-layout-set-fullscreen)
+              ;; Hide a floating X window
+              ("C-c C-h" . exwm-floating-hide)
+              ;; Switch to =char-mode=
+              ("C-c C-k" . exwm-input-release-keyboard)
+              ;; Move X window to another workspace
+              ("C-c C-m" . exwm-workspace-move-window)
+              ;; Send a single key to the X window
+              ;; can be prefixed with =C-u= to send multiple keys
+              ("C-c C-q" . exwm-input-send-next-key)
+              ;; Toggle between tiling and floating mode
+              ("C-c C-t C-f" . exwm-input-toggle-floating)
+              ;; Toggle mode-line
+              ("C-c C-t C-m" . exwm-layout-toggle-mode-line))
+       :hook (exwm-change-screen-hook . gaelan-exwm-change-screen-hook)
+       :config
+       (require 'exwm)
+       (require 'exwm-systemtray)
+       (require 'exwm-randr)
+       (exwm-randr-enable)
+       (exwm-systemtray-enable)
+       (exwm-enable))
+   #+END_SRC
+** SSH/GPG keychain manager
+   Emacs can integrate with keychain to use whatever keys it has activated
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package keychain-environment
+    :config (keychain-refresh-environment))
+   #+END_SRC
+** Completion in eshell buffers
+   Some helpful argument completion in eshell buffers
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package pcomplete-extension
+       :config
+       (require 'pcomplete-extension))
+   #+END_SRC
+* Mail Reader (currently disabled)
+  I used mu4e for reading mail. I assumed the commandline side had been set up correctly.
+  #+BEGIN_SRC emacs-lisp :tangle no
+    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
+    (require 'mu4e)
+    ;; Binaries are located in different places on OSX vs ArchLinux
+    (setq mu4e-mu-binary (if (eql system-type 'darwin)
+                             "/usr/local/bin/mu"
+                           "/usr/bin/mu"))
+    ;; Use offlineimap to update mail
+    (setq mu4e-get-mail-command "offlineimap")
+
+    (setq mail-user-agent 'mu4e-user-agent)
+    (setq mu4e-maildir "~/mail")
+    ;; Gmail transparently handles saving sent mail, so delete on our side
+    (setq mu4e-sent-messages-behavior 'delete)
+    ;; Save queued messages in a local directory
+    (setq smtpmail-queue-dir "~/mail/sendqueue")
+    ;; Because GmailIMAP downloads a copy of mail for each label,
+    ;; dedupe when navigating
+    (setq mu3e-headers-skip-duplicates t)
+    ;; Different settings for work and personal mail
+    (setq mu4e-contexts
+          `( ,(make-mu4e-context
+               :name "Personal"
+               :match-func (lambda (msg) (when msg
+                                           (string-prefix-p "/personal" (mu4e-message-field msg :maildir))))
+               :vars '((mu4e-drafts-folder . "/personal/drafts")
+                       (mu4e-refile-folder . "/personal/archive")
+                       (mu4e-sent-folder . "/personal/sent")
+                       (mu4e-trash-folder . "/personal/trash")
+                       (message-send-mail-function . smtpmail-send-it)
+                       (smtpmail-stream-type . starttls)
+                       (smtpmail-smtp-user . "gdcosta")
+                       (smtpmail-local-domain . "gmail.com")
+                       (smtpmail-smtp-server . "smtp.gmail.com")
+                       (smtpmail-smtp-service . 587)
+                       (user-mail-address . "gdcosta@gmail.com")
+                       (user-full-name . "Gaelan D'costa")))
+             ,(make-mu4e-context
+               :name "Tulip"
+               :match-func (lambda (msg) (when msg
+                                           (string-prefix-p "/tulip" (mu4e-message-field msg :maildir))))
+               :vars '((mu4e-drafts-folder . "/tulip/drafts")
+                       (mu4e-refile-folder . "/tulip/archive")
+                       (mu4e-sent-folder . "/tulip/sent")
+                       (mu4e-trash-folder . "/tulip/trash")
+                       (message-send-mail-function . smtpmail-send-it)
+                       (smtpmail-stream-type . starttls)
+                       (smtpmail-smtp-user . "gaelan@tulip.com")
+                       (smtpmail-local-domain . "tulip.com")
+                       (smtpmail-smtp-server . "smtp.gmail.com")
+                       (smtpmail-smtp-service . 587)
+                       (user-mail-address . "gaelan@tulip.com")
+                       (user-full-name . "Gaelan D'costa")))))
+    ;; Ask user if some mail doesn't match any mail contexts we've set up
+    (setq mu4e-context-policy 'ask)
+    (setq mu4e-compose-context-policy 'ask)
+    ;; This sets `mu4e-user-mail-address-list' to the concatenation of all
+    ;; `user-mail-address' values for all contexts. If you have other mail
+    ;; addresses as well, you'll need to add those manually.
+    (setq mu4e-user-mail-address-list
+          (delq nil
+            (mapcar (lambda (context)
+                  (when (mu4e-context-vars context)
+                (cdr (assq 'user-mail-address (mu4e-context-vars context)))))
+                    mu4e-contexts)))
+  #+END_SRC
+** Mail Alerts
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (use-package mu4e-alert
+       :after mu4e
+       :hooks ((after-init-hook . mu4e-alert-enable-notifications))
+       :init
+       (setq mu4e-alert-interesting-mail-query
+             (concat "flag:unread maildir:/personal/inbox "
+                     "OR "
+                     "flag:unread maildir:/tulip/inbox"))
+       (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
+       (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display)
+       :config
+       (mu4e-alert-set-default-style (if (eql system-type 'darwin)
+                                         'notifier
+                                       'notifications)))
+   #+END_SRC
