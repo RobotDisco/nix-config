@@ -217,7 +217,7 @@
 (use-package ruby-tools)
 (use-package robe
   :config
-  (add-mode 'ruby-mode-hook #'robe-mode)
+  (add-hook 'ruby-mode-hook #'robe-mode)
   (eval-after-load 'company
     '(push 'company-robe company-backends))
   (defadvice inf-ruby-console-auto (before activate-rbenv-for-robe activate)
