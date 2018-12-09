@@ -678,6 +678,9 @@
            (setq exwm-randr-workspace-output-plist (list 0 (match-string 1))))))
 
      (use-package exwm
+       :hook
+       (exwm-update-class . (lambda ()
+                              (exwm-workspace-rename-buffer exwm-class-name)))
        :init
        (setq display-time-default-load-average nil)
        (display-time-mode t)
