@@ -318,17 +318,12 @@
    S-expression (and surrounding-pairs) editing helper for various languages)
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package smartparens
-       :hook ((prog-mode . smartparens-global-mode)
-              (prog-mode . show-smartparens-global-mode)
-              ((clojure-mode-hook
-                cider-repl-mode-hook
-                lisp-interaction-mode-hook
-                emacs-lisp-mode-hook
-                ielm-mode-hook
-                eval-expression-minibuffer-setup-hook) . turn-on-smartparens-strict-mode))
+       :hook (prog-mode . turn-on-smartparens-strict-mode)
        :config
        (require 'smartparens-config)
-       (sp-use-smartparens-bindings))
+       (sp-use-smartparens-bindings)
+       (smartparens-global-mode)
+       (show-smartparens-global-mode))
    #+END_SRC
 ** Linting with FlyCheck
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -378,10 +373,33 @@
     :config (slime-setup '(slime-company)))
    #+END_SRC
 ** Emacs Lisp
-   Emacs lisp doesn't have the nice buffer eval command of other lisp modes
+   Emacs lisp doesn't have the nice buffer eval command of other lisp modes, so add one.
    #+BEGIN_SRC emacs-lisp :tangle yes
   (bind-key "C-c C-k" 'eval-buffer emacs-lisp-mode-map)
    #+END_SRC
+
+   Turn on eldoc mode
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+   #+END_SRC
+
+   Optimize our workflow
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (add-hook 'emacs-lisp-mode-hook
+               (lambda ()
+                 ;; Use spaces, not tabs
+                 (setq indent-tabs-mode nil)
+                 ;; Pretty-print emacs lisp evaluations
+                 (define-key emacs-lisp-mode-map "\C-x\C-e" 'pp-eval-last-sexp)
+                 ;; Always Recompile if .elc exists
+                 (add-hook (make-local-variable 'after-save-hook)
+                           (lambda ()
+                             (byte-force-recompile default-directory)))
+                 ;; Always correct formatting when pressing "Enter"
+                 (define-key emacs-lisp-mode-map "\r"
+                   'reindent-then-newline-and-indent)))
+   #+END_SRC
+
 ** Docker
    #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package docker
@@ -472,7 +490,7 @@
     (typescript-mode . (lambda ()
 			 (tide-setup)
 			 (flycheck-mode +1)
-			 (eldoc-mode +!)
+			 (eldoc-mode +1)
 			 (tide-hl-identifier-mode +1)
 			 (company-mode +1))))
     #+END_SRC
