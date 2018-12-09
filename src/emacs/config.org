@@ -204,28 +204,36 @@
                                      (revert-buffer t nil nil)))
    #+END_SRC
 * Core Utilities
-** Helm (disabled for now)
+** Helm
    [[https://github.com/emacs-helm/helm][Helm]] is completion/selection framework that reworks how one navigates in emacs. Some people prefer Ivy for this, or the more traditional Ido which focuses on (optionally fuzzy) completion.
-   #+BEGIN_SRC emacs-lisp :tangle no
-  (use-package helm
-    :bind (("M-x" . helm-M-x)
-           ("C-x C-f" . helm-find-files)
-           ("M-y" . helm-show-kill-ring)
-           ("C-x C-b" . helm-mini))
-    :init
-    (setq helm-mode-fuzzy-match t)
-    (setq helm-completion-in-region-fuzzy-match t)
-    :config
-    (require 'helm-config)
-    (helm-mode 1)
-    (helm-linum-relative-mode 1)
-    ;; Use helm to describe keybindings when typing
-    (use-package helm-descbinds
-      :diminish helm-descbinds-mode
-      :config (helm-descbinds-mode))
-    ;; Use helm when accessing files via tramp as well.
-    (use-package helm-tramp))
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package helm
+       :bind (("M-x" . helm-M-x)
+              ("C-x C-f" . helm-find-files)
+              ("M-y" . helm-show-kill-ring)
+              ("C-x C-b" . helm-mini))
+       :init
+       (setq helm-ff-fuzzy-matching t)
+       (setq helm-M-x-fuzzy-match t)
+       (setq helm-buffers-fuzzy-matching t)
+       (setq helm-recentf-fuzzy-match t)
+       :config
+       (require 'helm-config)
+       (helm-mode 1)
+       ;; Use helm to describe keybindings when typing
+       (use-package helm-descbinds
+         :diminish helm-descbinds-mode
+         :config (helm-descbinds-mode)
+         ;; Use helm when accessing files via tramp as well.
+         (use-package helm-tramp)
+         (use-package helm-ls-git)
+         (use-package helm-projectile)
+         (use-package helm-rg)))
    #+END_SRC
+
+   #+RESULTS:
+   : helm-mini
+
 ** Show available keybindings when starting an Emacs command
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package which-key
@@ -387,14 +395,8 @@
    #+BEGIN_SRC emacs-lisp :tangle yes
      (add-hook 'emacs-lisp-mode-hook
                (lambda ()
-                 ;; Use spaces, not tabs
-                 (setq indent-tabs-mode nil)
                  ;; Pretty-print emacs lisp evaluations
                  (define-key emacs-lisp-mode-map "\C-x\C-e" 'pp-eval-last-sexp)
-                 ;; Always Recompile if .elc exists
-                 (add-hook (make-local-variable 'after-save-hook)
-                           (lambda ()
-                             (byte-force-recompile default-directory)))
                  ;; Always correct formatting when pressing "Enter"
                  (define-key emacs-lisp-mode-map "\r"
                    'reindent-then-newline-and-indent)))
