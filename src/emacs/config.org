@@ -628,6 +628,13 @@
        (setq org-journal-dir
              (file-name-as-directory (concat gaelan-webdav-prefix "journal"))))
    #+END_SRC
+** Clean up chrome
+   The default org bullets/colouring is too distracting. Use UTF-8 and spacing for a cleaner buffer
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package org-bullets
+       :after org
+       :hook (org-mode . (lambda () (org-bullets-mode 1))))
+   #+END_SRC
 * Project Management
 ** Version Control
 *** Magit
@@ -835,7 +842,7 @@
    #+BEGIN_SRC emacs-lisp :tangle no
      (use-package mu4e-alert
        :after mu4e
-       :hooks ((after-init-hook . mu4e-alert-enable-notifications))
+       :hook ((after-init-hook . mu4e-alert-enable-notifications))
        :init
        (setq mu4e-alert-interesting-mail-query
              (concat "flag:unread maildir:/personal/inbox "
