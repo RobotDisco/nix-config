@@ -624,9 +624,10 @@
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package org-journal
        :after org
-       :init
-       (setq org-journal-dir
-             (file-name-as-directory (concat gaelan-webdav-prefix "journal"))))
+       :custom
+       (org-journal-file-format "%Y/%Y%m%d")
+       (org-journal-dir
+        (file-name-as-directory (concat gaelan-webdav-prefix "journal/"))))
    #+END_SRC
 ** Clean up chrome
    The default org bullets/colouring is too distracting. Use UTF-8 and spacing for a cleaner buffer
