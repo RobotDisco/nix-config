@@ -2,11 +2,11 @@ export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 export PS1='[\u@\h \W]$ '
 
 if [[ `uname` == 'Darwin' ]]; then
-   SSH_KEYS="id_rsa C3200DE15E326BD556AEF02827FD53393832612E"
+   SSH_KEYS="id_rsa"
 else
-   SSH_KEYS="id_rsa id_rsa.work 00822AA51EC93E807C6455A5C2939E67E9265504"
+   SSH_KEYS="id_rsa id_rsa.work"
 fi
-command -v keychain >/dev/null 2>&1 && eval "$(keychain --quiet --agents gpg,ssh --eval $=SSH_KEYS)"
+command -v keychain >/dev/null 2>&1 && eval "$(keychain --quiet --agents ssh --eval $=SSH_KEYS)"
 
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
 #  exec sway
