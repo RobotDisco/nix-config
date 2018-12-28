@@ -596,7 +596,7 @@
   #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package pdf-tools
     :mode (("\\.pdf\\'" . pdf-view-mode))
-    :config (pdf-tools-install))
+    :config (pdf-tools-install t))
   #+END_SRC
 * Org Mode
 ** Storage prefix
