@@ -12,5 +12,8 @@
 ;; Initialize package manager
 (package-initialize)
 
+;; Don't ask about following symlinks, just do it.
+(setq vc-follow-symlinks t)
+
 ;; Load config.org configuration
 (org-babel-load-file (expand-file-name "~/.emacs.d/config.org"))
