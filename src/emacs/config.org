@@ -206,29 +206,28 @@
 * Core Utilities
 ** Helm
    [[https://github.com/emacs-helm/helm][Helm]] is completion/selection framework that reworks how one navigates in emacs. Some people prefer Ivy for this, or the more traditional Ido which focuses on (optionally fuzzy) completion.
+
+   In our config we use =imenu= mode for zipping around a file via headers and sections, repurposing an otherwise uninteresting keybinding (indent-to-tab-stop?)
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package helm
-       :bind (("M-x" . helm-M-x)
-              ("C-x C-f" . helm-find-files)
-              ("M-y" . helm-show-kill-ring)
-              ("C-x C-b" . helm-mini))
-       :init
-       (setq helm-ff-fuzzy-matching t)
-       (setq helm-M-x-fuzzy-match t)
-       (setq helm-buffers-fuzzy-matching t)
-       (setq helm-recentf-fuzzy-match t)
-       :config
-       (require 'helm-config)
-       (helm-mode 1)
-       ;; Use helm to describe keybindings when typing
-       (use-package helm-descbinds
-         :diminish helm-descbinds-mode
-         :config (helm-descbinds-mode)
-         ;; Use helm when accessing files via tramp as well.
-         (use-package helm-tramp)
-         (use-package helm-ls-git)
-         (use-package helm-projectile)
-         (use-package helm-rg)))
+       (use-package helm
+         :bind (("M-x" . helm-M-x)
+                ("C-x r b" . helm-filtered-bookmarks)
+                ("C-x C-f" . helm-find-files)
+                ("M-y" . helm-show-kill-ring)
+                ("C-x C-b" . helm-mini)
+                ("M-i" . helm-semantic-or-imenu))
+         :config
+         (require 'helm-config)
+         (helm-mode 1)
+         ;; Use helm to describe keybindings when typing
+         (use-package helm-descbinds
+           :diminish helm-descbinds-mode
+           :config (helm-descbinds-mode)
+           ;; Use helm when accessing files via tramp as well.
+           (use-package helm-tramp)
+           (use-package helm-ls-git)
+           (use-package helm-projectile)
+           (use-package helm-rg)))
    #+END_SRC
 ** Show available keybindings when starting an Emacs command
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -302,12 +301,6 @@
         (if (file-exists-p gls)
             (setq insert-directory-program gls)))
     #+END_SRC
-** imenu
-   Use =imenu= mode for zipping around a file via headers and sections
-   Repurpose an otherwise not-very-interesting keybinding (indent-to-tab-stop?)
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (global-set-key (kbd "M-i") 'imenu)
-   #+END_SRC
 * Editing Text
 ** Multiple Cursors
    A port of the multiple-cursor functionality that Sublime Text invented
