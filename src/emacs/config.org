@@ -230,10 +230,6 @@
          (use-package helm-projectile)
          (use-package helm-rg)))
    #+END_SRC
-
-   #+RESULTS:
-   : helm-mini
-
 ** Show available keybindings when starting an Emacs command
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package which-key
