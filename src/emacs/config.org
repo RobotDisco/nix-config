@@ -46,6 +46,25 @@
     (setq mac-option-modifier 'super)
   #+END_SRC
 * Better defaults
+** File backups
+   By default emacs backs up files in the same directory with a ~-suffixed file. I find them annoying but backups seem like a good idea, so let's have more, just in a out-of-the-way place.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq backup-directory-alist '(("." . "~/.emacs.d/backups"))
+           ;; Moving files to backup causes some problems in certain
+           ;; situations (like symlinking?)
+           backup-by-copying t
+           ;; Don't prompt to delete aged-out backup files.
+           delete-old-versions t
+           ;; Do this for files in source-control as well.
+           vc-make-backup-files t
+           ;; Save the ten newest and oldest versions, dunno why I'd want to save
+           ;; the oldest but for now let's do it.
+           kept-new-versions 10
+           kept-old-versions 10
+           ;; Always append numbers to indicate backup order
+           version-control t)
+   #+END_SRC
 ** Auto Revert
    Often when switching git branches, files tend to change. By default, Emacs does not revert the buffers affected, which can lead to some confusion. Turn on =auto-revert-mode= globally, so that when the files change, the buffers reflect the latest editions as well.
 
@@ -607,10 +626,14 @@
               ("C-c c" . org-capture)
               ("C-c b" . org-iswitchb))
        :custom
-       (org-todo-keywords '("TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
+       (org-todo-keywords '("TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
+       (org-agenda-dim-blocked-tasks t)
+       (org-enforce-todo-dependencies t))
    #+END_SRC
 ** Org Journal Mode
    I use this for bullet-journal-like stuff
+
+   I'm adding my journal entries into org mode although the number of files may make me live to regret it.
    
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package org-journal
@@ -622,7 +645,10 @@
        ;; In BuJo it is bad practice to auto-carryover items to the next day.
        ;; _choose_ what is important enough to carry over!!!
        ;; plus, want to preserve previous todos for when I noted them.
-       (org-journal-carryover-items nil))
+       (org-journal-carryover-items nil)
+       (org-agenda-file-regexp "\`[^.].*\.org\'\|\`[0-9]+\'")
+       :config
+       (add-to-list 'org-agenda-files org-journal-dir))
    #+END_SRC
 ** Clean up chrome
    The default org bullets/colouring is too distracting. Use UTF-8 and spacing for a cleaner buffer
