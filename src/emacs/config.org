@@ -137,29 +137,32 @@
    #+END_SRC
 ** Theme
    Pretty colours :)
-*** Cyberpunk
+*** Cyberpunk (current not used)
     Hack the Gibson
-    #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package cyberpunk-theme
-    :init
-    (load-theme 'cyberpunk t))
-    #+END_SRC
-*** Solarized (curently not used)
     #+BEGIN_SRC emacs-lisp :tangle no
-  (use-package solarized-theme
-    :init
-    (load-theme 'solarized-dark t))
+      (use-package cyberpunk-theme
+        :config
+        (load-theme 'cyberpunk t))
     #+END_SRC
-** Rainbow-delimiters mode
+*** Solarized (currently not used)
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (use-package solarized-theme
+        :config
+        (load-theme 'solarized-dark t))
+    #+END_SRC
+*** Rebecca
+    Pretty and purple
+    
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package rebecca-theme
+        :config
+        (load-theme 'rebecca t'))
+    #+END_SRC
+** COMMENT Rainbow-delimiters mode
    Use colours to show matching matching opening/closing parentheses, and also highlight unmatched parentheses.
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package rainbow-delimiters
-    :hook ((prog-mode-hook
-	    lisp-mode-hook
-	    cider-repl-mode-hook
-	    lisp-interaction-mode-hook
-	    ielm-mode-hook
-	    eval-expression-minibuffer-setup-hook) . rainbow-delimiters-mode))
+     (use-package rainbow-delimiters
+       :hook (prog-mode . rainbow-delimiters-mode))
    #+END_SRC
 ** Mode Line
    #+BEGIN_SRC emacs-lisp :tangle yes
