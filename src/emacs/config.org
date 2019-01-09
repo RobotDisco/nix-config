@@ -15,7 +15,7 @@
    Install and configure it (and related dependencies) if they aren't already around.
    #+BEGIN_SRC emacs-lisp :tangle yes
     (unless (and (package-installed-p 'use-package)
-		 (package-installed-p 'diminish))
+         (package-installed-p 'diminish))
       (package-refresh-contents)
       (package-install 'use-package)
       (package-install 'diminish))
@@ -152,7 +152,7 @@
     #+END_SRC
 *** Rebecca
     Pretty and purple
-    
+
     #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package rebecca-theme
         :config
@@ -270,7 +270,7 @@
     :ensure f
     :diminish whitespace-mode
     :hook ((prog-mode . whitespace-mode)
-	   (before-save-hook . whitespace-cleanup))
+       (before-save-hook . whitespace-cleanup))
     :custom
     (whitespace-line-column 80))
    #+END_SRC
@@ -375,7 +375,7 @@
 * Programming Language Support
 ** Generic code tagging
    We use gnu global, which is better that ctags AFAICT
-   
+
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package ggtags)
    #+END_SRC
@@ -442,14 +442,14 @@
    ;; Web mode
    (use-package web-mode
      :mode (("\\.phtml\\'" . web-mode)
-	    ("\\.tpl\\.php\\'" . web-mode)
-	    ("\\.[agj]sp\\'" . web-mode)
-	    ("\\.[as[cp]x\\'" . web-mode)
-	    ("\\.erb\\'" . web-mode)
-	    ("\\.mustache\\'" . web-mode)
-	    ("\\.djhtml\\'" . web-mode)
-	    ("\\.html?\\'" . web-mode)
-	    ("\\.js[x]?\\'" . web-mode))
+        ("\\.tpl\\.php\\'" . web-mode)
+        ("\\.[agj]sp\\'" . web-mode)
+        ("\\.[as[cp]x\\'" . web-mode)
+        ("\\.erb\\'" . web-mode)
+        ("\\.mustache\\'" . web-mode)
+        ("\\.djhtml\\'" . web-mode)
+        ("\\.html?\\'" . web-mode)
+        ("\\.js[x]?\\'" . web-mode))
      :custom
      (web-mode-enable-css-colorization t)
      :config
@@ -479,7 +479,7 @@
     :hook (web-hook-mode . js2-minor-mode)
     :config
     (setq-default flycheck-disabled-checkers
-		  (append flycheck-disabled-checkers '(javascript-jshint))))
+          (append flycheck-disabled-checkers '(javascript-jshint))))
     #+END_SRC
 *** prettier
     Prettify javacsript in realtime
@@ -501,11 +501,11 @@
     :hook
     (before-save . tide-format-before-save)
     (typescript-mode . (lambda ()
-			 (tide-setup)
-			 (flycheck-mode +1)
-			 (eldoc-mode +1)
-			 (tide-hl-identifier-mode +1)
-			 (company-mode +1))))
+             (tide-setup)
+             (flycheck-mode +1)
+             (eldoc-mode +1)
+             (tide-hl-identifier-mode +1)
+             (company-mode +1))))
     #+END_SRC
 ** JSON
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -523,9 +523,9 @@
     #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package clojure-mode
     :mode (("\\.clj\\'" . clojure-mode)
-	   ("\\.boot\\'" . clojure-mode)
-	   ("\\.edn\\'" . clojure-mode)
-	   ("\\.cljs\\'" . clojurescript-mode))
+       ("\\.boot\\'" . clojure-mode)
+       ("\\.edn\\'" . clojure-mode)
+       ("\\.cljs\\'" . clojurescript-mode))
     :hook
     ((clojure-mode . eldoc-mode)
      (clojure-mode . subword-mode)
@@ -555,7 +555,7 @@
      :defines cljr-add-keybindings-with-prefix
      :diminish clj-refactor-mode
      :hook ((clojure-mode . clj-refactor-mode)
-	    (cider-mode . clj-refactor-mode))
+        (cider-mode . clj-refactor-mode))
      :config
      ;; This choice of keybinding leaves cider-macroexpand-1 unbound
      (cljr-add-keybindings-with-prefix "C-c C-m"))
@@ -616,7 +616,7 @@
      (setq gaelan-webdav-prefix (if (eql system-type 'darwin)
                                     (file-name-as-directory "~/Seafile/emacs/")
                                   (file-name-as-directory "~/fallcube/emacs/")))
-   #+END_SRC
+   #+END_SRCg
 ** Basic org mode configuration
    Default keybindings for now.
 
@@ -639,7 +639,7 @@
    I use this for bullet-journal-like stuff
 
    I'm adding my journal entries into org mode although the number of files may make me live to regret it.
-   
+
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package org-journal
        :after org
