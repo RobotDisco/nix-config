@@ -156,7 +156,7 @@
     #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package rebecca-theme
         :config
-        (load-theme 'rebecca t'))
+        (load-theme 'rebecca t))
     #+END_SRC
 ** COMMENT Rainbow-delimiters mode
    Use colours to show matching matching opening/closing parentheses, and also highlight unmatched parentheses.
@@ -166,9 +166,9 @@
    #+END_SRC
 ** Mode Line
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package smart-mode-line
-    :init (setq sml/no-confirm-load-theme t)
-    :config (sml/setup))
+     (use-package smart-mode-line
+       :init (setq sml/no-confirm-load-theme t)
+       :config (sml/setup))
    #+END_SRC
 * Custom commands
 ** Adjust text size globally (not just for one buffer)
@@ -231,25 +231,26 @@
 
    In our config we use =imenu= mode for zipping around a file via headers and sections, repurposing an otherwise uninteresting keybinding (indent-to-tab-stop?)
    #+BEGIN_SRC emacs-lisp :tangle yes
-       (use-package helm
-         :bind (("M-x" . helm-M-x)
-                ("C-x r b" . helm-filtered-bookmarks)
-                ("C-x C-f" . helm-find-files)
-                ("M-y" . helm-show-kill-ring)
-                ("C-x C-b" . helm-mini)
-                ("M-i" . helm-semantic-or-imenu))
-         :config
-         (require 'helm-config)
-         (helm-mode 1)
-         ;; Use helm to describe keybindings when typing
-         (use-package helm-descbinds
-           :diminish helm-descbinds-mode
-           :config (helm-descbinds-mode)
-           ;; Use helm when accessing files via tramp as well.
-           (use-package helm-tramp)
-           (use-package helm-ls-git)
-           (use-package helm-projectile)
-           (use-package helm-rg)))
+     (use-package helm
+       :diminish t
+       :bind (("M-x" . helm-M-x)
+              ("C-x r b" . helm-filtered-bookmarks)
+              ("C-x C-f" . helm-find-files)
+              ("M-y" . helm-show-kill-ring)
+              ("C-x C-b" . helm-mini)
+              ("M-i" . helm-semantic-or-imenu))
+       :config
+       (require 'helm-config)
+       (helm-mode 1)
+       ;; Use helm to describe keybindings when typing
+       (use-package helm-descbinds
+         :diminish helm-descbinds-mode
+         :config (helm-descbinds-mode)
+         ;; Use helm when accessing files via tramp as well.
+         (use-package helm-tramp)
+         (use-package helm-ls-git)
+         (use-package helm-projectile)
+         (use-package helm-rg)))
    #+END_SRC
 ** Show available keybindings when starting an Emacs command
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -298,6 +299,7 @@
    I am wearning myself off using arrow keys for movement in day-to-day unix tasks
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package guru-mode
+       :diminish t
        :config (guru-global-mode +1))
    #+END_SRC
 ** Avy
@@ -575,8 +577,9 @@
 ** Ruby
 *** Support rbenv for ruby version management
     #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package rbenv
-       :config (global-rbenv-mode))
+      (use-package rbenv
+        :config (global-rbenv-mode)
+        :custom (rbenv-show-active-ruby-in-modeline nil))
     #+END_SRC
 *** Use pry as an inferior REPL if you find it
     #+BEGIN_SRC emacs-lisp :tangle yes
@@ -593,7 +596,7 @@
     #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package robe
         :after (company rbenv)
-        :hook (ruby-mode-hook . robe-mode)
+        :hook (ruby-mode . robe-mode)
         :config
         (push 'company-robe company-backends)
         ;; Before activating rube console,
@@ -616,7 +619,7 @@
      (setq gaelan-webdav-prefix (if (eql system-type 'darwin)
                                     (file-name-as-directory "~/Seafile/emacs/")
                                   (file-name-as-directory "~/fallcube/emacs/")))
-   #+END_SRCg
+   #+END_SRC
 ** Basic org mode configuration
    Default keybindings for now.
 
@@ -682,7 +685,8 @@
    If an .editorconfig file exists, use that to influence Emacs' styling settings
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package editorconfig
-        :config (editorconfig-mode +1))
+       :diminish t
+       :config (editorconfig-mode +1))
    #+END_SRC
 * Emacs as an Operating System
 ** Window Manager
