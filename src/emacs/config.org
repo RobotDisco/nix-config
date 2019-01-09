@@ -629,9 +629,11 @@
               ("C-c c" . org-capture)
               ("C-c b" . org-iswitchb))
        :custom
-       (org-todo-keywords '("TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
+       (org-todo-keywords
+        '("TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
        (org-agenda-dim-blocked-tasks t)
-       (org-enforce-todo-dependencies t))
+       (org-enforce-todo-dependencies t)
+       (org-src-tab-acts-natively t))
    #+END_SRC
 ** Org Journal Mode
    I use this for bullet-journal-like stuff
