@@ -781,10 +781,10 @@
        :hook (exwm-change-screen-hook . gaelan-exwm-change-screen-hook)
        :config
        (require 'exwm)
-       (require 'exwm-systemtray)
+       ;(require 'exwm-systemtray)
        (require 'exwm-randr)
        (exwm-randr-enable)
-       (exwm-systemtray-enable)
+       ;(exwm-systemtray-enable)
        (exwm-enable))
    #+END_SRC
 ** SSH/GPG keychain manager
