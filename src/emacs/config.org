@@ -541,51 +541,48 @@
 ** Clojure
 *** clojure-mode
     #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package clojure-mode
-    :mode (("\\.clj\\'" . clojure-mode)
-       ("\\.boot\\'" . clojure-mode)
-       ("\\.edn\\'" . clojure-mode)
-       ("\\.cljs\\'" . clojurescript-mode))
-    :hook
-    ((clojure-mode . eldoc-mode)
-     (clojure-mode . subword-mode)
-     (clojure-mode . cider-mode)))
+      (use-package clojure-mode
+        :after smartparens
+        :hook
+        ((clojure-mode . subword-mode)
+         (clojure-mode . aggressive-indent-mode)
+         (clojure-mode . smartparens-strict-mode)))
     #+END_SRC
 *** cider
     Emacs slime-equivalent REPL for Clojure
     #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package cider
-   :pin melpa-stable
-     :after clojure-mode
-     :hook
-     ((cider-repl-mode-hook . company-mode)
-      (cider-repl-mode-hook . subword-mode)
-      (cider-mode . company-mode))
-     :diminish subword-mode
-     :custom
-     (cider-cljs-lein-repl "(do (use 'fighwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
-     :config
-     (cider-repl-toggle-pretty-printing)
-     (use-package cider-eval-sexp-fu))
+      (use-package cider
+        :pin melpa-stable
+        :hook ((cider-mode-hook . eldoc-mode)
+               (cider-mode-hook . subword-mode)
+               (cider-mode-hook . smartparens-strict-mode)
+               (cider-mode-hook . rainbow-delimiters-mode))
+        :config
+        (use-package cider-eval-sexp-fu))
     #+END_SRC
 *** clj-refactor
     #+BEGIN_SRC emacs-lisp :tangle yes
-   (use-package clj-refactor
-     :after (clojure-mode cider)
-     :defines cljr-add-keybindings-with-prefix
-     :diminish clj-refactor-mode
-     :hook ((clojure-mode . clj-refactor-mode)
-        (cider-mode . clj-refactor-mode))
-     :config
-     ;; This choice of keybinding leaves cider-macroexpand-1 unbound
-     (cljr-add-keybindings-with-prefix "C-c C-m"))
+      (use-package clj-refactor
+        :hook (clojure-mode . (lambda ()
+                                (clj-refactor-mode 1)
+                                ;; for adding require/use/import statements
+                                (yas-minor-mode 1)
+                                ;; This choice of keybinding leaves
+                                ;; cider-macroexpand-1 unbound
+                                (cljr-add-keybindings-with-prefix "C-c C-m"))))
+    #+END_SRC
+*** helm cider support
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package helm-cider
+        :config
+        (helm-cider-mode 1))
     #+END_SRC
 *** flycheck support for clojure
     #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package flycheck
-    :after (fly-check clojure-mode)
-    :config
-    (flycheck-clojure-setup))
+      (use-package flycheck-clojure
+        :after flycheck
+        :config
+        (eval-after-load 'flycheck '(flycheck-clojure-setup)))
     #+END_SRC
 ** YAML
    #+BEGIN_SRC emacs-lisp :tangle yes
