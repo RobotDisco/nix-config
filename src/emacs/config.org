@@ -353,13 +353,16 @@
    #+END_SRC
 ** Linting with FlyCheck
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package flycheck
-    :config (add-hook 'after-init-hook #'global-flycheck-mode))
+     (use-package flycheck
+       :hook (after-init .  global-flycheck-mode))
 
-  ;; Errors hover over point of error, not in separate buffer
-  (use-package flycheck-pos-tip
-    :after flycheck
-    :hook (flycheck-mode . flycheck-pos-tip-mode))
+     ;; Errors hover over point of error, not in separate buffer
+     (use-package flycheck-pos-tip
+       :after flycheck
+       :init
+       (with-eval-after-load 'flycheck
+         '(setq flycheck-display-errors-function
+                #'flycheck-pos-tip-error-messages)))
    #+END_SRC
 ** Autocompletions with Company
    Company Mode can also do popup documentation displays
@@ -372,12 +375,22 @@
      ;; Documentation popups using company mode
      (use-package company-quickhelp
        :after company
-       :hook (company-mode . company-quickhelp-mode))
+       :config
+       (company-quickhelp-mode))
    #+END_SRC
 ** Hippie Expand
    A better expand mode
    #+BEGIN_SRC emacs-lisp :tangle yes
      (bind-key "M-/" 'hippie-expand)
+   #+END_SRC
+** Snippet Templates
+   Use YASnippet to auto-populate common code/text fragments
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package yasnippet
+       :config
+       (yas-global-mode 1))
+
+     (use-package yasnippet-snippets)
    #+END_SRC
 * Programming Language Support
 ** Generic code tagging
