@@ -56,8 +56,10 @@ alias z='fasd_cd -d'     # cd, same functionality as j in autojump
 alias zz='fasd_cd -d -i' # cd with interactive selection
 
 # Helpers for editing/refreshing .zshrc
-alias erc='e ~/.zshrc'
-alias rrc='source ~/.zshrc'
+alias ezr='e ~/.zshrc'
+alias ezp='e ~/.zprofile'
+alias rzr='source ~/.zshrc'
+alias rzp='source ~/.zprofile'
 
 # Activate FASD
 command -v fasd >/dev/null 2>&1 && eval "$(fasd --init auto)"
