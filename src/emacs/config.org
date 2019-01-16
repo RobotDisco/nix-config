@@ -33,11 +33,12 @@
 
 * Add PATH to shell (on Mac OSX)
   #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package exec-path-from-shell
-    :ensure f
-    :if (memq window-system '(mac ns))
-    :config
-    (exec-path-from-shell-initialize))
+    (use-package exec-path-from-shell
+      :config
+      (when (memq window-system '(mac ns x))
+        (exec-path-from-shell-initialize))
+      ;; We need to pull GOPATH definition from our shell
+      (exec-path-from-shell-copy-env "GOPATH"))
   #+END_SRC
 * Better Mac OSX keybindings
   Adjust alt/super placement for mac keyboards
@@ -620,6 +621,18 @@
             (before activate-ruby-for-robe activate)
           (rbenv-use-corresponding)))
     #+END_SRC
+** Go
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package go-mode
+       :mode ("\\.go\\'" . go-mode))
+
+     (use-package go-eldoc
+       :after (go-mode)
+       :hook (go-mode . go-eldoc-setup))
+
+     (use-package company-go
+       :after company)
+   #+END_SRC
 * PDF support
   We use [[https://github.com/politza/pdf-tools][pdf-tools]] for PDF viewing, which has first-class support for highlighting and annotations.
   #+BEGIN_SRC emacs-lisp :tangle yes
