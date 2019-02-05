@@ -699,7 +699,10 @@
    Git utility goodness :)
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package magit
-       :bind ("C-x g" . magit-status))
+       :defer t
+       :bind ("C-x g" . magit-status)
+       :config
+       (magit-wip-mode))
    #+END_SRC
 ** Projectile
    Project Manager written by bbatsov :)
