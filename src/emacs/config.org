@@ -371,7 +371,8 @@
      ;; Auto-completion
      (use-package company
        :diminish company-mode
-       :hook (after-init-hook . global-company-mode))
+       :config
+       (global-company-mode))
 
      ;; Documentation popups using company mode
      (use-package company-quickhelp
