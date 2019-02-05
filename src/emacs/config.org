@@ -138,6 +138,8 @@
    #+END_SRC
 ** Theme
    Pretty colours :)
+
+   We have to do some funky stuff to load themes when starting emacs server non-interactively.
 *** Cyberpunk (current not used)
     Hack the Gibson
     #+BEGIN_SRC emacs-lisp :tangle no
