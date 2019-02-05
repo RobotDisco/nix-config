@@ -625,7 +625,8 @@
 ** Go
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package go-mode
-       :mode ("\\.go\\'" . go-mode))
+       :mode "\\.go\\'"
+       :hook (before-save . gofmt-before-save))
 
      (use-package go-eldoc
        :after (go-mode)
