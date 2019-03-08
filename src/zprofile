@@ -34,6 +34,11 @@ if [ -d ~/bin ]; then
     export PATH=$PATH:~/bin
 fi
 
+# Include tdocker into PATH
+if [ -d ~/workspace/dev_scripts/docker/bin ]; then
+   export PATH=$PATH:~/workspace/dev_scripts/docker/bin
+fi
+
 # Set Go root directory
 export GOPATH=$HOME/code/go
 
