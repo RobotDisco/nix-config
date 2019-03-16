@@ -73,17 +73,6 @@ command -v fasd >/dev/null 2>&1 && eval "$(fasd --init auto)"
 command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
 command -v pyenv >/dev/null 2>&1 && eval "$(pyenv init -)"
 
-## Make ZSH use the good parts of FISH
-if [[ `uname` == 'Darwin' ]]; then
-    source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-    # Fish-like syntax highlighting. Must be at the end of .zshrc
-    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-else
-    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-    # Fish-like syntax highlighting. Must be at the end of .zshrc
-    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
-
 # activate NVM if it's available
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
@@ -94,6 +83,22 @@ else
    SSH_KEYS="id_rsa id_rsa.work"
 fi
 command -v keychain >/dev/null 2>&1 && eval "$(keychain --quiet --agents ssh --eval $=SSH_KEYS)"
+
+## Make ZSH use the good parts of FISH
+if [[ `uname` == 'Darwin' ]]; then
+    fpath=(/usr/local/share/zsh-completions $fpath)
+    source "/usr/local/opt/zsh-git-prompt/zshrc.sh"
+    source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    # Fish-like syntax highlighting. Must be at the end of .zshrc
+    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+    # Fish-like history substring search. Must be at the end of the .zshrc
+    source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+else
+    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+    # Fish-like syntax highlighting. Must be at the end of .zshrc
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
 
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
   exec startx
