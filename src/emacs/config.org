@@ -602,10 +602,11 @@
     #+END_SRC
 *** Use pry as an inferior REPL if you find it
     #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package inf-ruby
-       :config
-       (add-to-list 'inf-ruby-implementations '("pry" . "Pry"))
-       (setq inf-ruby-default-implementation "pry"))
+      (use-package inf-ruby
+        :config
+        (add-to-list 'inf-ruby-implementations '("pry" . "Pry"))
+        (add-to-list 'inf-ruby-implementations '("irb" . "IRB"))
+        (setq inf-ruby-default-implementation "pry"))
     #+END_SRC
 *** Little helper package, for stuff like flipping between '/" and between strings/symbols
     #+BEGIN_SRC emacs-lisp :tangle yes
@@ -679,7 +680,7 @@
      (use-package org-journal
        :after org
        :custom
-       (org-journal-file-format "%Y/%Y%m%d")
+       (org-journal-file-format "%Y/%Y%m%d.org")
        (org-journal-dir
         (file-name-as-directory (concat gaelan-webdav-prefix "journal/")))
        ;; In BuJo it is bad practice to auto-carryover items to the next day.
