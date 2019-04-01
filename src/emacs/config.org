@@ -347,7 +347,7 @@
    S-expression (and surrounding-pairs) editing helper for various languages)
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package smartparens
-       :hook (prog-mode . turn-on-smartparens-strict-mode)
+       :hook (prog-mode . turn-on-smartparens-mode)
        :config
        (require 'smartparens-config)
        (sp-use-smartparens-bindings)
