@@ -5,8 +5,8 @@
   This document is a constant work-in-progress, and will contain the latest updates to my Emacs configuration.
   If you wish to contact me for any reason, you can reach me at my email: =gdcosta@gmail.com=.
   #+BEGIN_SRC emacs-lisp :tangle yes
-(setq user-full-name "Gaelan D'costa"
-      user-mail-address "gdcosta@gmail.com")
+    (setq user-full-name "Gaelan D'costa"
+          user-mail-address "gdcosta@gmail.com")
   #+END_SRC
 ** Pre-initialization: [[https://github.com/jwiegley/use-package/issues/70][use-package]]
 
@@ -14,21 +14,21 @@
 
    Install and configure it (and related dependencies) if they aren't already around.
    #+BEGIN_SRC emacs-lisp :tangle yes
-    (unless (and (package-installed-p 'use-package)
-         (package-installed-p 'diminish))
-      (package-refresh-contents)
-      (package-install 'use-package)
-      (package-install 'diminish))
+     (unless (and (package-installed-p 'use-package)
+                  (package-installed-p 'diminish))
+       (package-refresh-contents)
+       (package-install 'use-package)
+       (package-install 'diminish))
 
-  (eval-when-compile
-    (require 'use-package)
-    (require 'diminish)
-    (require 'bind-key))
+     (eval-when-compile
+       (require 'use-package)
+       (require 'diminish)
+       (require 'bind-key))
 
-  (setq use-package-always-ensure t)
+     (setq use-package-always-ensure t)
 
-  ;; Always demand if daemon-mode
-  (setq use-package-always-demand (daemonp))
+     ;; Always demand if daemon-mode
+     (setq use-package-always-demand (daemonp))
    #+END_SRC
 
 * Add PATH to shell (on Mac OSX)
@@ -71,38 +71,38 @@
 
    NOTE: This can be quite slow, when the changes are massive across branches.
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package autorevert
-    :ensure f
-    :diminish t
-    :hook (dired-mode . auto-revert-mode)
-    :config (global-auto-revert-mode +1))
+     (use-package autorevert
+       :ensure f
+       :diminish t
+       :hook (dired-mode . auto-revert-mode)
+       :config (global-auto-revert-mode +1))
    #+END_SRC
 ** Custom file
    Using the customize interface can be nice, but it tends to pollute =init.el=. Move all customizations to a separate file.
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (setq custom-file "~/.emacs.d/custom.el")
+     (setq custom-file "~/.emacs.d/custom.el")
    #+END_SRC
 ** Use y/n over yes/no
    Less typing required in prompts :)
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (defalias 'yes-or-no-p 'y-or-n-p)
+     (defalias 'yes-or-no-p 'y-or-n-p)
    #+END_SRC
 ** Editing Preferences
    Use 4 spaces for indentation.
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (setq-default tab-width 4)
-  (setq-default js-indent-level 4)
-  (setq-default indent-tabs-mode nil)
+     (setq-default tab-width 4)
+     (setq-default js-indent-level 4)
+     (setq-default indent-tabs-mode nil)
    #+END_SRC
 ** Line wrapping for text modes
    Don't wrap lines for coding. Create a hook that enables wrappping, for text-modes like =org-mode= and =markdown-mode=.
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (setq-default truncate-lines t)
+     (setq-default truncate-lines t)
 
-  (defun gaelan/truncate-lines-hook ()
-    (setq truncate-lines nil))
+     (defun gaelan/truncate-lines-hook ()
+       (setq truncate-lines nil))
 
-  (add-hook 'text-mode-hook 'gaelan/truncate-lines-hook)
+     (add-hook 'text-mode-hook 'gaelan/truncate-lines-hook)
    #+END_SRC
 ** Save recent file history periodically
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -125,16 +125,16 @@
 ** Font
    I use Mark Simonson's [[https://www.marksimonson.com/fonts/view/anonymous-pro][Anonymous Pro]]. Other good free alternatives include Source Code Pro, Droid Sans, Inconsolat and Deja Vu Sans Mono.
    #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; Use Anonymous Pro as default font
-  (add-to-list 'default-frame-alist '(font . "Anonymous Pro-14"))
+     ;; Use Anonymous Pro as default font
+     (add-to-list 'default-frame-alist '(font . "Anonymous Pro-14"))
    #+END_SRC
 ** Remove UI Chrome
    Remove toolbars, splash screens, and other things that produce clutter.
    #+BEGIN_SRC emacs-lisp :tangle yes
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-(setq inhibit-splash-screen t)
+     (tool-bar-mode -1)
+     (menu-bar-mode -1)
+     (scroll-bar-mode -1)
+     (setq inhibit-splash-screen t)
    #+END_SRC
 ** Theme
    Pretty colours :)
@@ -224,7 +224,7 @@
            (move-beginning-of-line 1))))
 
      (global-set-key [remap move-beginning-of-line]
-             'smarter-move-beginning-of-line)
+                     'smarter-move-beginning-of-line)
    #+END_SRC
 ** Revert Buffer shortcut
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -275,19 +275,19 @@
    Delete trailing whitespace from lines/buffer before every save
    Turn on whitespace indicators in programming major modes.
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package whitespace
-    :ensure f
-    :diminish whitespace-mode
-    :hook ((prog-mode . whitespace-mode)
-       (before-save-hook . whitespace-cleanup))
-    :custom
-    (whitespace-line-column 80))
+     (use-package whitespace
+       :ensure f
+       :diminish whitespace-mode
+       :hook ((prog-mode . whitespace-mode)
+              (before-save-hook . whitespace-cleanup))
+       :custom
+       (whitespace-line-column 80))
    #+END_SRC
 ** Show Matching Parenthesis
    Always show matching parenthesis for those surrounding the current eval
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (show-paren-mode 1)
-  (setq show-paren-delay 0)
+     (show-paren-mode 1)
+     (setq show-paren-delay 0)
    #+END_SRC
 ** Show line numbers relative to current line
    Instead of showing absolute line numbers, show their offset from the current line
@@ -405,20 +405,20 @@
    #+END_SRC
 ** Common Lisp
    #+BEGIN_SRC emacs-lisp :tangle no
-  (use-package slime
-    :commands slime
-    :custom
-    (inferior-lisp-program "sbcl")
-    (slime-contribs '(slime-fancy)))
+     (use-package slime
+       :commands slime
+       :custom
+       (inferior-lisp-program "sbcl")
+       (slime-contribs '(slime-fancy)))
 
-  (use-package slime-company
-    :after (slime company)
-    :config (slime-setup '(slime-company)))
+     (use-package slime-company
+       :after (slime company)
+       :config (slime-setup '(slime-company)))
    #+END_SRC
 ** Emacs Lisp
    Emacs lisp doesn't have the nice buffer eval command of other lisp modes, so add one.
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (bind-key "C-c C-k" 'eval-buffer emacs-lisp-mode-map)
+     (bind-key "C-c C-k" 'eval-buffer emacs-lisp-mode-map)
    #+END_SRC
 
    Turn on eldoc mode
@@ -439,108 +439,108 @@
 
 ** Docker
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package docker
-    :bind ("C-c d" . docker))
+     (use-package docker
+       :bind ("C-c d" . docker))
 
-  (use-package dockerfile-mode
-    :mode "Dockerfile\\'")
+     (use-package dockerfile-mode
+       :mode "Dockerfile\\'")
    #+END_SRC
 ** Python
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package anaconda-mode
-    :hook ((python-mode-hook . anaconda-mode)
-           (python-mode-hook . anaconda-eldoc-mode)))
+     (use-package anaconda-mode
+       :hook ((python-mode-hook . anaconda-mode)
+              (python-mode-hook . anaconda-eldoc-mode)))
 
-  (use-package company-anaconda
-    :after (company anaconda-mode)
-    :config
-    '(add-to-list 'company-backends 'company-anaconda))
+     (use-package company-anaconda
+       :after (company anaconda-mode)
+       :config
+       '(add-to-list 'company-backends 'company-anaconda))
 
-  (use-package pyenv-mode
-    :hook (python-mode-hook pyenv-mode))
+     (use-package pyenv-mode
+       :hook (python-mode-hook pyenv-mode))
    #+END_SRC
 ** HTML
 *** web-mode
     We want to support languaages that embed themselves into HTML
     #+BEGIN_SRC emacs-lisp :tangle yes
-   ;; Web mode
-   (use-package web-mode
-     :mode (("\\.phtml\\'" . web-mode)
-        ("\\.tpl\\.php\\'" . web-mode)
-        ("\\.[agj]sp\\'" . web-mode)
-        ("\\.[as[cp]x\\'" . web-mode)
-        ("\\.erb\\'" . web-mode)
-        ("\\.mustache\\'" . web-mode)
-        ("\\.djhtml\\'" . web-mode)
-        ("\\.html?\\'" . web-mode)
-        ("\\.js[x]?\\'" . web-mode))
-     :custom
-     (web-mode-enable-css-colorization t)
-     :config
-     (add-to-list 'web-mode-content-types-alist '("jsx" . "\\.js[x]?\\'")))
+      ;; Web mode
+      (use-package web-mode
+        :mode (("\\.phtml\\'" . web-mode)
+               ("\\.tpl\\.php\\'" . web-mode)
+               ("\\.[agj]sp\\'" . web-mode)
+               ("\\.[as[cp]x\\'" . web-mode)
+               ("\\.erb\\'" . web-mode)
+               ("\\.mustache\\'" . web-mode)
+               ("\\.djhtml\\'" . web-mode)
+               ("\\.html?\\'" . web-mode)
+               ("\\.js[x]?\\'" . web-mode))
+        :custom
+        (web-mode-enable-css-colorization t)
+        :config
+        (add-to-list 'web-mode-content-types-alist '("jsx" . "\\.js[x]?\\'")))
     #+END_SRC
 *** emmet-mode
     Easier way to insert HTML/XML into documents
     #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package emmet-mode
-    :diminish emmet-mode
-    :hook
-    (web-mode . emmet-mode))
+      (use-package emmet-mode
+        :diminish emmet-mode
+        :hook
+        (web-mode . emmet-mode))
     #+END_SRC
 ** CSS
 *** Rainbow mode
     Show/update colour previews when specifying a colour spec
     #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package rainbow-mode
-    :diminish rainbow-mode
-    :hook (css-mode . rainbow-mode))
+      (use-package rainbow-mode
+        :diminish rainbow-mode
+        :hook (css-mode . rainbow-mode))
     #+END_SRC
 ** Javascript
 *** js2-mode
     A nicer editing mode than the builtin one
     #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package js2-mode
-    :hook (web-hook-mode . js2-minor-mode)
-    :config
-    (setq-default flycheck-disabled-checkers
-          (append flycheck-disabled-checkers '(javascript-jshint))))
+      (use-package js2-mode
+        :hook (web-hook-mode . js2-minor-mode)
+        :config
+        (setq-default flycheck-disabled-checkers
+                      (append flycheck-disabled-checkers '(javascript-jshint))))
     #+END_SRC
 *** prettier
     Prettify javacsript in realtime
     #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package prettier-js
-    :hook (js2-minor-mode . prettier-js-mode))
+      (use-package prettier-js
+        :hook (js2-minor-mode . prettier-js-mode))
     #+END_SRC
 ** TypeScript
 *** typescript-mode
     #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package typescript-mode
-    :mode ("\\.ts\\'"))
+      (use-package typescript-mode
+        :mode ("\\.ts\\'"))
     #+END_SRC
 *** tide
     Typescript IDE for Emacs
     #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package tide
-    :after typescript-mode
-    :hook
-    (before-save . tide-format-before-save)
-    (typescript-mode . (lambda ()
-             (tide-setup)
-             (flycheck-mode +1)
-             (eldoc-mode +1)
-             (tide-hl-identifier-mode +1)
-             (company-mode +1))))
+      (use-package tide
+        :after typescript-mode
+        :hook
+        (before-save . tide-format-before-save)
+        (typescript-mode . (lambda ()
+                             (tide-setup)
+                             (flycheck-mode +1)
+                             (eldoc-mode +1)
+                             (tide-hl-identifier-mode +1)
+                             (company-mode +1))))
     #+END_SRC
 ** JSON
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package json-mode
-    :mode "\\.json\\'")
+     (use-package json-mode
+       :mode "\\.json\\'")
    #+END_SRC
 ** Markdown
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package markdown-mode
-    :mode "\\.md\\'"
-    :commands (markdown-mode gfm-mode))
+     (use-package markdown-mode
+       :mode "\\.md\\'"
+       :commands (markdown-mode gfm-mode))
    #+END_SRC
 ** Clojure
 *** clojure-mode
@@ -590,8 +590,8 @@
     #+END_SRC
 ** YAML
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package yaml-mode
-    :mode ("\\.yaml\\'" . yaml-mode))
+     (use-package yaml-mode
+       :mode ("\\.yaml\\'" . yaml-mode))
    #+END_SRC
 ** Ruby
 *** Support rbenv for ruby version management
@@ -610,7 +610,7 @@
     #+END_SRC
 *** Little helper package, for stuff like flipping between '/" and between strings/symbols
     #+BEGIN_SRC emacs-lisp :tangle yes
-    (use-package ruby-tools)
+      (use-package ruby-tools)
     #+END_SRC
 *** Ruby autocompletion via live inspection
     #+BEGIN_SRC emacs-lisp :tangle yes
@@ -641,9 +641,9 @@
 * PDF support
   We use [[https://github.com/politza/pdf-tools][pdf-tools]] for PDF viewing, which has first-class support for highlighting and annotations.
   #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package pdf-tools
-    :mode (("\\.pdf\\'" . pdf-view-mode))
-    :config (pdf-tools-install t))
+    (use-package pdf-tools
+      :mode (("\\.pdf\\'" . pdf-view-mode))
+      :config (pdf-tools-install t))
   #+END_SRC
 * Org Mode
 ** Storage prefix
@@ -701,14 +701,14 @@
 * Project Management
 ** Version Control
 *** Magit
-   Git utility goodness :)
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package magit
-       :defer t
-       :bind ("C-x g" . magit-status)
-       :config
-       (magit-wip-mode))
-   #+END_SRC
+    Git utility goodness :)
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package magit
+        :defer t
+        :bind ("C-x g" . magit-status)
+        :config
+        (magit-wip-mode))
+    #+END_SRC
 ** Projectile
    Project Manager written by bbatsov :)
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -817,18 +817,18 @@
        :hook (exwm-change-screen-hook . gaelan-exwm-change-screen-hook)
        :config
        (require 'exwm)
-       ;(require 'exwm-systemtray)
+                                             ;(require 'exwm-systemtray)
        (require 'exwm-randr)
        (exwm-randr-enable)
-       ;(exwm-systemtray-enable)
+                                             ;(exwm-systemtray-enable)
        (exwm-enable))
    #+END_SRC
 ** SSH/GPG keychain manager
    Emacs can integrate with keychain to use whatever keys it has activated
 
    #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package keychain-environment
-    :config (keychain-refresh-environment))
+     (use-package keychain-environment
+       :config (keychain-refresh-environment))
    #+END_SRC
 ** Completion in eshell buffers
    Some helpful argument completion in eshell buffers
@@ -900,10 +900,10 @@
     ;; addresses as well, you'll need to add those manually.
     (setq mu4e-user-mail-address-list
           (delq nil
-            (mapcar (lambda (context)
-                  (when (mu4e-context-vars context)
-                (cdr (assq 'user-mail-address (mu4e-context-vars context)))))
-                    mu4e-contexts)))
+                (mapcar (lambda (context)
+                          (when (mu4e-context-vars context)
+                            (cdr (assq 'user-mail-address (mu4e-context-vars context)))))
+                        mu4e-contexts)))
   #+END_SRC
 ** Mail Alerts
    #+BEGIN_SRC emacs-lisp :tangle no
