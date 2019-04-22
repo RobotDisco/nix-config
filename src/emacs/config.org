@@ -660,6 +660,16 @@
    #+BEGIN_SRC emacs-lisp :tangle yes
      (use-package org
        :commands (org-store-link org-agenda org-capture org-iswitchb)
+       :init
+       (setq org-capture-templates
+             '(("i"
+                "Inbox"
+                entry
+                (file
+                 (concat
+                  gaelan-webdav-prefix
+                  "inbox.org"))
+                "* TODO %?\n   %t")))
        :bind (("C-c l" . org-store-link)
               ("C-c a" . org-agenda)
               ("C-c c" . org-capture)
