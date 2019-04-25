@@ -1,2 +1,0 @@
-alias tclone="git clone git@git.internal.tulip.io:"
-alias tdl="tdocker login"

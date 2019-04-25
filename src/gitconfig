@@ -1,7 +1,0 @@
-[core]
-	autocrlf = input
-[user]
-	email = gdcosta@gmail.com
-	name = "Gaelan D'costa"
-[hub]
-	protocol = https

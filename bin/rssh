@@ -1,9 +1,0 @@
-#!/usr/bin/env sh
-
-# if machine name is nat01
-# USER=ec2-user
-# else
-USER=ubuntu
-#fi
-
-ssh -i ~/.ssh/tulipio.pem $USER@$1

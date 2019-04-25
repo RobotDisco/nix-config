@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-git clone git@git.internal.tulip.io:$1
