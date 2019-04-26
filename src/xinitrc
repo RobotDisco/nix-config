@@ -53,6 +53,6 @@ while true; do
         ' ' \
         $(cat /sys/class/power_supply/BAT0/capacity)
     sleep 5
-done | dzen2 -p -ta r -dock &
+done | dzen2 -xs 0 -p -ta r -dock &
 # Launch window manager
 exec emacs
