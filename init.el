@@ -96,3 +96,25 @@
 			(exwm-workspace-switch-create ,i))))
 		  (number-sequence 0 9))))
 (exwm-enable)
+
+(require 'exwm-randr)
+(defun gaelan-ewxm-randr-screen-change-hook ()
+ (let ((xrandr-output-regexp "\n\\([^ ]+\\) \\(dis\\)?connected ")
+       last-output)
+   (with-temp-buffer
+     (call-process "xrandr" nil t nil)
+     (goto-char (point-min))
+     (while (progn
+	      (unless (= (point) (point-min)) (forward-line))
+	      (re-search-forward xrandr-output-regexp nil 'noerror))
+       (if (not (null (match-string 2)))
+	   (call-process "xrandr" nil nil nil " --output" (match-string 1) "--off"))
+       (if (null last-output)
+	   (call-process "xrandr" nil nil nil
+			 "--output" (match-string 1) "--primary" "--auto")
+	 (call-process "xrandr" nil nil nil "--output" (match-string 1) "--auto --right-of" last-output)
+	 (setq last-output (match-string 1)))))))
+(add-hook 'exwm-randr-screen-change-hook 'gaelan-exwm-randr-screen-change-hook)
+
+(setq exwm-randr-workspace-output-plist
+      '(1 "DP-1-2"))
