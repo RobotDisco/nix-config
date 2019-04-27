@@ -34,6 +34,24 @@
 ;; Isolate custom variables because emacs likes to muck with these, making it hard to manage in source control.
 (setq custom-file "~/.emacs.d/custom.el")
 
+;; All my org files lvie in a cloud-synced directory that differ between OSX and Linux
+(require 'org)
+(setq gaelan/webdav-prefix
+      (if (eql system-type 'darwin)
+	  (file-name-as-directory "~/Seafile/emacs/")
+	(file-name-as-directory "~/fallcube/emacs/")))
+(require 'org-journal)
+(customize-save-variable 'org-journal-dir
+			 (file-name-as-directory (concat gaelan/webdav-prefix "journal/")))
+(customize-save-variable 'org-journal-file-format "%Y/%Y%m%d.org")
+(customize-save-variable 'org-journal-carryover-items nil)
+(customize-save-variable 'org-agenda-file-regex "\`[^.].*\.org\'\|\`[0-9]+\'")
+;; Prettify org mode, remove unnecessary asterix.
+(require 'org-bullets)
+(add-hook 'org-mode
+	  (lambda ()
+	    (org-bullets-mode 1)))
+
 ;; I use Emacs as my window manager
 (require 'exwm)
 (setq exwm-input-global-keys
