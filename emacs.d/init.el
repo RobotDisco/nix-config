@@ -34,7 +34,10 @@
 ;; Isolate custom variables because emacs likes to muck with these, making it hard to manage in source control.
 (setq custom-file "~/.emacs.d/custom.el")
 
-;; All my org files lvie in a cloud-synced directory that differ between OSX and Linux
+;; Install magit for managing git repos
+(require 'magit)
+
+;; All my org files live in a cloud-synced directory that differ between OSX and Linux
 (require 'org)
 (setq gaelan/webdav-prefix
       (if (eql system-type 'darwin)
