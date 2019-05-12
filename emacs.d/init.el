@@ -47,6 +47,7 @@
 (customize-save-variable 'org-journal-dir
 			 (file-name-as-directory (concat gaelan/webdav-prefix "journal/")))
 (customize-save-variable 'org-journal-file-format "%Y/%Y%m%d.org")
+;; Bullet Journal discourages carrying over todos. Decide that explicitly!
 (customize-save-variable 'org-journal-carryover-items nil)
 (customize-save-variable 'org-agenda-file-regex "\`[^.].*\.org\'\|\`[0-9]+\'")
 ;; Prettify org mode, remove unnecessary asterix.
