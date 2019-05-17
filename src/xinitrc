@@ -55,4 +55,5 @@ while true; do
     sleep 5
 done | lemonbar -p &
 # Launch window manager
-exec emacs
+emacs --daemon --eval "(require 'exwm)" -f exwm-enable
+exec emacsclient -c
