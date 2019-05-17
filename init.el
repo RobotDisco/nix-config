@@ -3,24 +3,20 @@
 ;;; This must be done before moving `user-emacs-directory'.
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 
-;; Load the package manager
-(require 'package)
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
+;; Load the package manager, set repos.
+(when (require 'package nil t)
+  (add-to-list 'package-archives
+	       '("melpa-stable" . "https://stable.melpa.org/packages/"))
+  (add-to-list 'package-archives
+	       '("melpa" . "https://melpa.org/packages/"))
+  (package-initialize))
 
 ;; Who am I?
 (setq user-full-name "Gaelan D'costa"
       user-mail-address "gdcosta@gmail.com")
 
 ;; Add package sources
-(add-to-list 'package-archives
-	     '("melpa-stable" . "https://stable.melpa.org/packages/"))
-(add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/"))
+
 ; (add-to-list 'package-archives
 ;	     '("marmalade" . "https://marmalade-repo.org/packages/"))
 
@@ -42,26 +38,11 @@
 ;; Install magit for managing git repos
 (require 'magit)
 
-;; All my org files live in a cloud-synced directory that differ between OSX and Linux
-(require 'org)
-(setq gaelan/webdav-prefix
-      (if (eql system-type 'darwin)
-	  (file-name-as-directory "~/Seafile/emacs/")
-	(file-name-as-directory "~/fallcube/emacs/")))
-(require 'org-journal)
-(customize-save-variable 'org-journal-dir
-			 (file-name-as-directory (concat gaelan/webdav-prefix "journal/")))
-(customize-save-variable 'org-journal-file-format "%Y/%Y%m%d.org")
-;; Bullet Journal discourages carrying over todos. Decide that explicitly!
-(customize-save-variable 'org-journal-carryover-items nil)
-(customize-save-variable 'org-agenda-file-regex "\`[^.].*\.org\'\|\`[0-9]+\'")
-;; Prettify org mode, remove unnecessary asterix.
-(require 'org-bullets)
-(add-hook 'org-mode
-	  (lambda ()
-	    (org-bullets-mode 1)))
+;;; Org-mode
+(nconc package-selected-packages '(org org-bullets))
+(with-eval-after-load 'org (require 'gaelan/init-org))
 
 ;; I use Emacs as my window manager
 (nconc package-selected-packages '(exwm))
-(eval-after-load 'exwm
+(with-eval-after-load 'exwm
   (require 'gaelan/init-exwm))
