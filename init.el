@@ -39,6 +39,14 @@
 (nconc package-selected-packages '(helm helm-descbinds helm-ls-git))
 (when (require 'helm-config nil t) (require 'gaelan/init-helm))
 
+;; Generic programming language tools
+(nconc package-selected-packages '(rainbow-delimiters smartparens))
+
+;; Emacs Lisp
+;; Can't use `with-eval-after-load' here because `emacs-lisp-mode' is builtin
+;; and thus is loaded before this config file runs
+(require 'gaelan/init-emacs-lisp)
+
 ;; Install magit for managing git repos
 (require 'magit)
 
