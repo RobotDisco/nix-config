@@ -1,3 +1,11 @@
+;;;; Emacs config
+
+;;; Prerequisites
+
+(let ((minver "26.1"))
+  (when (version< emacs-version minver)
+    (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
+
 ;;; Store additional config in a 'lisp' subfolder and add it to the load path
 ;;; so that 'require' can find the files.
 ;;; This must be done before moving `user-emacs-directory'.
@@ -9,16 +17,15 @@
 	       '("melpa-stable" . "https://stable.melpa.org/packages/"))
   (add-to-list 'package-archives
 	       '("melpa" . "https://melpa.org/packages/"))
+  (add-to-list 'package-archives
+	       '("org" . "https://orgmode.org/elpa/") t)
   (package-initialize))
+
+;;;
 
 ;; Who am I?
 (setq user-full-name "Gaelan D'costa"
       user-mail-address "gdcosta@gmail.com")
-
-;; Add package sources
-
-; (add-to-list 'package-archives
-;	     '("marmalade" . "https://marmalade-repo.org/packages/"))
 
 ;; Remove unnecessary chrome.
 (menu-bar-mode -1)
