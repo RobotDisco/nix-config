@@ -35,6 +35,10 @@
 ;; Isolate custom variables because emacs likes to muck with these, making it hard to manage in source control.
 (setq custom-file "~/.emacs.d/custom.el")
 
+;; Helm
+(nconc package-selected-packages '(helm helm-descbinds helm-ls-git))
+(when (require 'helm-config nil t) (require 'gaelan/init-helm))
+
 ;; Install magit for managing git repos
 (require 'magit)
 
