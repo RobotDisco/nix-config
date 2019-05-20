@@ -65,7 +65,11 @@
 (nconc package-selected-packages '(org org-bullets))
 (with-eval-after-load 'org (require 'gaelan/init-org))
 
-;; I use Emacs as my window manager
+;;; Syntax checking
+(nconc package-selected-packages '(flycheck))
+(when (require 'flycheck nil t) (require 'gaelan/init-flycheck))
+
+;; Window Manager
 (nconc package-selected-packages '(exwm))
 (with-eval-after-load 'exwm
   (require 'gaelan/init-exwm))
