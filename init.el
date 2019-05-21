@@ -65,6 +65,15 @@
 (nconc package-selected-packages '(org org-bullets))
 (with-eval-after-load 'org (require 'gaelan/init-org))
 
+;;; Project Management
+(nconc package-selected-packages '(projectile helm-projectile projectile-ripgrep))
+(when (require 'projectile nil t)
+  (when (require 'helm-config nil t)
+    (require 'helm-projectile))
+  (require 'projectile-ripgrep)
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+
 ;;; Syntax checking
 (nconc package-selected-packages '(flycheck))
 (when (require 'flycheck nil t) (require 'gaelan/init-flycheck))
