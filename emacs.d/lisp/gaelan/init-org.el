@@ -17,4 +17,31 @@
 (when (require 'org-bullets nil t)
   (add-hook 'org-mode-hook 'org-bullets-mode))
 
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
+
+(customize-save-variable 'org-log-into-drawer t)
+(customize-save-variable 'org-todo-keywords
+			 '((sequence "TODO" "NEXT" "WAITING" "|" "DONE" "CANCELLED")
+			   (sequence "TRIAGE" "PROJECT" "SOMEDAY" "DONE")))
+(customize-save-variable 'org-tag-persistent-alist
+			 '((:startgroup . nil)
+			   ("@home" . ?h)
+			   ("@officekw" . ?k)
+			   ("@officeto" . ?t)
+			   ("@errands" . ?e)
+			   ("@phone" . ?p)
+			   ("@lappy" . ?l)
+			   ("@online" . ?o)
+			   ("@brain" . ?b)
+			   (:endgroup . nil)))
+(customize-save-variable 'org-agenda-files
+			 `(,(concat gaelan/webdav-prefix "gtd/gtd.org")
+			   ,(concat gaelan/webdav-prefix "gtd/someday.org")
+			   ,(concat gaelan/webdav-prefix "gtd/tickler.org")
+			   ,(concat gaelan/webdav-prefix "gtd/gcal-personal.org")
+			   ,(concat gaelan/webdav-prefix "gtd/gcal-work.org")
+			   ,(concat gaelan/webdav-prefix "gtd/inbox.org")))
+
 (provide 'gaelan/init-org)
