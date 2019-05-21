@@ -26,7 +26,7 @@
 (global-set-key (kbd "C-x C-b") #'helm-mini)
 ;; (global-set-key (kbd "M-y") #'helm-show-kill-ring)
 (global-set-key (kbd "M-i") #'helm-semantic-or-imenu)
-(global-set-key (kbd "M-s o" #'helm-occur))
+(global-set-key (kbd "M-s o") #'helm-occur)
 (global-set-key (kbd "C-h SPC") #'helm-all-mark-rings)
 (global-set-key (kbd "C-x c h r") #'helm-register)
 (global-set-key (kbd "C-x c h g") #'helm-google-suggest)
