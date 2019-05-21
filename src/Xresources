@@ -57,6 +57,7 @@
 
 !! Font
 URxvt.font: xft:AnonymousPro:size=14
+emacs.font: Anonymous Pro-14
 !! urxvt addons
 URxvt.perl-ext-common: default,url-select,selection-to-clipboard,tabbed
 !! Clickable URLs

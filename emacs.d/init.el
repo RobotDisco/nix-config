@@ -52,6 +52,9 @@
       (add-hook 'after-make-frame-functions #'load-lavender))
   (load-theme 'lavender t))
 
+(add-to-list 'default-frame-alist '((font . "Anonymous Pro-14")
+				    ))
+
 ;; It is quicker to type y/n to prompts than "yes" or "no".
 (defalias 'yes-or-no-p 'y-or-n-p)
 
