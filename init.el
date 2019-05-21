@@ -82,7 +82,7 @@
 
 ;;; Org-mode
 (nconc package-selected-packages '(org org-bullets))
-(with-eval-after-load 'org (require 'gaelan/init-org))
+(when (require 'org nil t) (require 'gaelan/init-org))
 
 ;;; Project Management
 (nconc package-selected-packages '(projectile helm-projectile projectile-ripgrep))
