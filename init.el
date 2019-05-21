@@ -1,4 +1,4 @@
-;;;; Emacs config
+;;;; Emacs config -*- lexical-binding: t -*-
 
 ;;; Prerequisites
 
@@ -32,6 +32,25 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (fringe-mode 1)
+
+(eval-when-compile
+  (require 'cl-lib))
+
+;; Prettify necessary chrome
+(nconc package-selected-packages '(lavender-theme))
+(if (daemonp)
+    ;; We need this hack because when you initialize emacs as a daemon,
+    ;; no frame is created so a lot of important theme loading computations
+    ;; do not get run. However, this is especially hacky because we don't
+    ;; want to reload the theme from scratch on every frame creation but
+    ;; that's the only hook we can do this, so our hook has to remove itself
+    ;; when it is done.
+    (cl-labels ((load-lavender (frame)
+			       (with-selected-frame frame
+				 (load-theme 'lavender t))
+			       (remove-hook 'after-make-frame-functions #'load-lavender)))
+      (add-hook 'after-make-frame-functions #'load-lavender))
+  (load-theme 'lavender t))
 
 ;; It is quicker to type y/n to prompts than "yes" or "no".
 (defalias 'yes-or-no-p 'y-or-n-p)
