@@ -78,6 +78,12 @@
 (nconc package-selected-packages '(flycheck))
 (when (require 'flycheck nil t) (require 'gaelan/init-flycheck))
 
+;;; Which key mode
+;;; If we start a key chord, this tells us what actions we can complete via that chord.
+(nconc package-selected-packages '(which-key))
+(when (require 'which-key nil t)
+  (which-key-mode))
+
 ;; Window Manager
 (nconc package-selected-packages '(exwm))
 (with-eval-after-load 'exwm
