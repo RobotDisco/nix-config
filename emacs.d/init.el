@@ -64,6 +64,12 @@
 ;; Isolate custom variables because emacs likes to muck with these, making it hard to manage in source control.
 (setq custom-file "~/.emacs.d/custom.el")
 
+;; Window systems like OSX should set path based on shell configuration.
+(nconc package-selected-packages '(exec-path-from-shell))
+(when (require 'exec-path-from-shell nil t)
+  (when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize)))
+
 ;; Helm
 (nconc package-selected-packages '(helm helm-descbinds helm-ls-git))
 (when (require 'helm-config nil t) (require 'gaelan/init-helm))
