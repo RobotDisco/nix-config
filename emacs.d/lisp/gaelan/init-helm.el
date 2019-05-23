@@ -59,4 +59,16 @@
 ;;; This makes the copy and rename operations asynchronous.
 (dired-async-mode)
 
+(when (require 'helm-exwm nil t)
+  (add-to-list 'helm-source-names-using-follow "EXWM buffers")
+  (setq helm-exwm-emacs-buffers-source (helm-exwm-build-emacs-buffers-source))
+  (setq helm-exwm-source (helm-exwm-build-source))
+  (setq helm-mini-default-sources `(helm-exwm-emacs-buffers-source
+                                    helm-exwm-source
+                                    helm-source-recentf
+                                    ,(when (boundp 'helm-source-ls-git) 'helm-source-ls-git)
+                                    helm-source-bookmarks
+                                    helm-source-bookmark-set
+                                    helm-source-buffer-not-found)))
+
 (provide 'gaelan/init-helm)

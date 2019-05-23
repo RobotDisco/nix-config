@@ -107,6 +107,6 @@
   (which-key-mode))
 
 ;; Window Manager
-(nconc package-selected-packages '(exwm))
+(nconc package-selected-packages '(exwm helm-exwm))
 (with-eval-after-load 'exwm
   (require 'gaelan/init-exwm))
