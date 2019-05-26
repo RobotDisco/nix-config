@@ -1,16 +1,41 @@
-;;;; Emacs config -*- lexical-binding: t -*-
+;;; init.el --- Starting configuration file -*- lexical-binding: t -*-
 
-;;; Prerequisites
+;;; Commentary:
+;;; This is the file from which my configuration framework begins.
+;;; Set bootstraps the framework (sets things that can't be deferred to other
+;;; files) and then loads all of thos files in tern.
+
+;;; Code:
+
+;; Produce backtraces when errors occur.
+(setq debug-on-error t)
 
 (let ((minver "26.1"))
   (when (version< emacs-version minver)
     (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
 
-;;; Store additional config in a 'lisp' subfolder and add it to the load path
-;;; so that 'require' can find the files.
-;;; This must be done before moving `user-emacs-directory'.
-(add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
+;; Store additional config in a 'lisp' subfolder and add it to the load path
+;; so that 'require' can find the files.
+;; This must be done before moving `user-emacs-directory'.
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(defconst *is-osx* (eq system-type 'darwin))
 
+;;----------------------------------------------------------------------------
+;; Adjust garbage collection thresholds during startup, and thereafter
+;;----------------------------------------------------------------------------
+(let ((normal-gc-cons-threshold (* 20 1024 1024))
+      (init-gc-cons-threshold (* 128 1024 1024)))
+  (setq gc-cons-threshold init-gc-cons-threshold)
+  (add-hook 'emacs-startup-hook
+            (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
+
+;;----------------------------------------------------------------------------
+;; Isolate custom variables because emacs likes to muck with these, making it
+;; hard to manage in source control.
+;;----------------------------------------------------------------------------
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+
+(require 'init-site-lisp)
 ;; Load the package manager, set repos.
 (when (require 'package nil t)
   (add-to-list 'package-archives
@@ -60,9 +85,6 @@
 
 ;; Don't ask about following symlinks, just do it.
 (setq vc-follow-symlinks t)
-
-;; Isolate custom variables because emacs likes to muck with these, making it hard to manage in source control.
-(setq custom-file "~/.emacs.d/custom.el")
 
 ;; Window systems like OSX should set path based on shell configuration.
 (nconc package-selected-packages '(exec-path-from-shell))
@@ -116,3 +138,7 @@
 (nconc package-selected-packages '(exwm helm-exwm))
 (with-eval-after-load 'exwm
   (require 'gaelan/init-exwm))
+
+(provide 'init)
+;; init.el ends here.
+;;
