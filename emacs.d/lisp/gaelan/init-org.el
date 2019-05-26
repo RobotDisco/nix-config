@@ -23,8 +23,9 @@
 
 (customize-save-variable 'org-log-into-drawer t)
 (customize-save-variable 'org-todo-keywords
-			 '((sequence "TODO" "NEXT" "WAITING" "|" "DONE" "CANCELLED")
-			   (sequence "TRIAGE" "PROJECT" "SOMEDAY" "DONE")))
+			 '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)")
+			   (sequence "TRIAGE(r)" "PROJECT(p)" "SOMEDAY(s)" "|" "COMPLETED(c)")
+			   (sequence "|" "CANCELLED(a)")))
 (customize-save-variable 'org-tag-persistent-alist
 			 '((:startgroup . nil)
 			   ("@home" . ?h)
@@ -40,8 +41,8 @@
 			 `(,(concat gaelan/webdav-prefix "gtd/gtd.org")
 			   ,(concat gaelan/webdav-prefix "gtd/someday.org")
 			   ,(concat gaelan/webdav-prefix "gtd/tickler.org")
-			   ,(concat gaelan/webdav-prefix "gtd/gcal-personal.org")
-			   ,(concat gaelan/webdav-prefix "gtd/gcal-work.org")
+			   ,(concat gaelan/webdav-prefix "gtd/gcal/personal.org")
+			   ,(concat gaelan/webdav-prefix "gtd/gcal/work.org")
 			   ,(concat gaelan/webdav-prefix "gtd/inbox.org")))
 
 (provide 'gaelan/init-org)
