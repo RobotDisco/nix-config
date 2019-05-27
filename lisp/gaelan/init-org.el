@@ -45,4 +45,15 @@
 			   ,(concat gaelan/webdav-prefix "gtd/gcal/work.org")
 			   ,(concat gaelan/webdav-prefix "gtd/inbox.org")))
 
+(when (require 'org-gcal nil t)
+  (let* ((bwdata (elt (bitwarden-search "offlineimap") 0))
+	 (bwfields (gethash "fields" bwdata))
+	 (client-id (gethash "value" (elt bwfields 0)))
+	 (client-secret (gethash "value" (elt bwfields 1))))
+    (customize-save-variable 'org-gcal-client-id client-id)
+    (customize-save-variable 'org-gcal-client-secret client-secret))
+  (customize-save-variable 'org-gcal-file-alist
+			   `(("gdcosta@gmail.com" . ,(concat gaelan/webdav-prefix "gtd/gcal/personal.org"))
+			     ("gaelan@tulip.com" . ,(concat gaelan/webdav-prefix "gtd/gcal/work.org")))))
+
 (provide 'gaelan/init-org)
