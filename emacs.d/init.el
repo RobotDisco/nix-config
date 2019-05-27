@@ -62,7 +62,7 @@
   (require 'cl-lib))
 
 ;; Prettify necessary chrome
-(nconc package-selected-packages '(lavender-theme))
+(nconc package-selected-packages '(rebecca-theme))
 (if (daemonp)
     ;; We need this hack because when you initialize emacs as a daemon,
     ;; no frame is created so a lot of important theme loading computations
@@ -70,15 +70,14 @@
     ;; want to reload the theme from scratch on every frame creation but
     ;; that's the only hook we can do this, so our hook has to remove itself
     ;; when it is done.
-    (cl-labels ((load-lavender (frame)
+    (cl-labels ((load-my-theme (frame)
 			       (with-selected-frame frame
-				 (load-theme 'lavender t))
-			       (remove-hook 'after-make-frame-functions #'load-lavender)))
-      (add-hook 'after-make-frame-functions #'load-lavender))
-  (load-theme 'lavender t))
+				 (load-theme 'rebecca t))
+			       (remove-hook 'after-make-frame-functions #'load-my-theme)))
+      (add-hook 'after-make-frame-functions #'load-my-theme))
+  (load-theme 'rebecca t))
 
-(add-to-list 'default-frame-alist '((font . "Anonymous Pro-14")
-				    ))
+(add-to-list 'default-frame-alist '((font . "Anonymous Pro-14")))
 
 ;; It is quicker to type y/n to prompts than "yes" or "no".
 (defalias 'yes-or-no-p 'y-or-n-p)
