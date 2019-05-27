@@ -113,6 +113,7 @@
 
 ;;; Org-mode
 (nconc package-selected-packages '(org org-bullets))
+(nconc package-selected-packages '(org org-bullets org-gcal))
 (when (require 'org nil t) (require 'gaelan/init-org))
 
 ;;; Project Management
