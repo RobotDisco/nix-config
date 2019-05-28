@@ -1,7 +1,12 @@
 ;;; Org mode
 
+;;; Commentary:
+
+;;; Code:
+
+
 ;; All my org files live in a cloud-synced directory that differ between OSX and Linux
-(setq gaelan/webdav-prefix
+(setq-default gaelan/webdav-prefix
       (if (eql system-type 'darwin)
 	  (file-name-as-directory "~/Seafile/emacs/")
 	(file-name-as-directory "~/fallcube/emacs/")))
@@ -37,6 +42,10 @@
 			   ("@online" . ?o)
 			   ("@brain" . ?b)
 			   (:endgroup . nil)))
+(setq-default org-capture-templates
+      `(("t" "Todo" entry (file ,(concat gaelan/webdav-prefix "gtd/inbox.org"))
+	 "* TRIAGE %?\n   %t")))
+
 (customize-save-variable 'org-agenda-files
 			 `(,(concat gaelan/webdav-prefix "gtd/gtd.org")
 			   ,(concat gaelan/webdav-prefix "gtd/someday.org")
