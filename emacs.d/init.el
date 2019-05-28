@@ -18,7 +18,8 @@
 ;; so that 'require' can find the files.
 ;; This must be done before moving `user-emacs-directory'.
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-(defconst *is-osx* (eq system-type 'darwin))
+(defconst *is-osx* (eq system-type 'darwin)
+  "Is this operating system OSX?")
 
 ;;----------------------------------------------------------------------------
 ;; Adjust garbage collection thresholds during startup, and thereafter
