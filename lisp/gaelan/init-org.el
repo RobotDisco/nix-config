@@ -45,6 +45,12 @@
 			   ,(concat gaelan/webdav-prefix "gtd/gcal/work.org")
 			   ,(concat gaelan/webdav-prefix "gtd/inbox.org")))
 
+(when (require 'bitwarden nil t)
+  (customize-save-variable 'bitwarden-data-file
+			   (unless *is-osx*
+			     "~/.config/Bitwarden CLI/data.json"))
+  (customize-save-variable 'bitwarden-user "gdcosta+bitwarden@gmail.com"))
+
 (when (require 'org-gcal nil t)
   (let* ((bwdata (elt (bitwarden-search "offlineimap") 0))
 	 (bwfields (gethash "fields" bwdata))
