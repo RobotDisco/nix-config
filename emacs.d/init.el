@@ -79,6 +79,10 @@
 
 (add-to-list 'default-frame-alist '(font . "Anonymous Pro-14"))
 
+(when *is-osx*
+    (setq mac-command-modifier 'meta)
+    (setq mac-option-modifier 'super))
+
 ;; It is quicker to type y/n to prompts than "yes" or "no".
 (defalias 'yes-or-no-p 'y-or-n-p)
 
