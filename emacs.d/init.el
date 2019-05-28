@@ -77,7 +77,7 @@
       (add-hook 'after-make-frame-functions #'load-my-theme))
   (load-theme 'rebecca t))
 
-(add-to-list 'default-frame-alist '((font . "Anonymous Pro-14")))
+(add-to-list 'default-frame-alist '(font . "Anonymous Pro-14"))
 
 ;; It is quicker to type y/n to prompts than "yes" or "no".
 (defalias 'yes-or-no-p 'y-or-n-p)
