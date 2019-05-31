@@ -37,17 +37,8 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 (require 'init-site-lisp)
-;; Load the package manager, set repos.
-(when (require 'package nil t)
-  (add-to-list 'package-archives
-	       '("melpa-stable" . "https://stable.melpa.org/packages/"))
-  (add-to-list 'package-archives
-	       '("melpa" . "https://melpa.org/packages/"))
-  (add-to-list 'package-archives
-	       '("org" . "https://orgmode.org/elpa/") t)
-  (package-initialize))
-
-;;;
+;; Initialize package manager
+(require 'init-package)
 
 ;; Who am I?
 (setq user-full-name "Gaelan D'costa"
