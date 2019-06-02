@@ -54,7 +54,7 @@
   (require 'cl-lib))
 
 ;; Prettify necessary chrome
-(nconc package-selected-packages '(rebecca-theme))
+(gaelan/require-package 'rebecca-theme)
 (if (daemonp)
     ;; We need this hack because when you initialize emacs as a daemon,
     ;; no frame is created so a lot of important theme loading computations
@@ -82,14 +82,13 @@
 (setq vc-follow-symlinks t)
 
 ;; Window systems like OSX should set path based on shell configuration.
-(nconc package-selected-packages '(exec-path-from-shell))
+(gaelan/require-package exec-path-from-shell)
 (when (require 'exec-path-from-shell nil t)
   (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize)))
 
 ;; Helm
-(nconc package-selected-packages '(helm helm-descbinds helm-ls-git))
-(when (require 'helm-config nil t) (require 'gaelan/init-helm))
+(require 'gaelan/init-helm)
 
 ;; Generic programming language tools
 (nconc package-selected-packages '(rainbow-delimiters smartparens))

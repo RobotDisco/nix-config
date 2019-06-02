@@ -1,5 +1,13 @@
-;;; Helm
+;;; init-helm.el -- Configuration for Helm
 
+;;; Commentary:
+
+;;; Code:
+(require 'init-package)
+
+(gaelan/require-package 'helm)
+(gaelan/require-package 'helm-descbinds)
+(gaelan/require-package 'helm-ls-git)
 ;; Shows me the keybindings that are currently available
 ;; enhances C-h b
 (when (require 'helm-descbinds nil t)
@@ -34,25 +42,26 @@
 
 ;; Turn on fuzzy matching in a bunch of places
 ;; turn it off if it is irritating or slows down searches.
-(setq helm-M-x-fuzzy-match t
-      helm-buffers-fuzzy-matching t
-      helm-recentf-fuzzy-match t
-      helm-semantic-fuzzy-match t
-      helm-imenu-fuzzy-match t
-      helm-locate-fuzzy-match t
-      helm-apropos-fuzzy-match t
-      helm-lisp-fuzzy-completion t)
+(setq-default helm-M-x-fuzzy-match t
+	      helm-buffers-fuzzy-matching t
+	      helm-recentf-fuzzy-match t
+	      helm-semantic-fuzzy-match t
+	      helm-imenu-fuzzy-match t
+	      helm-locate-fuzzy-match t
+	      helm-apropos-fuzzy-match t
+	      helm-lisp-fuzzy-completion t)
 
 ;; Add helmized history searching functionality for a variety of interfaces,
 ;; `eshell', `shell-mode', `minibuffer', using the same C-c C-l binding.
-(require 'helm-eshell)
+
+(gaelan/require-package 'helm-eshell)
 (add-hook 'eshell-mode-hook
 	  #'(lambda ()
-	      (define-key eshell-mode-map (kbd "C-c C-l") #'helm-eshell-history)))
+	      (define-key 'eshell-mode-map (kbd "C-c C-l") #'helm-eshell-history)))
 
 (add-hook 'shell-mode-hook
 	  #'(lambda ()
-	      (define-key shell-mode-map (kbd "C-c C-l") #'helm-comint-input-ring)))
+	      (define-key 'shell-mode-map (kbd "C-c C-l") #'helm-comint-input-ring)))
 
 (define-key minibuffer-local-map (kbd "C-c C-l") #'helm-minibuffer-history)
 
@@ -60,15 +69,17 @@
 (dired-async-mode)
 
 (when (require 'helm-exwm nil t)
-  (add-to-list 'helm-source-names-using-follow "EXWM buffers")
+  (setq-default helm-source-names-using-follow '("EXWM buffers"))
   (setq helm-exwm-emacs-buffers-source (helm-exwm-build-emacs-buffers-source))
   (setq helm-exwm-source (helm-exwm-build-source))
-  (setq helm-mini-default-sources `(helm-exwm-emacs-buffers-source
-                                    helm-exwm-source
-                                    helm-source-recentf
-                                    ,(when (boundp 'helm-source-ls-git) 'helm-source-ls-git)
-                                    helm-source-bookmarks
-                                    helm-source-bookmark-set
-                                    helm-source-buffer-not-found)))
+  (setq-default helm-mini-default-sources `(helm-exwm-emacs-buffers-source
+					    helm-exwm-source
+					    helm-source-recentf
+					    ,(when (boundp 'helm-source-ls-git)
+					       'helm-source-ls-git)
+					    helm-source-bookmarks
+					    helm-source-bookmark-set
+					    helm-source-buffer-not-found)))
 
 (provide 'gaelan/init-helm)
+;;; init-helm.el ends here
