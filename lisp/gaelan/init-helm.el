@@ -54,7 +54,6 @@
 ;; Add helmized history searching functionality for a variety of interfaces,
 ;; `eshell', `shell-mode', `minibuffer', using the same C-c C-l binding.
 
-(gaelan/require-package 'helm-eshell)
 (add-hook 'eshell-mode-hook
 	  #'(lambda ()
 	      (define-key 'eshell-mode-map (kbd "C-c C-l") #'helm-eshell-history)))
