@@ -82,7 +82,7 @@
 (setq vc-follow-symlinks t)
 
 ;; Window systems like OSX should set path based on shell configuration.
-(gaelan/require-package exec-path-from-shell)
+(gaelan/require-package 'exec-path-from-shell)
 (when (require 'exec-path-from-shell nil t)
   (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize)))

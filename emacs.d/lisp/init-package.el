@@ -29,7 +29,7 @@ re-downloaded in order to locate PACKAGE."
           (if no-refresh
               (error "No version of %s >= %S is available" package min-version)
             (package-refresh-contents)
-            (require-package package min-version t))))))
+            (gaelan/require-package package min-version t))))))
 
 (defun gaelan/maybe-require-package (package &optional min-version no-refresh)
   "Try to install PACKAGE, and return non-nil if successful.
@@ -38,7 +38,7 @@ Optionally require MIN-VERSION.  If NO-REFRESH is non-nil, the
 available package lists will not be re-downloaded in order to
 locate PACKAGE."
   (condition-case err
-      (require-package package min-version no-refresh)
+      (gaelan/require-package package min-version no-refresh)
     (error
      (message "Couldn't install optional package `%s': %S" package err)
      nil)))
