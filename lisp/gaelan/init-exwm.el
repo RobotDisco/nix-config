@@ -100,4 +100,7 @@
 (add-hook 'exwm-randr-screen-change-hook 'gaelan/exwm-randr-screen-change-hook)
 (exwm-randr-enable)
 
+(when (require 'desktop-environment nil t)
+  (desktop-environment-mode))
+
 (provide 'gaelan/init-exwm)
