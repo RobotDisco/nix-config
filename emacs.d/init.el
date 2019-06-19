@@ -94,8 +94,7 @@
 (nconc package-selected-packages '(rainbow-delimiters smartparens))
 
 ;; Completion
-(nconc package-selected-packages '(company helm-company))
-(when (require 'company nil t) (require 'gaelan/init-company))
+(require 'init-company)
 
 ;; Emacs Lisp
 ;; Can't use `with-eval-after-load' here because `emacs-lisp-mode' is builtin
