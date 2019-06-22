@@ -88,10 +88,9 @@
   (exec-path-from-shell-initialize)))
 
 ;; Helm
-(require 'gaelan/init-helm)
+(require 'init-helm)
 
 ;; Generic programming language tools
-(nconc package-selected-packages '(rainbow-delimiters smartparens))
 
 ;; Completion
 (require 'init-company)
@@ -99,43 +98,36 @@
 ;; Emacs Lisp
 ;; Can't use `with-eval-after-load' here because `emacs-lisp-mode' is builtin
 ;; and thus is loaded before this config file runs
-(require 'gaelan/init-emacs-lisp)
+(require 'init-emacs-lisp)
 
 ;; Clojure support
 (gaelan/require-package 'cider)
 
 ;; Install magit for managing git repos
-(require 'magit)
+(gaelan/require-package 'magit)
 
 ;;; Org-mode
-(nconc package-selected-packages '(org org-bullets))
-(nconc package-selected-packages '(org org-bullets org-gcal))
-(when (require 'org nil t) (require 'gaelan/init-org))
+(require 'init-org)
 
 ;;; Project Management
-(nconc package-selected-packages '(projectile helm-projectile projectile-ripgrep))
-(when (require 'projectile nil t)
-  (when (require 'helm-config nil t)
-    (require 'helm-projectile))
-  (require 'projectile-ripgrep)
-  (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+(gaelan/require-packages '(projectile helm-projectile projectile-ripgrep))
+(with-eval-after-load 'helm-projectile
+		      (require 'helm-projectile)
+		      (projectile-mode +1)
+		      (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 ;;; Syntax checking
-(nconc package-selected-packages '(flycheck))
-(when (require 'flycheck nil t) (require 'gaelan/init-flycheck))
+(with-eval-after-load 'flycheck
+  (add-hook 'after-init-hook #'global-flycheck-mode))
 
 ;;; Which key mode
 ;;; If we start a key chord, this tells us what actions we can complete via that chord.
-(nconc package-selected-packages '(which-key))
-(when (require 'which-key nil t)
+(gaelan/require-package 'which-key)
+(with-eval-after-load 'which-key
   (which-key-mode))
 
 ;; Window Manager
-(nconc package-selected-packages '(exwm helm-exwm))
-(with-eval-after-load 'exwm
-  (require 'gaelan/init-exwm))
+(require 'init-exwm)
 
 (provide 'init)
-;; init.el ends here.
-;;
+;; init.el ends here
