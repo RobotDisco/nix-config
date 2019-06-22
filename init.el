@@ -101,6 +101,9 @@
 ;; and thus is loaded before this config file runs
 (require 'gaelan/init-emacs-lisp)
 
+;; Clojure support
+(gaelan/require-package 'cider)
+
 ;; Install magit for managing git repos
 (require 'magit)
 
