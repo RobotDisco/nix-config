@@ -31,6 +31,11 @@ re-downloaded in order to locate PACKAGE."
             (package-refresh-contents)
             (gaelan/require-package package min-version t))))))
 
+(defun gaelan/require-packages (packages)
+  "Install all entries in PACKAGES using gaelan/require-package."
+  (dolist (package packages)
+    (gaelan/require-package package)))
+
 (defun gaelan/maybe-require-package (package &optional min-version no-refresh)
   "Try to install PACKAGE, and return non-nil if successful.
 In the event of failure, return nil and print a warning message.

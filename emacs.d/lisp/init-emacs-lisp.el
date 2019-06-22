@@ -1,9 +1,13 @@
-;;; Emacs Lisp
+;;; init-emacs-lisp.el --- Emacs Lisp environment config
 
-(require 'gaelan/init-smartparens)
-(require 'rainbow-delimiters)
+;;; Commentary:
+
+;;; Code:
+(require 'init-smartparens)
+(gaelan/require-package 'rainbow-delimiters)
 
 (defun gaelan/emacs-lisp-mode-hook ()
+  "Mode hook when working in Emacs Lisp."
   (smartparens-strict-mode)
   (rainbow-delimiters-mode)
   (turn-on-eldoc-mode))
@@ -20,4 +24,5 @@
 (define-key emacs-lisp-mode-map (kbd "C-c M-m") 'macroexpand-all)
 
 
-(provide 'gaelan/init-emacs-lisp)
+(provide 'init-emacs-lisp)
+;;; init-emacs-lisp ends here
