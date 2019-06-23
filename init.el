@@ -3,7 +3,7 @@
 ;;; Commentary:
 ;;; This is the file from which my configuration framework begins.
 ;;; Set bootstraps the framework (sets things that can't be deferred to other
-;;; files) and then loads all of thos files in tern.
+;;; files) and then loads all of those files in tern.
 
 ;;; Code:
 
@@ -105,6 +105,9 @@
 
 ;; Install magit for managing git repos
 (gaelan/require-package 'magit)
+(with-eval-after-load 'magit
+  (global-set-key (kbd "C-x g") 'magit-status)
+  (magit-wip-mode))
 
 ;;; Org-mode
 (require 'init-org)
