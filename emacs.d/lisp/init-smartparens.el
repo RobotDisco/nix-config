@@ -6,8 +6,8 @@
 (require 'init-package)
 
 (gaelan/require-package 'smartparens)
-(with-eval-after-load 'smartparens
-  (require 'smartparens-config)
+(require 'smartparens-config)
+(with-eval-after-load 'smartparens-config
   (sp-use-smartparens-bindings))
 
 (provide 'init-smartparens)
