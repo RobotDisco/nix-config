@@ -23,7 +23,8 @@
 	     (helm-make-source "Git files" 'helm-ls-git-source
 	       :fuzzy-match helm-ls-git-fuzzy-match))))
 
-(with-eval-after-load 'helm
+(require 'helm-config)
+(with-eval-after-load 'helm-config
   (helm-mode 1)
   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
 
