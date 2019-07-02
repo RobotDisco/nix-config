@@ -75,6 +75,9 @@
     (setq mac-command-modifier 'meta)
     (setq mac-option-modifier 'super))
 
+;; Handy shortcut for reverting buffers
+(global-set-key (kbd "s-u") 'revert-buffer)
+
 ;; It is quicker to type y/n to prompts than "yes" or "no".
 (defalias 'yes-or-no-p 'y-or-n-p)
 
