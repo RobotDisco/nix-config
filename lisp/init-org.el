@@ -30,9 +30,7 @@
 
   (customize-save-variable 'org-log-into-drawer t)
   (customize-save-variable 'org-todo-keywords
-			   '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)")
-			     (sequence "TRIAGE(r)" "PROJECT(p)" "SOMEDAY(s)" "|" "COMPLETED(c)")
-			     (sequence "|" "CANCELLED(a)")))
+			   '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d) CANCELLED(c)")))
   (customize-save-variable 'org-tag-persistent-alist
 			   '((:startgroup . nil)
 			     ("@home" . ?h)
@@ -47,6 +45,10 @@
   (setq-default org-capture-templates
 		`(("t" "Todo" entry (file ,(concat webdav-prefix "gtd/inbox.org"))
 		   "* TRIAGE %?\n   %t")))
+  (setq-default org-refile-targets
+		`((,(concat webdav-prefix "gtd/gtd.org") . (:maxlevel . 2))
+		  (,(concat webdav-prefix "gtd/someday.org") . (:level . 2))
+		  (,(concat webdav-prefix "gtd/tickler.org") . (:level . 2))))
 
   (customize-save-variable 'org-agenda-files
 			   `(,(concat webdav-prefix "gtd/gtd.org")
