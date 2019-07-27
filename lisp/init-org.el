@@ -60,7 +60,8 @@
 
   (when (require 'bitwarden nil t)
     (customize-save-variable 'bitwarden-data-file
-			       (unless *is-osx*
+			     (if *is-osx*
+				 "~/Library/Application Support/Bitwarden CLI/data.json"
 				 "~/.config/Bitwarden CLI/data.json"))
     (customize-save-variable 'bitwarden-user "gdcosta+bitwarden@gmail.com"))
 
