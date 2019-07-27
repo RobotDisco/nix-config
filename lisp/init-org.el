@@ -44,7 +44,7 @@
 			     (:endgroup . nil)))
   (setq-default org-capture-templates
 		`(("t" "Todo" entry (file ,(concat webdav-prefix "gtd/inbox.org"))
-		   "* TRIAGE %?\n   %t")))
+		   "* TODO %?\n   %t")))
   (setq-default org-refile-targets
 		`((,(concat webdav-prefix "gtd/gtd.org") . (:maxlevel . 2))
 		  (,(concat webdav-prefix "gtd/someday.org") . (:level . 2))
