@@ -58,9 +58,6 @@
 			     ,(concat webdav-prefix "gtd/gcal/work.org")
 			     ,(concat webdav-prefix "gtd/inbox.org")))
 
-  (when (require 'bitwarden nil t)
-    (customize-save-variable 'bitwarden-user "gdcosta+bitwarden@gmail.com"))
-
   (gaelan/require-package 'org-gcal)
   (with-eval-after-load 'org-gcal
     (let* ((bwdata (elt (bitwarden-search "offlineimap") 0))

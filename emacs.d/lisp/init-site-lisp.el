@@ -43,10 +43,14 @@
       (url-copy-file url el-file t nil)
       el-file)))
 
+(defun gaelan/recompile-lib-from-url (name url)
+  "compile package NAME from URL."
+  (byte-compile-file (gaelan/download-site-lisp-module name url)))
+
 (defun gaelan/ensure-lib-from-url (name url)
   "Download and compile package NAME from URL unless already loadable."
   (unless (gaelan/site-lisp-library-loadable-p name)
-    (byte-compile-file (gaelan/download-site-lisp-module name url))))
+    (gaelan/recompile-lib-from-url name url)))
 
 (defun gaelan/site-lisp-library-loadable-p (name)
   "Is library NAME loadable from source file under `site-lisp/name/'?"
