@@ -59,10 +59,6 @@
 			     ,(concat webdav-prefix "gtd/inbox.org")))
 
   (when (require 'bitwarden nil t)
-    (customize-save-variable 'bitwarden-data-file
-			     (if *is-osx*
-				 "~/Library/Application Support/Bitwarden CLI/data.json"
-				 "~/.config/Bitwarden CLI/data.json"))
     (customize-save-variable 'bitwarden-user "gdcosta+bitwarden@gmail.com"))
 
   (gaelan/require-package 'org-gcal)
