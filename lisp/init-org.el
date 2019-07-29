@@ -30,7 +30,7 @@
 
   (customize-save-variable 'org-log-into-drawer t)
   (customize-save-variable 'org-todo-keywords
-			   '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d) CANCELLED(c)")))
+			   '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
   (customize-save-variable 'org-tag-persistent-alist
 			   '((:startgroup . nil)
 			     ("@home" . ?h)
