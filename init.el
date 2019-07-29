@@ -112,6 +112,9 @@
   (global-set-key (kbd "C-x g") 'magit-status)
   (magit-wip-mode))
 
+;;; Bitwarden passage manager
+(require 'init-bitwarden)
+
 ;;; Org-mode
 (require 'init-org)
 
