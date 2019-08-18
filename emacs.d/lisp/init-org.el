@@ -28,6 +28,7 @@
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c c") 'org-capture)
 
+  (customize-save-variable 'org-lowest-priority ?D)
   (customize-save-variable 'org-log-into-drawer t)
   (customize-save-variable 'org-todo-keywords
 			   '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
