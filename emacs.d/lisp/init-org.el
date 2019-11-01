@@ -48,8 +48,8 @@
 		   "* TODO %?\n   %t")))
   (setq-default org-refile-targets
 		`((,(concat webdav-prefix "gtd/gtd.org") . (:maxlevel . 2))
-		  (,(concat webdav-prefix "gtd/someday.org") . (:level . 2))
-		  (,(concat webdav-prefix "gtd/tickler.org") . (:level . 2))))
+		  (,(concat webdav-prefix "gtd/someday.org") . (:level . 1))
+		  (,(concat webdav-prefix "gtd/tickler.org") . (:level . 1))))
 
   (customize-save-variable 'org-agenda-files
 			   `(,(concat webdav-prefix "gtd/gtd.org")
