@@ -1,7 +1,7 @@
 #### FILENAME: zshenv
-#### Author: Gaelan D'costa (gdcosta@gmail.com)
-#### License: https://opensource.org/licenses/GPL-3.0
-#### Description: Foundatinoal environment settings
+#### AUTHOR: Gaelan D'costa (gdcosta@gmail.com)
+#### LICENSE: https://opensource.org/licenses/GPL-3.0
+#### DESCRIPTION: Foundational environment settings
 
 ### XDG Base Directory Specification
 ### http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
