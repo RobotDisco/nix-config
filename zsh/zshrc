@@ -1,3 +1,25 @@
+#### FILENAME: zshrc
+#### Author: Gaelan D'costa (gdcosta@gmail.com)
+#### LICENSE: https://opensource.org/licenses/GPL-3.0
+####
+#### DESCRIPTION: Configuration that applies to interactive sessions
+#### THANKS: https://github.com/seebi/zshrc for the layout inspiration
+
+### ZSH modules
+
+## This array holds the list of zsh modules I have written and want to load.
+typeset -ga gaelan_zsh_modules
+
+## fasd, the fuzzy file/directory finder
+gaelan_zsh_modules+="$ZSH_CONFIG/fasd.zsh"
+
+## load all modules, failing gracefully if not found
+foreach file (`echo $gaelan_zsh_modules`)
+if [[ -a $file ]]; then
+    source $file
+fi
+end
+
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 export PS1='[\u@\h \W]$ '
 
@@ -54,24 +76,11 @@ fi
 alias tclone="git clone git@git.internal.tulip.io:"
 alias tdl="tdocker login"
 
-# FASD aliases
-alias a='fasd -a'        # any
-alias s='fasd -si'       # show / search / select
-alias d='fasd -d'        # directory
-alias f='fasd -f'        # file
-alias sd='fasd -sid'     # interactive directory selection
-alias sf='fasd -sif'     # interactive file selection
-alias z='fasd_cd -d'     # cd, same functionality as j in autojump
-alias zz='fasd_cd -d -i' # cd with interactive selection
-
 # Helpers for editing/refreshing .zshrc
 alias ezr='e ~/.zshrc'
 alias ezp='e ~/.zprofile'
 alias rzr='source ~/.zshrc'
 alias rzp='source ~/.zprofile'
-
-# Activate FASD
-command -v fasd >/dev/null 2>&1 && eval "$(fasd --init auto)"
 
 # Activate rbenv and pyenv
 command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
