@@ -50,6 +50,10 @@ if [ -d /usr/local/opt/go/libexec/bin ]; then
     export PATH=$PATH:/usr/local/opt/go/libexec/bin
 fi
 
+# Tulip aliases
+alias tclone="git clone git@git.internal.tulip.io:"
+alias tdl="tdocker login"
+
 # FASD aliases
 alias a='fasd -a'        # any
 alias s='fasd -si'       # show / search / select
