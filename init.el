@@ -57,26 +57,20 @@
 
 ;; Helm
 (require 'init-helm)
-
-;; Generic programming language tools
-
 ;; Completion
 (require 'init-company)
-
 ;; Emacs Lisp
 ;; Can't use `with-eval-after-load' here because `emacs-lisp-mode' is builtin
 ;; and thus is loaded before this config file runs
 (require 'init-emacs-lisp)
-
 ;;; Bitwarden passage manager
 (require 'init-bitwarden)
-
 ;;; Org-mode
 (require 'init-org)
-
+;;; Python
+(require 'init-python)
 ;; Window Manager
 (require 'init-exwm)
-
 ;; Add miscellaneous config that isn't large enough for its own module.
 (require 'init-misc)
 
