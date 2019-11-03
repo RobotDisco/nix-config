@@ -26,10 +26,10 @@ alias eedit=" $EDITOR $HOME/.emacs.d/config.org"
 
 ### Optimize standard tools
 ## colourize grep
-alias grep='grep --color=auto'
+#alias grep='grep --color=auto'
 
 ## make ls look nicer
-alias ls=' ls --color=auto -Fph'
+#alias ls=' ls --color=auto -Fph'
 
 
 
