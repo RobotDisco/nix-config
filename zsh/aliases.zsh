@@ -6,8 +6,10 @@
 #### THANKS: https://github.com/seebi/zshrc for the layout inspiration
 
 ### Emacs is my editor
-export EDITOR="emacsclient --alternate-editor=''"
-export VISUAL="$EDITOR -n"
+export EDITOR="emacsclient -t --alternate-editor=''"
+export VISUAL="emacsclient -nc --alternate-editor=''"
+export GIT_EDITOR="emacsclient -c --alternate-editor=''"
+alias e="$VISUAL"
 
 ## so use its keybindings in the zsh line editor
 bindkey -e
