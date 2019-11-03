@@ -31,10 +31,6 @@ alias grep='grep --color=auto'
 ## make ls look nicer
 alias ls=' ls --colour=auto -Fph'
 
-### Tulip workflow
-alias tclone="git clone git@git.internal.tulip.io:"
-alias tdl=" tdocker login"
-
 
 
 

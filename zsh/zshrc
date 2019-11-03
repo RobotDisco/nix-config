@@ -21,6 +21,9 @@ gaelan_zsh_modules+="$ZSH_CONFIG/fasd.zsh"
 gaelan_zsh_modules+="$ZSH_CONFIG/options.zsh"
 gaelan_zsh_modules+="$ZSH_CONFIG/prompt.zsh"
 
+# customizations for work
+gaelan_zsh_modules+="$ZSH_CONFIG/work_tulip.zsh"
+
 
 ## load all modules, failing gracefully if not found
 foreach file (`echo $gaelan_zsh_modules`)
@@ -28,21 +31,6 @@ if [[ -a $file ]]; then
     source $file
 fi
 end
-
-export XKB_DEFAULT_OPTIONS=ctrl:nocaps
-
-# Include tdocker into PATH
-if [ -d ~/workspace/dev_scripts/docker/bin ]; then
-   export PATH=$PATH:~/workspace/dev_scripts/docker/bin
-fi
-
-# Activate rbenv and pyenv
-command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
-command -v pyenv >/dev/null 2>&1 && eval "$(pyenv init -)"
-
-# activate NVM if it's available
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 if [[ `uname` == 'Darwin' ]]; then
    SSH_KEYS="id_rsa"
@@ -64,9 +52,4 @@ else
     source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
     # Fish-like syntax highlighting. Must be at the end of .zshrc
     source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
-
-
-if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
-  exec startx
 fi
