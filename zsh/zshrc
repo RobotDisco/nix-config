@@ -17,11 +17,18 @@ gaelan_zsh_modules+="$ZSH_CONFIG/completion.zsh"
 ## fasd, the fuzzy file/directory finder
 gaelan_zsh_modules+="$ZSH_CONFIG/fasd.zsh"
 
-# zsh customiztions
+## zsh customiztions
 gaelan_zsh_modules+="$ZSH_CONFIG/options.zsh"
 gaelan_zsh_modules+="$ZSH_CONFIG/prompt.zsh"
 
-# customizations for work
+## Check for a system specific file
+systemFile=`uname -s | tr "[:upper:]" "[:lower:]"`
+gaelan_zsh_modules+="$ZSH_CONFIG/$systemFile.zsh"
+
+## SSH (specifically, ssh key management)
+gaelan_zsh_modules+="$ZSH_CONFIG/ssh.zsh"
+
+## customizations for work
 gaelan_zsh_modules+="$ZSH_CONFIG/work_tulip.zsh"
 
 
@@ -31,13 +38,6 @@ if [[ -a $file ]]; then
     source $file
 fi
 end
-
-if [[ `uname` == 'Darwin' ]]; then
-   SSH_KEYS="id_rsa"
-else
-   SSH_KEYS="id_rsa id_rsa.work"
-fi
-command -v keychain >/dev/null 2>&1 && eval "$(keychain --quiet --agents ssh --eval $=SSH_KEYS)"
 
 ## Make ZSH use the good parts of FISH
 if [[ `uname` == 'Darwin' ]]; then
