@@ -13,11 +13,11 @@
 
   (gaelan/require-package 'org-journal)
   (with-eval-after-load 'org-journal
-    (customize-save-variable 'org-journal-dir
+    (customize-set-variable 'org-journal-dir
 			     (file-name-as-directory (concat webdav-prefix "journal/")))
-    (customize-save-variable 'org-journal-file-format "%Y/%Y%m%d.org")
+    (customize-set-variable 'org-journal-file-format "%Y/%Y%m%d.org")
     ;; Bullet Journal discourages carrying over todos. Decide that explicitly!
-    (customize-save-variable 'org-journal-carryover-items nil))
+    (customize-set-variable 'org-journal-carryover-items nil))
 
   ;; Prettify org mode, remove unnecessary asterix.
   (gaelan/require-package 'org-bullets)
@@ -28,11 +28,11 @@
   (global-set-key (kbd "C-c a") 'org-agenda)
   (global-set-key (kbd "C-c c") 'org-capture)
 
-  (customize-save-variable 'org-lowest-priority ?D)
-  (customize-save-variable 'org-log-into-drawer t)
-  (customize-save-variable 'org-todo-keywords
+  (customize-set-variable 'org-lowest-priority ?D)
+  (customize-set-variable 'org-log-into-drawer t)
+  (customize-set-variable 'org-todo-keywords
 			   '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-  (customize-save-variable 'org-tag-persistent-alist
+  (customize-set-variable 'org-tag-persistent-alist
 			   '((:startgroup . nil)
 			     ("@home" . ?h)
 			     ("@officekw" . ?k)
@@ -51,7 +51,7 @@
 		  (,(concat webdav-prefix "gtd/someday.org") . (:level . 1))
 		  (,(concat webdav-prefix "gtd/tickler.org") . (:level . 1))))
 
-  (customize-save-variable 'org-agenda-files
+  (customize-set-variable 'org-agenda-files
 			   `(,(concat webdav-prefix "gtd/gtd.org")
 			     ,(concat webdav-prefix "gtd/someday.org")
 			     ,(concat webdav-prefix "gtd/tickler.org")
@@ -65,9 +65,9 @@
 	   (bwfields (gethash "fields" bwdata))
 	   (client-id (gethash "value" (elt bwfields 0)))
 	   (client-secret (gethash "value" (elt bwfields 1))))
-      (customize-save-variable 'org-gcal-client-id client-id)
-      (customize-save-variable 'org-gcal-client-secret client-secret))
-    (customize-save-variable 'org-gcal-file-alist
+      (customize-set-variable 'org-gcal-client-id client-id)
+      (customize-set-variable 'org-gcal-client-secret client-secret))
+    (customize-set-variable 'org-gcal-file-alist
 			     `(("gdcosta@gmail.com" . ,(concat webdav-prefix "gtd/gcal/personal.org"))
 			       ("gaelan@tulip.com" . ,(concat webdav-prefix "gtd/gcal/work.org"))))))
 

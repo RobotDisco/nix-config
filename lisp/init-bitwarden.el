@@ -16,8 +16,7 @@
     (gaelan/recompile-lib-from-url bw-package-symbol bw-url))
 
   (when (require 'bitwarden nil t)
-    (customize-save-variable 'bitwarden-user "gdcosta+bitwarden@gmail.com")
-    (bitwarden-unlock)))
+    (customize-set-variable 'bitwarden-user "gdcosta+bitwarden@gmail.com")))
 
 (provide 'init-bitwarden)
 ;;; init-bitwarden.el ends here
