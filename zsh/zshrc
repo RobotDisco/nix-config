@@ -15,6 +15,11 @@ gaelan_zsh_modules+="$ZSH_CONFIG/completion.zsh"
 ## fasd, the fuzzy file/directory finder
 gaelan_zsh_modules+="$ZSH_CONFIG/fasd.zsh"
 
+# zsh customiztions
+gaelan_zsh_modules+="$ZSH_CONFIG/options.zsh"
+gaelan_zsh_modules+="$ZSH_CONFIG/prompt.zsh"
+
+
 ## load all modules, failing gracefully if not found
 foreach file (`echo $gaelan_zsh_modules`)
 if [[ -a $file ]]; then
@@ -23,12 +28,6 @@ fi
 end
 
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
-export PS1='[\u@\h \W]$ '
-
-# Enable ZSH prompt
-autoload -Uz promptinit
-promptinit
-prompt redhat
 
 # Emacs is my editor
 export GIT_EDITOR="emacsclient --alternate-editor=''"
@@ -37,15 +36,6 @@ alias killemacs="emacsclient -e '(kill-emacs)'"
 
 # If vim doesn't exist, invoke vi instead
 command -v vim --help >/dev/null 2>&1 || alias vim=vi
-
-# Command history
-HISTSIZE=1000
-SAVEHIST=1000
-HISTFILE=~/.zsh_history
-setopt append_history
-setopt extended_history
-setopt hist_ignore_dups
-setopt hist_expire_dups_first
 
 # Include ~/bin in PATH
 if [ -d ~/bin ]; then

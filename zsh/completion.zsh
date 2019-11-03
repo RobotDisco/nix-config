@@ -4,5 +4,5 @@
 ####
 #### DESCRIPTION: Configure zshell tab completion
 
-# Enable stock command completion
+## Enable stock command completion
 autoload -Uz compinit && compinit
