@@ -10,6 +10,8 @@
 ## This array holds the list of zsh modules I have written and want to load.
 typeset -ga gaelan_zsh_modules
 
+## tab completion
+gaelan_zsh_modules+="$ZSH_CONFIG/completion.zsh"
 ## fasd, the fuzzy file/directory finder
 gaelan_zsh_modules+="$ZSH_CONFIG/fasd.zsh"
 
@@ -27,12 +29,6 @@ export PS1='[\u@\h \W]$ '
 autoload -Uz promptinit
 promptinit
 prompt redhat
-
-# Enable Command completion
-autoload -Uz compinit
-compinit
-# Menu-style completion interface
-zstyle ':completion:*' menu select
 
 # Emacs is my editor
 export GIT_EDITOR="emacsclient --alternate-editor=''"
