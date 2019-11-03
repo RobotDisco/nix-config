@@ -10,6 +10,8 @@
 ## This array holds the list of zsh modules I have written and want to load.
 typeset -ga gaelan_zsh_modules
 
+## user aliases
+gaelan_zsh_modules+="$ZSH_CONFIG/aliases.zsh"
 ## tab completion
 gaelan_zsh_modules+="$ZSH_CONFIG/completion.zsh"
 ## fasd, the fuzzy file/directory finder
@@ -29,44 +31,10 @@ end
 
 export XKB_DEFAULT_OPTIONS=ctrl:nocaps
 
-# Emacs is my editor
-export GIT_EDITOR="emacsclient --alternate-editor=''"
-export VISUAL="$GIT_EDITOR -n"
-alias killemacs="emacsclient -e '(kill-emacs)'"
-
-# If vim doesn't exist, invoke vi instead
-command -v vim --help >/dev/null 2>&1 || alias vim=vi
-
-# Include ~/bin in PATH
-if [ -d ~/bin ]; then
-    export PATH=$PATH:~/bin
-fi
-
 # Include tdocker into PATH
 if [ -d ~/workspace/dev_scripts/docker/bin ]; then
    export PATH=$PATH:~/workspace/dev_scripts/docker/bin
 fi
-
-# Set Go root directory
-export GOPATH=$HOME/code/go
-
-# Add Go root to path
-export PATH=$PATH:$GOPATH/bin
-
-# Include Go toolchain in path
-if [ -d /usr/local/opt/go/libexec/bin ]; then
-    export PATH=$PATH:/usr/local/opt/go/libexec/bin
-fi
-
-# Tulip aliases
-alias tclone="git clone git@git.internal.tulip.io:"
-alias tdl="tdocker login"
-
-# Helpers for editing/refreshing .zshrc
-alias ezr='e ~/.zshrc'
-alias ezp='e ~/.zprofile'
-alias rzr='source ~/.zshrc'
-alias rzp='source ~/.zprofile'
 
 # Activate rbenv and pyenv
 command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
