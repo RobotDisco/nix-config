@@ -3,6 +3,7 @@
 ;;; Commentary:
 
 ;;; Code:
+(require 'init-package)
 
 ;; Remove unnecessary chrome.
 (menu-bar-mode -1)
@@ -10,10 +11,11 @@
 (scroll-bar-mode -1)
 (fringe-mode 1)
 
-;; Show columns
+;; Show columns, that is useful chrome.
 (column-number-mode +1)
 
-;; Prettify necessary chrome
+
+;;; Emacs theming
 (gaelan/require-package 'rebecca-theme)
 
 (if (daemonp)
@@ -30,8 +32,18 @@
       (add-hook 'after-make-frame-functions #'load-my-theme))
   (load-theme 'rebecca t))
 
+;; Fonts
 (add-to-list 'default-frame-alist '(font . "Anonymous Pro-14"))
+
+
+;;; Behaviour changes
+
+;; It is quicker to type y/n to prompts than "yes" or "no".
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+;; Don't ask about following symlinks, just do it.
+(setq vc-follow-symlinks t)
+
 
 (provide 'init-appearance)
 ;;; init-appearance.el ends here
-
