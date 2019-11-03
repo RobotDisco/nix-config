@@ -14,8 +14,8 @@
 
 ;; Use company-mode's completion framework with anaconda as a backend
 (gaelan/require-package company-anaconda)
-(eval-after-load "company"
-  '(add-to-list 'company-backends '(company-anaconda :with company-capf)))
+(with-eval-after-load 'company
+  (add-to-list 'company-backends '(company-anaconda :with company-capf)))
 
 (provide 'init-python)
 ;;; init-python.el ends hee

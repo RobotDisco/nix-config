@@ -35,10 +35,11 @@
 
 ;;; Project Management
 (gaelan/require-packages '(projectile helm-projectile projectile-ripgrep))
+(with-eval-after-load 'projectile
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 (with-eval-after-load 'helm-projectile
-		      (require 'helm-projectile)
-		      (projectile-mode +1)
-		      (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+  (helm-projectile-on))
 
 (provide 'init-misc)
 ;;; init-misc.el ends here
