@@ -29,7 +29,7 @@ alias eedit=" $EDITOR $HOME/.emacs.d/config.org"
 alias grep='grep --color=auto'
 
 ## make ls look nicer
-alias ls=' ls --colour=auto -Fph'
+alias ls=' ls --color=auto -Fph'
 
 
 
