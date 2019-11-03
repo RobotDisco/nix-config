@@ -31,6 +31,11 @@ gaelan_zsh_modules+="$ZSH_CONFIG/ssh.zsh"
 ## customizations for work
 gaelan_zsh_modules+="$ZSH_CONFIG/work_tulip.zsh"
 
+## adding ZSH plugins via submodules
+gaelan_zsh_modules+="$ZSH_CONFIG/zsh-autosuggestions/zsh-autosuggestions.zsh"
+gaelan_zsh-modules+="$ZSH_CONFIG/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+gaelan_zsh-modules+="$ZSH_CONFIG/zsh-history-substring-search/zsh-history-substring-search.zsh"
+
 
 ## load all modules, failing gracefully if not found
 foreach file (`echo $gaelan_zsh_modules`)
@@ -38,18 +43,3 @@ if [[ -a $file ]]; then
     source $file
 fi
 end
-
-## Make ZSH use the good parts of FISH
-if [[ `uname` == 'Darwin' ]]; then
-    fpath=(/usr/local/share/zsh-completions $fpath)
-    source "/usr/local/opt/zsh-git-prompt/zshrc.sh"
-    source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-    # Fish-like syntax highlighting. Must be at the end of .zshrc
-    source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    # Fish-like history substring search. Must be at the end of the .zshrc
-    source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-else
-    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-    # Fish-like syntax highlighting. Must be at the end of .zshrc
-    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
