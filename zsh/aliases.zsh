@@ -32,7 +32,7 @@ alias eedit=" $EDITOR $HOME/.emacs.d/config.org"
 
 ## make ls look nicer
 #alias ls=' ls --color=auto -Fph'
-
+alias pgrep='pgrep -a'
 
 
 
