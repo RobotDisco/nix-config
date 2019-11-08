@@ -3,8 +3,8 @@
 ;;; Commentary:
 
 ;;; Code:
-(setq mac-command-modifier 'meta)
-(setq mac-option-modifier 'super)
+(setq-default mac-command-modifier 'meta)
+(setq-default mac-option-modifier 'super)
 
 (provide 'init-osx)
 ;;; init-osx.el ends here
