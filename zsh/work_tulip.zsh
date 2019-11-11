@@ -12,5 +12,7 @@ if [[ -d ~/workspace/dev_scripts/docker/bin ]]; then
 fi
 
 ### Tulip workflow
-alias tclone="git clone git@git.internal.tulip.io:"
+function tclone () {
+        mkdir -p ~/workspace/$1 && git clone git@git.internal.tulip.io:$1.git ~/workspace/$1
+}
 alias tdl=" tdocker login"
