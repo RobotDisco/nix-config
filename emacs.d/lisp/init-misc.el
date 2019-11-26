@@ -14,6 +14,9 @@
 ;; Handy shortcut for reverting buffers
 (global-set-key (kbd "s-u") 'revert-buffer)
 
+;; Automatically revret files if they have been changed from under the editor
+(global-auto-revert-mode +1)
+
 ;;; Syntax checking
 (when (gaelan/require-package 'flycheck)
   (add-hook 'after-init-hook #'global-flycheck-mode))
