@@ -69,6 +69,8 @@
 (require 'init-org)
 ;;; Python
 (require 'init-python)
+;;; Haskell
+(require 'init-haskell)
 ;; Window Manager
 (require 'init-exwm)
 ;; Add miscellaneous config that isn't large enough for its own module.
