@@ -1,19 +1,20 @@
-Host ix
-    HostName ix.local
-    User pi
-    ForwardAgent yes
+Host bastion pfsense cisco
+     Hostname 192.168.20.2
 
-Host ascorbic
-	HostName  ascorbic-acid.csclub.uwaterloo.ca
-Host caffeine
-	HostName  caffeine.csclub.uwaterloo.ca
-Host corn-syrup
-	HostName  corn-syrup.csclub.uwaterloo.ca
-Host potassium
-	HostName  potassium-citrate.csclub.uwaterloo.ca
-Host taurine
-	HostName  taurine.csclub.uwaterloo.ca
+Host pfsense
+     LocalForward 4200 192.168.10.1:80
 
-User gdcosta
+Host cisco
+     LocalForward 4201 192.168.10.2:80
+     
+Host jails
+     Hostname 192.168.10.4
+     ProxyCommand ssh bastion nc %h %p
+
+Host docker
+     Hostname 192.168.10.50
+     ProxyCommand ssh bastion nc %h %p
+
 ForwardX11  no
 ForwardAgent no
+User gaelan
