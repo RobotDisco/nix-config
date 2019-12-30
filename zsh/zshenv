@@ -11,6 +11,6 @@ export ZSH_CONFIG="$XDG_CONFIG_HOME/zsh"
 export ZSH_CACHE="$XDG_CACHE_HOME/zsh"
 
 ### executable search paths
-export PATH=$PATH:$HOME/bin
+export PATH=$PATH:$HOME/.local/bin
 
 
