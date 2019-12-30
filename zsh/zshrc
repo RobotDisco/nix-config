@@ -43,3 +43,4 @@ if [[ -a $file ]]; then
     source $file
 fi
 end
+[ -f "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env" ] && source "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env"
