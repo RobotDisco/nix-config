@@ -8,8 +8,8 @@
 ;; All my org files live in a cloud-synced directory that differ between OSX and Linux
 (let ((webdav-prefix
        (if (eql system-type 'darwin)
-	   (file-name-as-directory "~/Seafile/emacs/")
-	 (file-name-as-directory "~/fallcube/emacs/"))))
+	   (file-name-as-directory "~/Seafile/gtd/")
+	 (file-name-as-directory "~/fallcube/gtd/"))))
 
   (gaelan/require-package 'org-journal)
   (with-eval-after-load 'org-journal
@@ -44,7 +44,7 @@
 			     ("@brain" . ?b)
 			     (:endgroup . nil)))
   (setq-default org-capture-templates
-		`(("t" "Todo" entry (file ,(concat webdav-prefix "gtd/inbox.org"))
+		`(("t" "Todo" entry (file ,(concat webdav-prefix "inbox.org"))
 		   "* TODO %?\n   %t")))
   (setq-default org-refile-targets
 		`((,(concat webdav-prefix "gtd/gtd.org") . (:maxlevel . 2))
@@ -52,12 +52,12 @@
 		  (,(concat webdav-prefix "gtd/tickler.org") . (:level . 1))))
 
   (customize-set-variable 'org-agenda-files
-			   `(,(concat webdav-prefix "gtd/gtd.org")
-			     ,(concat webdav-prefix "gtd/someday.org")
-			     ,(concat webdav-prefix "gtd/tickler.org")
-			     ,(concat webdav-prefix "gtd/gcal/personal.org")
-			     ,(concat webdav-prefix "gtd/gcal/work.org")
-			     ,(concat webdav-prefix "gtd/inbox.org")))
+			   `(,(concat webdav-prefix "gtd.org")
+			     ,(concat webdav-prefix "someday.org")
+			     ,(concat webdav-prefix "tickler.org")
+			     ,(concat webdav-prefix "gcal/personal.org")
+			     ,(concat webdav-prefix "gcal/work.org")
+			     ,(concat webdav-prefix "inbox.org")))
 
   (gaelan/require-package 'org-gcal)
   (with-eval-after-load 'org-gcal
@@ -68,8 +68,8 @@
       (customize-set-variable 'org-gcal-client-id client-id)
       (customize-set-variable 'org-gcal-client-secret client-secret))
     (customize-set-variable 'org-gcal-file-alist
-			     `(("gdcosta@gmail.com" . ,(concat webdav-prefix "gtd/gcal/personal.org"))
-			       ("gaelan@tulip.com" . ,(concat webdav-prefix "gtd/gcal/work.org"))))))
+			     `(("gdcosta@gmail.com" . ,(concat webdav-prefix "gcal/personal.org"))
+			       ("gaelan@tulip.com" . ,(concat webdav-prefix "gcal/work.org"))))))
 
 (provide 'init-org)
 ;;; init-org ends here
