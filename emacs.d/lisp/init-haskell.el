@@ -7,6 +7,7 @@
 ;;; Code:
 (require 'init-package)
 
+(gaelan/require-package 'haskell-mode)
 (gaelan/require-package 'lsp-mode)
 (add-hook 'haskell-mode-hook #'lsp-deferred)
 
@@ -23,8 +24,6 @@
 (gaelan/require-package 'helm-lsp)
 
 (gaelan/require-package 'lsp-haskell)
-(with-eval-after-load 'lsp-haskell
-  (customize-set-variable lsp-haskell-process-path-hie "hie-wrapper"))
 
 (provide 'init-haskell)
 ;;; init-haskell ends here
