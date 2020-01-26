@@ -205,7 +205,7 @@
 	(yas-global-mode 1))
     #+END_SRC
 ** Software Development
-*** Git
+*** Git source control management
     =magit= is a super awesome git package
     #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package magit
@@ -216,6 +216,51 @@
 	(require 'magit-wip)
 	(magit-wip-mode))
     #+END_SRC
+** Programming Language support
+*** Generic Lisp support
+    The various lisp modes tend to need the same basic configuration, so I will specify it here.
+**** Parentheses disambiguation
+     In lispy languages parentheses are often so nested that it is confusing to figure out which level of nesting you are about to close.
+     There is a nice package we can install to make each level's parentheses have a distinct colour, for easy identification.
+    #+begin_src emacs-lisp :tangle yes
+      (use-package rainbow-delimiters
+	:pin melpa-stable)
+    #+end_src
+**** Show matching paren
+     Along with colouring parentheses by level, we can also highlight the matching opening/closing parenthesis for the parenthesis your point is currently over.
+     #+begin_src emacs-lisp :tangle yes
+       (show-paren-mode)
+     #+end_src
+**** Generic Lisp hook
+     There are some things we always want to enable when entering the editor mode for any lisp
+     #+begin_src emacs-lisp :tangle yes
+       (defun gaelan/generic-lisp-mode-hook ()
+	 "Mode hook when working in any Lisp."
+	 ;; Unlike non-lispy editing modes, we should never allow unbalanced parens
+	 (smartparens-strict-mode)
+	 ;; Enable visual disambiguation of nested parentheses
+	 (rainbow-delimiters-mode)
+	 ;; Show documentation for a function/variable in the minibuffer
+	 (turn-on-eldoc-mode))
+     #+end_src
+*** Emacs Lisp
+    Despite being the primordial Emacs programming language, a lot of standard workflow needs to be manually specified.
+
+    We need to add our generic lisp mode to our editor and REPL modes
+    #+begin_src emacs-lisp :tangle yes
+      (add-hook 'emacs-lisp-mode-hook 'gaelan/generic-lisp-mode-hook)
+    #+end_src
+
+    We also add keybindings found in other lispy environments like Clojure's CIDER and Emacs' SLIME.
+    #+begin_src emacs-lisp :tangle yes
+      (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-defun)
+      (define-key emacs-lisp-mode-map (kbd "C-c C-p") 'eval-print-last-sexp)
+      (define-key emacs-lisp-mode-map (kbd "C-c C-r") 'eval-region)
+      (define-key emacs-lisp-mode-map (kbd "C-c C-k") 'eval-buffer)
+      (define-key emacs-lisp-mode-map (kbd "C-c C-l") 'load-file)
+      (define-key emacs-lisp-mode-map (kbd "C-c RET") 'macroexpand-1)
+      (define-key emacs-lisp-mode-map (kbd "C-c M-m") 'macroexpand-all)
+    #+end_src
 ** Window Management
    I love Emacs so much, I use it as my window manager :)
 *** Window title hook
