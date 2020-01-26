@@ -309,6 +309,29 @@
       (define-key emacs-lisp-mode-map (kbd "C-c RET") 'macroexpand-1)
       (define-key emacs-lisp-mode-map (kbd "C-c M-m") 'macroexpand-all)
     #+end_src
+*** Python
+    I generally use pyenv to manage different versions of python
+    #+begin_src emacs-lisp :tangle yes
+      (use-package pyenv-mode
+	:pin melpa-stable
+	:config
+	(pyenv-mode))
+    #+end_src
+
+    I use anaconda mode to get inspection  and analysis from dynamic analysis, and I tie this to my completion framework.
+    #+begin_src emacs-lisp :tangle yes
+      (use-package anaconda-mode
+	:pin melpa-stable
+	:config
+	(add-hook 'python-mode-hook 'anaconda-mode)
+	(add-hook 'python-mode-hook 'anaconda-eldoc-mode))
+
+      (use-package company-anaconda
+	:pin melpa-stable
+	:after company
+	:config
+	(add-to-list 'company-backends '(company-anaconda :with company-capf)))
+    #+end_src
 ** Window Management
    I love Emacs so much, I use it as my window manager :)
 *** Window title hook
