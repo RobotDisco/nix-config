@@ -135,11 +135,12 @@
 ** Software Development
 *** Git
     =magit= is a super awesome git package
-    #+BEGIN_SRC emacs-lisp :tangle
+    #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package magit
+	;; I should have a keybinding that displays magit-status from anywhere
 	:bind (("C-x g" . magit-status))
 	:config
-	;; TODO what is magit-wip mode?
+	;; Enable pseudo-worktree for uncommitted files.
 	(require 'magit-wip)
 	(magit-wip-mode))
     #+END_SRC
