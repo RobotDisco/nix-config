@@ -291,24 +291,24 @@
 	 ;; Show documentation for a function/variable in the minibuffer
 	 (turn-on-eldoc-mode))
      #+end_src
-**** Emacs Lisp
-     Despite being the primordial Emacs programming language, a lot of standard workflow needs to be manually specified.
+*** Emacs Lisp
+    Despite being the primordial Emacs programming language, a lot of standard workflow needs to be manually specified.
 
-     We need to add our generic lisp mode to our editor and REPL modes
-     #+begin_src emacs-lisp :tangle yes
-       (add-hook 'emacs-lisp-mode-hook 'gaelan/generic-lisp-mode-hook)
-     #+end_src
+    We need to add our generic lisp mode to our editor and REPL modes
+    #+begin_src emacs-lisp :tangle yes
+      (add-hook 'emacs-lisp-mode-hook 'gaelan/generic-lisp-mode-hook)
+    #+end_src
 
-     We also add keybindings found in other lispy environments like Clojure's CIDER and Emacs' SLIME.
-     #+begin_src emacs-lisp :tangle yes
-       (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-defun)
-       (define-key emacs-lisp-mode-map (kbd "C-c C-p") 'eval-print-last-sexp)
-       (define-key emacs-lisp-mode-map (kbd "C-c C-r") 'eval-region)
-       (define-key emacs-lisp-mode-map (kbd "C-c C-k") 'eval-buffer)
-       (define-key emacs-lisp-mode-map (kbd "C-c C-l") 'load-file)
-       (define-key emacs-lisp-mode-map (kbd "C-c RET") 'macroexpand-1)
-       (define-key emacs-lisp-mode-map (kbd "C-c M-m") 'macroexpand-all)
-     #+end_src
+    We also add keybindings found in other lispy environments like Clojure's CIDER and Emacs' SLIME.
+    #+begin_src emacs-lisp :tangle yes
+      (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-defun)
+      (define-key emacs-lisp-mode-map (kbd "C-c C-p") 'eval-print-last-sexp)
+      (define-key emacs-lisp-mode-map (kbd "C-c C-r") 'eval-region)
+      (define-key emacs-lisp-mode-map (kbd "C-c C-k") 'eval-buffer)
+      (define-key emacs-lisp-mode-map (kbd "C-c C-l") 'load-file)
+      (define-key emacs-lisp-mode-map (kbd "C-c RET") 'macroexpand-1)
+      (define-key emacs-lisp-mode-map (kbd "C-c M-m") 'macroexpand-all)
+    #+end_src
 ** Window Management
    I love Emacs so much, I use it as my window manager :)
 *** Window title hook
