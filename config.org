@@ -59,3 +59,58 @@
    (defconst gaelan/*is-linux* (eq system-type 'gnu/linux)
      "Is this operating system Linux?")
  #+END_SRC
+** Package Management
+   From this point out, we're likely going to be installing and configuration packages.
+   The first thing we should do is configure our packaging system
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'package)
+   #+END_SRC
+*** Enable package sources
+    By default, emacs' package manager only grabs packages from GNU's ELPA package library, which has a very tiny selection of packages.
+    We are going to add the following additional reposities:
+    - melpa-stable :: Stable versions of almost every commonly-used package
+    - melpa :: Unstable versions of almost every commonly-used package
+    - org :: The repository for org mode, my favourite emacs package :)
+
+    My understanding is that the order of repos =package-archives= does not matter, if this because a problem (i.e. the wrong versions of packages are being pulled because they exist in multiple archives) the solution is apparently to set values in =package-archive-priorities=
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (add-to-list 'package-archives
+		   '("melpa-stable" . "https://stable.melpa.org/packages/"))
+      (add-to-list 'package-archives
+		   '("melpa" . "https://melpa.org/packages/"))
+      (add-to-list 'package-archives
+		   '("org" . "https://orgmode.org/elpa/"))
+    #+END_SRC
+*** Initialize the package subsystem
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (package-initialize)
+    #+END_SRC
+*** use-package, an easier way to manage package configuration
+    While ELPA is still Emacs' package management system, it is a pretty manual process.
+    Traditionally, one has to manually download the package, manually require the package in one's config, and then customize it by setting the appropriate variables and running the appropriate functions.
+
+    This is messy if one wants to always ensure that packages are installed, or if there is a logical ordering to packages (for example a base package must be loaded and configured before additional packages extend it.
+    In addition, there is a lot of repeated boilerplate around things like associating modes with file extensions or configuring key bindings for these packages.
+
+    John Wiegley has written a nice emacs plugin to manage these via a macro, which makes reading one's intended configuration for each package a lot more compact and easier to comprehend.
+
+    Because it is a macro, we only need to require the package when compiling the configuration file.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (eval-when-compile
+	(require 'use-package))
+    #+END_SRC
+**** Diminish 
+    Having the full name of every package displayed would clog our status line; there is a package that will appreviate the name of well-known packages to a couple of characters.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+       (require 'diminish)
+    #+END_SRC
+**** Bind-key
+     Since we're going to be using the =:bind= keyword to configure keybindings, we require the =bind-key= package
+     #+BEGIN_SRC emacs-lisp :tangle yes
+       (require 'bind-key)
+     #+END_SRC
+
+   
+
