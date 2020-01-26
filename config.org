@@ -132,7 +132,18 @@
        (use-package bind-key
 	 :config (require 'bind-key))
      #+END_SRC
-** Editor Workflow enhancements
+** General editor behaviour
+*** Revert buffer shortcut
+    I revert unsaved changes often enough that I should define a command for it.
+    #+begin_src emacs-lisp :tangle yes
+    (global-set-key (kbd "s-u") 'revert-buffer)
+    #+end_src
+*** Auto-revert files that have changed from under the editor
+    Sometimes files I have open are updated by a git checkout or some external process. I want to make sure emacs automatically reverts to those because I don't want to accidentally reintroduce stale files.
+    #+begin_src emacs-lisp :tangle yes
+    (global-auto-revert-mode +1)
+    #+end_src
+** Editor workflow enhancements
 *** Project Management
     =projectile= is a package that adds a software development workflow to collections of files.
 
