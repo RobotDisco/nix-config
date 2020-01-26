@@ -30,35 +30,36 @@
 
   (customize-set-variable 'org-lowest-priority ?D)
   (customize-set-variable 'org-log-into-drawer t)
-  (customize-set-variable 'org-todo-keywords
-			   '((sequence "TODO(t)" "NEXT(n)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
-  (customize-set-variable 'org-tag-persistent-alist
-			   '((:startgroup . nil)
-			     ("@home" . ?h)
-			     ("@officekw" . ?k)
-			     ("@officeto" . ?t)
-			     ("@errands" . ?e)
-			     ("@phone" . ?p)
-			     ("@lappy" . ?l)
-			     ("@online" . ?o)
-			     ("@brain" . ?b)
-			     (:endgroup . nil)))
   (setq-default org-capture-templates
-		`(("t" "Todo" entry (file ,(concat webdav-prefix "inbox.org"))
+		`(("t" "Todo" entry (file+headline ,(concat webdav-prefix "gtd.org") "Tasks")
 		   "* TODO %?\n   %t")))
   (setq-default org-refile-targets
-		`((,(concat webdav-prefix "gtd.org") . (:maxlevel . 2))
-		  (,(concat webdav-prefix "someday.org") . (:level . 1))
-		  (,(concat webdav-prefix "tickler.org") . (:level . 1))
-		  (,(concat webdav-prefix "projects.org") . (:level . 1))))
+		`((,(concat webdav-prefix "gtd.org") . (:level . 1))
+		  (,(concat webdav-prefix "someday.org") . (:level . 1))))
 
   (customize-set-variable 'org-agenda-files
 			   `(,(concat webdav-prefix "gtd.org")
-			     ,(concat webdav-prefix "someday.org")
-			     ,(concat webdav-prefix "tickler.org")
 			     ,(concat webdav-prefix "gcal/personal.org")
-			     ,(concat webdav-prefix "gcal/work.org")
-			     ,(concat webdav-prefix "inbox.org")))
+			     ,(concat webdav-prefix "gcal/work.org")))
+
+  (customize-set-variable 'org-agenda-custom-commands
+			  '(("h" "Office and Home Lists"
+			     ((agenda)
+			      (tags-todo "@home")
+			      (tags-todo "@officeto")
+			      (tags-todo "@officekw")
+			      (tags-todo "@lappy")
+			      (tags-todo "@phone")
+			      (tags-todo "@brain")
+			      (tags-todo "@online")
+			      (tags-todo "@reading")
+			      (tags-todo "@watching")
+			      (tags-todo "@gaming")))
+			    ("d" "Daily Action List"
+			     ((agenda "" ((org-agenda-ndays 1)
+					  (org-agenda-sorting-strategy
+					   (quote ((agenda time-up priority-down tag-up))))
+					  (org-deadline-warning-days 0)))))))
 
   (gaelan/require-package 'org-gcal)
   (with-eval-after-load 'org-gcal
