@@ -252,6 +252,46 @@
 	(require 'magit-wip)
 	(magit-wip-mode))
     #+END_SRC
+*** Language Server Project
+    Traditionally completely different ecosystems need to be built to provide a rich language editor experience for every stack
+    Common Lisp for example has SLIME, Clojure has Clojure, Python has Anaconda, etc...
+
+    But a lot of stacks are consolidating on the "Language Server Project", which decouples the language backend and the editor frontend, so that the experience is as uniform and easy to expend as possible.
+
+    Most of my preferred languages don't implement this yet, but a few are starting.
+
+    At the very least we can automatically have file navigation and completion functionality out of the box.
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package lsp-mode
+	:pin melpa-stable)
+
+      (use-package lsp-ui
+	:pin melpa-stable
+	:after lsp-mode
+	:hook (lsp-mode-hook . lsp-ui-mode))
+    #+end_src
+**** LSP has completion support
+     #+begin_src emacs-lisp :tangle yes
+       (use-package company-lsp
+	 :pin melpa-stable
+	 :after company
+	 :config
+	 (push 'company-lsp company-backends))
+     #+end_src
+**** LSP also has file navigation support
+    #+begin_src emacs-lisp :tangle yes
+      (use-package lsp-treemacs
+	:pin melpa-stable
+	:after lsp-mode
+	:config
+	(lsp-treemacs-sync-mode +1))
+    #+end_src
+**** LSP also has helm support
+    #+begin_src emacs-lisp :tangle yes
+      (use-package helm-lsp
+	:pin melpa-stable)
+    #+end_src
 ** Programming Language support
 *** Generic Lisp support
     The various lisp modes tend to need the same basic configuration, so I will specify it here.
@@ -331,6 +371,13 @@
 	:after company
 	:config
 	(add-to-list 'company-backends '(company-anaconda :with company-capf)))
+    #+end_src
+*** Haskell
+    Haskell uses the language server project, so we can just hook into that
+    #+begin_src emacs-lisp :tangle yes
+      (use-package lsp-haskell
+	:pin melpa-stable
+	:hook (haskell-mode-hook . lsp-deferred))
     #+end_src
 ** Window Management
    I love Emacs so much, I use it as my window manager :)
