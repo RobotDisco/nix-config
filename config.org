@@ -218,6 +218,12 @@
 	:config
 	(exec-path-from-shell-initialize))
     #+end_src
+*** MacOS keybindings
+    Apple keyboards swap the locations of meta and command, so reverse that.
+    #+begin_src emacs-lisp :tangle yes
+      (setq-default mac-command-modifier 'meta)
+      (setq-default mac-option-modifier 'super)
+    #+end_src
 ** Editor workflow enhancements
 *** Helm -- a better minibuffer workflow
     Helm is a super powerful way to use the minibuffer that uses fuzzy searching to bring up candidate actions for that particular command.
