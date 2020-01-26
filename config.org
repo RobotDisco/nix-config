@@ -133,6 +133,58 @@
 	 :config (require 'bind-key))
      #+END_SRC
 ** General editor behaviour
+*** Appearance
+**** Remove unnecessary chrome
+     I'm pretty minimalist and keyboard-driven in how I use Emacs, so I want to remove all mouse-based chrome
+     #+begin_src emacs-lisp :tangle yes
+       (menu-bar-mode -1)
+       (tool-bar-mode -1)
+       (scroll-bar-mode -1)
+       ;; The fringe is this small strip which sometimes indicates that line-specific information
+       ;; about that line is available (there is an error on that line, for example.)
+       (fringe-mode -1)
+     #+end_src
+**** Add useful chrome
+     It is very useful to know what column I am currently on
+     #+begin_src emacs-lisp :tangle yes
+       (column-number-mode +1)
+     #+end_src
+**** Use preferred typeface
+     Like a lot of developers, I am very particular about my monospaced font choices :)
+     #+begin_src emacs-lisp :tangle yes
+       (add-to-list 'default-frame-alist '(font . "Anonymous Pro-14"))
+     #+end_src
+**** Emacs theming
+     As far as I can tell, the combination of using Emacs in daemon mode and themes are a dark art, which often conflict with each other. The problem is that the daemon likely runs outside the graphical system, but the theme does load-time adjustments based on whether the frame is run in a console or graphical context.
+     #+begin_src emacs-lisp :tangle yes
+       (use-package rebecca-theme
+	 :pin melpa-stable
+	 :config
+	 (if (daemonp)
+	   ;; We need this hack because when you initialize emacs as a daemon,
+	   ;; no frame is created so a lot of important theme loading computations
+	   ;; do not get run. However, this is especially hacky because we don't
+	   ;; want to reload the theme from scratch on every frame creation but
+	   ;; that's the only hook we can do this, so our hook has to remove itself
+	   ;; when it is done.
+	   (cl-labels ((load-my-theme (frame)
+				      (with-selected-frame frame
+					(load-theme 'rebecca t))
+				      (remove-hook 'after-make-frame-functions #'load-my-theme)))
+	     (add-hook 'after-make-frame-functions #'load-my-theme))
+	 (load-theme 'rebecca t)))
+     #+end_src
+*** Shorten yes/no prompts
+    I would much rather type Y/N over Yes/No in prompts
+    #+begin_src emacs-lisp :tangle yes
+      (defalias 'yes-or-no-p 'y-or-n-p)
+    #+end_src
+*** Follow symlinks in version control functions
+    Especially in my configuration and dotfiles, I often edit symlinks where applications expect those files, but the file lives in a git repo somewhere.
+    Emacs' default behaviour always prompts for me to follow the symlink back to the original file, but that's really annoying, so I will disable that.
+    #+begin_src emacs-lisp :tangle yes
+      (setq vc-follow-symlinks t)
+    #+end_src
 *** Revert buffer shortcut
     I revert unsaved changes often enough that I should define a command for it.
     #+begin_src emacs-lisp :tangle yes
