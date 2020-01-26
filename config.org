@@ -143,6 +143,14 @@
     #+begin_src emacs-lisp :tangle yes
     (global-auto-revert-mode +1)
     #+end_src
+*** Show my options when I start an emacs key-chord
+    I do not have infinite memory, I would like emacs to tell me what commands I could run from all the possible completions of the keychord I have started.
+    #+begin_src emacs-lisp :tangle yes
+      (use-package which-key
+	:pin melpa-stable
+	:config
+	(which-key-mode))
+    #+end_src
 ** Editor workflow enhancements
 *** Project Management
     =projectile= is a package that adds a software development workflow to collections of files.
