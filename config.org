@@ -132,6 +132,115 @@
        (use-package bind-key
 	 :config (require 'bind-key))
      #+END_SRC
+** Window Management
+   I love Emacs so much, I use it as my window manager :)
+*** Window title hook
+    By default, all X Window buffers have the title of =*EXWM*=. I want them to have the supplied window name of the application they contain, and I can perform that via a hook.
 
-   
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (defun gaelan/exwm-buffer-title-hook ()
+	"EXWM hook for renaming buffer names to their associated X window title."
+	(exwm-workspace-rename-buffer exwm-class-name))
+    #+END_SRC
+*** Monitor change hook
+    This hook invokes =xrandr= and, based on the monitors in my house and where they connect to my laptop, and reconfigures what monitors are enabled or disabled for X Windows.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (defun gaelan/exwm-randr-screen-change-hook ()
+	"Hook for updating X screens when monitors plugged in."
+	;; Start by enumerating over which screens are connected and disconnected
+	(let ((xrandr-output-regexp "\n\\([^ ]+\\) \\(dis\\)?connected ")
+	     output-connected
+	     output-disconnected)
+	 (with-temp-buffer
+	   (call-process "xrandr" nil t nil)
+	   (goto-char (point-min))
+	   (while (re-search-forward xrandr-output-regexp nil 'noerror)
+	     (if (null (match-string 2))
+		 (add-to-list 'output-connected (match-string 1))
+	       (add-to-list 'output-disconnected (match-string 1))))
+	   ;; disable all screens that are marked as disabled.
+	   (dolist (output output-disconnected)
+	     (call-process "xrandr" nil nil nil "--output" output "--off"))
+	   (dolist (output output-connected)
+	     (cond ((string= output "DP-1-1")
+		    ;; When docked, this is my main monitor
+		    (call-process "xrandr" nil nil nil
+				  "--output" output "--primary" "--auto"))
+		   ((string= output "DP-1-2")
+		    ;; My second monitor is in portrait mode
+		    (call-process "xrandr" nil nil nil
+				  "--output" output "--auto" "--rotate" "left" "--right-of" "DP-1-1"))
+		   ((string= output "eDP-1")
+		    (if (= (length output-connected) 1)
+			;; If this is the only connected screen, mark it as the primary one.
+			(call-process "xrandr" nil nil nil
+				      "--output" output "--primary" "--auto")
+		      ;; If it isn't the only monitor, my laptop is most likely in
+		      ;; clamshell mode.
+		      (call-process "xrandr" nil nil nil
+				    "--output" output "--off"))))))))
+    #+END_SRC
+*** Enable and configure EXWM
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package exwm
+	:hook
+	(exwm-update-class-hook . gaelan/exwm-buffer-title-hook)
+	(exwm-randr-screen-change-hook . gaelan/exwm-randr-screen-change-hook)
+	:init
+	;; Set some global window management bindings
+	(setq exwm-input-global-keys
+	      `(
+		;; 's-r': Reset to (line-mode).
+		([?\s-r] . exwm-reset)
+		;; 's-w': Switch workspace.
+		([?\s-w] . exwm-workspace-switch)
+		;; 's-p': Launch application
+		([?\s-p] . (lambda (command)
+			     (interactive (list (read-shell-command "$ ")))
+			     (start-process-shell-command command nil command)))
+		;; 's-<N>': Switch to certain workspace.
+		,@(mapcar (lambda (i)
+			    `(,(kbd (format "s-%d" i)) .
+			      (lambda ()
+				(interactive)
+				(exwm-workspace-switch-create ,i))))
+			  (number-sequence 0 9))))
+	;; translate emacs keybindings into CUA-like ones for most apps, since most
+	;; apps don't observe emacs kebindings and we would like a uniform experience.
+	(setq exwm-input-simulation-keys
+	      '(;; movement
+		([?\C-b] . [left])
+		([?\M-b] . [C-left])
+		([?\C-f] . [right])
+		([?\M-f] . [C-right])
+		([?\C-p] . [up])
+		([?\C-n] . [down])
+		([?\C-a] . [home])
+		([?\C-e] . [end])
+		([?\M-v] . [prior])
+		([?\C-v] . [next])
+		([?\C-d] . [delete])
+		([?\C-k] . [S-end delete])
+		;; cut/paste
+		([?\C-w] . [?\C-x])
+		([?\M-w] . [?\C-c])
+		([?\C-y] . [?\C-v])
+		;; search
+		([?\C-s] . [?\C-f])))
+	;; Configure workspace 1 to show up by default on my portrait monitor.
+	;; By default, workspaces show up on the first, default, active monitor.
+	(setq exwm-randr-workspace-output-plist
+	      '(1 "DP-1-2"))
+	:config
+	(exwm-randr-enable))
+   #+END_SRC
+*** Multimedia keys
+    If Emacs is going to be our window manager, it only makes sense to have it handle things like multimedia keys on keyboards
 
+    =desktop-environment-mode= is a package that automatically hooks up handlers for things like brightness, volume, wireless disable, etc...
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package desktop-environment
+	:config
+	(desktop-environment-mode))
+    #+END_SRC
