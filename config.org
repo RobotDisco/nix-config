@@ -132,6 +132,33 @@
        (use-package bind-key
 	 :config (require 'bind-key))
      #+END_SRC
+** Editor Workflow enhancements
+*** Project Management
+    =projectile= is a package that adds a software development workflow to collections of files.
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package projectile
+	:pin melpa-stable
+	:config
+	(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+	(projectile-mode +1))
+    #+end_src
+**** Helm support
+     Use helm in projectile commands
+     #+begin_src emacs-lisp :tangle yes
+       (use-package helm-projectile
+	 :require helm
+	 :pin melpa-stable
+	 :config
+	 (helm-projectile-on))
+     #+end_src
+**** Ripgrep support
+     Ripgrep is my preferred choice in the "better than grep" software category
+     #+begin_src emacs-lisp :tangle yes
+       (use-package projectile-ripgrep
+	 :pin melpa-stable
+	 :after projectile)
+     #+end_src
 ** Software Development
 *** Git
     =magit= is a super awesome git package
