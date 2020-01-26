@@ -151,6 +151,16 @@
 	:config
 	(which-key-mode))
     #+end_src
+** Platform-specific tweaks
+*** Load path from shell
+    On graphical systems like X and OSX we need to load paths from our shell scripts rather than using some generic system path. Luckily Steve Purcell has written a helpful package to manage this.
+    #+begin_src emacs-lisp :tangle yes
+      (use-package exec-path-from-shell
+	:pin melpa-stable
+	:if (memq window-system '(mac ns x))
+	:config
+	(exec-path-from-shell-initialize))
+    #+end_src
 ** Editor workflow enhancements
 *** Project Management
     =projectile= is a package that adds a software development workflow to collections of files.
