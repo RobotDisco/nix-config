@@ -176,7 +176,7 @@
      Use helm in projectile commands
      #+begin_src emacs-lisp :tangle yes
        (use-package helm-projectile
-	 :requires helm
+	 :after helm
 	 :pin melpa-stable
 	 :config
 	 (helm-projectile-on))
@@ -199,11 +199,11 @@
 
       (use-package treemacs-projectile
 	:pin melpa-stable
-	:requires projectile)
+	:after projectile)
 
       (use-package treemacs-magit
 	:pin melpa-stable
-	:requires magit)
+	:after magit)
     #+end_src
 *** Error/Syntax checking
     We use =flycheck= for things like on-the-fly syntax checking, linting, dynamic runtime analysis, etc...
