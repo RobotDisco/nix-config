@@ -101,6 +101,25 @@
       (eval-when-compile
 	(require 'use-package))
     #+END_SRC
+*** Always download packages, if required
+    By default, use-package does not download emacs packages if they are missing.
+
+    I would like that to happen rather than having to install them all manually myself
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (require 'use-package-ensure)
+      (setq use-package-always-ensure t)
+    #+END_SRC
+*** Automatically update packages
+    Emacs doesn't update packages automatically. There is a package which enables this.
+
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package auto-package-update
+	:config
+	(setq auto-package-update-delete-old-versions t)
+	(setq auto-package-update-hide-results t)
+	(auto-package-update-maybe))
+    #+END_SRC
 **** Diminish 
     Having the full name of every package displayed would clog our status line; there is a package that will appreviate the name of well-known packages to a couple of characters.
     #+BEGIN_SRC emacs-lisp :tangle yes
