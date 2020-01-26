@@ -138,8 +138,12 @@
     By default, all X Window buffers have the title of =*EXWM*=. I want them to have the supplied window name of the application they contain, and I can perform that via a hook.
 
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (defun gaelan/exwm-buffer-title-hook ()
+      (defun gaelan/exwm-update-title-hook ()
 	"EXWM hook for renaming buffer names to their associated X window title."
+	(exwm-workspace-rename-buffer exwm-title))
+
+      (defun gaelan/exwm-update-class-hook ()
+	"EXWM hook for renaming buffer names to their associated X window class."
 	(exwm-workspace-rename-buffer exwm-class-name))
     #+END_SRC
 *** Monitor change hook
@@ -183,9 +187,6 @@
 *** Enable and configure EXWM
     #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package exwm
-	:hook
-	(exwm-update-class-hook . gaelan/exwm-buffer-title-hook)
-	(exwm-randr-screen-change-hook . gaelan/exwm-randr-screen-change-hook)
 	:init
 	;; Set some global window management bindings
 	(setq exwm-input-global-keys
@@ -232,6 +233,15 @@
 	(setq exwm-randr-workspace-output-plist
 	      '(1 "DP-1-2"))
 	:config
+	(add-hook 'exwm-update-class-hook
+		  'gaelan/exwm-update-class-hook)
+	(add-hook 'exwm-update-title-hook
+		  'gaelan/exwm-update-title-hook)
+
+	;; Enable multi-monitor support for EXWM
+	(require 'exwm-randr)
+	(add-hook 'exwm-randr-screen-change-hook
+		  'gaelan/exwm-randr-screen-change-hook)
 	(exwm-randr-enable))
    #+END_SRC
 *** Multimedia keys
