@@ -166,6 +166,15 @@
 	:pin melpa-stable
 	:hook (after-init-hook . global-flycheck-mode))
     #+end_src
+*** Snippet Manager
+    It's annoying to type the same things over and over. =yasnippet= is a tool that expands full templates from short snippets.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package yasnippet-snippets)
+      (use-package yasnippet
+	:after yasnippet-snippets
+	:config
+	(yas-global-mode 1))
+    #+END_SRC
 ** Software Development
 *** Git
     =magit= is a super awesome git package
@@ -178,15 +187,6 @@
 	(require 'magit-wip)
 	(magit-wip-mode))
     #+END_SRC
-** Snippet Manager
-   It's annoying to type the same things over and over. =yasnippet= is a tool that expands full templates from short snippets.
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (use-package yasnippet-snippets)
-     (use-package yasnippet
-       :after yasnippet-snippets
-       :config
-       (yas-global-mode 1))
-   #+END_SRC
 ** Window Management
    I love Emacs so much, I use it as my window manager :)
 *** Window title hook
