@@ -123,12 +123,14 @@
 **** Diminish 
     Having the full name of every package displayed would clog our status line; there is a package that will appreviate the name of well-known packages to a couple of characters.
     #+BEGIN_SRC emacs-lisp :tangle yes
-       (require 'diminish)
+      (use-package diminish
+	:config (require 'diminish))
     #+END_SRC
 **** Bind-key
      Since we're going to be using the =:bind= keyword to configure keybindings, we require the =bind-key= package
      #+BEGIN_SRC emacs-lisp :tangle yes
-       (require 'bind-key)
+       (use-package bind-key
+	 :config (require 'bind-key))
      #+END_SRC
 
    
