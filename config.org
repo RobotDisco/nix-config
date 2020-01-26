@@ -400,3 +400,6 @@
 	:config
 	(desktop-environment-mode))
     #+END_SRC
+* Org Mode settings
+  #+STARTUP: content
+  #+STARTUP: showstars
