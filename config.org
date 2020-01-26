@@ -221,6 +221,25 @@
 	:config
 	(yas-global-mode 1))
     #+END_SRC
+*** Autocompletion
+    It's nice to have autocompletion for things like functions and other possibilities that can be inferred from the editor mode.
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package company
+	:pin melpa-stable
+	:bind (("M-TAB" . 'company-complete))
+	:hook (after-init-hook . global-company-mode))
+    #+end_src
+
+    My autocompletion moder also has helm integration
+    #+begin_src emacs-lisp :tangle yes
+      (use-package helm-company
+	:pin melpa-stable
+	:after (helm company)
+	:config
+	(define-key company-mode-map (kbd "C-:") 'helm-company)
+	(define-key company-active-map (kbd "C-:") 'helm-company))
+    #+end_src
 ** Software Development
 *** Git source control management
     =magit= is a super awesome git package
