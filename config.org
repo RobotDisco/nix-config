@@ -159,6 +159,13 @@
 	 :pin melpa-stable
 	 :after projectile)
      #+end_src
+*** Error/Syntax checking
+    We use =flycheck= for things like on-the-fly syntax checking, linting, dynamic runtime analysis, etc...
+    #+begin_src emacs-lisp :tangle yes
+      (use-package flycheck
+	:pin melpa-stable
+	:hook (after-init-hook . global-flycheck-mode))
+    #+end_src
 ** Software Development
 *** Git
     =magit= is a super awesome git package
