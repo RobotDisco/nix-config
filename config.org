@@ -147,7 +147,7 @@
      Use helm in projectile commands
      #+begin_src emacs-lisp :tangle yes
        (use-package helm-projectile
-	 :require helm
+	 :requires helm
 	 :pin melpa-stable
 	 :config
 	 (helm-projectile-on))
