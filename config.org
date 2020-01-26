@@ -1,0 +1,61 @@
+# -*- mode: org; coding: utf-8; -*-
+* Gaelan's Emacs Config
+  This is my emacs config; there are many like it, but this one is mine.
+** Preamble
+*** File header
+    There are little things I can do to make my life easier working with the tangled file.
+
+    For one thing, I wil definitely want to enable lexical binding.
+    For another thing, I can set the file to be opened in read-only mode in case I mistakenly try to edit the generated elisp file rather than this org file.
+    #+BEGIN_SRC elisp
+      ;;; init.el --- Gaelan's Emacs config -*- lexical-binding: t; eval: (view-mode 1) -*-
+    #+END_SRC
+** Initialization
+   This is low-level stuff that sets up my emacs environment. It's usually not config but
+   tweaking the environment to support my configuration.
+*** Version Sentinal
+    I am not sure if this config will work with older versions of emacs, so I'll abort if the running version of emacs is older than a known version.
+ #+BEGIN_SRC elisp
+   (let ((minver "26.1"))
+     (when (version< emacs-version minver)
+       (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
+ #+END_SRC
+*** Garbage Collection threshold tweak
+    I saw a config where the author tweaked garbage collection thresholds for speed during initialization, presuambly to minimize GC overhead at startup.
+    When emacs has finished initalizing, it runs a hook we've set up to restore a more aggressive threshold.
+    I have no idea if this is a good idea or not, but for now I will trust them.
+    #+BEGIN_SRC elisp
+      (let ((normal-gc-cons-threshold (* 20 1024 1024))
+	    (init-gc-cons-threshold (* 128 1024 1024)))
+	(setq gc-cons-threshold init-gc-cons-threshold)
+	(add-hook 'emacs-startup-hook
+		  (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
+    #+END_SRC
+    
+*** Set location of custom file
+    Emacs by default manages some forms for variables and faces and places them at the end of =init.el=. Since my =init.el= is generated, this would be difficult to manage.
+    I can tell Emacs to use a different location for these, which will not be checked into source control or regenerated and Emacs can manage it to its heart's content.
+    #+BEGIN_SRC elisp
+      (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+    #+END_SRC
+*** Who am I?
+    My name and email will be used by things like git and email plugins and so on.
+    #+BEGIN_SRC elisp
+      (setq user-full-name "Gaelan D'costa"
+	    user-mail-address "gdcosta@gmail.com")
+    #+END_SRC
+*** Enable Common Lisp language features
+    We'll need to load common-lisp functionality, but since we're only using macros, we can restrict it to the compliation step to monimize runtime bloat.
+    #+BEGIN_SRC elisp
+      (eval-when-compile
+	(require 'cl-lib))
+    #+END_SRC
+** Some helpful constants
+    There are some constants I will refer to often; this is a good place to put them.
+    These will often be things like quickly getting the operating system and user-defined directories and such.
+ #+BEGIN_SRC elisp
+   (defconst *is-osx* (eq system-type 'darwin)
+     "Is this operating system OSX?")
+   (defconst *is-linux* (eq system-type 'gnu/linux)
+     "Is this operating system Linux?")
+ #+END_SRC
