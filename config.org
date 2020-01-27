@@ -393,6 +393,102 @@
 	(define-key company-mode-map (kbd "C-:") 'helm-company)
 	(define-key company-active-map (kbd "C-:") 'helm-company))
     #+end_src
+** Org Mode
+   Org mode is my most essential emacs package, since it effectively manages my life.
+
+   I am a heavy user of the Getting Things Done task/project management system.
+*** Some important variables
+    My central org mode files are installed in a folder that is automatically synced to the cloud. It is different depending on which operating system I am running.
+    #+begin_src emacs-lisp :tangle yes
+      (defconst gaelan/webdav-prefix
+	"The root location of my GTD system"
+	(if gaelan/*is-osx*
+	    (file-name-as-directory "~/Seafile/gtd/")
+	  (file-name-as-directory "~/fallcube/gtd/")))
+    #+end_src
+*** Basic org mode configuration
+    This is where I'm going to set up some really basic GTD stuff:
+    - Install org itself
+    - Install global hotkeys
+    - Setting available priority levels
+    - Configuring logging behaviour
+    - Configuring org capture tactics
+    - Configuring refile targets
+    - Configuring custom agenda views
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package org
+	:pin org
+	:init
+	(setq-default org-lowest-priority ?D)
+	(setq-default org-log-into-drawer t)
+	(setq-default org-capture-templates
+		      `(("t" "Todo" entry (file+headline ,(concat gaelan/webdav-prefix "gtd.org") "Tasks")
+			 "* TODO %?\n   %t)")))
+	(setq-default org-refile-targets
+		      `((,(concat gaelan/webdav-prefix "gtd.org") . (:level . 1))
+			(,(concat gaelan/webdav-prefix "someday.org") . (:level . 1))))
+	(setq-default org-agenda-files
+		      `(,(concat gaelan/webdav-prefix "gtd.org")
+			,(concat gaelan/webdav-prefix "gcal/personal.org")
+			,(concat gaelan/webdav-prefix "gcal/work.org")))
+	(setq-default org-agenda-custom-commands
+		      '(("h" "Office and Home Lists"
+			 ((agenda)
+			  (tags-todo "@home")
+			  (tags-todo "@officeto")
+			  (tags-todo "@officekw")
+			  (tags-todo "@lappy")
+			  (tags-todo "@phone")
+			  (tags-todo "@brain")
+			  (tags-todo "@online")
+			  (tags-todo "@reading")
+			  (tags-todo "@watching")
+			  (tags-todo "@gaming")))
+			("d" "Daily Action List"
+			 ((agenda "" ((org-agenda-ndays 1)
+				      (org-agenda-sorting-strategy
+				       (quote ((agenda time-up priority-down tag-up))))
+				      (org-deadline-warning-days 0)))))))
+	:bind (("C-c l" . org-store-link)
+	       ("C-c a" . org-agenda)
+	       ("C-c c" . org-capture)))
+    #+end_src
+*** Org Journal mode
+    I also use org mode for journalling my days
+    #+begin_src emacs-lisp :tangle yes
+      (use-package org-journal
+	:pin melpa-stable
+	:init
+	(setq org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "journal/")))
+	(setq org-journal-file-format "%Y/%Y%m%d.org")
+	;; Bullet Journal discourages carrying over todos. Decide that explicitly!
+	(setq org-journal-carryover-items nil))
+    #+end_src
+*** Prettify org mode
+    Org files often look like a overwhelming wall of leading asterisks.
+    We use a mode to minimize the amount of chrome displayed in org mode while still clearly distinguishing between outline levels.
+    #+begin_src emacs-lisp :tangle yes
+      (use-package org-bullets
+	:pin melpa-stable
+	:hook (org-mode-hook . org-bullets-mode))
+    #+end_src
+*** [Inactive] Org Mode / Google Calendar integration
+    In the past I tried and failed to use something that pulls appointment data from google calendar into my org mode.
+    #+begin_src emacs-lisp :tangle no
+      (use-package org-gcal
+	:pin melpa-stable
+	:init
+	(let* ((bwdata (elt (bitwarden-search "offlineimap") 0))
+	       (bwfields (gethash "fields" bwdata))
+	       (client-id (gethash "value" (elt bwfields 0)))
+	       (client-secret (gethash "value" (elt bwfields 1))))
+	  (setq-default 'org-gcal-client-id client-id)
+	  (setq-default 'org-gcal-client-secret client-secret))
+	(setq-default org-gcal-file-alist
+		      `(("gdcosta@gmail.com" . ,(concat webdav-prefix "gcal/personal.org"))
+			("gaelan@tulip.com" . ,(concat webdav-prefix "gcal/work.org")))))
+    #+end_src
 ** Software Development
 *** Git source control management
     =magit= is a super awesome git package
