@@ -93,10 +93,16 @@
 
     John Wiegley has written a nice emacs plugin to manage these via a macro, which makes reading one's intended configuration for each package a lot more compact and easier to comprehend.
 
+    There is a fun chicken-and-the-egg problem where we need =use-package= installed to automatically install other packages, but how does =use-package= itself get installed? Well, we do it the old-fashioned way, with checks :)
+
     Because it is a macro, we only need to require the package when compiling the configuration file.
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (eval-when-compile
-	(require 'use-package))
+	(unless (package-installed-p 'use-package)
+	  (package-refresh-contents)
+	  (package-install 'use-package))
+
+        (eval-when-compile
+          (require 'use-package))
     #+END_SRC
 *** Always download packages, if required
     By default, use-package does not download emacs packages if they are missing.
