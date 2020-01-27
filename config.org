@@ -401,10 +401,10 @@
     My central org mode files are installed in a folder that is automatically synced to the cloud. It is different depending on which operating system I am running.
     #+begin_src emacs-lisp :tangle yes
       (defconst gaelan/webdav-prefix
-	"The root location of my GTD system"
 	(if gaelan/*is-osx*
 	    (file-name-as-directory "~/Seafile/gtd/")
-	  (file-name-as-directory "~/fallcube/gtd/")))
+	  (file-name-as-directory "~/fallcube/gtd/"))
+	"The root location of my GTD system")
     #+end_src
 *** Basic org mode configuration
     This is where I'm going to set up some really basic GTD stuff:
