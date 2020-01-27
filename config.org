@@ -69,15 +69,12 @@
 *** Enable package sources
     By default, emacs' package manager only grabs packages from GNU's ELPA package library, which has a very tiny selection of packages.
     We are going to add the following additional reposities:
-    - melpa-stable :: Stable versions of almost every commonly-used package
-    - melpa :: Unstable versions of almost every commonly-used package
+    - melpa :: Repository of almost every commonly-used package
     - org :: The repository for org mode, my favourite emacs package :)
 
     My understanding is that the order of repos =package-archives= does not matter, if this because a problem (i.e. the wrong versions of packages are being pulled because they exist in multiple archives) the solution is apparently to set values in =package-archive-priorities=
 
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (add-to-list 'package-archives
-		   '("melpa-stable" . "https://stable.melpa.org/packages/"))
       (add-to-list 'package-archives
 		   '("melpa" . "https://melpa.org/packages/"))
       (add-to-list 'package-archives
