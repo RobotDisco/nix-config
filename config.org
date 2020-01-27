@@ -158,7 +158,6 @@
      As far as I can tell, the combination of using Emacs in daemon mode and themes are a dark art, which often conflict with each other. The problem is that the daemon likely runs outside the graphical system, but the theme does load-time adjustments based on whether the frame is run in a console or graphical context.
      #+begin_src emacs-lisp :tangle yes
        (use-package rebecca-theme
-	 :pin melpa-stable
 	 :config
 	 (if (daemonp)
 	   ;; We need this hack because when you initialize emacs as a daemon,
@@ -199,7 +198,6 @@
     I do not have infinite memory, I would like emacs to tell me what commands I could run from all the possible completions of the keychord I have started.
     #+begin_src emacs-lisp :tangle yes
       (use-package which-key
-	:pin melpa-stable
 	:config
 	(which-key-mode))
     #+end_src
@@ -215,7 +213,6 @@
     On graphical systems like X and OSX we need to load paths from our shell scripts rather than using some generic system path. Luckily Steve Purcell has written a helpful package to manage this.
     #+begin_src emacs-lisp :tangle yes
       (use-package exec-path-from-shell
-	:pin melpa-stable
 	:if (memq window-system '(mac ns x))
 	:config
 	(exec-path-from-shell-initialize))
@@ -238,7 +235,6 @@
 
     #+begin_src emacs-lisp :tangle yes
       (use-package helm
-	:pin melpa-stable
 	;; Add recommended keybindings as found in Thierry Volpiatto's guide
 	;; http://tuhdo.github.io/helm-intro.html
 	:bind (("M-x" . helm-M-x)
@@ -283,7 +279,6 @@
      There is a really cool interface for looking at files in git projects, called =helm-browse-project=     
      #+begin_src emacs-lisp :tangle yes
        (use-package helm-ls-git
-	 :pin melpa-stable
 	 :after helm
 	 :config
 	 ;; `helm-source-ls-git' must be defined manually
@@ -298,7 +293,6 @@
      There's a really nice node that will list all the possible keybindings at your current moment, and you can choose one using helm.
      #+begin_src emacs-lisp :tangle yes
        (use-package helm-descbinds
-	 :pin melpa-stable
 	 :after helm
 	 :config
 	 (helm-descbinds-mode))
@@ -322,7 +316,6 @@
 
     #+begin_src emacs-lisp :tangle yes
       (use-package projectile
-	:pin melpa-stable
 	:config
 	(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 	(projectile-mode +1))
@@ -332,7 +325,6 @@
      #+begin_src emacs-lisp :tangle yes
        (use-package helm-projectile
 	 :after helm
-	 :pin melpa-stable
 	 :config
 	 (helm-projectile-on))
      #+end_src
@@ -340,7 +332,6 @@
      Ripgrep is my preferred choice in the "better than grep" software category
      #+begin_src emacs-lisp :tangle yes
        (use-package projectile-ripgrep
-	 :pin melpa-stable
 	 :after projectile)
      #+end_src
 *** Directory Pane
@@ -349,22 +340,18 @@
     The module I use has integrations with packages for my project management and git source control workflow
 
     #+begin_src emacs-lisp :tangle yes
-      (use-package treemacs
-	:pin melpa-stable)
+      (use-package treemacs)
 
       (use-package treemacs-projectile
-	:pin melpa-stable
 	:after projectile)
 
       (use-package treemacs-magit
-	:pin melpa-stable
 	:after magit)
     #+end_src
 *** Error/Syntax checking
     We use =flycheck= for things like on-the-fly syntax checking, linting, dynamic runtime analysis, etc...
     #+begin_src emacs-lisp :tangle yes
       (use-package flycheck
-	:pin melpa-stable
 	:hook (after-init-hook . global-flycheck-mode))
     #+end_src
 *** Snippet Manager
@@ -381,7 +368,6 @@
 
     #+begin_src emacs-lisp :tangle yes
       (use-package company
-	:pin melpa-stable
 	:bind (("M-TAB" . 'company-complete))
 	:hook (after-init-hook . global-company-mode))
     #+end_src
@@ -389,7 +375,6 @@
     My autocompletion moder also has helm integration
     #+begin_src emacs-lisp :tangle yes
       (use-package helm-company
-	:pin melpa-stable
 	:after (helm company)
 	:config
 	(define-key company-mode-map (kbd "C-:") 'helm-company)
@@ -460,7 +445,6 @@
     I also use org mode for journalling my days
     #+begin_src emacs-lisp :tangle yes
       (use-package org-journal
-	:pin melpa-stable
 	:init
 	(setq org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "journal/")))
 	(setq org-journal-file-format "%Y/%Y%m%d.org")
@@ -472,14 +456,12 @@
     We use a mode to minimize the amount of chrome displayed in org mode while still clearly distinguishing between outline levels.
     #+begin_src emacs-lisp :tangle yes
       (use-package org-bullets
-	:pin melpa-stable
 	:hook (org-mode-hook . org-bullets-mode))
     #+end_src
 *** [Inactive] Org Mode / Google Calendar integration
     In the past I tried and failed to use something that pulls appointment data from google calendar into my org mode.
     #+begin_src emacs-lisp :tangle no
       (use-package org-gcal
-	:pin melpa-stable
 	:init
 	(let* ((bwdata (elt (bitwarden-search "offlineimap") 0))
 	       (bwfields (gethash "fields" bwdata))
@@ -514,18 +496,15 @@
     At the very least we can automatically have file navigation and completion functionality out of the box.
 
     #+begin_src emacs-lisp :tangle yes
-      (use-package lsp-mode
-	:pin melpa-stable)
+      (use-package lsp-mode)
 
       (use-package lsp-ui
-	:pin melpa-stable
 	:after lsp-mode
 	:hook (lsp-mode-hook . lsp-ui-mode))
     #+end_src
 **** LSP has completion support
      #+begin_src emacs-lisp :tangle yes
        (use-package company-lsp
-	 :pin melpa-stable
 	 :after company
 	 :config
 	 (push 'company-lsp company-backends))
@@ -533,15 +512,13 @@
 **** LSP also has file navigation support
     #+begin_src emacs-lisp :tangle yes
       (use-package lsp-treemacs
-	:pin melpa-stable
 	:after lsp-mode
 	:config
 	(lsp-treemacs-sync-mode +1))
     #+end_src
 **** LSP also has helm support
     #+begin_src emacs-lisp :tangle yes
-      (use-package helm-lsp
-	:pin melpa-stable)
+      (use-package helm-lsp)
     #+end_src
 ** Programming Language support
 *** Generic Lisp support
@@ -550,8 +527,7 @@
      In lispy languages parentheses are often so nested that it is confusing to figure out which level of nesting you are about to close.
      There is a nice package we can install to make each level's parentheses have a distinct colour, for easy identification.
     #+begin_src emacs-lisp :tangle yes
-      (use-package rainbow-delimiters
-	:pin melpa-stable)
+      (use-package rainbow-delimiters)
     #+end_src
 **** Show matching paren
      Along with colouring parentheses by level, we can also highlight the matching opening/closing parenthesis for the parenthesis your point is currently over.
@@ -565,7 +541,6 @@
 
      #+begin_src emacs-lisp :tangle yes
        (use-package smartparens
-	 :pin melpa-stable
 	 :config
 	 (require 'smartparens-config)
 	 (sp-use-smartparens-bindings))
@@ -604,7 +579,6 @@
     I generally use pyenv to manage different versions of python
     #+begin_src emacs-lisp :tangle yes
       (use-package pyenv-mode
-	:pin melpa-stable
 	:config
 	(pyenv-mode))
     #+end_src
@@ -612,13 +586,11 @@
     I use anaconda mode to get inspection  and analysis from dynamic analysis, and I tie this to my completion framework.
     #+begin_src emacs-lisp :tangle yes
       (use-package anaconda-mode
-	:pin melpa-stable
 	:config
 	(add-hook 'python-mode-hook 'anaconda-mode)
 	(add-hook 'python-mode-hook 'anaconda-eldoc-mode))
 
       (use-package company-anaconda
-	:pin melpa-stable
 	:after company
 	:config
 	(add-to-list 'company-backends '(company-anaconda :with company-capf)))
@@ -627,7 +599,6 @@
     Haskell uses the language server project, so we can just hook into that
     #+begin_src emacs-lisp :tangle yes
       (use-package lsp-haskell
-	:pin melpa-stable
 	:hook (haskell-mode-hook . lsp-deferred))
     #+end_src
 ** Window Management
