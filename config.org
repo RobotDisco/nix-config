@@ -206,7 +206,9 @@
 *** Make dired operations async
     Make rename and copy operations in dired asynchronous, don't wait for them to finish.
     #+begin_src emacs-lisp :tangle yes
-      (dired-async-mode)
+      (use-package dired-async
+	:config
+	(dired-async-mode))
     #+end_src
 ** Platform-specific tweaks
 *** Load path from shell
