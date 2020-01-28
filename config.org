@@ -448,11 +448,12 @@
     I also use org mode for journalling my days
     #+begin_src emacs-lisp :tangle yes
       (use-package org-journal
-	:init
-	(setq org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "journal/")))
-	(setq org-journal-file-format "%Y/%Y%m%d.org")
+	:custom
+	(org-journal-date-format "%A, %F")
+	(org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "journal/")))
+	(org-journal-file-format "%Y/%m/%Y%m%d.org")
 	;; Bullet Journal discourages carrying over todos. Decide that explicitly!
-	(setq org-journal-carryover-items nil))
+	(org-journal-carryover-items nil))
     #+end_src
 *** Prettify org mode
     Org files often look like a overwhelming wall of leading asterisks.
