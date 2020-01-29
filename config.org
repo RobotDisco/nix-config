@@ -456,6 +456,7 @@
     I also use org mode for journalling my days
     #+begin_src emacs-lisp :tangle yes
       (use-package org-journal
+	:after org
 	:defer t
 	:custom
 	(org-journal-date-format "%A, %F")
