@@ -355,7 +355,8 @@
     We use =flycheck= for things like on-the-fly syntax checking, linting, dynamic runtime analysis, etc...
     #+begin_src emacs-lisp :tangle yes
       (use-package flycheck
-	:hook (after-init-hook . global-flycheck-mode))
+	:init
+	(add-hook 'after-init-hook 'global-flycheck-mode))
     #+end_src
 *** Snippet Manager
     It's annoying to type the same things over and over. =yasnippet= is a tool that expands full templates from short snippets.
@@ -371,8 +372,9 @@
 
     #+begin_src emacs-lisp :tangle yes
       (use-package company
-	:bind (("M-TAB" . 'company-complete))
-	:hook (after-init-hook . global-company-mode))
+	:init
+	(add-hook 'after-init-hook 'global-company-mode)
+	:bind (("M-TAB" . 'company-complete)))
     #+end_src
 
     My autocompletion moder also has helm integration
