@@ -627,6 +627,15 @@
       (use-package lsp-haskell
 	:hook (haskell-mode-hook . lsp-deferred))
     #+end_src
+*** Terraform
+    #+begin_src emacs-lisp :tangle yes
+      (use-package terraform-mode)
+
+      (use-package company-terraform
+	:after company
+	:config
+	(company-terraform-init))
+    #+end_src
 ** Window Management
    I love Emacs so much, I use it as my window manager :)
 *** Window title hook
