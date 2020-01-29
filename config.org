@@ -496,7 +496,7 @@
     We use a mode to minimize the amount of chrome displayed in org mode while still clearly distinguishing between outline levels.
     #+begin_src emacs-lisp :tangle yes
       (use-package org-bullets
-	:hook (org-mode-hook . org-bullets-mode))
+	:hook (org-mode . org-bullets-mode))
     #+end_src
 *** [Inactive] Org Mode / Google Calendar integration
     In the past I tried and failed to use something that pulls appointment data from google calendar into my org mode.
