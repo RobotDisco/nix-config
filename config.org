@@ -608,7 +608,7 @@
     #+begin_src emacs-lisp :tangle yes
       (use-package pyenv-mode
 	:config
-	(pyenv-mode))
+	(add-hook 'python-mode 'pyenv-mode))
     #+end_src
 
     I use anaconda mode to get inspection  and analysis from dynamic analysis, and I tie this to my completion framework.
