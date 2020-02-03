@@ -211,6 +211,17 @@
 	:config
 	(dired-async-mode))
     #+end_src
+*** Soft-word wrap long lines
+    I am a big fan of text always being capped at 80 characters
+    #+begin_src emacs-lisp :tangle yes
+      (setq fill-column 80)
+    #+end_src
+
+    I am not sure, however, whether I can safely force this to happen, esp. in shared work files.
+    I can at least start with soft-wrapping lines of text.
+    #+begin_src emacs-lisp :tangle yes
+      (visual-line-mode)
+    #+end_src
 ** Platform-specific tweaks
 *** Load path from shell
     On graphical systems like X and OSX we need to load paths from our shell scripts rather than using some generic system path. Luckily Steve Purcell has written a helpful package to manage this.
