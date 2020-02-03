@@ -437,7 +437,7 @@
 			("y" "Yearly Reflection" entry (functiona gaelan/org-journal-find-location)
 			 "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
 	(setq-default org-refile-targets
-		      `((,(concat gaelan/webdav-prefix "gtd.org") . (:level . 1))
+		      `((,(concat gaelan/webdav-prefix "gtd.org") . (:maxlevel . 2))
 			(,(concat gaelan/webdav-prefix "someday.org") . (:level . 1))))
 	(setq-default org-agenda-files
 		      `(,(concat gaelan/webdav-prefix "gtd.org")
