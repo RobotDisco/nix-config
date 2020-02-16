@@ -439,7 +439,7 @@
 	(setq-default org-refile-targets
 		      `((,(concat gaelan/webdav-prefix "gtd.org") . (:maxlevel . 2))
 			(,(concat gaelan/webdav-prefix "someday.org") . (:level . 1))
-			(nil . (:level 1))))
+			(nil . (:level . 1))))
 	(setq-default org-agenda-files
 		      `(,(concat gaelan/webdav-prefix "gtd.org")
 			,(concat gaelan/webdav-prefix "gcal/personal.org")
