@@ -238,7 +238,17 @@
       (setq-default mac-option-modifier 'super)
     #+end_src
 ** Editor workflow enhancements
+*** SSH key management
+    I use [[https://www.funtoo.org/Keychain][Keychain]] to manage my GPG and SSH keychains.
+    I want Emacs to leverage any keys I've added into this system.
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package keychain-environment
+	:config
+	(keychain-refresh-environment))
+    #+end_src
 *** Helm -- a better minibuffer workflow
+
     Helm is a super powerful way to use the minibuffer that uses fuzzy searching to bring up candidate actions for that particular command.
 
     It also allows for extensions to provide relevant completion options for context-sensitive minibuffers (language-aware functions, window manager buffer names, etc...)
@@ -597,6 +607,26 @@
 	 ;; Show documentation for a function/variable in the minibuffer
 	 (turn-on-eldoc-mode))
      #+end_src
+*** Common lisp
+    SLIME, Emacs' Common Lisp environment, is installed via the QuickLisp package manager.
+
+    We will load the package from its directory
+
+    #+begin_src emacs-lisp :tangle yes
+      (load (expand-file-name "~/.quicklisp/slime-helper.el"))
+    #+end_src
+
+    We currently use Steel Bank Common Lisp as our runtime environment
+
+    #+begin_src emacs-lisp :tangle yes
+      (setq inferior-lisp-program "sbcl")
+    #+end_src
+
+    We should load our generic lisp mode hook in common lisp edit and REPL buffers
+    #+begin_src emacs-lisp :tangle yes
+      (add-hook 'lisp-mode-hook 'gaelan/generic-lisp-mode-hook)
+    #+end_src
+
 *** Emacs Lisp
     Despite being the primordial Emacs programming language, a lot of standard workflow needs to be manually specified.
 
