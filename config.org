@@ -684,7 +684,7 @@
       (use-package lsp-haskell
 	:hook (haskell-mode-hook . lsp-deferred))
     #+end_src
-*** Terraformf
+*** Terraform
     #+begin_src emacs-lisp :tangle yes
       (use-package terraform-mode)
 
