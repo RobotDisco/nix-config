@@ -570,6 +570,19 @@
     #+begin_src emacs-lisp :tangle yes
       (use-package helm-lsp)
     #+end_src
+*** Docker support
+    Because I use Docker for development, it'd be nice to be work with containers from within emacs (say while workin in a software project.)
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package docker
+	:bind ("C-c d" . docker))
+    #+end_src
+
+    When working with local docker containers, it might be nice to edit files inside them as I'm trying stuff out. We can use tramp mode for this.
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package docker-tramp)
+    #+end_src
 ** Programming Language support
 *** Generic Lisp support
     The various lisp modes tend to need the same basic configuration, so I will specify it here.
