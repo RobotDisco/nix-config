@@ -699,6 +699,10 @@
     #+begin_src emacs-lisp :tangle yes
       (use-package yaml-mode)
     #+end_src
+*** Nix Package Management
+    #+begin_src emacs-lisp :tangle yes
+      (use-package nix-mode)
+    #+end_src
 ** Window Management
    I love Emacs so much, I use it as my window manager :)
 *** Window title hook
