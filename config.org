@@ -626,7 +626,9 @@
     We will load the package from its directory
 
     #+begin_src emacs-lisp :tangle yes
-      (load (expand-file-name "~/.quicklisp/slime-helper.el"))
+      (let ((slime-helper-file "~/.quicklisp/slime-helper.el"))
+	(when (file-readable-p slime-helper-file)
+	  (load (expand-file-name "~/.quicklisp/slime-helper.el"))))
     #+end_src
 
     We currently use Steel Bank Common Lisp as our runtime environment
