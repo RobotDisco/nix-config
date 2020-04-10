@@ -758,7 +758,7 @@
 *** Enable and configure EXWM
     #+BEGIN_SRC emacs-lisp :tangle yes
       (use-package exwm
-	:init
+	:config
 	;; Set some global window management bindings
 	(setq exwm-input-global-keys
 	      `(
@@ -801,9 +801,9 @@
 		([?\C-s] . [?\C-f])))
 	;; Configure workspace 1 to show up by default on my portrait monitor.
 	;; By default, workspaces show up on the first, default, active monitor.
-	(setq exwm-randr-workspace-output-plist
+	(setq exwm-randr-workspace-monitor-plist
 	      '(1 "DP-1-2"))
-	:config
+
 	(add-hook 'exwm-update-class-hook
 		  'gaelan/exwm-update-class-hook)
 	(add-hook 'exwm-update-title-hook
