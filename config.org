@@ -146,6 +146,9 @@
        ;; The fringe is this small strip which sometimes indicates that line-specific information
        ;; about that line is available (there is an error on that line, for example.)
        (fringe-mode -1)
+
+       ;; Don't show Emacs' default splash screen
+       (setq inhibit-splash-screen t)
      #+end_src
 **** Add useful chrome
      It is very useful to know what column I am currently on
