@@ -769,6 +769,8 @@
 		([?\s-r] . exwm-reset)
 		;; 's-w': Switch workspace.
 		([?\s-w] . exwm-workspace-switch)
+		;; 's-b': Bring application to current workspace
+		([?\s-b] . exwm-workspace-switch-to-buffer)
 		;; 's-p': Launch application
 		([?\s-p] . (lambda (command)
 			     (interactive (list (read-shell-command "$ ")))
