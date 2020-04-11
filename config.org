@@ -814,6 +814,12 @@
 	(add-hook 'exwm-update-title-hook
 		  'gaelan/exwm-update-title-hook)
 
+	;; Despite all my attempts, exwm works better in NixOS if I include this
+	;; command in my init rather than loading it as part of the emacs invocation.
+	;; While annoying, it's fine as exwm is smart enough to not double-initialize
+	;; or load in an incompatible environment like OSX or linux console.
+	(exwm-enable)
+
 	;; Enable multi-monitor support for EXWM
 	(require 'exwm-randr)
 	(add-hook 'exwm-randr-screen-change-hook
