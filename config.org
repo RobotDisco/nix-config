@@ -549,9 +549,13 @@
     At the very least we can automatically have file navigation and completion functionality out of the box.
 
     #+begin_src emacs-lisp :tangle yes
-      (use-package lsp-mode)
+      (use-package lsp-mode
+	:commands (lsp lsp-deferred)
+	;; Enable some built-in LSP clients
+	:hook (go-mode . lsp-deferred))
 
       (use-package lsp-ui
+	:commands lsp-ui-mode
 	:after lsp-mode
 	:hook (lsp-mode-hook . lsp-ui-mode))
     #+end_src
@@ -662,6 +666,10 @@
       (define-key emacs-lisp-mode-map (kbd "C-c C-l") 'load-file)
       (define-key emacs-lisp-mode-map (kbd "C-c RET") 'macroexpand-1)
       (define-key emacs-lisp-mode-map (kbd "C-c M-m") 'macroexpand-all)
+    #+end_src
+*** Go
+    #+begin_src emacs-lisp :tangle yes
+      (use-package go-mode)
     #+end_src
 *** Python
     I generally use pyenv to manage different versions of python
