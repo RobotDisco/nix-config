@@ -439,7 +439,7 @@
 	(setq-default org-lowest-priority ?D)
 	(setq-default org-log-into-drawer t)
 	(setq-default org-capture-templates
-		      `(("t" "Todo" entry (file+headline ,(concat gaelan/webdav-prefix "gtd.org") "Tasks")
+		      `(("t" "Todo" entry (file+headline ,(concat gaelan/webdav-prefix "gtd.org") "Inbox")
 			 "* TODO %?\n   %t")
 			("d" "Daily Reflection" entry (function gaelan/org-journal-find-location)
 			 "* %(format-time-string org-journal-time-format)Daily Reflection\n** Write down three accomplishments\n   1. %?\n** What did I learn?\n** What did I do to help my future?\n** What did I do to help others?\n** What am I grateful for?\n")
