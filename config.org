@@ -731,43 +731,45 @@
 	"EXWM hook for renaming buffer names to their associated X window class."
 	(exwm-workspace-rename-buffer exwm-class-name))
     #+END_SRC
-*** Monitor change hook
+*** [Inactive since Xrandr 1.5] Monitor change hook
+    **Note: This hasn't been needed since Xrandr 1.5 introduced the concept of pre-defined "monitors"**
+
     This hook invokes =xrandr= and, based on the monitors in my house and where they connect to my laptop, and reconfigures what monitors are enabled or disabled for X Windows.
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle no
       (defun gaelan/exwm-randr-screen-change-hook ()
-	"Hook for updating X screens when monitors plugged in."
-	;; Start by enumerating over which screens are connected and disconnected
-	(let ((xrandr-output-regexp "\n\\([^ ]+\\) \\(dis\\)?connected ")
-	     output-connected
-	     output-disconnected)
-	 (with-temp-buffer
-	   (call-process "xrandr" nil t nil)
-	   (goto-char (point-min))
-	   (while (re-search-forward xrandr-output-regexp nil 'noerror)
-	     (if (null (match-string 2))
-		 (add-to-list 'output-connected (match-string 1))
-	       (add-to-list 'output-disconnected (match-string 1))))
-	   ;; disable all screens that are marked as disabled.
-	   (dolist (output output-disconnected)
-	     (call-process "xrandr" nil nil nil "--output" output "--off"))
-	   (dolist (output output-connected)
-	     (cond ((string= output "DP-1-1")
-		    ;; When docked, this is my main monitor
-		    (call-process "xrandr" nil nil nil
-				  "--output" output "--primary" "--auto"))
-		   ((string= output "DP-1-2")
-		    ;; My second monitor is in portrait mode
-		    (call-process "xrandr" nil nil nil
-				  "--output" output "--auto" "--rotate" "left" "--right-of" "DP-1-1"))
-		   ((string= output "eDP-1")
-		    (if (= (length output-connected) 1)
-			;; If this is the only connected screen, mark it as the primary one.
-			(call-process "xrandr" nil nil nil
-				      "--output" output "--primary" "--auto")
-		      ;; If it isn't the only monitor, my laptop is most likely in
-		      ;; clamshell mode.
+	  "Hook for updating X screens when monitors plugged in."
+	  ;; Start by enumerating over which screens are connected and disconnected
+	  (let ((xrandr-output-regexp "\n\\([^ ]+\\) \\(dis\\)?connected ")
+	       output-connected
+	       output-disconnected)
+	   (with-temp-buffer
+	     (call-process "xrandr" nil t nil)
+	     (goto-char (point-min))
+	     (while (re-search-forward xrandr-output-regexp nil 'noerror)
+	       (if (null (match-string 2))
+		   (add-to-list 'output-connected (match-string 1))
+		 (add-to-list 'output-disconnected (match-string 1))))
+	     ;; disable all screens that are marked as disabled.
+	     (dolist (output output-disconnected)
+	       (call-process "xrandr" nil nil nil "--output" output "--off"))
+	     (dolist (output output-connected)
+	       (cond ((string= output "DP-1-1")
+		      ;; When docked, this is my main monitor
 		      (call-process "xrandr" nil nil nil
-				    "--output" output "--off"))))))))
+				    "--output" output "--primary" "--auto"))
+		     ((string= output "DP-1-2")
+		      ;; My second monitor is in portrait mode
+		      (call-process "xrandr" nil nil nil
+				    "--output" output "--auto" "--rotate" "left" "--right-of" "DP-1-1"))
+		     ((string= output "eDP-1")
+		      (if (= (length output-connected) 1)
+			  ;; If this is the only connected screen, mark it as the primary one.
+			  (call-process "xrandr" nil nil nil
+					"--output" output "--primary" "--auto")
+			;; If it isn't the only monitor, my laptop is most likely in
+			;; clamshell mode.
+			(call-process "xrandr" nil nil nil
+				      "--output" output "--off"))))))))
     #+END_SRC
 *** Enable and configure EXWM
     #+BEGIN_SRC emacs-lisp :tangle yes
@@ -833,8 +835,11 @@
 
 	;; Enable multi-monitor support for EXWM
 	(require 'exwm-randr)
-	(add-hook 'exwm-randr-screen-change-hook
-		  'gaelan/exwm-randr-screen-change-hook)
+	;; This hook was used before XRandR 1.5 introduced the idea of pre-configured monitors
+	;; out of laziness I have defined my monitor names to be the same as my laptop's output
+	;; names for them but I could come up with more descriptive names if I so chose.
+	; (add-hook 'exwm-randr-screen-change-hook
+	; 	  'gaelan/exwm-randr-screen-change-hook)
 	(exwm-randr-enable))
    #+END_SRC
 *** Multimedia keys
