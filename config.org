@@ -412,6 +412,18 @@
 	(define-key company-mode-map (kbd "C-:") 'helm-company)
 	(define-key company-active-map (kbd "C-:") 'helm-company))
     #+end_src
+*** Multiple cursors
+    Do the cool vim/sublime? thing where you can edit multiple lines in the same way.
+
+    (for example ... prefix every line in a region with the same text, or add a checkmark to every item in an org list.
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package multiple-cursors
+	:bind (("C-S-c C-S-c" . mc/edit-lines)
+	       ("C->" . mc/mark-more-like-this)
+	       ("C-<" . mc/mark-previous-like-this)
+	       ("C-c C-<" . mc/mark-all-like-this)))
+    #+end_src
 ** Org Mode
    Org mode is my most essential emacs package, since it effectively manages my life.
 
