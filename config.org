@@ -682,6 +682,46 @@
       (define-key emacs-lisp-mode-map (kbd "C-c RET") 'macroexpand-1)
       (define-key emacs-lisp-mode-map (kbd "C-c M-m") 'macroexpand-all)
     #+end_src
+*** Clojure
+    Clojure is a lisp that runs in the JVM, CLR, and also transpiles to JavaScript
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package clojure-mode
+	:config
+	(add-hook 'clojure-mode-hook #'gaelan/generic-lisp-mode-hook)
+	(add-hook 'clojure-mode-hook #'subword-mode))
+    #+end_src
+**** Cider
+     Clojure has a wonderful SLIME-like environment cnalled CIDER
+
+     #+begin_src emacs-lisp :tangle yes
+       (use-package cider
+	 :config
+	 (add-hook 'cider-repl-mode-hook #'gaelan/generic-lisp-mode-hook)
+	 (add-hook 'cider-repl-mode-hook #'subword-mode))
+     #+end_src
+***** Cider has Helm support
+      #+begin_src emacs-lisp :tangle yes
+	(use-package helm-cider
+	  :after helm)
+      #+end_src
+**** [Inactive] clj-refactor
+     #+begin_src emacs-lisp :tangle no
+       (defun gaelan/clj-refactor-hook ()
+	 (clj-refactor-mode 1)
+	 (yas-minor-mode 1)
+	 (cljr-add-keybindings-with-prefix "C-c C-m"))
+
+       (use-package clj-refactor
+	 :config
+	 (add-hook 'clojure-mode-hook #'gaelan/clj-refactor-hook))
+     #+end_src
+**** eval-sexp-fu
+     It's nice, when evaluatingn a line of clojure code, to have the value pop up inline rather than just in the mini-buffer
+
+     #+begin_src emacs-lisp :tangle yes
+       (use-package cider-eval-sexp-fu)
+     #+end_src
 *** Go
     #+begin_src emacs-lisp :tangle yes
       (use-package go-mode)
