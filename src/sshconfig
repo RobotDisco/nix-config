@@ -1,3 +1,5 @@
+Include config.d/*.conf
+
 Host bastion pfsense cisco
      Hostname 192.168.20.2
 
@@ -9,11 +11,11 @@ Host cisco
      
 Host jails
      Hostname 192.168.10.4
-     ProxyCommand ssh bastion nc %h %p
+     ProxyJump bastion
 
 Host docker
      Hostname 192.168.10.50
-     ProxyCommand ssh bastion nc %h %p
+     ProxyJump bastion
 
 ForwardX11  no
 ForwardAgent no
