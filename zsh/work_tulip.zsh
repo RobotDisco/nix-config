@@ -15,4 +15,4 @@ fi
 function tclone () {
         mkdir -p ~/workspace/$1 && git clone git@git.internal.tulip.io:$1.git ~/workspace/$1
 }
-alias tdl=" tdocker login"
+alias tdl="tdocker login"

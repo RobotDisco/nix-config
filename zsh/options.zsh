@@ -20,7 +20,7 @@ setopt auto_cd
 ## Treat '#', '~', and '^' as part of patteerns for filename geeneration.
 setopt extended_glob
 
-## If a glob paatterne has no matches, error instead of retaining pattenn string
+## If a glob pattern has no matches, error instead of retaining pattern string
 setopt nomatch
 
 ## cd will implicitly push old directory into directory stack
