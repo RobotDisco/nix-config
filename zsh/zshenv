@@ -13,4 +13,9 @@ export ZSH_CACHE="$XDG_CACHE_HOME/zsh"
 ### executable search paths
 export PATH=$PATH:$HOME/bin
 
-
+### activate local nix install if required
+### This is needed early because this fundamentally is
+### how we locally customize our system.
+if [[ -f ~/.nix-profile/etc/profile.d/nix.sh ]]; then
+    source ~/.nix-profile/etc/profile.d/nix.sh
+fi
