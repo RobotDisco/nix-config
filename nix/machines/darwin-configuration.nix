@@ -23,6 +23,7 @@
     zsh
   ];
   environment.shells = [ pkgs.zsh ];
+  environment.pathsToLink = [ "/share/zsh" ];
 
   # Use a custom configuration.nix location.
   # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
@@ -133,5 +134,54 @@
       programs.zsh.enableAutosuggestions = true;
       programs.zsh.enableCompletion = true;
       programs.zsh.autocd = true;
+      programs.zsh.defaultKeymap = "emacs";
+      programs.zsh.dotDir = ".config/zsh";
+      programs.zsh.history = {
+        extended = true;
+        path = "${config.xdg.dataHome}/zsh/.zsh_history";
+      };
+      programs.zsh.initExtra = ''
+      # initialize fasd, configures completion, hooks, aliases
+      command -v fasd >/dev/null 2>&1 && eval "$(fasd --init auto)"
+
+      # If input isn't a command but a directory, switch to it
+      setopt auto_cd
+
+      # Treat '#', '~', and '^' as part of patteerns for filename geeneration.
+      setopt extended_glob
+
+      # If a glob pattern has no matches, error instead of retaining pattern string
+      setopt nomatch
+
+      # cd will implicitly push old directory into directory stack
+      setopt auto_pushd
+      # Don't push multiple copies of the same directory onto directory stack.
+      setopt pushd_ignore_dups
+
+      ## Just use a stock pre-supplied prompt for now.
+      autoload -Uz promptinit && promptinit && prompt redhat
+n
+      ## Include tdocker dir into PATH
+      if [[ -d ~/workspace/dev_scripts/docker/bin ]]; then
+          export PATH=$PATH:$HOME/workspace/dev_scripts/docker/bin
+      fi
+
+      ### Tulip workflow
+      function tclone () {
+          mkdir -p ~/workspace/$1 && git clone git@git.internal.tulip.io:$1.git ~/workspace/$1
+      }
+
+      ## If vim doesn't exist, invoke vi instead
+      command -v vim --help >/dev/null 2>&1 || alias vim=vi
+      '';
+      
+      programs.zsh.shellAliases = {
+        tdl = "tdocker login";
+        e = "$VISUAL";
+        killemacs="emacsclient -e '(kill-emacs)'";
+        pgrep="pgrep -a";
+        ls="ls -FGh";
+        grep="grep --colour=auto";
+      };
     };
 }
