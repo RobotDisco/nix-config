@@ -59,7 +59,7 @@
   home-manager.users.gaelan = {config, pkgs, ... }:
     {
       # Let Home Manager install and manage itself.
-      programs.home-manager.enable = true;
+      # programs.home-manager.enable = true;
       
       # This value determines the Home Manager release that your
       # configuration is compatible with. This helps avoid breakage
@@ -71,20 +71,12 @@
       # changes in each release.
       home.stateVersion = "20.03";
 
-      nixpkgs.config.allowUnfree = true;
-  
-      fonts.fontconfig.enable = true;
-      
-      home.extraOutputsToInstall = [ "man" "doc" ];
-
-      #programs.chromium.enable = true;
       programs.emacs.enable = true;
-      #programs.firefox.enable = true;
+
       programs.fzf.enable = true;
       programs.fzf.enableZshIntegration = true;
       
-      programs.git.enable = true;
-      
+      programs.git.enable = true;      
       programs.git.extraConfig = {
         core = {
           autocrlf = "input";
@@ -94,14 +86,49 @@
           protocol = "https";
         };
       };
-          
       programs.git.userEmail = "gaelan@tulip.com";
       programs.git.userName = "Gaelan D'costa";
 
-      
-      programs.keychain.enable = true;
-      programs.keychain.enableZshIntegration = true;
       programs.ssh.enable = true;
+      programs.ssh.compression = true;
+      programs.ssh.controlMaster = "auto";
+      programs.ssh.forwardAgent = false;
+
+      programs.ssh.matchBlocks = {
+        "bastion pfsense cisco" = {
+          hostname = "192.168.20.2";
+          localForwards = [
+            {
+              bind.port = 4200;
+              host.address = "192.168.10.1";
+              host.port = 80;
+            }
+            {
+              bind.port = 4201;
+              host.address = "192.168.10.2";
+              host.port = 80;
+            }
+          ];
+        };
+        jails = {
+          hostname = "192.168.10.4";
+          proxyJump = "bastion";
+        };
+        docker = {
+          hostname = "192.168.10.50";
+          proxyJump = "bastion";
+        };
+        "bastion01-tulip-prod" = {
+          hostname = "34.192.243.137";
+          user = "welladmin";
+        };
+        tulip-servers = {
+          host = "*.dev *.staging *.demo *.prod *.internal";
+          proxyCommand = "ssh -q bastion01-tulip-prod -- /usr/local/bin/central_ssh.sh %h";
+          user = "welladmin";
+        };
+      };
+
       programs.zsh.enable = true;
       programs.zsh.enableAutosuggestions = true;
       programs.zsh.enableCompletion = true;
