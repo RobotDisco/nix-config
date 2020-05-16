@@ -4,6 +4,9 @@
 
 { config, lib, pkgs, ... }:
 
+let
+  secrets = import ./secrets.nix;
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -114,13 +117,13 @@
   #   isNormalUser = true;
   #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   # };
-  users.users.root.hashedPassword = "<redacted>";
+  users.users.root.hashedPassword = secrets.userRootPasswordHash;
   users.users.gaelan = {
     isNormalUser = true;
     home = "/home/gaelan";
     description = "Gaelan D'costa";
     extraGroups = [ "wheel" "networkmanager" "scanner" "video" "input" "docker" ];
-    hashedPassword = "<redacted>";
+    hashedPassword = secrets.userGaelanPasswordHash;
   };
 
   # This value determines the NixOS release with which your system is to be
@@ -186,7 +189,7 @@
     description = "Enable S3 sleep on OPAL self-encrypting drives";
     documentation = [ "https://github.com/Drive-Trust-Alliance/sedutil/pull/190" ];
     path = [ pkgs.sedutil ];
-    script = "sedutil-cli -n -x --prepareForS3Sleep 0 <redacted> /dev/nvme0n1";
+    script = "sedutil-cli -n -x --prepareForS3Sleep 0 ${secrets.opalDiskPasswordHash} /dev/nvme0n1";
     wantedBy = [ "multi-user.target" ];
   };
   # Sleep
