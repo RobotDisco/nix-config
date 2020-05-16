@@ -1,7 +1,14 @@
-{ ... }:
+{ config, pkgs, ... }:
 
 {
-  home-manager.users.gaelan = {config, pkgs, ... }:
+  environment.systemPackages = with pkgs; [
+    awscli
+    google-cloud-sdk
+    ripgrep
+    fasd
+  ];
+
+  home-manager.users.gaelan = { ... }:
     {
       # Let Home Manager install and manage itself.
       # programs.home-manager.enable = true;
@@ -15,6 +22,8 @@
       # the Home Manager release notes for a list of state version
       # changes in each release.
       home.stateVersion = "20.03";
+
+      home.extraOutputsToInstall = [ "man" "doc" "info" ];
 
       programs.emacs.enable = true;
 
@@ -42,10 +51,6 @@
       programs.ssh.compression = true;
       programs.ssh.controlMaster = "auto";
       programs.ssh.forwardAgent = false;
-
-      programs.keychain.enable = true;
-      programs.keychain.enableXsessionIntegration = true;
-      programs.keychain.enableZshIntegration = true;
 
       programs.ssh.matchBlocks = {
         "bastion pfsense cisco" = {
