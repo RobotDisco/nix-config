@@ -8,6 +8,8 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      # Set up home-manager as a NixOS module.
+      <home-manager/nixos>
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -231,4 +233,7 @@
   ];
 
   virtualisation.docker.enable = true;
+
+  home-manager.useUserPackages = true;
+  home-manager.useGlobalPkgs = true;
 }
