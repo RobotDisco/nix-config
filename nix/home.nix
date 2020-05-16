@@ -63,19 +63,6 @@
   home.extraOutputsToInstall = [ "man" "doc" ];
 
   #programs.chromium.enable = true;
-  programs.emacs.enable = true;
   #programs.firefox.enable = true;
-  programs.fzf.enable = true;
-  programs.fzf.enableZshIntegration = true;
   #programs.git.enable = true;
-  programs.git.userEmail = "gdcosta@gmail.com";
-  programs.git.userName = "Gaelan D'costa";
-  programs.keychain.enable = true;
-  programs.keychain.enableXsessionIntegration = true;
-  programs.keychain.enableZshIntegration = true;
-  programs.ssh.enable = true;
-  programs.zsh.enable = true;
-  programs.zsh.enableAutosuggestions = true;
-  programs.zsh.enableCompletion = true;
-  programs.zsh.autocd = true;
 }

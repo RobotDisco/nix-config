@@ -34,10 +34,18 @@
       programs.git.userEmail = "gaelan@tulip.com";
       programs.git.userName = "Gaelan D'costa";
 
+      programs.keychain.enable = true;
+      programs.keychain.enableXsessionIntegration = true;
+      programs.keychain.enableZshIntegration = true;
+      
       programs.ssh.enable = true;
       programs.ssh.compression = true;
       programs.ssh.controlMaster = "auto";
       programs.ssh.forwardAgent = false;
+
+      programs.keychain.enable = true;
+      programs.keychain.enableXsessionIntegration = true;
+      programs.keychain.enableZshIntegration = true;
 
       programs.ssh.matchBlocks = {
         "bastion pfsense cisco" = {
