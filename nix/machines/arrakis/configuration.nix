@@ -11,8 +11,8 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      # Set up home-manager as a NixOS module.
-      <home-manager/nixos>
+
+      ../../modules
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -166,8 +166,6 @@ in
   programs.sedutil.enable = true;
   programs.slock.enable = true;
 
-  nixpkgs.config.allowUnfree = true;
-
   # Self-encrypting drive (OPAL)
   nixpkgs.config.packageOverrides = pkgs: {
     sedutil = (pkgs.sedutil.overrideAttrs (oldAttrs: {
@@ -237,6 +235,5 @@ in
 
   virtualisation.docker.enable = true;
 
-  home-manager.useUserPackages = true;
-  home-manager.useGlobalPkgs = true;
+
 }
