@@ -46,7 +46,7 @@
 
   imports = [
     <home-manager/nix-darwin>
-
+    
     ../../modules
   ];
 
