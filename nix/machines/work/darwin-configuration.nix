@@ -45,9 +45,7 @@
   nix.buildCores = 1;
 
   imports = [
-    <home-manager/nix-darwin>
-    
-    ../../modules
+    ../../profiles/darwin
   ];
 
   users.users.gaelan = {
