@@ -13,7 +13,7 @@ in
       ./hardware-configuration.nix
 
       <home-manager/nixos>
-      ../../modules
+      ../../profiles/nixos
     ];
 
   gaelan.linux-laptop.enable = true;
