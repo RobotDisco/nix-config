@@ -47,5 +47,17 @@ in {
     ];
 
     fonts.fontconfig.enable = true;
+
+    systemd.user.services."seafile-cli" = {
+      after = [ "network.target" ];
+      enable = true;
+      description = "Seafile CLI Client";
+      wantedBy = [ "default.target" ];
+      path = [ pkgs.seafile-shared ];
+      serviceConfig.Type = "oneshot";
+      serviceConfig.ExecStart = "${pkgs.seafile-shared}/bin/seaf-cli start";
+      serviceConfig.ExecStop = "${pkgs.seafile-shared}/bin/seaf-cli stop";
+      serviceConfig.RemainAfterExit="yes";
+    };
   };
 }
