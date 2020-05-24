@@ -11,7 +11,6 @@ in {
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       # chefdk
-      clojure
       dosbox
       file
       pavucontrol
@@ -27,9 +26,6 @@ in {
       chromium
       firefox
       git
-      gnumake
-      go
-      sbcl
       emacs
       bitwarden
       bitwarden-cli
