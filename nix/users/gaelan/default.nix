@@ -139,6 +139,7 @@
         pgrep="pgrep -a";
         ls="ls -FGh";
         grep="grep --colour=auto";
+        nix-install = "nix-env -f '<nixpkgs>' -iA";
       };
     };
 }
