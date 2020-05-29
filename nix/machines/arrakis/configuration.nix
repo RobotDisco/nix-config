@@ -215,9 +215,6 @@ in
 
   hardware.bluetooth.enable = true;
 
-
-  virtualisation.docker.enable = true;
-
   services.xserver.windowManager.session = lib.singleton {
     name = "xsession";
     start = pkgs.writeScript "xsession" ''
