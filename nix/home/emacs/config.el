@@ -217,6 +217,26 @@
 	 ("C-<" . mc/mark-previous-like-this)
 	 ("C-c C-<" . mc/mark-all-like-this)))
 
+(use-package direnv
+  :config
+  (direnv-mode))
+
+(use-package nix-sandbox
+  :after flycheck
+  :config
+  (setq flycheck-command-wrapper-function
+	(lambda (command) (apply 'nix-shell-command (nix-current-sandbox) command))
+	flycheck-executable-find
+	(lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd))))
+
+(use-package helm-nixos-options
+  :after helm
+  :bind (("C-c C-S-n" . helm-nixos-options)))
+
+(use-package company-nixos-options
+  :after company
+  :config (add-to-list 'company-backends 'company-nixos-options))
+
 (defconst gaelan/webdav-prefix
   (if gaelan/*is-osx*
       (file-name-as-directory "~/Seafile/gtd/")

@@ -430,6 +430,32 @@
 	       ("C-<" . mc/mark-previous-like-this)
 	       ("C-c C-<" . mc/mark-all-like-this)))
     #+end_src
+*** direnv
+    We use direnv in order to automatically load environment variables (or inherit nix-shell envs) when inside a project.
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package direnv
+	:config
+	(direnv-mode))
+    #+end_src
+*** nix-shell support
+    #+begin_src emacs-lisp :tangle yes
+      (use-package nix-sandbox
+	:after flycheck
+	:config
+	(setq flycheck-command-wrapper-function
+	      (lambda (command) (apply 'nix-shell-command (nix-current-sandbox) command))
+	      flycheck-executable-find
+	      (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd))))
+
+      (use-package helm-nixos-options
+	:after helm
+	:bind (("C-c C-S-n" . helm-nixos-options)))
+
+      (use-package company-nixos-options
+	:after company
+	:config (add-to-list 'company-backends 'company-nixos-options))
+    #+end_src
 ** Org Mode
    Org mode is my most essential emacs package, since it effectively manages my life.
 
