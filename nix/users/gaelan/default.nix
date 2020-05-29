@@ -56,6 +56,7 @@ in
       programs.keychain.enable = true;
       programs.keychain.enableXsessionIntegration = true;
       programs.keychain.enableZshIntegration = true;
+      programs.keychain.keys = [ "id_rsa" "id_rsa.work" ];
       
       programs.ssh.enable = true;
       programs.ssh.compression = true;
