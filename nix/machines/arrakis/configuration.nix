@@ -102,19 +102,6 @@ in
   # services.xserver.displayManager.sddm.enable = true;
   # services.xserver.desktopManager.plasma5.enable = true;
 
-  # Set EXWM as my window manager of choice
-  # services.xserver.windowManager.session = with pkgs; lib.singleton {
-  #   name = "exwm";
-  #   start = "
-  #     $(emacs)/bin/emacs -f exwm-enable
-  #   ";
-  # };
-  services.xserver.windowManager.exwm = {
-    enable = true;
-    enableDefaultConfig = false;
-  };
-  services.xserver.displayManager.defaultSession = "none+exwm";
-  
   # Define a user account. Don't forget to set a password with ‘passwd’.
   # users.users.jane = {
   #   isNormalUser = true;
@@ -194,8 +181,6 @@ in
     }));
   };
 
-  #environment.systemPackages = [ pkgs.sedutil ];
-
   # NOTE: Generate the password hash with: sudo sedutil-cli --printPasswordHash 'plaintext-password-here' /dev/nvme0n1  
   systemd.services.sedutil-s3sleep = {
     description = "Enable S3 sleep on OPAL self-encrypting drives";
@@ -249,5 +234,16 @@ in
 
   virtualisation.docker.enable = true;
 
-
+  services.xserver.windowManager.session = lib.singleton {
+    name = "xsession";
+    start = pkgs.writeScript "xsession" ''
+      #!${pkgs.runtimeShell}
+      if test -f $HOME/.xsession; then
+        exec ${pkgs.runtimeShell} -c $HOME/.xsession
+      else
+        echo "No xsession script found"
+        exit 1
+      fi
+    '';
+  };
 }

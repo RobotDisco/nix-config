@@ -1,13 +1,17 @@
 { config, pkgs, ... }:
 
-{
-  environment.systemPackages = with pkgs; [
-    awscli
-    google-cloud-sdk
-    ripgrep
-    fasd
-  ];
+let
+  emacsP = (pkgs.emacsWithPackagesFromUsePackage {
+    config = builtins.readFile ../../home/emacs/config.el;
+  }).overrideAttrs (oldAttrs: {
+    buildCommand = oldAttrs.buildCommand + ''
+      ln -s $emacs/share/emacs $out/share/emacs
+    '';
+  });
 
+in
+
+{
   home-manager.users.gaelan = { config, ... }:
     {
       # Let Home Manager install and manage itself.
@@ -25,7 +29,13 @@
 
       home.extraOutputsToInstall = [ "man" "doc" "info" ];
 
-      programs.emacs.enable = true;
+      home.packages = with pkgs; [
+        awscli
+        emacsP
+        fasd
+        google-cloud-sdk
+        ripgrep
+      ];
 
       programs.fzf.enable = true;
       programs.fzf.enableZshIntegration = true;
@@ -141,5 +151,12 @@
         grep="grep --colour=auto";
         nix-install = "nix-env -f '<nixpkgs>' -iA";
       };
+
+      xsession.enable = true;
+      xsession.windowManager.command = "${emacsP}/bin/emacs";
+      xsession.initExtra = "xmobar &";
+
+      # Fix stupid java applications like android studio
+      home.sessionVariables._JAVA_AWT_WM_NONREPARENTING = "1";
     };
 }

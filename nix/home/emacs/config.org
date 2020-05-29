@@ -104,19 +104,23 @@
         (eval-when-compile
           (require 'use-package))
     #+END_SRC
-*** Always download packages, if required
+*** [Disabled] Always download packages, if required
+    [Disabled] I now want packages controlled by Nix
+
     By default, use-package does not download emacs packages if they are missing.
 
     I would like that to happen rather than having to install them all manually myself
 
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle no
       (require 'use-package-ensure)
       (setq use-package-always-ensure t)
     #+END_SRC
-*** Automatically update packages
+*** [Disabled] Automatically update packages
+    [Disabled] Nowadays we want this controlled by Nix
+
     Emacs doesn't update packages automatically. There is a package which enables this.
 
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle no
       (use-package auto-package-update
 	:config
 	(setq auto-package-update-delete-old-versions t)
