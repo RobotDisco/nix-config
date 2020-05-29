@@ -394,6 +394,17 @@
 (use-package helm-cider
   :after helm)
 
+(defun gaelan/clj-refactor-hook ()
+  (clj-refactor-mode 1)
+  (yas-minor-mode 1)
+  (cljr-add-keybindings-with-prefix "C-c C-m"))
+
+(use-package clj-refactor
+  :config
+  (add-hook 'clojure-mode-hook #'gaelan/clj-refactor-hook))
+
+(use-package flycheck-clj-kondo)
+
 (use-package cider-eval-sexp-fu)
 
 (use-package go-mode)
@@ -433,41 +444,6 @@
 (defun gaelan/exwm-update-class-hook ()
   "EXWM hook for renaming buffer names to their associated X window class."
   (exwm-workspace-rename-buffer exwm-class-name))
-
-(defun gaelan/exwm-randr-screen-change-hook ()
-  "Hook for updating X screens when monitors plugged in."
-  ;; Start by enumerating over which screens are connected and disconnected
-  (let ((xrandr-output-regexp "\n\\([^ ]+\\) \\(dis\\)?connected ")
-       output-connected
-       output-disconnected)
-   (with-temp-buffer
-     (call-process "xrandr" nil t nil)
-     (goto-char (point-min))
-     (while (re-search-forward xrandr-output-regexp nil 'noerror)
-       (if (null (match-string 2))
-	   (add-to-list 'output-connected (match-string 1))
-	 (add-to-list 'output-disconnected (match-string 1))))
-     ;; disable all screens that are marked as disabled.
-     (dolist (output output-disconnected)
-       (call-process "xrandr" nil nil nil "--output" output "--off"))
-     (dolist (output output-connected)
-       (cond ((string= output "DP-1-1")
-	      ;; When docked, this is my main monitor
-	      (call-process "xrandr" nil nil nil
-			    "--output" output "--primary" "--auto"))
-	     ((string= output "DP-1-2")
-	      ;; My second monitor is in portrait mode
-	      (call-process "xrandr" nil nil nil
-			    "--output" output "--auto" "--rotate" "left" "--right-of" "DP-1-1"))
-	     ((string= output "eDP-1")
-	      (if (= (length output-connected) 1)
-		  ;; If this is the only connected screen, mark it as the primary one.
-		  (call-process "xrandr" nil nil nil
-				"--output" output "--primary" "--auto")
-		;; If it isn't the only monitor, my laptop is most likely in
-		;; clamshell mode.
-		(call-process "xrandr" nil nil nil
-			      "--output" output "--off"))))))))
 
 (use-package exwm
   :config
@@ -531,8 +507,8 @@
 
   ;; Enable multi-monitor support for EXWM
   (require 'exwm-randr)
-  (add-hook 'exwm-randr-screen-change-hook
-	    'gaelan/exwm-randr-screen-change-hook)
+  ; (add-hook 'exwm-randr-screen-change-hook
+  ; 	  'gaelan/exwm-randr-screen-change-hook)
   (exwm-randr-enable))
 
 (use-package desktop-environment

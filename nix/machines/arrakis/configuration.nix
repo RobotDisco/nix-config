@@ -215,22 +215,6 @@ in
 
   hardware.bluetooth.enable = true;
 
-  services.xserver.xrandrHeads = [
-    "eDP-1" {
-      output = "eDP-1";
-    }
-    "DP-1-1" {
-      output = "DP-1-1";
-      primary = true;
-    }
-    "DP-1-2" {
-      monitorConfig = ''
-        Option "Rotate" "left"
-        Option "RightOf" "DP-1-1"
-      '';
-      output = "DP-1-2";
-    }
-  ];
 
   virtualisation.docker.enable = true;
 
@@ -246,4 +230,6 @@ in
       fi
     '';
   };
+
+  services.autorandr.enable = true;
 }

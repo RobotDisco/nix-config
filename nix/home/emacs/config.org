@@ -738,7 +738,7 @@
 	  :after helm)
       #+end_src
 **** [Inactive] clj-refactor
-     #+begin_src emacs-lisp :tangle no
+     #+begin_src emacs-lisp :tangle yes
        (defun gaelan/clj-refactor-hook ()
 	 (clj-refactor-mode 1)
 	 (yas-minor-mode 1)
@@ -747,6 +747,12 @@
        (use-package clj-refactor
 	 :config
 	 (add-hook 'clojure-mode-hook #'gaelan/clj-refactor-hook))
+     #+end_src
+**** clj-kondo
+     clj-kondo seems to be the clojure(script) linter that everyone is most into right now.
+
+     #+begin_src emacs-lisp :tangle yes
+       (use-package flycheck-clj-kondo)
      #+end_src
 **** eval-sexp-fu
      It's nice, when evaluatingn a line of clojure code, to have the value pop up inline rather than just in the mini-buffer
@@ -815,9 +821,11 @@
 	"EXWM hook for renaming buffer names to their associated X window class."
 	(exwm-workspace-rename-buffer exwm-class-name))
     #+END_SRC
-*** Monitor change hook
+*** [Inactive] Monitor change hook
+    [Inactive] I don't think I need this when using autorandr
+
     This hook invokes =xrandr= and, based on the monitors in my house and where they connect to my laptop, and reconfigures what monitors are enabled or disabled for X Windows.
-    #+BEGIN_SRC emacs-lisp :tangle yes
+    #+BEGIN_SRC emacs-lisp :tangle no
       (defun gaelan/exwm-randr-screen-change-hook ()
 	"Hook for updating X screens when monitors plugged in."
 	;; Start by enumerating over which screens are connected and disconnected
@@ -917,8 +925,8 @@
 
 	;; Enable multi-monitor support for EXWM
 	(require 'exwm-randr)
-	(add-hook 'exwm-randr-screen-change-hook
-		  'gaelan/exwm-randr-screen-change-hook)
+	; (add-hook 'exwm-randr-screen-change-hook
+	; 	  'gaelan/exwm-randr-screen-change-hook)
 	(exwm-randr-enable))
    #+END_SRC
 *** Multimedia keys
