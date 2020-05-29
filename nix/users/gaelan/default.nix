@@ -50,7 +50,7 @@ in
           protocol = "https";
         };
       };
-      programs.git.userEmail = "gaelan@tulip.com";
+      programs.git.userEmail = "gdcosta@gmail.com";
       programs.git.userName = "Gaelan D'costa";
 
       programs.keychain.enable = true;
