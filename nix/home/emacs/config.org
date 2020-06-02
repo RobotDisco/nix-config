@@ -957,12 +957,12 @@
 	(push 'helm-exwm-emacs-buffers-source helm-mini-default-sources)
 	(push 'helm-exwm-source helm-mini-default-sources))
     #+end_src
-** Emacs Server
+** [Disabled] Emacs Server
    It'd be nice if I could invoke emacs from anywhere (including the terminal or git hooks) and have buffers always collect in my main emacs instance.
 
    There are all sorts of tricks to not have to start the emacs daemon inside the init file, but they all end up being kind of gross and have all sorts of gotchas.
 
-   #+begin_src emacs-lisp :tangle yes
+   #+begin_src emacs-lisp :tangle no
      (unless (daemonp)
        (server-start))
    #+end_src
