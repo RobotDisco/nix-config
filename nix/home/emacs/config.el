@@ -453,6 +453,9 @@
   "EXWM hook for renaming buffer names to their associated X window class."
   (exwm-workspace-rename-buffer exwm-class-name))
 
+(defun gaelan/exwm-randr-screen-change-hook ()
+  (call-process "autorandr" nil nil nil "--change"))
+
 (use-package exwm
   :config
   ;; Set some global window management bindings
@@ -522,8 +525,8 @@
 
   ;; Enable multi-monitor support for EXWM
   (require 'exwm-randr)
-  ; (add-hook 'exwm-randr-screen-change-hook
-  ; 	  'gaelan/exwm-randr-screen-change-hook)
+  (add-hook 'exwm-randr-screen-change-hook
+	    'gaelan/exwm-randr-screen-change-hook)
   (exwm-randr-enable))
 
 (use-package desktop-environment
