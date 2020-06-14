@@ -497,10 +497,17 @@
 	  ([?\C-y] . [?\C-v])
 	  ;; search
 	  ([?\C-s] . [?\C-f])))
-  ;; Configure workspace 1 to show up by default on my portrait monitor.
+  ;; Configure workspaces 2,3 to display  on my portrait monitor.
   ;; By default, workspaces show up on the first, default, active monitor.
   (setq exwm-randr-workspace-monitor-plist
-	'(1 "DP-1-2"))
+	'(0 "DP-1-1" 1 "DP-1-1" 2 "DP-1-2" 3 "DP-1-2"))
+
+  ;; Pin certain applications to specific workspaces
+  (setq exwm-manage-configurations
+	'(((string= exwm-class-name "Firefox") workspace 2)
+	  ((string= exwm-class-name "Chromium-browser") workspace 3)
+	  ((string= exwm-class-name ".obs-wrapped" workspace 2))))
+
 
   (add-hook 'exwm-update-class-hook
 	    'gaelan/exwm-update-class-hook)
