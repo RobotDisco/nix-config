@@ -142,6 +142,7 @@ in
     enableDefaultFonts = true;
     fonts = [
       pkgs.anonymousPro
+      pkgs.camingo-code
     ];
   };
 
