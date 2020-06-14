@@ -760,6 +760,16 @@
      #+begin_src emacs-lisp :tangle yes
        (use-package cider-eval-sexp-fu)
      #+end_src
+**** Kaocha unit test runner
+     #+begin_src emacs-lisp :tangle yes
+       (use-package kaocha-runner
+	 :bind ((:map clojure-mode-map
+		      ("C-c k t" . kaocha-runner-run-test-at-point)
+		      ("C-c k r" . kaocha-runner-run-tests)
+		      ("C-c k a" . kaocha-runner-run-all-tests)
+		      ("C-c k w" . kaocha-runner-show-warnings)
+		      ("C-c k h" . kaocha-runner-hide-windows))))
+     #+end_src
 *** Go
     #+begin_src emacs-lisp :tangle yes
       (use-package go-mode)
