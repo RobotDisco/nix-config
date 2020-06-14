@@ -531,6 +531,3 @@
   (setq helm-exwm-source (helm-exwm-build-source))
   (push 'helm-exwm-emacs-buffers-source helm-mini-default-sources)
   (push 'helm-exwm-source helm-mini-default-sources))
-
-(unless (daemonp)
-  (server-start))
