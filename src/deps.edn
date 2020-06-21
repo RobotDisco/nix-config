@@ -1,0 +1,159 @@
+;; The deps.edn file describes the information needed to build a classpath.
+;;
+;; When using the `clojure` or `clj` script, there are several deps.edn files
+;; that are combined:
+;; - install-level
+;; - user level (this file)
+;; - project level (current directory when invoked)
+;;
+;; For all attributes other than :paths, these config files are merged left to right.
+;; Only the last :paths is kept and others are dropped.
+
+{
+  ;; Paths
+  ;;   Directories in the current project to include in the classpath
+
+  ;; :paths ["src"]
+
+  ;; External dependencies
+ 
+ :deps {org.clojure/clojure {:mvn/version "1.10.1"}}
+
+ :aliases
+ {
+  ;; Aliases
+  ;;   resolve-deps aliases (-R) affect dependency resolution, options:
+  ;;     :extra-deps - specifies extra deps to add to :deps
+  ;;     :override-deps - specifies a coordinate to use instead of that in :deps
+  ;;     :default-deps - specifies a coordinate to use for a lib if one isn't found
+  ;;   make-classpath aliases (-C) affect the classpath generation, options:
+  ;;     :extra-paths - vector of additional paths to add to the classpath
+  ;;     :classpath-overrides - map of lib to path that overrides the result of resolving deps
+  ;;   :deps {:extra-deps {org.clojure/tools.deps.alpha {:mvn/version "0.8.661"}}}
+  ;;   :test {:extra-paths ["test"]}
+
+  
+  ;; Creating projects from templates
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; https://github.com/seancorfield/clj-new
+  ;;
+  ;; clj -A:new template-name domain/namespace
+  ;; clj -m myname.myapp
+  ;; clj -A:test:runner
+  :new
+  {:extra-deps {seancorfield/clj-new {:mvn/version "1.0.199"}}
+   :main-ops ["-m" "clj-new.create"]}
+
+  
+  ;; REPL experience
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Clojure REPL with syntax highlighting, built in docs and a quit command `:repl/quit`
+  :rebel
+  {:extra-deps {com.bhauman/rebel-readline {:mvn/version "0.1.4"}}
+   :main-opts ["-m" "rebel-readline.main"]}
+
+
+  ;; ClojureScript REPL rebel readline service
+  ;; https://github.com/bhauman/rebel-readline/tree/master/rebel-readline-cljs
+  ;; Starts the default CLJS repl, eg. figwheel
+  :rebel-cljs
+  {:extra-deps {com.bhauman/rebel-readline-cljs {:mvn/version "0.1.4"}}
+   :main-opts ["-m" "rebel-readline-cljs.main"]}
+
+
+  ;; Testing frameworks
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  ;; Include the test directory as a path used by Clojure CLI tools
+  :test-path
+  {:extra-paths ["test"]}
+
+
+  ;; Clojure.test
+  ;; Nothing required as it is part of the Clojure library.
+
+  ;; Clojure spec
+  :spec
+  {:extra-deps {org.clojure/spec.alpha {:mvn/version "0.2.187"}}}
+
+
+  ;; Test runners
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  ;; Cognitect test-runner
+  ;; https://github.com/cognitect-labs/test-runner
+  :test-runner
+  {:extra-paths ["test"]
+   :extra-deps  {com.cognitect/test-runner
+                 {:git/url "https://github.com/cognitect-labs/test-runner.git"
+                  :sha "f7ef16dc3b8332b0d77bc0274578ad5270fbfedd"}}
+   :main-opts   ["-m" "cognitect.test-runner"]}
+
+
+  ;; kaocha - comprehensive test runner for Clojure/Script
+  ;; tests.edn should be created for each project
+  ;; https://github.com/lambdaisland/kaocha
+  :test-runner-kaocha
+  {:extra-paths ["test"]
+   :extra-deps  {lambdaisland/kaocha {:mvn/version "1.0.632"}}
+   :main-opts   ["-m" "kaocha.runner"]}
+
+
+  ;; Test Coverage tools
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  ;; Cloverage - Simple clojure coverage tool
+  ;; https://github.com/cloverage/cloverage
+  ;; In the root of your Clojure project, run the command:
+  ;; clojure -A:test-coverage
+  :test-coverage
+  {:extra-paths ["test"]
+   :extra-deps  {cloverage {:mvn/version "RELEASE"}}
+   :main-opts   ["-m" "cloverage.coverage"]}
+
+
+  ;; Linting/ static analysis
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  ;; clj-kondo - comprehensive and fast linter
+  ;; https://github.com/borkdude/clj-kondo/
+  :lint
+  {:extra-deps {clj-kondo {:mvn/version "RELEASE"}}
+   :main-opts  ["-m" "clj-kondo.main"]}
+
+
+  ;; kibit - suggest idiomatic use of Clojure
+  ;; https://github.com/jonase/kibit/issues/221
+  :idiom-check
+  {:extra-deps {tvaughan/kibit-runner {:mvn/version "1.0.1"}}
+   :main-opts  ["-m" "kibit-runner.cmdline"]}
+
+
+  ;; Dependency version management
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  ;; Manage versions for maven and git dependencies
+  ;; https://github.com/Olical/depot
+  ;; Report dependencies that have newer versions available
+  ;; Update library versions in this deps.edn file:
+  ;; cd ~/.clojure && clojure -A:outdated
+  :outdated
+  {:extra-deps {olical/depot {:mvn/version "1.8.4"}}
+   :main-opts  ["-m" "depot.outdated.main"]}
+  ;; clj -A:outdated-update
+  :outdated-update
+  {:extra-deps {olical/depot {:mvn/version "1.8.4"}}
+   :main-opts  ["-m" "depot.outdated.main"
+                "--update"]}
+
+  
+  } ;; End of alias definitions
+
+ 
+  ;; Provider attributes
+
+  ;; :mvn/repos {
+  ;;   "central" {:url "https://repo1.maven.org/maven2/"}
+  ;;   "clojars" {:url "https://repo.clojars.org/"}
+  ;; }
+}
