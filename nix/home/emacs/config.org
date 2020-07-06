@@ -892,7 +892,7 @@
 	(setq exwm-manage-configurations
 	      '(((string= exwm-class-name "Firefox") workspace 2)
 		((string= exwm-class-name "Chromium-browser") workspace 3)
-		((string= exwm-class-name ".obs-wrapped" workspace 2))))
+		((string= exwm-class-name ".obs-wrapped") workspace 2)))
 
 
 	(add-hook 'exwm-update-class-hook
