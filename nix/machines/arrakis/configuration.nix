@@ -93,6 +93,7 @@ in
   # Enable the X11 windowing system.
   services.xserver.enable = true;
   services.xserver.xkbOptions = "ctrl:nocaps";
+  services.xserver.xkbVariant = "colemak";
   
   # Enable touchpad support.
   services.xserver.libinput.enable = true;
