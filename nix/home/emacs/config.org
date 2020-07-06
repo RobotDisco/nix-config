@@ -752,7 +752,8 @@
      clj-kondo seems to be the clojure(script) linter that everyone is most into right now.
 
      #+begin_src emacs-lisp :tangle yes
-       (use-package flycheck-clj-kondo)
+       (use-package flycheck-clj-kondo
+	 :after clojure-mode)
      #+end_src
 **** eval-sexp-fu
      It's nice, when evaluatingn a line of clojure code, to have the value pop up inline rather than just in the mini-buffer
