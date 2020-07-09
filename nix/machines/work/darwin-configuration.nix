@@ -19,8 +19,8 @@
     vscode
     zsh
   ];
-  environment.shells = [ pkgs.zsh ];
-  environment.pathsToLink = [ "/share/zsh" ];
+  #environment.shells = [ pkgs.zsh ];
+  #environment.pathsToLink = [ "/share/zsh" ];
 
   # Use a custom configuration.nix location.
   # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
@@ -39,19 +39,25 @@
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
 
-  # You should generally set this to the total number of logical cores in your system.
-  # $ sysctl -n hw.ncpu
-  nix.maxJobs = 1;
-  nix.buildCores = 1;
-
   imports = [
-    ../../profiles/darwin
+    <home-manager/nix-darwin>
+
+    (import ../../users/gaelan { inherit config; inherit pkgs; linux = false; })
   ];
 
   users.users.gaelan = {
     home = "/Users/gaelan";
     description = "Gaelan D'costa";
 
-    shell = pkgs.zsh;
+    #shell = pkgs.zsh;
   };
+
+  # I'm fine installing non-free software.
+  nixpkgs.config.allowUnfree = true;
+
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+    }))
+  ];
 }

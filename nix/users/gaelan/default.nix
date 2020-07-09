@@ -1,13 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, linux ? false, ... }:
 
 let
-  emacsP = (pkgs.emacsWithPackagesFromUsePackage {
+  emacsP = pkgs.emacsWithPackagesFromUsePackage {
     config = builtins.readFile ../../home/emacs/config.el;
-  }).overrideAttrs (oldAttrs: {
-    buildCommand = oldAttrs.buildCommand + ''
-      ln -s $emacs/share/emacs $out/share/emacs
-    '';
-  });
+  };
 
 in
 
@@ -50,13 +46,17 @@ in
           protocol = "https";
         };
       };
-      programs.git.userEmail = "gdcosta@gmail.com";
+      programs.git.userEmail = if linux
+                               then "gdcosta@gmail.com"
+                               else "gaelan@tulip.com";
       programs.git.userName = "Gaelan D'costa";
 
       programs.keychain.enable = true;
       programs.keychain.enableXsessionIntegration = true;
       programs.keychain.enableZshIntegration = true;
-      programs.keychain.keys = [ "id_rsa" "id_rsa.work" ];
+      programs.keychain.keys = if linux
+                               then [ "id_rsa" "id_rsa.work" ]
+                               else [ "id_rsa" ];
       
       programs.ssh.enable = true;
       programs.ssh.compression = true;
@@ -153,7 +153,7 @@ in
         nix-install = "nix-env -f '<nixpkgs>' -iA";
       };
 
-      xsession.enable = true;
+      xsession.enable = if linux then true else false;
       xsession.windowManager.command = "${emacsP}/bin/emacs";
       xsession.initExtra = "xmobar &";
 
