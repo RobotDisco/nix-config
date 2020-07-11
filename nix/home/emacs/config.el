@@ -239,8 +239,8 @@
 
 (defconst gaelan/webdav-prefix
   (if gaelan/*is-osx*
-      (file-name-as-directory "~/Seafile/gtd/")
-    (file-name-as-directory "~/fallcube/gtd/"))
+      (file-name-as-directory "~/Seafile/Brain/")
+    (file-name-as-directory "~/fallcube/Brain/"))
   "The root location of my GTD system")
 
 (use-package org
@@ -248,7 +248,7 @@
   :init
   (setq-default org-lowest-priority ?D)
   (setq-default org-capture-templates
-		`(("t" "Todo" entry (file+headline ,(concat gaelan/webdav-prefix "gtd.org") "Inbox")
+		`(("t" "Todo" entry (file+headline ,(concat gaelan/webdav-prefix "gtd/gtd.org") "Inbox")
 		   "* TODO %?\n   %t")
 		  ("d" "Daily Reflection" entry (function gaelan/org-journal-find-location)
 		   "* %(format-time-string org-journal-time-format)Daily Reflection\n** Write down three accomplishments\n   1. %?\n** What did I learn?\n** What did I do to help my future?\n** What did I do to help others?\n** What am I grateful for?\n")
@@ -259,21 +259,42 @@
 		  ("y" "Yearly Reflection" entry (functiona gaelan/org-journal-find-location)
 		   "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
   (setq-default org-refile-targets
-		`((,(concat gaelan/webdav-prefix "gtd.org") . (:maxlevel . 2))
-		  (,(concat gaelan/webdav-prefix "someday.org") . (:level . 1))
+		`((,(concat gaelan/webdav-prefix "gtd/gtd.org") . (:maxlevel . 2))
+		  (,(concat gaelan/webdav-prefix "gtd/someday.org") . (:level . 1))
 		  (nil . (:level . 1))))
   (setq-default org-agenda-files
-		`(,(concat gaelan/webdav-prefix "gtd.org")
-		  ,(concat gaelan/webdav-prefix "gcal/personal.org")
-		  ,(concat gaelan/webdav-prefix "gcal/work.org")))
+		`(,(concat gaelan/webdav-prefix "gtd/gtd.org")
+		  ,(concat gaelan/webdav-prefix "gtd/gcal/personal.org")
+		  ,(concat gaelan/webdav-prefix "gtd/gcal/work.org")))
   :bind (("C-c l" . org-store-link)
 	 ("C-c a" . org-agenda)
 	 ("C-c c" . org-capture)))
 
+(use-package org-roam
+  :after org
+  :custom
+  (org-roam-directory gaelan/webdav-prefix)
+  :config
+  (add-hook 'after-init-hook 'org-roam-mode))
+
+(use-package deft
+  :after org
+  :bind ("C-c n d" . deft)
+  :custom
+  (deft-recursive t)
+  (deft-use-filter-string-for-filename t)
+  (deft-default-extension "org")
+  (deft-directory (file-name-as-directory gaelan/webdav-prefix)))
+
+(winner-mode +1)
+(define-key winner-mode-map (kbd "<M-left>") #'winner-undo)
+(define-key winner-mode-map (kbd "<M-right>") #'winner-redo)
+
 (use-package org-journal
   :after org
-  :defer t
+  :bind ("C-c n j" . org-journal-new-entry)
   :custom
+  (org-journal-date-prefix "#+title: ")
   (org-journal-date-format "%A, %F")
   (org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "journal/")))
   (org-journal-file-format "%Y/%m/%Y-%m-%d.org"))
