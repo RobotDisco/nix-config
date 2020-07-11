@@ -283,4 +283,7 @@ in
     serviceConfig.ExecStop = "${pkgs.seafile-shared}/bin/seaf-cli stop";
     serviceConfig.RemainAfterExit="yes";
   };
+
+  services.fwupd.enable = true;
+
 }
