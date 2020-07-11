@@ -247,7 +247,6 @@
   :pin org
   :init
   (setq-default org-lowest-priority ?D)
-  (setq-default org-log-into-drawer t)
   (setq-default org-capture-templates
 		`(("t" "Todo" entry (file+headline ,(concat gaelan/webdav-prefix "gtd.org") "Inbox")
 		   "* TODO %?\n   %t")
@@ -267,24 +266,6 @@
 		`(,(concat gaelan/webdav-prefix "gtd.org")
 		  ,(concat gaelan/webdav-prefix "gcal/personal.org")
 		  ,(concat gaelan/webdav-prefix "gcal/work.org")))
-  (setq-default org-agenda-custom-commands
-		'(("h" "Office and Home Lists"
-		   ((agenda)
-		    (tags-todo "@home")
-		    (tags-todo "@officeto")
-		    (tags-todo "@officekw")
-		    (tags-todo "@lappy")
-		    (tags-todo "@phone")
-		    (tags-todo "@brain")
-		    (tags-todo "@online")
-		    (tags-todo "@reading")
-		    (tags-todo "@watching")
-		    (tags-todo "@gaming")))
-		  ("d" "Daily Action List"
-		   ((agenda "" ((org-agenda-ndays 1)
-				(org-agenda-sorting-strategy
-				 (quote ((agenda time-up priority-down tag-up))))
-				(org-deadline-warning-days 0)))))))
   :bind (("C-c l" . org-store-link)
 	 ("C-c a" . org-agenda)
 	 ("C-c c" . org-capture)))
@@ -295,9 +276,7 @@
   :custom
   (org-journal-date-format "%A, %F")
   (org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "journal/")))
-  (org-journal-file-format "%Y/%m/%Y%m%d.org")
-  ;; Bullet Journal discourages carrying over todos. Decide that explicitly!
-  (org-journal-carryover-items nil))
+  (org-journal-file-format "%Y/%m/%Y-%m-%d.org")
 
 (defun gaelan/org-journal-find-location ()
   ;; Open today's journal, but specify a non-nil prefix argument in order to
