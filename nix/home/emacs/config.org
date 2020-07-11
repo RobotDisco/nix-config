@@ -752,7 +752,7 @@
 	(use-package helm-cider
 	  :after helm)
       #+end_src
-**** [Inactive] clj-refactor
+**** clj-refactor
      #+begin_src emacs-lisp :tangle yes
        (defun gaelan/clj-refactor-hook ()
 	 (clj-refactor-mode 1)
