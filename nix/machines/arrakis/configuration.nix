@@ -13,10 +13,17 @@ in
       ./hardware-configuration.nix
 
       <home-manager/nixos>
-      ../../profiles/nixos
+      (import ../../users/gaelan { inherit config; inherit pkgs; linux = true; })
     ];
 
-  gaelan.linux-laptop.enable = true;
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+    }))
+  ];
+
+  # I'm fine installing non-free software.
+  nixpkgs.config.allowUnfree = true;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -56,6 +63,37 @@ in
     mkpasswd
     vim
     links2
+
+    # chefdk
+    dosbox
+    file
+    pavucontrol
+    seafile-shared
+    inotify-tools
+    libsearpc
+    timidity
+    # Fluid3
+    pmidi
+    transmission
+    vlc
+    # wine-wow
+    chromium
+    firefox
+    git
+    emacs
+    bitwarden
+    bitwarden-cli
+    yubioath-desktop
+    signal-desktop
+    obs-studio
+    dwarf-fortress-packages.dwarf-fortress-full
+    unzip
+    zsh
+    keychain
+    xmobar
+    scrot
+    steam
+    networkmanager_l2tp
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -231,4 +269,18 @@ in
   };
 
   services.autorandr.enable = true;
+
+  fonts.fontconfig.enable = true;
+
+  systemd.user.services."seafile-cli" = {
+    after = [ "network.target" ];
+    enable = true;
+    description = "Seafile CLI Client";
+    wantedBy = [ "default.target" ];
+    path = [ pkgs.seafile-shared ];
+    serviceConfig.Type = "oneshot";
+    serviceConfig.ExecStart = "${pkgs.seafile-shared}/bin/seaf-cli start";
+    serviceConfig.ExecStop = "${pkgs.seafile-shared}/bin/seaf-cli stop";
+    serviceConfig.RemainAfterExit="yes";
+  };
 }
