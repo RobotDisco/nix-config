@@ -276,7 +276,7 @@
   :custom
   (org-journal-date-format "%A, %F")
   (org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "journal/")))
-  (org-journal-file-format "%Y/%m/%Y-%m-%d.org")
+  (org-journal-file-format "%Y/%m/%Y-%m-%d.org"))
 
 (defun gaelan/org-journal-find-location ()
   ;; Open today's journal, but specify a non-nil prefix argument in order to
@@ -349,8 +349,6 @@
   (setq slime-lisp-implementations '((sbcl ("sbcl" "--core" "~/code/common-lisp/sbcl.core-for-slime")))))
 
 (setq inferior-lisp-program "sbcl")
-
-
 
 (add-hook 'lisp-mode-hook 'gaelan/generic-lisp-mode-hook)
 (add-hook 'slime-repl-mode-hook 'gaelan/generic-lisp-mode-hook)
