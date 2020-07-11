@@ -675,14 +675,14 @@
 	 (turn-on-eldoc-mode))
      #+end_src
 *** Common lisp
-    SLIME, Emacs' Common Lisp environment, is installed via the QuickLisp package manager.
-
-    We will load the package from its directory
+    SLIME is the fancy REPL environment we use for Common Lisp
 
     #+begin_src emacs-lisp :tangle yes
-      (let ((slime-helper-file "~/.quicklisp/slime-helper.el"))
-	(when (file-readable-p slime-helper-file)
-	  (load (expand-file-name "~/.quicklisp/slime-helper.el"))))
+      (use-package slime
+	:config
+	(require 'slime-autoloads)
+	(setq slime-contribs '(slime-repl slime-autodoc slime-references slime-scratch slime-mdot-fu slime-quicklisp))
+	(setq slime-lisp-implementations '((sbcl ("sbcl" "--core" "~/code/common-lisp/sbcl.core-for-slime")))))
     #+end_src
 
     We currently use Steel Bank Common Lisp as our runtime environment
@@ -694,6 +694,7 @@
     We should load our generic lisp mode hook in common lisp edit and REPL buffers
     #+begin_src emacs-lisp :tangle yes
       (add-hook 'lisp-mode-hook 'gaelan/generic-lisp-mode-hook)
+      (add-hook 'slime-repl-mode-hook 'gaelan/generic-lisp-mode-hook)
     #+end_src
 
 *** Emacs Lisp
