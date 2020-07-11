@@ -274,6 +274,7 @@
   :after org
   :custom
   (org-roam-directory gaelan/webdav-prefix)
+  (org-roam-completion-system 'helm)
   :config
   (add-hook 'after-init-hook 'org-roam-mode))
 
