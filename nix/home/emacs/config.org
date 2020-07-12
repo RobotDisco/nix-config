@@ -538,8 +538,6 @@
     org-roam also suggests some winner-mode config, which is a way to undo/redo changes in window configuration
     #+begin_src emacs-lisp :tangle yes
       (winner-mode +1)
-      (define-key winner-mode-map (kbd "<M-left>") #'winner-undo)
-      (define-key winner-mode-map (kbd "<M-right>") #'winner-redo)
     #+end_src
     
 *** Org Journal mode
