@@ -531,6 +531,21 @@
 	(add-hook 'after-init-hook 'org-roam-mode))
     #+end_src
 
+    There is a webserver it uses which I guess is the best way to browse one's info
+    #+begin_src emacs-lisp :tangle yes
+      (use-package org-roam-server
+	:config
+	(setq org-roam-server-host "127.0.0.1"
+	      org-roam-server-port 8080
+	      org-roam-server-export-inline-images t
+	      org-roam-server-authenticate nil
+	      org-roam-server-network-poll t
+	      org-roam-server-network-arrows nil
+	      org-roam-server-network-label-truncate t
+	      org-roam-server-network-label-truncate-length 60
+	      org-roam-server-network-label-wrap-length 20))
+    #+end_src
+
     org-roam also recommends this thing called deft which I think is a way for browsing and filtering org files
 
     #+begin_src emacs-lisp :tangle yes

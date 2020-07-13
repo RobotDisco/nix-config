@@ -287,6 +287,18 @@
   :config
   (add-hook 'after-init-hook 'org-roam-mode))
 
+(use-package org-roam-server
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+	org-roam-server-port 8080
+	org-roam-server-export-inline-images t
+	org-roam-server-authenticate nil
+	org-roam-server-network-poll t
+	org-roam-server-network-arrows nil
+	org-roam-server-network-label-truncate t
+	org-roam-server-network-label-truncate-length 60
+	org-roam-server-network-label-wrap-length 20))
+
 (use-package deft
   :after org
   :bind ("C-c n d" . deft)
@@ -302,9 +314,8 @@
   :after org
   :bind ("C-c n j" . org-journal-new-entry)
   :custom
-  (org-journal-date-prefix "#+title: ")
   (org-journal-date-format "%A, %F")
-  (org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "journal/")))
+  (org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "brain" "journal")))
   (org-journal-file-format "%Y/%m/%Y-%m-%d.org"))
 
 (defun gaelan/org-journal-find-location ()
