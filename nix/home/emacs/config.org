@@ -465,9 +465,9 @@
     #+begin_src emacs-lisp :tangle yes
       (defconst gaelan/webdav-prefix
 	(if gaelan/*is-osx*
-	    (file-name-as-directory "~/Seafile/Brain/")
-	  (file-name-as-directory "~/fallcube/Brain/"))
-	"The root location of my GTD system")
+	    (file-name-as-directory "~/Seafile/emacs/")
+	  (file-name-as-directory "~/fallcube/emacs/"))
+	"The root location of my emacs / org-mode files system")
     #+end_src
 *** Basic org mode configuration
     This is where I'm going to set up some really basic GTD stuff:
@@ -515,9 +515,18 @@
     #+begin_src emacs-lisp :tangle yes
       (use-package org-roam
 	:after org
+	:bind (:map org-roam-mode-map
+		    (("C-c n l" . org-roam)
+		     ("C-c n f" . org-roam-find-file)
+		     ("C-c n g" . org-roam-graph-show))
+		    :map org-mode-map
+		    (("C-c n i" . org-roam-insert))
+		    (("C-c n I" . org-roam-insert-immediate)))
 	:custom
-	(org-roam-directory gaelan/webdav-prefix)
+	(org-roam-directory (concat gaelan/webdav-prefix "brain"))
 	(org-roam-completion-system 'helm)
+	;; I don't care about graphing daily notes or historical stuff
+	(org-roam-graph-exclude-matcher '("journal"))
 	:config
 	(add-hook 'after-init-hook 'org-roam-mode))
     #+end_src
@@ -532,7 +541,7 @@
 	(deft-recursive t)
 	(deft-use-filter-string-for-filename t)
 	(deft-default-extension "org")
-	(deft-directory (file-name-as-directory gaelan/webdav-prefix)))
+	(deft-directory (concat gaelan/webdav-prefix "brain")))
     #+end_src
 
     org-roam also suggests some winner-mode config, which is a way to undo/redo changes in window configuration
@@ -547,9 +556,8 @@
 	:after org
 	:bind ("C-c n j" . org-journal-new-entry)
 	:custom
-	(org-journal-date-prefix "#+title: ")
 	(org-journal-date-format "%A, %F")
-	(org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "journal/")))
+	(org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "brain" "journal")))
 	(org-journal-file-format "%Y/%m/%Y-%m-%d.org"))
     #+end_src
 

@@ -239,9 +239,9 @@
 
 (defconst gaelan/webdav-prefix
   (if gaelan/*is-osx*
-      (file-name-as-directory "~/Seafile/Brain/")
-    (file-name-as-directory "~/fallcube/Brain/"))
-  "The root location of my GTD system")
+      (file-name-as-directory "~/Seafile/emacs/")
+    (file-name-as-directory "~/fallcube/emacs/"))
+  "The root location of my emacs / org-mode files system")
 
 (use-package org
   :pin org
@@ -272,9 +272,18 @@
 
 (use-package org-roam
   :after org
+  :bind (:map org-roam-mode-map
+	      (("C-c n l" . org-roam)
+	       ("C-c n f" . org-roam-find-file)
+	       ("C-c n g" . org-roam-graph-show))
+	      :map org-mode-map
+	      (("C-c n i" . org-roam-insert))
+	      (("C-c n I" . org-roam-insert-immediate)))
   :custom
-  (org-roam-directory gaelan/webdav-prefix)
+  (org-roam-directory (concat gaelan/webdav-prefix "brain"))
   (org-roam-completion-system 'helm)
+  ;; I don't care about graphing daily notes or historical stuff
+  (org-roam-graph-exclude-matcher '("journal"))
   :config
   (add-hook 'after-init-hook 'org-roam-mode))
 
@@ -285,7 +294,7 @@
   (deft-recursive t)
   (deft-use-filter-string-for-filename t)
   (deft-default-extension "org")
-  (deft-directory (file-name-as-directory gaelan/webdav-prefix)))
+  (deft-directory (concat gaelan/webdav-prefix "brain")))
 
 (winner-mode +1)
 
