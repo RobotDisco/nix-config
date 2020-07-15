@@ -281,6 +281,10 @@
 	      (("C-c n I" . org-roam-insert-immediate)))
   :custom
   (org-roam-directory (concat gaelan/webdav-prefix "brain"))
+  (org-roam-db-location (if gaelan/*is-osx*
+			    (concat org-roam-directory "/db/osx.db")
+			  (concat org-roam-directory "/db/linux.db")))
+
   (org-roam-completion-system 'helm)
   ;; I don't care about graphing daily notes or historical stuff
   (org-roam-graph-exclude-matcher '("journal"))
@@ -315,7 +319,7 @@
   :bind ("C-c n j" . org-journal-new-entry)
   :custom
   (org-journal-date-format "%A, %F")
-  (org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "brain" "journal")))
+  (org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "brain/" "journal")))
   (org-journal-file-format "%Y/%m/%Y-%m-%d.org"))
 
 (defun gaelan/org-journal-find-location ()
