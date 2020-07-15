@@ -224,11 +224,11 @@
 (use-package nix-sandbox
   :after flycheck
   :config
-  (setq flycheck-command-wrapper-function
-	(lambda (command) (apply 'nix-shell-command (nix-current-sandbox) command))
-	flycheck-executable-find
-	(lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd))))
-
+  ; (setq flycheck-command-wrapper-function
+  ;      (lambda (command) (apply 'nix-shell-command (nix-current-sandbox) command))
+  ;      flycheck-executable-find
+  ;      (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd))))
+  )
 (use-package helm-nixos-options
   :after helm
   :bind (("C-c C-S-n" . helm-nixos-options)))
