@@ -57,7 +57,7 @@
 
 (column-number-mode +1)
 
-(add-to-list 'default-frame-alist '(font . "Camingo Code-13"))
+(add-to-list 'default-frame-alist '(font . "CamingoCode-13"))
 
 (use-package rebecca-theme
   :config
