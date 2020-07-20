@@ -289,7 +289,9 @@
   ;; I don't care about graphing daily notes or historical stuff
   (org-roam-graph-exclude-matcher '("journal"))
   :config
-  (add-hook 'after-init-hook 'org-roam-mode))
+  (add-hook 'after-init-hook 'org-roam-mode)
+  ;;  org-roam-protocol is used to handle weblinks (e.g. org-roam-server)
+  (require 'org-roam-protocol))
 
 (use-package org-roam-server
   :config
