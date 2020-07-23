@@ -2,7 +2,7 @@
 
 let
   emacsP = pkgs.emacsWithPackagesFromUsePackage {
-    config = builtins.readFile ../../home/emacs/config.el;
+    config = builtins.readFile ../../../emacs/config.el;
     # By default emacsWithPackagesFromUsePackage will only pull in packages with `:ensure t`.
     # Setting alwaysEnsure to true emulates `use-package-always-ensure` and pulls in all use-package references.
     alwaysEnsure = true;
