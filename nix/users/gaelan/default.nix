@@ -3,11 +3,17 @@
 let
   emacsP = pkgs.emacsWithPackagesFromUsePackage {
     config = builtins.readFile ../../home/emacs/config.el;
+    # By default emacsWithPackagesFromUsePackage will only pull in packages with `:ensure t`.
+    # Setting alwaysEnsure to true emulates `use-package-always-ensure` and pulls in all use-package references.
+    alwaysEnsure = true;
   };
 
 in
 
 {
+  services.emacs.enable = true;
+  services.emacs.package = emacsP;
+
   home-manager.users.gaelan = { config, ... }:
     {
       # Let Home Manager install and manage itself.
@@ -27,7 +33,6 @@ in
 
       home.packages = with pkgs; [
         awscli
-        emacsP
         fasd
         google-cloud-sdk
         ripgrep
