@@ -335,6 +335,21 @@
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))
 
+(defun gaelan/org-replace-link-by-link-description ()
+  "Replace an org link by its description; or if empty, its address.
+
+   Source: https://emacs.stackexchange.com/questions/10707/in-org-mode-how-to-remove-a-link
+   and modified slightly to place the url in the kill ring."
+  (interactive)
+  (if (org-in-regexp org-link-bracket-re 1)
+      (save-excursion
+	(let ((remove (list (match-beginning 0) (match-end 0)))
+	      (description (if (match-end 3)
+			       (org-match-string-no-properties 3)
+			     (org-match-string-no-properties 1))))
+	  (apply 'kill-region remove)
+	  (insert description)))))
+
 (use-package magit
   ;; I should have a keybinding that displays magit-status from anywhere
   :bind (("C-x g" . magit-status))
