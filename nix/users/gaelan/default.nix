@@ -159,7 +159,7 @@ in
       };
 
       xsession.enable = if linux then true else false;
-      xsession.windowManager.command = "${emacsP}/bin/emacs";
+      xsession.windowManager.command = "${emacsP}/bin/emacsclient -c";
       xsession.initExtra = "xmobar &";
 
       # Fix stupid java applications like android studio
