@@ -33,10 +33,16 @@ in
 
       home.packages = with pkgs; [
         awscli
+        direnv
+        jq
+        clojure
         fasd
         google-cloud-sdk
         ripgrep
       ];
+
+      programs.emacs.enable = true;
+      programs.emacs.package = emacsP;
 
       programs.fzf.enable = true;
       programs.fzf.enableZshIntegration = true;
@@ -55,6 +61,7 @@ in
                                then "gdcosta@gmail.com"
                                else "gaelan@tulip.com";
       programs.git.userName = "Gaelan D'costa";
+
 
       programs.keychain.enable = true;
       programs.keychain.enableXsessionIntegration = true;
@@ -164,5 +171,16 @@ in
 
       # Fix stupid java applications like android studio
       home.sessionVariables._JAVA_AWT_WM_NONREPARENTING = "1";
+
+
+      home.activation.gitConfigSymlink = config.lib.dag.entryAfter ["writeBoundary"] ''
+        $DRY_RUN_CMD ln -s $VERBOSE_ARG \
+        $HOME/.config/git.config $HOME/.gitconfig
+      '';
+      home.activation.emacsConfigSymlink = config.lib.dag.entryAfter ["writeBoundary"] ''
+        $DRY_RUN_CMD mkdir $VERBOSE_ARG -p $HOME/.emacs.d
+        $DRY_RUN_CMD ln -s $VERBOSE_ARG \
+        ${builtins.toPath ../../../emacs/config.el} $HOME/.emacs.d/init.el
+      '';
     };
 }

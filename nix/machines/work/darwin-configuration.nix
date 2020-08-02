@@ -6,7 +6,6 @@
   environment.systemPackages = with pkgs; [
     awscli
     chefdk
-    emacs
     fasd
     fd
     fzf
@@ -15,8 +14,6 @@
     python3
     ripgrep
     tree
-    vim
-    vscode
     zsh
   ];
   #environment.shells = [ pkgs.zsh ];
