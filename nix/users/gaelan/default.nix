@@ -174,12 +174,12 @@ in
 
 
       home.activation.gitConfigSymlink = config.lib.dag.entryAfter ["writeBoundary"] ''
-        $DRY_RUN_CMD ln -s $VERBOSE_ARG \
-        $HOME/.config/git.config $HOME/.gitconfig
+        $DRY_RUN_CMD ln -sf $VERBOSE_ARG \
+        $HOME/.config/git/config $HOME/.gitconfig
       '';
       home.activation.emacsConfigSymlink = config.lib.dag.entryAfter ["writeBoundary"] ''
         $DRY_RUN_CMD mkdir $VERBOSE_ARG -p $HOME/.emacs.d
-        $DRY_RUN_CMD ln -s $VERBOSE_ARG \
+        $DRY_RUN_CMD ln -sf $VERBOSE_ARG \
         ${builtins.toPath ../../../emacs/config.el} $HOME/.emacs.d/init.el
       '';
     };
