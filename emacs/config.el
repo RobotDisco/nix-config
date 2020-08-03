@@ -249,7 +249,7 @@
   (setq-default org-lowest-priority ?D)
   (setq-default org-capture-templates
 		`(("t" "Todo" entry (file+headline ,(concat gaelan/webdav-prefix "gtd/gtd.org") "Inbox")
-		   "* TODO $?")
+		   "* TODO %?")
 		  ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
 		   "* %(format-time-string org-journal-time-format)Daily Morning Reflectionddfa\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
 		  ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
@@ -273,7 +273,6 @@
 	 ("C-c c" . org-capture)))
 
 (use-package org-roam
-  :after org
   :bind (:map org-roam-mode-map
 	      (("C-c n l" . org-roam)
 	       ("C-c n f" . org-roam-find-file)
