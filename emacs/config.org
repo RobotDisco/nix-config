@@ -542,6 +542,7 @@
     There is a webserver it uses which I guess is the best way to browse one's info
     #+begin_src emacs-lisp :tangle yes
       (use-package org-roam-server
+	:after org-roam
 	:config
 	(setq org-roam-server-host "127.0.0.1"
 	      org-roam-server-port 8080
@@ -600,6 +601,7 @@
     We use a mode to minimize the amount of chrome displayed in org mode while still clearly distinguishing between outline levels.
     #+begin_src emacs-lisp :tangle yes
       (use-package org-bullets
+	:after org
 	:hook (org-mode . org-bullets-mode))
     #+end_src
 *** [Inactive] Org Mode / Google Calendar integration

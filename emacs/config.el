@@ -296,6 +296,7 @@
   (require 'org-roam-protocol))
 
 (use-package org-roam-server
+  :after org-roam
   :config
   (setq org-roam-server-host "127.0.0.1"
 	org-roam-server-port 8080
@@ -335,6 +336,7 @@
   (goto-char (point-min)))
 
 (use-package org-bullets
+  :after org
   :hook (org-mode . org-bullets-mode))
 
 (defun gaelan/org-replace-link-by-link-description ()
