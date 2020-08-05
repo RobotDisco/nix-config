@@ -231,9 +231,11 @@
   )
 (use-package helm-nixos-options
   :after helm
+  :if gaelan/*is-linux*
   :bind (("C-c C-S-n" . helm-nixos-options)))
 
 (use-package company-nixos-options
+  :if gaelan/*is-linux*
   :after company
   :config (add-to-list 'company-backends 'company-nixos-options))
 
@@ -503,88 +505,91 @@
 (defun gaelan/exwm-randr-screen-change-hook ()
   (call-process "autorandr" nil nil nil "--change"))
 
-(use-package exwm
-  :config
-  ;; Set some global window management bindings
-  (setq exwm-input-global-keys
-	`(
-	  ;; 's-r': Reset to (line-mode).
-	  ([?\s-r] . exwm-reset)
-	  ;; 's-w': Switch workspace.
-	  ([?\s-w] . exwm-workspace-switch)
-	  ;; 's-b': Bring application to current workspace
-	  ([?\s-b] . exwm-workspace-switch-to-buffer)
-	  ;; 's-p': Launch application
-	  ([?\s-p] . (lambda (command)
-		       (interactive (list (read-shell-command "$ ")))
-		       (start-process-shell-command command nil command)))
-	  ;; 's-<N>': Switch to certain workspace.
-	  ,@(mapcar (lambda (i)
-		      `(,(kbd (format "s-%d" i)) .
-			(lambda ()
-			  (interactive)
-			  (exwm-workspace-switch-create ,i))))
-		    (number-sequence 0 9))))
-  ;; translate emacs keybindings into CUA-like ones for most apps, since most
-  ;; apps don't observe emacs kebindings and we would like a uniform experience.
-  (setq exwm-input-simulation-keys
-	'(;; movement
-	  ([?\C-b] . [left])
-	  ([?\M-b] . [C-left])
-	  ([?\C-f] . [right])
-	  ([?\M-f] . [C-right])
-	  ([?\C-p] . [up])
-	  ([?\C-n] . [down])
-	  ([?\C-a] . [home])
-	  ([?\C-e] . [end])
-	  ([?\M-v] . [prior])
-	  ([?\C-v] . [next])
-	  ([?\C-d] . [delete])
-	  ([?\C-k] . [S-end delete])
-	  ;; cut/paste
-	  ([?\C-w] . [?\C-x])
-	  ([?\M-w] . [?\C-c])
-	  ([?\C-y] . [?\C-v])
-	  ;; search
-	  ([?\C-s] . [?\C-f])))
-  ;; Configure workspaces 2,3 to display  on my portrait monitor.
-  ;; By default, workspaces show up on the first, default, active monitor.
-  (setq exwm-randr-workspace-monitor-plist
-	'(0 "DP-1-1" 1 "DP-1-1" 2 "DP-1-2" 3 "DP-1-2"))
+(when gaelan/*is-linux*
+  (use-package exwm
+    :config
+    ;; Set some global window management bindings
+    (setq exwm-input-global-keys
+	  `(
+	    ;; 's-r': Reset to (line-mode).
+	    ([?\s-r] . exwm-reset)
+	    ;; 's-w': Switch workspace.
+	    ([?\s-w] . exwm-workspace-switch)
+	    ;; 's-b': Bring application to current workspace
+	    ([?\s-b] . exwm-workspace-switch-to-buffer)
+	    ;; 's-p': Launch application
+	    ([?\s-p] . (lambda (command)
+			 (interactive (list (read-shell-command "$ ")))
+			 (start-process-shell-command command nil command)))
+	    ;; 's-<N>': Switch to certain workspace.
+	    ,@(mapcar (lambda (i)
+			`(,(kbd (format "s-%d" i)) .
+			  (lambda ()
+			    (interactive)
+			    (exwm-workspace-switch-create ,i))))
+		      (number-sequence 0 9))))
+    ;; translate emacs keybindings into CUA-like ones for most apps, since most
+    ;; apps don't observe emacs kebindings and we would like a uniform experience.
+    (setq exwm-input-simulation-keys
+	  '(;; movement
+	    ([?\C-b] . [left])
+	    ([?\M-b] . [C-left])
+	    ([?\C-f] . [right])
+	    ([?\M-f] . [C-right])
+	    ([?\C-p] . [up])
+	    ([?\C-n] . [down])
+	    ([?\C-a] . [home])
+	    ([?\C-e] . [end])
+	    ([?\M-v] . [prior])
+	    ([?\C-v] . [next])
+	    ([?\C-d] . [delete])
+	    ([?\C-k] . [S-end delete])
+	    ;; cut/paste
+	    ([?\C-w] . [?\C-x])
+	    ([?\M-w] . [?\C-c])
+	    ([?\C-y] . [?\C-v])
+	    ;; search
+	    ([?\C-s] . [?\C-f])))
+    ;; Configure workspaces 2,3 to display  on my portrait monitor.
+    ;; By default, workspaces show up on the first, default, active monitor.
+    (setq exwm-randr-workspace-monitor-plist
+	  '(0 "DP-1-1" 1 "DP-1-1" 2 "DP-1-2" 3 "DP-1-2"))
 
-  ;; Pin certain applications to specific workspaces
-  (setq exwm-manage-configurations
-	'(((string= exwm-class-name "Firefox") workspace 2)
-	  ((string= exwm-class-name "Chromium-browser") workspace 3)
-	  ((string= exwm-class-name ".obs-wrapped") workspace 2)))
+    ;; Pin certain applications to specific workspaces
+    (setq exwm-manage-configurations
+	  '(((string= exwm-class-name "Firefox") workspace 2)
+	    ((string= exwm-class-name "Chromium-browser") workspace 3)
+	    ((string= exwm-class-name ".obs-wrapped") workspace 2)))
 
 
-  (add-hook 'exwm-update-class-hook
-	    'gaelan/exwm-update-class-hook)
-  (add-hook 'exwm-update-title-hook
-	    'gaelan/exwm-update-title-hook)
+    (add-hook 'exwm-update-class-hook
+	      'gaelan/exwm-update-class-hook)
+    (add-hook 'exwm-update-title-hook
+	      'gaelan/exwm-update-title-hook)
 
-  ;; Despite all my attempts, exwm works better in NixOS if I include this
-  ;; command in my init rather than loading it as part of the emacs invocation.
-  ;; While annoying, it's fine as exwm is smart enough to not double-initialize
-  ;; or load in an incompatible environment like OSX or linux console.
-  (exwm-enable)
+    ;; Despite all my attempts, exwm works better in NixOS if I include this
+    ;; command in my init rather than loading it as part of the emacs invocation.
+    ;; While annoying, it's fine as exwm is smart enough to not double-initialize
+    ;; or load in an incompatible environment like OSX or linux console.
+    (exwm-enable)
 
-  ;; Enable multi-monitor support for EXWM
-  (require 'exwm-randr)
-  (add-hook 'exwm-randr-screen-change-hook
-	    'gaelan/exwm-randr-screen-change-hook)
-  (exwm-randr-enable))
+    ;; Enable multi-monitor support for EXWM
+    (require 'exwm-randr)
+    (add-hook 'exwm-randr-screen-change-hook
+	      'gaelan/exwm-randr-screen-change-hook)
+    (exwm-randr-enable)))
 
-(use-package desktop-environment
-  :config
-  (desktop-environment-mode))
+(when gaelan/*is-linux*
+  (use-package desktop-environment
+    :config
+    (desktop-environment-mode)))
 
-(use-package helm-exwm
-  :init
-  (setq-default helm-source-names-using-follow '("EXWM buffers"))
-  :config
-  (setq helm-exwm-emacs-buffers-source (helm-exwm-build-emacs-buffers-source))
-  (setq helm-exwm-source (helm-exwm-build-source))
-  (push 'helm-exwm-emacs-buffers-source helm-mini-default-sources)
-  (push 'helm-exwm-source helm-mini-default-sources))
+(when gaelan/*is-linux*
+  (use-package helm-exwm
+    :init
+    (setq-default helm-source-names-using-follow '("EXWM buffers"))
+    :config
+    (setq helm-exwm-emacs-buffers-source (helm-exwm-build-emacs-buffers-source))
+    (setq helm-exwm-source (helm-exwm-build-source))
+    (push 'helm-exwm-emacs-buffers-source helm-mini-default-sources)
+    (push 'helm-exwm-source helm-mini-default-sources)))
