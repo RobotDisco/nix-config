@@ -257,7 +257,7 @@
 		  ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
 		   "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What things did I accomplish today?\n   1. %?\n** What did I learn?\n** What did I do to help my future?\n** What did I do to help others?\n")
 		  ("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
-		   "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n**What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week?\n** What can you work on this week?\n** What can you learn this week?")
+		   "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week?\n** What can you work on this week?\n** What can you learn this week?")
 		  ("m" "Monthly Reflection" entry (function gaelan/org-journal-find-location)
 		   "* %(format-time-string org-journal-time-format)Monthly Reflection\n** What were your biggest wins of the month?\n   - %?\n** What were you most grateful for this month?\n** What tensions have you removed this month?\n** What did you learn this month?\n** How have you grown this month?")
 		  ("y" "Yearly Reflection" entry (functiona gaelan/org-journal-find-location)
@@ -291,6 +291,22 @@
   (org-roam-completion-system 'helm)
   ;; I don't care about graphing daily notes or historical stuff
   (org-roam-graph-exclude-matcher '("journal"))
+  (org-roam-capture-templates 
+   '(("d" "default" plain (function org-roam--capture-get-point)
+      "%?"
+      :file-name "%<%Y%m%d%H%M%S>-${slug}"
+      :head "#+title: ${title}\n"
+      :unnarrowed t)
+     ("f" "fleeting" plain (function org-roam--capture-get-point)
+      "%?"
+      :file-name "%<%Y%m%d%H%M%S>-${slug}"
+      :head "#+title: ${title}\n#+roam_tags: fleeting-note\n"
+      :unnarrowed t)
+     ("l" "literature" plain (function org-roam--capture-get-point)
+      "%?"
+      :file-name "%<%Y%m%d%H%M%S>-${slug}"
+      :head "#+title: ${title}\n#+roam_tags: literature-note\n"
+      :unnarrowed t)))
   :config
   (add-hook 'after-init-hook 'org-roam-mode)
   ;;  org-roam-protocol is used to handle weblinks (e.g. org-roam-server)
