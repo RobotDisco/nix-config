@@ -268,6 +268,7 @@
 		  (nil . (:level . 1))))
   (setq-default org-agenda-files
 		`(,(concat gaelan/webdav-prefix "gtd/gtd.org")
+		  ,(concat gaelan/webdav-prefix "gtd/tickler.org")
 		  ,(concat gaelan/webdav-prefix "gtd/gcal/personal.org")
 		  ,(concat gaelan/webdav-prefix "gtd/gcal/work.org")))
   :bind (("C-c l" . org-store-link)
