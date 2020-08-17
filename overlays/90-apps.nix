@@ -72,4 +72,16 @@ Firefox = self.installApplication rec {
   homepage = https://mozilla.org;
 };
 
+Deezer = self.installApplication rec {
+  name = "Deezer";
+  version = "4.21.0";
+  sourceRoot = "Deezer.app";
+  src = super.fetchurl {
+    url = "http://cdn-content.deezer.com/builds/deezer-desktop/8cF2rAuKxLcU1oMDmCYm8Uiqe19Ql0HTySLssdzLkQ9ZWHuDTp2JBtQOvdrFzWPA/darwin/x64/${version}/DeezerDesktop_${version}.dmg";
+    sha256 = "42b5fde967dd3e2d3e2e408b66a1018b7142765eea6977537bbe5517f014e335";
+  };
+  description = "A world of music in your pocket.";
+  homepage = https://deezer.com;
+};
+
 }
