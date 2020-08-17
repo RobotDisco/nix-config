@@ -1,0 +1,1 @@
+I am indebted to https://github.com/peel/dotfiles for providing a guiding light on how to set up a unified Nix repo that will work on MacOS and NixOS and conform in some way to the Nix User Repository model
