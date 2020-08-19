@@ -1,1 +1,7 @@
 I am indebted to https://github.com/peel/dotfiles for providing a guiding light on how to set up a unified Nix repo that will work on MacOS and NixOS and conform in some way to the Nix User Repository model
+
+The following directories are deprecated and files in them should be moved elsewhere:
+
+zsh -> into a custom package or overlay
+nix -> into the standard nur layout, or the machines nixops-like folder.
+src -> into a custom package or overlay for the respective package involved
