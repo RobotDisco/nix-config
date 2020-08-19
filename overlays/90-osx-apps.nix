@@ -84,4 +84,16 @@ Deezer = self.installApplication rec {
   homepage = https://deezer.com;
 };
 
+SeafileClient = self.installApplication rec {
+  name = "SeafileClient";
+  version = "7.0.9";
+  sourceRoot = "Seafile\ Client.app";
+  src = super.fetchurl {
+    url = "https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-client-${version}.dmg";
+    sha256 = "b00e859fc55d05fe0af1dfaddab64d166875e90b5969289fd35b4811aaeea71c";
+  };
+  description = "Seafile is an open source enterprise file sync and share platform with high reliability and performance.";
+  homepage = "https://seafile.com";
+};
+
 }
