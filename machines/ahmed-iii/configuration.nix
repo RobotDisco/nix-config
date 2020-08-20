@@ -3,6 +3,7 @@
 let
 
   hostName = "Fountain-of-Ahmed-III";
+  username = "gaelan.dcosta";
 
 in
 
@@ -45,6 +46,15 @@ in
   ];
 
   imports = [
+    <dotfiles/home-manager/nix-darwin>
     <dotfiles/setup/darwin>
   ];
+
+  users.users."${username}" = {
+    description = "Gaelan D'costa";  
+  };
+
+  home-manager.users = {
+    "gaelan.dcosta" = import <dotfiles/setup/user>;
+  };
 }
