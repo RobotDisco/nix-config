@@ -8,6 +8,7 @@
     ./gnupg.nix
     ./google-cloud-platform.nix
     ./packages.nix
+    ./shell.nix
   ];
 
   time.timeZone = "America/Toronto";
