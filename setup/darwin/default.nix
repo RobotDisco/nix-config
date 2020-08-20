@@ -11,6 +11,7 @@
     Deezer
     Firefox
     SeafileClient
+    Signal
     Slack
   ];
 }
