@@ -90,7 +90,7 @@
 
   home.file.emacsConfig = {
     source = <dotfiles/overlays/20-emacs/emacs/config.el>;
-    target = ".emacs/init.el";
+    target = ".emacs.d/init.el";
   };
 }
     

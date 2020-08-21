@@ -4,10 +4,10 @@
   programs.zsh = {
     enable = true;
     # Bash compatibility
-    enableBashCompletion = true;
+    # enableBashCompletion = true;
     enableCompletion = true;
-    enableFzfGit = true;
-    enableFzfHistory = true;
+    # enableFzfGit = true;
+    # enableFzfHistory = true;
     enableSyntaxHighlighting = true;
   };
 
