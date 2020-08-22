@@ -1,0 +1,8 @@
+Config { font = "xft:Anonymous Pro"
+       , position = Top
+       , bgColor = "black"
+       , fgColor = "white"
+       , allDesktops = True
+       , persistent = True
+       , template = "hello"
+       }

@@ -3,8 +3,9 @@
 {
   fonts = {
     enableFontDir = true;
-    fonts = [] ++ lib.optionals (pkgs ? camingo-code) [
+    fonts = [
       pkgs.camingo-code
+      pkgs.anonymousPro
     ];
   };
 }
