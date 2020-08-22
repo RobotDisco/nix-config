@@ -245,11 +245,11 @@
       (setq-default mac-option-modifier 'super)
     #+end_src
 ** Editor workflow enhancements
-*** SSH key management
+*** [Disabled] SSH key management
     I use [[https://www.funtoo.org/Keychain][Keychain]] to manage my GPG and SSH keychains.
     I want Emacs to leverage any keys I've added into this system.
 
-    #+begin_src emacs-lisp :tangle yes
+    #+begin_src emacs-lisp :tangle no
       (use-package keychain-environment
 	:config
 	(keychain-refresh-environment))

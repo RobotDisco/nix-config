@@ -32,12 +32,12 @@
     userName = "Gaelan D'costa";
   };
 
-  programs.keychain = {
-    enable = true;
-    enableXsessionIntegration = true;
-    enableZshIntegration = true;
-    agents = ["gpg-agent"];
-  };
+  # programs.keychain = {
+  #   enable = true;
+  #   enableXsessionIntegration = true;
+  #   enableZshIntegration = true;
+  #   agents = ["gpg-agent"];
+  # };
 
   programs.ssh = {
     enable = true;
