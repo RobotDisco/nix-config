@@ -3,6 +3,7 @@
 {
   imports = [
     ../common
+    ./emacs.nix
   ];
 
   environment.systemPackages = with pkgs; [

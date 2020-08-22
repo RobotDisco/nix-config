@@ -6,12 +6,9 @@
 
   environment.systemPackages = [ pkgs.emacs ];
   
-  services.emacs = {
-    enable = true;
-    package = pkgs.emacs;
-  };
   environment.shellAliases = {
     vim = "${pkgs.emacs}/bin/emacsclient -nw";
+    vi  = "${pkgs.emacs}/bin/emacsclient -nw";
     e   = "${pkgs.emacs}/bin/emacsclient -nw";
   };
 }

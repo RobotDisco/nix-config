@@ -921,7 +921,9 @@
       (defun gaelan/exwm-randr-screen-change-hook ()
 	(call-process "autorandr" nil nil nil "--change"))
     #+END_SRC
-*** Enable and configure EXWM
+*** Configure EXWM
+    We enable exwm via ~(exwm-enable)~ when we start the emacs daemon
+
     #+BEGIN_SRC emacs-lisp :tangle yes
       (when gaelan/*is-linux*
 	(use-package exwm
@@ -984,12 +986,6 @@
 		    'gaelan/exwm-update-class-hook)
 	  (add-hook 'exwm-update-title-hook
 		    'gaelan/exwm-update-title-hook)
-
-	  ;; Despite all my attempts, exwm works better in NixOS if I include this
-	  ;; command in my init rather than loading it as part of the emacs invocation.
-	  ;; While annoying, it's fine as exwm is smart enough to not double-initialize
-	  ;; or load in an incompatible environment like OSX or linux console.
-	  (exwm-enable)
 
 	  ;; Enable multi-monitor support for EXWM
 	  (require 'exwm-randr)

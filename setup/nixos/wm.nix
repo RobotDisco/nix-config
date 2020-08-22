@@ -1,14 +1,15 @@
 { pkgs, lib, ... }:
 
 {
-  environment.systemPackages = [
-    pkgs.emacs
+  environment.systemPackages = with pkgs; [
+    emacs
   ];
   
-  services.xserver.windowManager.session = lib.singleton {
+  services.xserver.windowManager.session = with pkgs; lib.singleton {
     name = "exwm";
     start = ''
-      ${pkgs.emacs}/bin/emacsclient -c
+      ${emacs}/bin/emacs -f exwm-enable --daemon
+      ${emacs}/bin/emacsclient -c
     '';
   };
 }
