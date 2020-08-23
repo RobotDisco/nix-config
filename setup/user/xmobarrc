@@ -4,5 +4,14 @@ Config { font = "xft:Anonymous Pro"
        , fgColor = "white"
        , allDesktops = True
        , persistent = True
-       , template = "hello"
+       , commands = [ Run Memory [] 10, Run Swap [] 10
+                    , Run Weather "CYYZ" [] 10
+                    , Run Weather "CYKF" [] 10
+                    , Run Wireless "wlp4s0" [] 10
+                    , Run MultiCpu [] 10
+                    , Run Battery [] 10
+                    , Run Alsa "default" "Master" []
+                    , Run Date "" "date" 10
+                    ]
+       , template = "%CYYZ% %CYKF% %wlp4s0wi% %memory% %swap% %multicpu% %battery% %alsa:default:Master% %date%"
        }
