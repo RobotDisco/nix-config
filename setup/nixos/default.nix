@@ -14,6 +14,7 @@
     dwarf-fortress-packages.dwarf-fortress-full
     inotify-tools
     mkpasswd
+    nethack
     scrot
     seafile-shared
     signal-desktop
