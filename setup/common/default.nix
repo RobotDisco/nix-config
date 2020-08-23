@@ -1,14 +1,18 @@
-{...}:
+{ pkgs, ... }:
 
 {
   imports = [
-    ./aws.nix
     ./emacs.nix
     ./fonts.nix
     ./gnupg.nix
-    ./google-cloud-platform.nix
     ./packages.nix
     ./shell.nix
+  ];
+
+  environment.systemPackages = with pkgs; [
+    awscli
+    direnv
+    google-cloud-sdk
   ];
 
   time.timeZone = "America/Toronto";
