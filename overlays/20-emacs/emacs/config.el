@@ -103,10 +103,6 @@
 (setq-default mac-command-modifier 'meta)
 (setq-default mac-option-modifier 'super)
 
-(use-package keychain-environment
-  :config
-  (keychain-refresh-environment))
-
 (use-package helm
   ;; Add recommended keybindings as found in Thierry Volpiatto's guide
   ;; http://tuhdo.github.io/helm-intro.html
