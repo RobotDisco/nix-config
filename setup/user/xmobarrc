@@ -10,8 +10,8 @@ Config { font = "xft:Anonymous Pro"
                     , Run Wireless "wlp4s0" [] 10
                     , Run MultiCpu [] 10
                     , Run Battery [] 10
-                    , Run Alsa "default" "Master" []
+                    , Run Volume "default" "Master" [] 10
                     , Run Date "" "date" 10
                     ]
-       , template = "%CYYZ% %CYKF% %wlp4s0wi% %memory% %swap% %multicpu% %battery% %alsa:default:Master% %date%"
+       , template = "%CYYZ% %CYKF% %wlp4s0wi% %memory% %swap% %multicpu% %battery% %default:Master% %date%"
        }
