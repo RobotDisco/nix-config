@@ -106,5 +106,17 @@ self: super: {
     };
     description = "State-of-the-art end-to-end encryption";
     homepage = "https://www.signal.org/";
-  };  
+  };
+
+  Kobo = self.installApplication rec {
+    name = "Kobo";
+    version = "0.0.1";
+    sourceRoot = "Kobo.app";
+    src = super.fetchurl {
+      url = "https://kbdownload1-a.akamaihd.net/desktop/kobodesktop/kobosetup.dmg";
+      sha256 = "23368860e3e9ec726538251cfb5589fb57a73ff2f4c13678246921c3f9a23e95";
+    };
+    description = "kobo.com eBooks and Audiobooks";
+    homepage = "https://www.kobo.com";
+  };
 }
