@@ -6,7 +6,17 @@
     target = ".gnupg/gpg.conf";
   };
   home.file.gpg-agent-conf = {
-    source = ./gpg-agent.conf;
+    text = ''
+      # https://github.com/drduh/config/blob/master/gpg-agent.conf
+      # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Options.html
+      enable-ssh-support
+      default-cache-ttl 60
+      max-cache-ttl 120
+      ${if pkgs.stdenvNoCC.isLinux then
+        "pinentry-program ${pkgs.pinentry}/bin/pinentry-curses"
+        else
+          "pinentry-program ${pkgs.pinentry_mac}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"}
+    '';
     target = ".gnupg/gpg-agent.conf";
   };
 
