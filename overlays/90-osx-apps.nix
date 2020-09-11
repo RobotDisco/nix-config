@@ -119,4 +119,16 @@ self: super: {
     description = "kobo.com eBooks and Audiobooks";
     homepage = "https://www.kobo.com";
   };
+
+  Steam = self.installApplication rec {
+    name = "Steam";
+    version = "0.0.1";
+    sourceRoot = "Steam.app";
+    src = super.fetchurl {
+      url = "https://cdn.cloudflare.steamstatic.com/client/installer/steam.dmg";
+      sha256 = "dda4744327fe200e08d132ccbba9828b6bde8672080a69f69d52e72e9a6bda17";
+    };
+    description = "Steam is the ultimate destination for playing, discussing, and creating games.";
+    homepage = "https://steampowered.com";
+  };
 }

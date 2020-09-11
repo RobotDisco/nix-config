@@ -15,5 +15,6 @@
     SeafileClient
     Signal
     Slack
+    Steam
   ];
 }
