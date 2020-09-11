@@ -37,11 +37,11 @@ self: super: {
 
   Slack = self.installApplication rec {
     name = "Slack";
-    version = "4.8.0";
+    version = "4.9.0";
     sourceRoot = "Slack.app";
     src = super.fetchurl {
       url = "https://downloads.slack-edge.com/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-      sha256 = "428ec2b5a9d5eb3b408c1cafa3977daeff0391c7d71656773c6ce535d8e0424c";
+      sha256 = "007fflncvvclj4agb6g5hc5k9j5hhz1rpvlcfd8w31rn1vad4abk";
     };
     description = "Slack is the collaboration hub that brings the right people, information, and tools together to get work done.";
     homepage = https://slack.com;
@@ -61,11 +61,11 @@ self: super: {
 
   Firefox = self.installApplication rec {
     name = "Firefox";
-    version = "79.0";
+    version = "80.0";
     sourceRoot = "Firefox.app";
     src = super.fetchurl {
       url = "https://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/mac/en-CA/Firefox%20${version}.dmg";
-      sha256 = "bd5b12cdcb25c516490b6563178f5acc4064047c4341c5126dcf180c0ab02eb4";
+      sha256 = "06z69b0q31h1y2hhw1pvwmcj3rdfyzkjw3h029fvg6wyv70d3vyn";
       name = "Firefox-${version}.dmg";
     };
     description = "The browser that respects your privacy";
@@ -98,11 +98,11 @@ self: super: {
 
   Signal = self.installApplication rec {
     name = "Signal";
-    version = "1.34.5";
+    version = "1.35.2";
     sourceRoot = "Signal.app";
     src = super.fetchurl {
       url = "https://updates.signal.org/desktop/signal-desktop-mac-${version}.dmg";
-      sha256 = "718e0c68f8475f7816b49d84fd26f215f9202e18576abeb38f0517c9262e1776";
+      sha256 = "1ay40a86lb3xgc1a4bq2hvb6dmzjqb694fnsjrm9x452q72jnvq8";
     };
     description = "State-of-the-art end-to-end encryption";
     homepage = "https://www.signal.org/";
