@@ -244,19 +244,20 @@
 (use-package org
   :pin org
   :init
-  (setq-default org-lowest-priority ?D)
   (setq-default org-capture-templates
 		`(("t" "Todo" entry (file+headline ,(concat gaelan/webdav-prefix "gtd/gtd.org") "Inbox")
 		   "* TODO %?")
+		   ("p" "Project" entry (file+headline ,(concat gaelan/webdav-prefix "gtd/gtd.org") "Inbox")
+		   "* [/] %? :project:")
 		  ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
-		   "* %(format-time-string org-journal-time-format)Daily Morning Reflectionddfa\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
+		   "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
 		  ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
 		   "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What things did I accomplish today?\n   1. %?\n** What did I learn?\n** What did I do to help my future?\n** What did I do to help others?\n")
 		  ("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
 		   "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week?\n** What can you work on this week?\n** What can you learn this week?")
 		  ("m" "Monthly Reflection" entry (function gaelan/org-journal-find-location)
 		   "* %(format-time-string org-journal-time-format)Monthly Reflection\n** What were your biggest wins of the month?\n   - %?\n** What were you most grateful for this month?\n** What tensions have you removed this month?\n** What did you learn this month?\n** How have you grown this month?")
-		  ("y" "Yearly Reflection" entry (functiona gaelan/org-journal-find-location)
+		  ("y" "Yearly Reflection" entry (function gaelan/org-journal-find-location)
 		   "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
   (setq-default org-refile-targets
 		`((,(concat gaelan/webdav-prefix "gtd/gtd.org") . (:maxlevel . 2))
