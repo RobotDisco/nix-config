@@ -9,6 +9,8 @@
     text = ''
       # https://github.com/drduh/config/blob/master/gpg-agent.conf
       # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Options.html
+      allow-emacs-pinentry
+      allow-loopback-pinentry
       enable-ssh-support
       default-cache-ttl 60
       max-cache-ttl 120

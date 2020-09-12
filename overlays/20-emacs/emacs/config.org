@@ -245,6 +245,18 @@
       (setq-default mac-option-modifier 'super)
     #+end_src
 ** Editor workflow enhancements
+*** GPG pinentry support
+    The GPG agent usually spawns an external pinentry process; instead integrate with emacs
+
+    (this requires some modifications to ~gpg-agent.conf~)
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package pinentry
+	:custom
+	(epa-pinentry-mode 'loopback)
+	:config
+	(pinentry-start))
+    #+end_src
 *** [Disabled] SSH key management
     I use [[https://www.funtoo.org/Keychain][Keychain]] to manage my GPG and SSH keychains.
     I want Emacs to leverage any keys I've added into this system.
