@@ -93,6 +93,23 @@
     };
   };
 
+  programs.zsh = {
+    enable = true;
+    enableAutosuggestions = true;
+    enableCompletion = true;
+    defaultKeymap = "emacs";
+
+    shellAliases = {
+      tdl = "tdocker login";
+      e = "$VISUAL";
+      killemacs = "emacsclient -e '(kill-emacs)'";
+      pgrep = "pgrep -a";
+      ls = "ls -FGh";
+      grep = "grep --colour=auto";
+      nix-install = "nix-env -f '<nixpkgs>' -iA";
+    };
+  };
+
   # We need git's config found in a legacy place because of how certain devtools tooling
   # mounts it into dockerized tools.
   home.activation.gitConfigSymlink = config.lib.dag.entryAfter ["writeBoundary"] ''
