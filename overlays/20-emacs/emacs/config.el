@@ -103,6 +103,12 @@
 (setq-default mac-command-modifier 'meta)
 (setq-default mac-option-modifier 'super)
 
+(use-package pinentry
+  :custom
+  (epa-pinentry-mode 'loopback)
+  :config
+  (pinentry-start))
+
 (use-package helm
   ;; Add recommended keybindings as found in Thierry Volpiatto's guide
   ;; http://tuhdo.github.io/helm-intro.html
@@ -235,6 +241,9 @@
   :after company
   :config (add-to-list 'company-backends 'company-nixos-options))
 
+(use-package nov
+  :mode ("\\.epub\\'" . nov-mode))
+
 (defconst gaelan/webdav-prefix
   (if gaelan/*is-osx*
       (file-name-as-directory "~/Seafile/emacs/")
@@ -349,6 +358,8 @@
   ;; Position point on the journal's top-level heading so that org-capture
   ;; will add the new entry as a child entry.
   (goto-char (point-min)))
+
+(use-package org-noter)
 
 (use-package org-bullets
   :after org

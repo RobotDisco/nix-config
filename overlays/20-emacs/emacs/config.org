@@ -470,6 +470,18 @@
 	:after company
 	:config (add-to-list 'company-backends 'company-nixos-options))
     #+end_src
+** Document Viewing
+*** pdf-tools
+    for viewing PDFs
+    #+begin_src emacs-lisp :tangle no
+      (use-package pdf-tools)
+    #+end_src
+*** nov.el
+    for viewing ePubs
+    #+begin_src emacs-lisp :tangle yes
+      (use-package nov
+	:mode ("\\.epub\\'" . nov-mode))
+    #+end_src
 ** Org Mode
    Org mode is my most essential emacs package, since it effectively manages my life.
 
@@ -626,6 +638,11 @@
 	;; Position point on the journal's top-level heading so that org-capture
 	;; will add the new entry as a child entry.
 	(goto-char (point-min)))
+    #+end_src
+*** org-noter
+    A package for annotating PDF, DOC files, and the like into org files.
+    #+begin_src emacs-lisp :tangle yes
+      (use-package org-noter)
     #+end_src
 *** Prettify org mode
     Org files often look like a overwhelming wall of leading asterisks.
