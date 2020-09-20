@@ -51,7 +51,8 @@ in
   ];
 
   users.users."${username}" = {
-    description = "Gaelan D'costa";  
+    description = "Gaelan D'costa";
+    shell = pkgs.zsh;
   };
 
   home-manager.users = {
