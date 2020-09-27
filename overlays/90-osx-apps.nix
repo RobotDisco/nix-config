@@ -61,11 +61,11 @@ self: super: {
 
   Firefox = self.installApplication rec {
     name = "Firefox";
-    version = "80.0";
+    version = "81.0";
     sourceRoot = "Firefox.app";
     src = super.fetchurl {
       url = "https://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/mac/en-CA/Firefox%20${version}.dmg";
-      sha256 = "06z69b0q31h1y2hhw1pvwmcj3rdfyzkjw3h029fvg6wyv70d3vyn";
+      sha256 = "ea3357277d236208980940850f0728eff9ad5fa8f2e8c40d5fc8af79df24c554";
       name = "Firefox-${version}.dmg";
     };
     description = "The browser that respects your privacy";
@@ -74,11 +74,11 @@ self: super: {
 
   Deezer = self.installApplication rec {
     name = "Deezer";
-    version = "4.21.0";
+    version = "4.23.1";
     sourceRoot = "Deezer.app";
     src = super.fetchurl {
       url = "http://cdn-content.deezer.com/builds/deezer-desktop/8cF2rAuKxLcU1oMDmCYm8Uiqe19Ql0HTySLssdzLkQ9ZWHuDTp2JBtQOvdrFzWPA/darwin/x64/${version}/DeezerDesktop_${version}.dmg";
-      sha256 = "42b5fde967dd3e2d3e2e408b66a1018b7142765eea6977537bbe5517f014e335";
+      sha256 = "f7520c05a2f3f113ab44ca3cb2cde1dbe3070152ba93fabafea42dd8389e9954";
     };
     description = "A world of music in your pocket.";
     homepage = https://deezer.com;
@@ -98,11 +98,11 @@ self: super: {
 
   Signal = self.installApplication rec {
     name = "Signal";
-    version = "1.35.2";
+    version = "1.36.3";
     sourceRoot = "Signal.app";
     src = super.fetchurl {
       url = "https://updates.signal.org/desktop/signal-desktop-mac-${version}.dmg";
-      sha256 = "1ay40a86lb3xgc1a4bq2hvb6dmzjqb694fnsjrm9x452q72jnvq8";
+      sha256 = "94ffa7b4615d783290066dc5f7dd4dd956d1fe229f334dee543627979846daac";
     };
     description = "State-of-the-art end-to-end encryption";
     homepage = "https://www.signal.org/";
@@ -130,5 +130,17 @@ self: super: {
     };
     description = "Steam is the ultimate destination for playing, discussing, and creating games.";
     homepage = "https://steampowered.com";
+  };
+
+  Discord = self.installApplication rec {
+    name = "Discord";
+    version = "0.0.259";
+    sourceRoot = "Discord.app";
+    src = super.fetchurl {
+      url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
+      sha256 = "927b7174671aeede430e5a71f9a8eee1991e2dab5309a8ee623dd1fb04706517";
+    };
+    description = "Step up your game with a modern voice & text chat app.";
+    homepage = "https://discord.com";
   };
 }
