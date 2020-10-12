@@ -103,6 +103,12 @@
 (setq-default mac-command-modifier 'meta)
 (setq-default mac-option-modifier 'super)
 
+(use-package pinentry
+  :custom
+  (epa-pinentry-mode 'loopback)
+  :config
+  (pinentry-start))
+
 (use-package helm
   ;; Add recommended keybindings as found in Thierry Volpiatto's guide
   ;; http://tuhdo.github.io/helm-intro.html
@@ -237,37 +243,45 @@
 
 (defconst gaelan/webdav-prefix
   (if gaelan/*is-osx*
-      (file-name-as-directory "~/Seafile/emacs/")
-    (file-name-as-directory "~/fallcube/emacs/"))
+      (file-name-as-directory "~/Seafile/DocStore/")
+    (file-name-as-directory "~/fallcube/DocStore/"))
   "The root location of my emacs / org-mode files system")
+
+(defconst gaelan/brain-prefix
+  (concat gaelan/webdav-prefix "brain/")
+  "The root directory of my org-roam knowledge store.")
+
+(defconst gaelan/gtd-prefix
+  (concat gaelan/brain-prefix "gtd/")
+  "The root directory of my GTD task management system.")
 
 (use-package org
   :pin org
   :init
   (setq-default org-capture-templates
-		`(("t" "Todo" entry (file+headline ,(concat gaelan/webdav-prefix "gtd/gtd.org") "Inbox")
+		`(("t" "Todo" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
 		   "* TODO %?")
-		   ("p" "Project" entry (file+headline ,(concat gaelan/webdav-prefix "gtd/gtd.org") "Inbox")
+		   ("p" "Project" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
 		   "* [/] %? :project:")
 		  ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
 		   "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
 		  ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
 		   "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What things did I accomplish today?\n   1. %?\n** What did I learn?\n** What did I do to help my future?\n** What did I do to help others?\n")
 		  ("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
-		   "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week?\n** What can you work on this week?\n** What can you learn this week?")
+		   "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week? What can you work on this week?\n** What can you learn this week?")
 		  ("m" "Monthly Reflection" entry (function gaelan/org-journal-find-location)
 		   "* %(format-time-string org-journal-time-format)Monthly Reflection\n** What were your biggest wins of the month?\n   - %?\n** What were you most grateful for this month?\n** What tensions have you removed this month?\n** What did you learn this month?\n** How have you grown this month?")
 		  ("y" "Yearly Reflection" entry (function gaelan/org-journal-find-location)
 		   "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
   (setq-default org-refile-targets
-		`((,(concat gaelan/webdav-prefix "gtd/gtd.org") . (:maxlevel . 2))
-		  (,(concat gaelan/webdav-prefix "gtd/someday.org") . (:level . 1))
+		`((,(concat gaelan/gtd-prefix "gtd.org") . (:maxlevel . 2))
+		  (,(concat gaelan/gtd-prefix "someday.org") . (:level . 1))
 		  (nil . (:level . 1))))
   (setq-default org-agenda-files
-		`(,(concat gaelan/webdav-prefix "gtd/gtd.org")
-		  ,(concat gaelan/webdav-prefix "gtd/tickler.org")
-		  ,(concat gaelan/webdav-prefix "gtd/gcal/personal.org")
-		  ,(concat gaelan/webdav-prefix "gtd/gcal/work.org")))
+		`(,(concat gaelan/gtd-prefix "gtd.org")
+		  ,(concat gaelan/gtd-prefix "tickler.org")
+		  ,(concat gaelan/gtd-prefix "gcal/personal.org")
+		  ,(concat gaelan/gtd-prefix "gcal/work.org")))
   :bind (("C-c l" . org-store-link)
 	 ("C-c a" . org-agenda)
 	 ("C-c c" . org-capture)))
@@ -281,15 +295,15 @@
 	      ("C-c n i" . org-roam-insert)
 	      ("C-c n I" . org-roam-insert-immediate))
   :custom
-  (org-roam-directory (concat gaelan/webdav-prefix "brain"))
+  (org-roam-directory gaelan/brain-prefix)
   (org-roam-db-location (if gaelan/*is-osx*
 			    (concat org-roam-directory "/db/osx.db")
 			  (concat org-roam-directory "/db/linux.db")))
 
   (org-roam-completion-system 'helm)
-  ;; I don't care about graphing daily notes or historical stuff
-  (org-roam-graph-exclude-matcher '("journal"))
-  (org-roam-capture-templates 
+  ;; I don't care about graphing daily notes, tasks, or historical stuff
+  (org-roam-graph-exclude-matcher '("journal" "gtd"))
+  (org-roam-capture-templates
    '(("d" "default" plain (function org-roam--capture-get-point)
       "%?"
       :file-name "%<%Y%m%d%H%M%S>-${slug}"
