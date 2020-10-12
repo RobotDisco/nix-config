@@ -9,6 +9,7 @@
   environment.systemPackages = with pkgs; [
     bitwarden
     brightnessctl
+    cifs-utils
     file
     firefox
     dwarf-fortress-packages.dwarf-fortress-full
@@ -22,4 +23,8 @@
     unzip
     yubioath-desktop
   ];
+
+  security.wrappers = {
+    "mount.cifs".source = "${pkgs.cifs-utils}/bin/mount.cifs";
+  };
 }
