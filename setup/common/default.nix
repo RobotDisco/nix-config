@@ -11,6 +11,7 @@
 
   environment.systemPackages = with pkgs; [
     awscli
+    beets
     direnv
     google-cloud-sdk
   ];
