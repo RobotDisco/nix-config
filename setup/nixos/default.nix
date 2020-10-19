@@ -7,6 +7,7 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    beets
     bitwarden
     brightnessctl
     cifs-utils
