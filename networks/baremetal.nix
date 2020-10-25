@@ -9,7 +9,7 @@
     ];
   };
   
-  network.description = "Gaelan Homelab ISP";
+  network.description = "Gaelan Homelab Baremetal Infra";
 
   defaults = {
     imports = [
@@ -18,4 +18,4 @@
       ../profiles/users.nix
     ];
   };
-}  
+}
