@@ -85,4 +85,11 @@
 
   nix.maxJobs = lib.mkDefault 4;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+
+  services.nfs.server.enable = true;
+  services.nfs.server.exports = ''
+    /salusajail/data/webdav salusa0(rw,no_root_squash)
+    /salusajail/data/bitwarden salusa0(rw,no_root_squash)
+  '';
+  networking.firewall.enable = false;
 }

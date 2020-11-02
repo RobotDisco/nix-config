@@ -1,6 +1,6 @@
 {
   darktower = {
-    deployment.targetHost = "192.168.10.3";
+    deployment.targetHost = "192.168.10.4";
     networking.hostName = "darktower.admin.robot-disco.net";
     imports = [
       ../machines/darktower/hardware-configuration.nix

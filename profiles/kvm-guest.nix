@@ -35,12 +35,12 @@
 
   fileSystems."/nix" =
     { device = "/dev/disk/by-label/nixpart";
-      fsType = "xfs";
+      fsType = "ext4";
     };
 
   fileSystems."/var" =
     { device = "/dev/disk/by-label/varpart";
-      fsType = "xfs";
+      fsType = "ext4";
     };
 
   swapDevices =
