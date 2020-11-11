@@ -37,11 +37,11 @@ self: super: {
 
   Slack = self.installApplication rec {
     name = "Slack";
-    version = "4.9.0";
+    version = "4.10.3";
     sourceRoot = "Slack.app";
     src = super.fetchurl {
       url = "https://downloads.slack-edge.com/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-      sha256 = "007fflncvvclj4agb6g5hc5k9j5hhz1rpvlcfd8w31rn1vad4abk";
+      sha256 = "0r77l57vr603xamich4h4gbdd5vdcj0sjs6yjpymfx9s0f98v8bb";
     };
     description = "Slack is the collaboration hub that brings the right people, information, and tools together to get work done.";
     homepage = https://slack.com;
@@ -61,11 +61,11 @@ self: super: {
 
   Firefox = self.installApplication rec {
     name = "Firefox";
-    version = "81.0";
+    version = "82.0";
     sourceRoot = "Firefox.app";
     src = super.fetchurl {
       url = "https://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/mac/en-CA/Firefox%20${version}.dmg";
-      sha256 = "ea3357277d236208980940850f0728eff9ad5fa8f2e8c40d5fc8af79df24c554";
+      sha256 = "0c0silwps6fjw6pm5bh2fdhbb43zxxzzp7b36556gqbqwf3b6zzx";
       name = "Firefox-${version}.dmg";
     };
     description = "The browser that respects your privacy";
@@ -74,11 +74,11 @@ self: super: {
 
   Deezer = self.installApplication rec {
     name = "Deezer";
-    version = "4.23.1";
+    version = "4.25.0";
     sourceRoot = "Deezer.app";
     src = super.fetchurl {
       url = "http://cdn-content.deezer.com/builds/deezer-desktop/8cF2rAuKxLcU1oMDmCYm8Uiqe19Ql0HTySLssdzLkQ9ZWHuDTp2JBtQOvdrFzWPA/darwin/x64/${version}/DeezerDesktop_${version}.dmg";
-      sha256 = "f7520c05a2f3f113ab44ca3cb2cde1dbe3070152ba93fabafea42dd8389e9954";
+      sha256 = "0c7fj7gwaxwkbs2mb4d9lm5m939ck4sip352rmwgwkzaxms3vy91";
     };
     description = "A world of music in your pocket.";
     homepage = https://deezer.com;
@@ -98,11 +98,11 @@ self: super: {
 
   Signal = self.installApplication rec {
     name = "Signal";
-    version = "1.36.3";
+    version = "1.37.2";
     sourceRoot = "Signal.app";
     src = super.fetchurl {
       url = "https://updates.signal.org/desktop/signal-desktop-mac-${version}.dmg";
-      sha256 = "94ffa7b4615d783290066dc5f7dd4dd956d1fe229f334dee543627979846daac";
+      sha256 = "1l4ff6ww5xihsglf32530hrqhwnxwkpsjx1dlavslf5cnrs4divy";
     };
     description = "State-of-the-art end-to-end encryption";
     homepage = "https://www.signal.org/";
