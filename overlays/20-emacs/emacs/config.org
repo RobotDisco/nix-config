@@ -922,6 +922,10 @@
       (use-package lsp-haskell
 	:hook (haskell-mode-hook . lsp-deferred))
     #+end_src
+*** Rust
+    #+begin_src emacs-lisp :tangle yes
+      (use-package rustic)
+    #+end_src
 *** Terraform
     #+begin_src emacs-lisp :tangle yes
       (use-package terraform-mode)
