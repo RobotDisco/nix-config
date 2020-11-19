@@ -108,7 +108,7 @@
       grep = "grep --colour=auto";
       nix-install = "nix-env -f '<nixpkgs>' -iA";
       nix-upgrade = if pkgs.stdenvNoCC.isLinux
-        then null
+        then ""
         else "sudo -i sh -c 'nix-channel --update && nix-env -iA nixpkgs.nix && launchctl remove org.nixos.nix-daemon && launchctl load /Library/LaunchDaemons/org.nixos.nix-daemon.plist'";
     };
   };

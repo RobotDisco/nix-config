@@ -20,7 +20,6 @@
     scrot
     seafile-shared
     signal-desktop
-    steam
     unzip
     yubioath-desktop
   ];
@@ -28,4 +27,6 @@
   security.wrappers = {
     "mount.cifs".source = "${pkgs.cifs-utils}/bin/mount.cifs";
   };
+
+  programs.steam.enable = true;
 }

@@ -120,7 +120,7 @@ in
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "20.03"; # Did you read the comment?
+  system.stateVersion = "20.09"; # Did you read the comment?
 
   boot.supportedFilesystems = [ "zfs" ];
 
@@ -214,12 +214,9 @@ in
   users.defaultUserShell = pkgs.zsh;
 
   services.zfs.autoScrub.enable = true;
+  services.zfs.trim.enable = true;
 
   services.upower.enable = true;
-
-  hardware.opengl.driSupport32Bit = true;
-  hardware.opengl.extraPackages32 = with pkgs.pkgsi686Linux; [ libva ];
-  hardware.pulseaudio.support32Bit = true;
 
   hardware.bluetooth.enable = true;
 
