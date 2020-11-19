@@ -37,11 +37,11 @@ self: super: {
 
   Slack = self.installApplication rec {
     name = "Slack";
-    version = "4.10.3";
+    version = "4.11.1";
     sourceRoot = "Slack.app";
     src = super.fetchurl {
       url = "https://downloads.slack-edge.com/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-      sha256 = "0r77l57vr603xamich4h4gbdd5vdcj0sjs6yjpymfx9s0f98v8bb";
+      sha256 = "0a5rq8zhgdckwxnyjv6nrgpnj682j1rd9yc4nwvsbvpzv15kmd35";
     };
     description = "Slack is the collaboration hub that brings the right people, information, and tools together to get work done.";
     homepage = https://slack.com;
@@ -49,11 +49,11 @@ self: super: {
 
   Bitwarden = self.installApplication rec {
     name = "Bitwarden";
-    version = "1.20.1";
+    version = "1.23.0";
     sourceRoot = "Bitwarden.app";
     src = super.fetchurl {
       url = "https://github.com/bitwarden/desktop/releases/download/v${version}/Bitwarden-${version}.dmg";
-      sha256 = "c8bc79c18e7c163d8bd2410f875b9427bd3e5c52357720e05fc49c7729be04fa";
+      sha256 = "0md02zf1q415qfab4n32yzzxyi5j22y62iib29d1z4yfqkwl3gj9";
     };
     description = "Bitwarden helps you generate, save and manage your passwords safely and securely.";
     homepage = https://bitwarden.com;
@@ -61,11 +61,11 @@ self: super: {
 
   Firefox = self.installApplication rec {
     name = "Firefox";
-    version = "82.0";
+    version = "83.0";
     sourceRoot = "Firefox.app";
     src = super.fetchurl {
       url = "https://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/mac/en-CA/Firefox%20${version}.dmg";
-      sha256 = "0c0silwps6fjw6pm5bh2fdhbb43zxxzzp7b36556gqbqwf3b6zzx";
+      sha256 = "15qw0cl7r73233lbljg9pr86r4sdnww3pd1vlm61zvc8dn6zyf31";
       name = "Firefox-${version}.dmg";
     };
     description = "The browser that respects your privacy";
@@ -74,11 +74,11 @@ self: super: {
 
   Deezer = self.installApplication rec {
     name = "Deezer";
-    version = "4.25.0";
+    version = "4.27.0";
     sourceRoot = "Deezer.app";
     src = super.fetchurl {
       url = "http://cdn-content.deezer.com/builds/deezer-desktop/8cF2rAuKxLcU1oMDmCYm8Uiqe19Ql0HTySLssdzLkQ9ZWHuDTp2JBtQOvdrFzWPA/darwin/x64/${version}/DeezerDesktop_${version}.dmg";
-      sha256 = "0c7fj7gwaxwkbs2mb4d9lm5m939ck4sip352rmwgwkzaxms3vy91";
+      sha256 = "1bzvpdjmvz2fsq9caqs564ljskbjg3g428gqx72rr160b36aickq";
     };
     description = "A world of music in your pocket.";
     homepage = https://deezer.com;
@@ -86,11 +86,11 @@ self: super: {
 
   SeafileClient = self.installApplication rec {
     name = "SeafileClient";
-    version = "7.0.9";
+    version = "7.0.10";
     sourceRoot = "Seafile\ Client.app";
     src = super.fetchurl {
       url = "https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-client-${version}.dmg";
-      sha256 = "b00e859fc55d05fe0af1dfaddab64d166875e90b5969289fd35b4811aaeea71c";
+      sha256 = "0dixypqajnpks7w47bv582qqi4a85y2zw24wxrs5wad3kafkyv7m";
     };
     description = "Seafile is an open source enterprise file sync and share platform with high reliability and performance.";
     homepage = "https://seafile.com";
@@ -98,11 +98,11 @@ self: super: {
 
   Signal = self.installApplication rec {
     name = "Signal";
-    version = "1.37.2";
+    version = "1.38.1";
     sourceRoot = "Signal.app";
     src = super.fetchurl {
       url = "https://updates.signal.org/desktop/signal-desktop-mac-${version}.dmg";
-      sha256 = "1l4ff6ww5xihsglf32530hrqhwnxwkpsjx1dlavslf5cnrs4divy";
+      sha256 = "1vf3rzzs8imbg3nmxikhqi48asldwv00wpmhvbisqn1bbrbias5x";
     };
     description = "State-of-the-art end-to-end encryption";
     homepage = "https://www.signal.org/";
