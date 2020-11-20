@@ -55,6 +55,9 @@ in
     shell = pkgs.zsh;
   };
 
+  home-manager.useUserPackages = true;
+  home-manager.useGlobalPkgs = true;
+  
   home-manager.users = {
     "gaelan.dcosta" = import <dotfiles/setup/user>;
   };
