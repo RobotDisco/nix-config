@@ -722,17 +722,8 @@
 	:hook (go-mode . lsp-deferred))
 
       (use-package lsp-ui
-	:commands lsp-ui-mode
-	:after lsp-mode
-	:hook (lsp-mode-hook . lsp-ui-mode))
+	:after lsp-mode)
     #+end_src
-**** LSP has completion support
-     #+begin_src emacs-lisp :tangle yes
-       (use-package company-lsp
-	 :after company
-	 :config
-	 (push 'company-lsp company-backends))
-     #+end_src
 **** LSP also has file navigation support
     #+begin_src emacs-lisp :tangle yes
       (use-package lsp-treemacs
@@ -743,6 +734,14 @@
 **** LSP also has helm support
     #+begin_src emacs-lisp :tangle yes
       (use-package helm-lsp)
+    #+end_src
+
+*** Debug Adapter Protocol
+    Like LSP but for debugging
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package dap-mode
+	:config (dap-auto-configure-mode))
     #+end_src
 *** Docker support
     Because I use Docker for development, it'd be nice to be work with containers from within emacs (say while workin in a software project.)

@@ -402,14 +402,7 @@
   :hook (go-mode . lsp-deferred))
 
 (use-package lsp-ui
-  :commands lsp-ui-mode
-  :after lsp-mode
-  :hook (lsp-mode-hook . lsp-ui-mode))
-
-(use-package company-lsp
-  :after company
-  :config
-  (push 'company-lsp company-backends))
+  :after lsp-mode)
 
 (use-package lsp-treemacs
   :after lsp-mode
@@ -417,6 +410,9 @@
   (lsp-treemacs-sync-mode +1))
 
 (use-package helm-lsp)
+
+(use-package dap-mode
+  :config (dap-auto-configure-mode))
 
 (use-package docker
   :bind ("C-c d" . docker))
