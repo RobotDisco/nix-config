@@ -95,6 +95,12 @@
 
 (visual-line-mode)
 
+(setq backup-directory-alist `(("." . "~/.emacs.d/backups"))
+      delete-old-versions t
+      kept-new-versions 8
+      kept-old-versions 2
+      version-control t)
+
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns x))
   :config

@@ -229,6 +229,16 @@
     #+begin_src emacs-lisp :tangle yes
       (visual-line-mode)
     #+end_src
+*** Centralize backups and store multiple copies
+    Backups are great but it's annoying to have backups cluttering up project directories.
+    Let's centralize them but also save multiple older copies of them! Also, let's copy them safely.
+    #+begin_src emacs-lisp :tangle yes
+      (setq backup-directory-alist `(("." . "~/.emacs.d/backups"))
+	    delete-old-versions t
+	    kept-new-versions 8
+	    kept-old-versions 2
+	    version-control t)
+    #+end_src
 ** Platform-specific tweaks
 *** Load path from shell
     On graphical systems like X and OSX we need to load paths from our shell scripts rather than using some generic system path. Luckily Steve Purcell has written a helpful package to manage this.
@@ -920,10 +930,6 @@
     #+begin_src emacs-lisp :tangle yes
       (use-package lsp-haskell
 	:hook (haskell-mode-hook . lsp-deferred))
-    #+end_src
-*** Rust
-    #+begin_src emacs-lisp :tangle yes
-      (use-package rustic)
     #+end_src
 *** Terraform
     #+begin_src emacs-lisp :tangle yes
