@@ -143,4 +143,16 @@ self: super: {
     description = "Step up your game with a modern voice & text chat app.";
     homepage = "https://discord.com";
   };
+
+  Remarkable = self.installApplication rec {
+    name = "Remarkable";
+    version = "2.3.1-126-a3a0129fd";
+    sourceRoot = "Remarkable.app";
+    src = super.fetchurl {
+      url = "https://downloads.remarkable.com/desktop/production/mac/reMarkable-${version}.dmg";
+      sha256 = "d16c8e2d6e388cf0f65706e4fff5ef93fa829ba74daae79c5bfe33b9af13aacf";
+    };
+    description = "The next-generation paper tablet.";
+    homepage = "https://remarkable.com";
+  };
 }

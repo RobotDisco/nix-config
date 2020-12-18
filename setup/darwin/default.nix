@@ -13,6 +13,7 @@
     Discord
     Firefox
     Kobo
+    Remarkable
     SeafileClient
     Signal
     Slack
