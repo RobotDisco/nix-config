@@ -107,14 +107,14 @@
         (eval-when-compile
           (require 'use-package))
     #+END_SRC
-*** [Disabled] Always download packages, if required
-    [Disabled] I now want packages controlled by Nix
+*** Always download packages, if required
+    I now want packages controlled by Nix
 
     By default, use-package does not download emacs packages if they are missing.
 
     I would like that to happen rather than having to install them all manually myself
 
-    #+BEGIN_SRC emacs-lisp :tangle no
+    #+BEGIN_SRC emacs-lisp :tangle yes
       (require 'use-package-ensure)
       (setq use-package-always-ensure t)
     #+END_SRC
@@ -133,14 +133,12 @@
 **** Diminish 
     Having the full name of every package displayed would clog our status line; there is a package that will appreviate the name of well-known packages to a couple of characters.
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (use-package diminish
-	:config (require 'diminish))
+      (use-package diminish)
     #+END_SRC
 **** Bind-key
      Since we're going to be using the =:bind= keyword to configure keybindings, we require the =bind-key= package
      #+BEGIN_SRC emacs-lisp :tangle yes
-       (use-package bind-key
-	 :config (require 'bind-key))
+       (use-package bind-key)
      #+END_SRC
 ** General editor behaviour
 *** Appearance

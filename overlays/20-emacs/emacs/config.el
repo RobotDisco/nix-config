@@ -39,11 +39,12 @@
 (eval-when-compile
   (require 'use-package))
 
-(use-package diminish
-  :config (require 'diminish))
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
 
-(use-package bind-key
-  :config (require 'bind-key))
+(use-package diminish)
+
+(use-package bind-key)
 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
