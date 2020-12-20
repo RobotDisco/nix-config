@@ -416,6 +416,16 @@
 	  (apply 'kill-region remove)
 	  (insert description)))))
 
+;; Automatically tangle our Emacs.org config file when we save it
+(defun gaelan/org-babel-tangle-config ()
+  (when (string-equal (file-name-directory (buffer-file-name))
+		      (expand-file-name user-emacs-directory))
+    ;; Dynamic scoping to the rescue
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
+
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'gaelan/org-babel-tangle-config)))
+
 (use-package magit
   ;; I should have a keybinding that displays magit-status from anywhere
   :bind (("C-x g" . magit-status))

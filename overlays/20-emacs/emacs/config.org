@@ -1,4 +1,7 @@
 # -*- mode: org; coding: utf-8; -*-
+#+title: Emacs Configuration
+#+PROPERTY: header-args:emacs-lisp :tangle ./config.el :mkdirp yes
+#+STARTUP: content showstars
 * Gaelan's Emacs Config
   This is my emacs config; there are many like it, but this one is mine.
 
@@ -741,7 +744,22 @@
 		(apply 'kill-region remove)
 		(insert description)))))
     #+end_src
+*** Auto-tangle Configuration Files
+    This snippet adds a hook to =org-mode= buffers so that =gaelan/org-babel-tangle-config= gets executed each time such a buffer gets saved.  This function checks to see if the file being saved is the Emacs.org file you're looking at right now, and if so, automatically exports the configuration here to the associated output files.
 
+    Source: https://github.com/daviwil/emacs-from-scratch/blob/master/Emacs.org
+    
+    #+begin_src emacs-lisp :tangle yes
+      ;; Automatically tangle our Emacs.org config file when we save it
+      (defun gaelan/org-babel-tangle-config ()
+	(when (string-equal (file-name-directory (buffer-file-name))
+			    (expand-file-name user-emacs-directory))
+	  ;; Dynamic scoping to the rescue
+	  (let ((org-confirm-babel-evaluate nil))
+	    (org-babel-tangle))))
+
+      (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'gaelan/org-babel-tangle-config)))
+    #+end_src
 ** Software Development
 *** Git source control management
     =magit= is a super awesome git package
@@ -1115,6 +1133,4 @@
      (unless (daemonp)
        (server-start))
    #+end_src
-* Org Mode settings
-  #+STARTUP: content
-  #+STARTUP: showstars
+
