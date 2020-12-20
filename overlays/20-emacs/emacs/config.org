@@ -258,7 +258,7 @@
 	([remap describe-function] . helpful-callable)
 	([remap describe-variable] . helpful-variable)
 	([remap describe-key] . helpful-key)
-	((kbd "C-c C-d") . helpful-at-point))
+	("C-c C-d" . helpful-at-point))
     #+end_src
 *** Make dired operations async
     Make rename and copy operations in dired asynchronous, don't wait for them to finish.

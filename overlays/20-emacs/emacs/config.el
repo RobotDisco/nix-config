@@ -113,7 +113,7 @@
   ([remap describe-function] . helpful-callable)
   ([remap describe-variable] . helpful-variable)
   ([remap describe-key] . helpful-key)
-  ((kbd "C-c C-d") . helpful-at-point))
+  ("C-c C-d" . helpful-at-point))
 
 (use-package async
   :config
