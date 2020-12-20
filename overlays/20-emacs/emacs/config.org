@@ -1,6 +1,9 @@
 # -*- mode: org; coding: utf-8; -*-
 * Gaelan's Emacs Config
   This is my emacs config; there are many like it, but this one is mine.
+
+  Inspirations:
+  - [[https://github.com/daviwil/emacs-from-scratch/][Emacs from Scratch]] is a great series of youtube videos where the author clearly puts a lot of thoughts and well-principled thought into his configuration principles.
 ** Preamble
 *** File header
     There are little things I can do to make my life easier working with the tangled file.
@@ -147,9 +150,6 @@
        (menu-bar-mode -1)
        (tool-bar-mode -1)
        (scroll-bar-mode -1)
-       ;; The fringe is this small strip which sometimes indicates that line-specific information
-       ;; about that line is available (there is an error on that line, for example.)
-       (fringe-mode -1)
 
        ;; Don't show Emacs' default splash screen
        (setq inhibit-splash-screen t)
@@ -159,10 +159,50 @@
      #+begin_src emacs-lisp :tangle yes
        (column-number-mode +1)
      #+end_src
+
+     The fringe is this small strip which sometimes indicates that
+     line-specific information about that line is available (there is
+     an error on that line, for example.)
+     #+begin_src emacs-lisp :tangle yes
+       (set-fringe-mode 10)
+     #+end_src
+
+     Visual feedback is nicer than audio feedback
+     #+begin_src emacs-lisp :tangle yes
+       (setq visual-bell t)
+     #+end_src
+**** Show line numbers
+     #+begin_src emacs-lisp :tangle yes
+       (global-display-line-numbers-mode t)
+
+       ;; Disable line numbers for some modes
+       (dolist (mode '(org-mode-hook
+		       term-mode-hook
+		       shell-mode-hook
+		       treemacs-mode-hook
+		       eshell-mode-hook))
+	 (add-hook mode (lambda () (display-line-numbers-mode 0))))
+     #+end_src
 **** Use preferred typeface
      Like a lot of developers, I am very particular about my monospaced font choices :)
+
+     I currently use [[https://www.janfromm.de/typefaces/camingomono/camingocode/][Camingo Code]], which pleases my heart's eye greatly.
+     In the past I have used [[https://www.marksimonson.com/fonts/view/anonymous-pro][Anonymous Pro]], which is also quite wonderful.
      #+begin_src emacs-lisp :tangle yes
        (add-to-list 'default-frame-alist '(font . "CamingoCode-13"))
+     #+end_src
+**** Optimize mode line
+     By default, the emacs modeline is full of extraneous information and it's too hard to pick out relevant information at a glance.
+
+     Let's try doom-mode-line, a popular reorganization that people find aesthetically pleasing.
+
+     #+begin_src emacs-lisp :tangle yes
+       (use-package doom-modeline
+	 :custom
+	 (doom-modeline-height 1)
+	 (doom-modeline-buffer-file-name 'truncate-upto-project)
+	 :init
+	 (doom-modeline-mode 1))
      #+end_src
 **** Emacs theming
      As far as I can tell, the combination of using Emacs in daemon mode and themes are a dark art, which often conflict with each other. The problem is that the daemon likely runs outside the graphical system, but the theme does load-time adjustments based on whether the frame is run in a console or graphical context.
@@ -208,8 +248,19 @@
     I do not have infinite memory, I would like emacs to tell me what commands I could run from all the possible completions of the keychord I have started.
     #+begin_src emacs-lisp :tangle yes
       (use-package which-key
-	:config
+	:custom (which-key-idle-delay 1)
+	:diminish which-key-mode
+	:init
 	(which-key-mode))
+    #+end_src
+*** Improve help and documentation buffers
+    #+begin_src emacs-lisp :tangle yes
+      (use-package helpful
+	:bind
+	([remap describe-function] . helpful-callable)
+	([remap describe-variable] . helpful-variable)
+	([remap describe-key] . helpful-key)
+	((kbd "C-c C-d") . helpful-at-point))
     #+end_src
 *** Make dired operations async
     Make rename and copy operations in dired asynchronous, don't wait for them to finish.

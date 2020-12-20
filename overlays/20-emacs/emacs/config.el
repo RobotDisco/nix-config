@@ -48,16 +48,34 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-;; The fringe is this small strip which sometimes indicates that line-specific information
-;; about that line is available (there is an error on that line, for example.)
-(fringe-mode -1)
 
 ;; Don't show Emacs' default splash screen
 (setq inhibit-splash-screen t)
 
 (column-number-mode +1)
 
+(set-fringe-mode 10)
+
+(setq visual-bell t)
+
+(global-display-line-numbers-mode t)
+
+;; Disable line numbers for some modes
+(dolist (mode '(org-mode-hook
+		term-mode-hook
+		shell-mode-hook
+		treemacs-mode-hook
+		eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
 (add-to-list 'default-frame-alist '(font . "CamingoCode-13"))
+
+(use-package doom-modeline
+  :custom
+  (doom-modeline-height 1)
+  (doom-modeline-buffer-file-name 'truncate-upto-project)
+  :init
+  (doom-modeline-mode 1))
 
 (use-package rebecca-theme
   :config
@@ -84,8 +102,17 @@
 (global-auto-revert-mode +1)
 
 (use-package which-key
-  :config
+  :custom (which-key-idle-delay 1)
+  :diminish which-key-mode
+  :init
   (which-key-mode))
+
+(use-package helpful
+  :bind
+  ([remap describe-function] . helpful-callable)
+  ([remap describe-variable] . helpful-variable)
+  ([remap describe-key] . helpful-key)
+  ((kbd "C-c C-d") . helpful-at-point))
 
 (use-package async
   :config
@@ -511,6 +538,8 @@
 
 (use-package lsp-haskell
   :hook (haskell-mode-hook . lsp-deferred))
+
+(use-package rustic)
 
 (use-package terraform-mode)
 
