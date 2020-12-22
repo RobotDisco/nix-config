@@ -566,35 +566,66 @@
    #+begin_src emacs-lisp :tangle yes
      (use-package org
        :pin org
-       :init
-       (setq-default org-capture-templates
-		     `(("t" "Todo" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
-			"* TODO %?")
-			("p" "Project" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
-			"* [/] %? :project:")
-		       ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
-			"* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
-		       ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
-			"* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What things did I accomplish today?\n   1. %?\n** What did I learn?\n** What did I do to help my future?\n** What did I do to help others?\n")
-		       ("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
-			"* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week? What can you work on this week?\n** What can you learn this week?")
-		       ("m" "Monthly Reflection" entry (function gaelan/org-journal-find-location)
-			"* %(format-time-string org-journal-time-format)Monthly Reflection\n** What were your biggest wins of the month?\n   - %?\n** What were you most grateful for this month?\n** What tensions have you removed this month?\n** What did you learn this month?\n** How have you grown this month?")
-		       ("y" "Yearly Reflection" entry (function gaelan/org-journal-find-location)
-			"* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
-       (setq-default org-refile-targets
-		     `((,(concat gaelan/gtd-prefix "gtd.org") . (:maxlevel . 2))
-		       (,(concat gaelan/gtd-prefix "someday.org") . (:level . 1))
-		       (nil . (:level . 1))))
-       (setq-default org-agenda-files
-		     `(,(concat gaelan/gtd-prefix "gtd.org")
-		       ,(concat gaelan/gtd-prefix "tickler.org")
-		       ,(concat gaelan/gtd-prefix "gcal/personal.org")
-		       ,(concat gaelan/gtd-prefix "gcal/work.org")))
-       :bind (("C-c l" . org-store-link)
-	      ("C-c a" . org-agenda)
-	      ("C-c c" . org-capture)))
+       :custom
+       ;; Have prettier chrome for headlines that can be expanded
+       (org-ellipsis " ▾")
+       ;; Show task state change logs in agenda mode
+       (org-agenda-start-with-log-mode  t)
+       ;; When we finish a task, log the time
+       (org-log-done 'time)
+       ;; Store task state changes into a dedicated drawer
+       (org-log-into-drawer t)
+
+       (org-agenda-files
+	`(,(concat gaelan/gtd-prefix "gtd.org")
+	  ,(concat gaelan/gtd-prefix "tickler.org")
+	  ,(concat gaelan/gtd-prefix "gcal/personal.org")
+	  ,(concat gaelan/gtd-prefix "gcal/work.org")))
+
+       (org-capture-templates
+	`(("t" "Todo" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
+	   "* TODO %?")
+	  ("p" "Project" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
+	   "* [/] %? :project:")
+	  ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
+	   "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
+	  ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
+	   "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What things did I accomplish today?\n   1. %?\n** What did I learn?\n** What did I do to help my future?\n** What did I do to help others?\n")
+	  ("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
+	   "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week? What can you work on this week?\n** What can you learn this week?")
+	  ("m" "Monthly Reflection" entry (function gaelan/org-journal-find-location)
+	   "* %(format-time-string org-journal-time-format)Monthly Reflection\n** What were your biggest wins of the month?\n   - %?\n** What were you most grateful for this month?\n** What tensions have you removed this month?\n** What did you learn this month?\n** How have you grown this month?")
+	  ("y" "Yearly Reflection" entry (function gaelan/org-journal-find-location)
+	   "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
+
+       (org-refile-targets
+	`((,(concat gaelan/gtd-prefix "gtd.org") . (:maxlevel . 2))
+	  (,(concat gaelan/gtd-prefix "someday.org") . (:level . 1))
+	  (nil . (:level . 1))))
+
+       :config
+       ;; Save Org buffers after refiling!
+       (advice-add 'org-refile :after 'org-save-all-org-buffers)
+
+       :bind
+       (("C-c l" . org-store-link)
+	("C-c a" . org-agenda)
+	("C-c c" . org-capture)))
    #+end_src
+
+** Habit tracking
+   Configure UI to show habit tasks in a way that measures and promotes keeping those habits.
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package org-habit
+       :ensure nil
+       :after org
+       :custom
+       (org-habit-graph-column 60)
+       :init
+       (add-to-list 'org-modules 'org-habit))
+   #+end_src
+
 ** Org Roam
    This seems to be the most promising way to deal with knowledge management, taking notes, things like that.
    It follows some kind of funky process called the [[https://zettelkasten.de/posts/overview/][Zettelkasten]] method, and it seems designed to integrate nicely with tools I already use (org-journal) while not requiring a lot of work to convert existing org-mode files over.
