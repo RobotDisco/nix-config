@@ -576,12 +576,14 @@
        ;; Store task state changes into a dedicated drawer
        (org-log-into-drawer t)
 
+       ;; The workhorse files in my GTD system
        (org-agenda-files
 	`(,(concat gaelan/gtd-prefix "gtd.org")
 	  ,(concat gaelan/gtd-prefix "tickler.org")
 	  ,(concat gaelan/gtd-prefix "gcal/personal.org")
 	  ,(concat gaelan/gtd-prefix "gcal/work.org")))
 
+       ;; Things I want to quickly enter, tasks and journal entries
        (org-capture-templates
 	`(("t" "Todo" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
 	   "* TODO %?")
@@ -598,10 +600,24 @@
 	  ("y" "Yearly Reflection" entry (function gaelan/org-journal-find-location)
 	   "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
 
+       ;; Where do I tend to move files to?
        (org-refile-targets
 	`((,(concat gaelan/gtd-prefix "gtd.org") . (:maxlevel . 2))
 	  (,(concat gaelan/gtd-prefix "someday.org") . (:level . 1))
+	  (,(concat gaelan/gtd-prefix "tickler.org") . (:level . 1))
+	  ;; Move targets within a file
 	  (nil . (:level . 1))))
+
+       ;; Handy search views for agenda mode
+       (org-agenda-custom-commands
+	'(("n" "Next Actions"
+	   ((todo "NEXT")))
+	  ("p" "Unplanned Projects"
+	   ((todo "PLAN")))
+	  ("r" "Reoccuring Tasks"
+	   ((tags-todo "+CATEGORY=\"tickler\"")))
+	  ("i" "Inbox Items"
+	   ((tags-todo "+CATEGORY=\"Inbox\"")))))
 
        :config
        ;; Save Org buffers after refiling!
