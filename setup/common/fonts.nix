@@ -7,6 +7,7 @@
       pkgs.corefonts
       pkgs.camingo-code
       pkgs.anonymousPro
+      pkgs.lato
     ];
   };
 }

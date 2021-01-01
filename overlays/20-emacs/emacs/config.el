@@ -18,10 +18,19 @@
 (eval-when-compile
   (require 'cl-lib))
 
-(defconst gaelan/*is-osx* (eq system-type 'darwin)
-  "Is this operating system OSX?")
-(defconst gaelan/*is-linux* (eq system-type 'gnu/linux)
-  "Is this operating system Linux?")
+(defconst gaelan/*is-osx* (eq system-type 'darwin))
+(defconst gaelan/*is-linux* (eq system-type 'gnu/linux))
+
+;; Font faces
+(defvar gaelan/default-font-face "CamingoCode")
+(defvar gaelan/default-variable-font-face "Lato")
+
+;; Font sizes, divide by 10 to get point size.
+(defvar gaelan/default-font-size 130)
+(defvar gaelan/default-variable-font-size 130)
+
+;; Make frame transparency overridable
+(defvar gaelan/frame-transparency '(90 . 90))
 
 (require 'package)
 
@@ -53,6 +62,12 @@
 ;; Don't show Emacs' default splash screen
 (setq inhibit-splash-screen t)
 
+;; Set frame transparency
+(set-frame-parameter (selected-frame) 'alpha gaelan/frame-transparency)
+(add-to-list 'default-frame-alist `(alpha . ,gaelan/frame-transparency))
+(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
 (column-number-mode +1)
 
 (set-fringe-mode 10)
@@ -69,7 +84,15 @@
 		eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-(add-to-list 'default-frame-alist '(font . "CamingoCode-13"))
+(set-face-attribute 'default nil :font gaelan/default-font-face :height gaelan/default-font-size)
+
+;; Set the fixed font face and height
+(set-face-attribute 'fixed-pitch nil :font gaelan/default-font-face :height gaelan/default-font-size)
+
+;; Set the variable font face and height
+(set-face-attribute 'variable-pitch nil :font gaelan/default-variable-font-face :height gaelan/default-variable-font-size)
+
+(use-package all-the-icons)
 
 (use-package doom-modeline
   :custom
@@ -128,8 +151,6 @@
   (dired-async-mode))
 
 (setq fill-column 80)
-
-(visual-line-mode)
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns x))
@@ -294,8 +315,15 @@
   (concat gaelan/brain-prefix "gtd/")
   "The root directory of my GTD task management system.")
 
+(defun gaelan/org-mode-setup ()
+  (org-indent-mode)
+  (variable-pitch-mode 1)
+  (visual-line-mode))
+
 (use-package org
   :pin org
+  :hook
+  (org-mode . gaelan/org-mode-setup)
   :custom
   ;; Have prettier chrome for headlines that can be expanded
   (org-ellipsis " ▾")
@@ -357,6 +385,16 @@
   (("C-c l" . org-store-link)
    ("C-c a" . org-agenda)
    ("C-c c" . org-capture)))
+
+(use-package visual-fill-column
+  :init
+  (defun gaelan/org-mode-visual-fill ()
+    (setq visual-fill-column-width 100
+          visual-fill-column-center-text t)
+    (visual-fill-column-mode 1))
+  :after org
+  :hook
+  (org-mode . gaelan/org-mode-visual-fill))
 
 (use-package org-habit
   :ensure nil

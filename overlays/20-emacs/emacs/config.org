@@ -55,14 +55,23 @@
        (require 'cl-lib))
    #+END_SRC
 * Some helpful constants
-   There are some constants I will refer to often; this is a good place to put them.
-   These will often be things like quickly getting the operating system and user-defined directories and such.
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (defconst gaelan/*is-osx* (eq system-type 'darwin)
-    "Is this operating system OSX?")
-  (defconst gaelan/*is-linux* (eq system-type 'gnu/linux)
-    "Is this operating system Linux?")
-#+END_SRC
+  There are some constants I will refer to often; this is a good place to put them.
+  These will often be things like quickly getting the operating system and user-defined directories and such.
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (defconst gaelan/*is-osx* (eq system-type 'darwin))
+    (defconst gaelan/*is-linux* (eq system-type 'gnu/linux))
+
+    ;; Font faces
+    (defvar gaelan/default-font-face "CamingoCode")
+    (defvar gaelan/default-variable-font-face "Lato")
+
+    ;; Font sizes, divide by 10 to get point size.
+    (defvar gaelan/default-font-size 130)
+    (defvar gaelan/default-variable-font-size 130)
+
+    ;; Make frame transparency overridable
+    (defvar gaelan/frame-transparency '(90 . 90))
+  #+END_SRC
 * Package Management
   From this point out, we're likely going to be installing and configuration packages.
   The first thing we should do is configure our packaging system
@@ -153,6 +162,14 @@
       ;; Don't show Emacs' default splash screen
       (setq inhibit-splash-screen t)
     #+end_src
+*** Set frame transparency
+    #+begin_src emacs-lisp :tangle yes
+      ;; Set frame transparency
+      (set-frame-parameter (selected-frame) 'alpha gaelan/frame-transparency)
+      (add-to-list 'default-frame-alist `(alpha . ,gaelan/frame-transparency))
+      (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+      (add-to-list 'default-frame-alist '(fullscreen . maximized))
+    #+end_src
 *** Add current column position to modeline
     It is very useful to know what column I am currently on
     #+begin_src emacs-lisp :tangle yes
@@ -189,7 +206,13 @@
     I currently use [[https://www.janfromm.de/typefaces/camingomono/camingocode/][Camingo Code]], which pleases my heart's eye greatly.
     In the past I have used [[https://www.marksimonson.com/fonts/view/anonymous-pro][Anonymous Pro]], which is also quite wonderful.
     #+begin_src emacs-lisp :tangle yes
-      (add-to-list 'default-frame-alist '(font . "CamingoCode-13"))
+      (set-face-attribute 'default nil :font gaelan/default-font-face :height gaelan/default-font-size)
+
+      ;; Set the fixed font face and height
+      (set-face-attribute 'fixed-pitch nil :font gaelan/default-font-face :height gaelan/default-font-size)
+
+      ;; Set the variable font face and height
+      (set-face-attribute 'variable-pitch nil :font gaelan/default-variable-font-face :height gaelan/default-variable-font-size)
     #+end_src
 *** Optimize mode line
     By default, the emacs modeline is full of extraneous information and it's too hard to pick out relevant information at a glance.
@@ -197,6 +220,8 @@
     Let's try doom-mode-line, a popular reorganization that people find aesthetically pleasing.
 
     #+begin_src emacs-lisp :tangle yes
+      (use-package all-the-icons)
+
       (use-package doom-modeline
 	:custom
 	(doom-modeline-height 1)
@@ -284,16 +309,10 @@
        :config
        (dired-async-mode))
    #+end_src
-** Soft-word wrap long lines
+** Cap line length to 80
    I am a big fan of text always being capped at 80 characters
    #+begin_src emacs-lisp :tangle yes
      (setq fill-column 80)
-   #+end_src
-
-   I am not sure, however, whether I can safely force this to happen, esp. in shared work files.
-   I can at least start with soft-wrapping lines of text.
-   #+begin_src emacs-lisp :tangle yes
-     (visual-line-mode)
    #+end_src
 * Platform-specific tweaks
 *** Load path from shell
@@ -569,6 +588,16 @@
        (concat gaelan/brain-prefix "gtd/")
        "The root directory of my GTD task management system.")
    #+end_src
+** Make text work for org buffers
+   In text-based files like org mode, we don't want to force hard line wrapping but instead will do it virtually
+
+   We're also going to use proportionally spaced fonts since those work better for non-code text.
+   #+begin_src emacs-lisp :tangle yes
+     (defun gaelan/org-mode-setup ()
+       (org-indent-mode)
+       (variable-pitch-mode 1)
+       (visual-line-mode))
+   #+end_src
 ** Basic org mode configuration
    This is where I'm going to set up some really basic GTD stuff:
    - Install org itself
@@ -582,6 +611,8 @@
    #+begin_src emacs-lisp :tangle yes
      (use-package org
        :pin org
+       :hook
+       (org-mode . gaelan/org-mode-setup)
        :custom
        ;; Have prettier chrome for headlines that can be expanded
        (org-ellipsis " ▾")
@@ -594,46 +625,46 @@
 
        ;; The workhorse files in my GTD system
        (org-agenda-files
-	`(,(concat gaelan/gtd-prefix "gtd.org")
-	  ,(concat gaelan/gtd-prefix "tickler.org")
-	  ,(concat gaelan/gtd-prefix "gcal/personal.org")
-	  ,(concat gaelan/gtd-prefix "gcal/work.org")))
+        `(,(concat gaelan/gtd-prefix "gtd.org")
+          ,(concat gaelan/gtd-prefix "tickler.org")
+          ,(concat gaelan/gtd-prefix "gcal/personal.org")
+          ,(concat gaelan/gtd-prefix "gcal/work.org")))
 
        ;; Things I want to quickly enter, tasks and journal entries
        (org-capture-templates
-	`(("t" "Todo" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
-	   "* TODO %?")
-	  ("p" "Project" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
-	   "* [/] %? :project:")
-	  ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
-	   "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
-	  ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
-	   "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What things did I accomplish today?\n   1. %?\n** What did I learn?\n** What did I do to help my future?\n** What did I do to help others?\n")
-	  ("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
-	   "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week? What can you work on this week?\n** What can you learn this week?")
-	  ("m" "Monthly Reflection" entry (function gaelan/org-journal-find-location)
-	   "* %(format-time-string org-journal-time-format)Monthly Reflection\n** What were your biggest wins of the month?\n   - %?\n** What were you most grateful for this month?\n** What tensions have you removed this month?\n** What did you learn this month?\n** How have you grown this month?")
-	  ("y" "Yearly Reflection" entry (function gaelan/org-journal-find-location)
-	   "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
+        `(("t" "Todo" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
+           "* TODO %?")
+          ("p" "Project" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
+           "* [/] %? :project:")
+          ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
+           "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
+          ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
+           "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What things did I accomplish today?\n   1. %?\n** What did I learn?\n** What did I do to help my future?\n** What did I do to help others?\n")
+          ("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
+           "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week? What can you work on this week?\n** What can you learn this week?")
+          ("m" "Monthly Reflection" entry (function gaelan/org-journal-find-location)
+           "* %(format-time-string org-journal-time-format)Monthly Reflection\n** What were your biggest wins of the month?\n   - %?\n** What were you most grateful for this month?\n** What tensions have you removed this month?\n** What did you learn this month?\n** How have you grown this month?")
+          ("y" "Yearly Reflection" entry (function gaelan/org-journal-find-location)
+           "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
 
        ;; Where do I tend to move files to?
        (org-refile-targets
-	`((,(concat gaelan/gtd-prefix "gtd.org") . (:maxlevel . 2))
-	  (,(concat gaelan/gtd-prefix "someday.org") . (:level . 1))
-	  (,(concat gaelan/gtd-prefix "tickler.org") . (:level . 1))
-	  ;; Move targets within a file
-	  (nil . (:level . 1))))
+        `((,(concat gaelan/gtd-prefix "gtd.org") . (:maxlevel . 2))
+          (,(concat gaelan/gtd-prefix "someday.org") . (:level . 1))
+          (,(concat gaelan/gtd-prefix "tickler.org") . (:level . 1))
+          ;; Move targets within a file
+          (nil . (:level . 1))))
 
        ;; Handy search views for agenda mode
        (org-agenda-custom-commands
-	'(("n" "Next Actions"
-	   ((todo "NEXT")))
-	  ("p" "Unplanned Projects"
-	   ((todo "PLAN")))
-	  ("r" "Reoccuring Tasks"
-	   ((tags-todo "+CATEGORY=\"tickler\"")))
-	  ("i" "Inbox Items"
-	   ((tags-todo "+CATEGORY=\"Inbox\"")))))
+        '(("n" "Next Actions"
+           ((todo "NEXT")))
+          ("p" "Unplanned Projects"
+           ((todo "PLAN")))
+          ("r" "Reoccuring Tasks"
+           ((tags-todo "+CATEGORY=\"tickler\"")))
+          ("i" "Inbox Items"
+           ((tags-todo "+CATEGORY=\"Inbox\"")))))
 
        :config
        ;; Save Org buffers after refiling!
@@ -641,10 +672,24 @@
 
        :bind
        (("C-c l" . org-store-link)
-	("C-c a" . org-agenda)
-	("C-c c" . org-capture)))
+        ("C-c a" . org-agenda)
+        ("C-c c" . org-capture)))
    #+end_src
 
+** Centre Org Buffers
+   Make org mode buffers more textually pleasing by centre-aligning the contents of the buffer horizontally.
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package visual-fill-column
+       :init
+       (defun gaelan/org-mode-visual-fill ()
+         (setq visual-fill-column-width 100
+               visual-fill-column-center-text t)
+         (visual-fill-column-mode 1))
+       :after org
+       :hook
+       (org-mode . gaelan/org-mode-visual-fill))
+   #+end_src
 ** Habit tracking
    Configure UI to show habit tasks in a way that measures and promotes keeping those habits.
 
