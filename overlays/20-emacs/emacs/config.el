@@ -355,7 +355,7 @@
   (deft-recursive t)
   (deft-use-filter-string-for-filename t)
   (deft-default-extension "org")
-  (deft-directory (concat gaelan/webdav-prefix "brain")))
+  (deft-directory (concat gaelan/brain-prefix)))
 
 (winner-mode +1)
 
