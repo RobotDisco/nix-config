@@ -199,6 +199,11 @@
     #+begin_src emacs-lisp :tangle yes
     (global-set-key (kbd "s-u") 'revert-buffer)
     #+end_src
+*** Nicer window navigation
+    Have a nicer shortcut for navigating windows than C-x o
+    #+begin_src emacs-lisp :tangle yes
+      (global-set-key (kbd "s-o") 'other-window)
+    #+end_src
 *** Auto-revert files that have changed from under the editor
     Sometimes files I have open are updated by a git checkout or some external process. I want to make sure emacs automatically reverts to those because I don't want to accidentally reintroduce stale files.
     #+begin_src emacs-lisp :tangle yes

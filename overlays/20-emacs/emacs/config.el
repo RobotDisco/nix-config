@@ -81,6 +81,8 @@
 
 (global-set-key (kbd "s-u") 'revert-buffer)
 
+(global-set-key (kbd "s-o") 'other-window)
+
 (global-auto-revert-mode +1)
 
 (use-package which-key
