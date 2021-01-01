@@ -1,250 +1,301 @@
 # -*- mode: org; coding: utf-8; -*-
-* Gaelan's Emacs Config
+#+title: Emacs Configuration
+#+PROPERTY: header-args:emacs-lisp :tangle ./config.el :mkdirp yes
+#+STARTUP: content showstars
+* Welcome!
   This is my emacs config; there are many like it, but this one is mine.
-** Preamble
-*** File header
-    There are little things I can do to make my life easier working with the tangled file.
+** Inspirations
+   - [[https://github.com/daviwil/emacs-from-scratch/][Emacs from Scratch]] is a great series of youtube videos where the author clearly puts a lot of thoughts and well-principled thought into his configuration principles.
+** File header
+   There are little things I can do to make my life easier working with the tangled file.
 
-    For one thing, I wil definitely want to enable lexical binding.
-    For another thing, I can set the file to be opened in read-only mode in case I mistakenly try to edit the generated elisp file rather than this org file.
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      ;;; init.el --- Gaelan's Emacs config -*- lexical-binding: t; eval: (view-mode 1) -*-
-    #+END_SRC
-** Initialization
-   This is low-level stuff that sets up my emacs environment. It's usually not config but
-   tweaking the environment to support my configuration.
-*** Version Sentinal
-    I am not sure if this config will work with older versions of emacs, so I'll abort if the running version of emacs is older than a known version.
- #+BEGIN_SRC emacs-lisp :tangle yes
-   (let ((minver "26.1"))
-     (when (version< emacs-version minver)
-       (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
- #+END_SRC
-*** Garbage Collection threshold tweak
-    I saw a config where the author tweaked garbage collection thresholds for speed during initialization, presuambly to minimize GC overhead at startup.
-    When emacs has finished initalizing, it runs a hook we've set up to restore a more aggressive threshold.
-    I have no idea if this is a good idea or not, but for now I will trust them.
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (let ((normal-gc-cons-threshold (* 20 1024 1024))
-	    (init-gc-cons-threshold (* 128 1024 1024)))
-	(setq gc-cons-threshold init-gc-cons-threshold)
-	(add-hook 'emacs-startup-hook
-		  (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
-    #+END_SRC
+   For one thing, I wil definitely want to enable lexical binding.
+   For another thing, I can set the file to be opened in read-only mode in case I mistakenly try to edit the generated elisp file rather than this org file.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     ;;; init.el --- Gaelan's Emacs config -*- lexical-binding: t; eval: (view-mode 1) -*-
+   #+END_SRC
+* Initialization
+  This is low-level stuff that sets up my emacs environment. It's usually not config but
+  tweaking the environment to support my configuration.
+** Version Sentinal
+   I am not sure if this config will work with older versions of emacs, so I'll abort if the running version of emacs is older than a known version.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (let ((minver "26.1"))
+    (when (version< emacs-version minver)
+      (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
+#+END_SRC
+** Garbage Collection threshold tweak
+   I saw a config where the author tweaked garbage collection thresholds for speed during initialization, presuambly to minimize GC overhead at startup.
+   When emacs has finished initalizing, it runs a hook we've set up to restore a more aggressive threshold.
+   I have no idea if this is a good idea or not, but for now I will trust them.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (let ((normal-gc-cons-threshold (* 20 1024 1024))
+	   (init-gc-cons-threshold (* 128 1024 1024)))
+       (setq gc-cons-threshold init-gc-cons-threshold)
+       (add-hook 'emacs-startup-hook
+		 (lambda () (setq gc-cons-threshold normal-gc-cons-threshold))))
+   #+END_SRC
     
-*** Set location of custom file
-    Emacs by default manages some forms for variables and faces and places them at the end of =init.el=. Since my =init.el= is generated, this would be difficult to manage.
-    I can tell Emacs to use a different location for these, which will not be checked into source control or regenerated and Emacs can manage it to its heart's content.
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-    #+END_SRC
-*** Who am I?
-    My name and email will be used by things like git and email plugins and so on.
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (setq user-full-name "Gaelan D'costa"
-	    user-mail-address "gdcosta@gmail.com")
-    #+END_SRC
-*** Enable Common Lisp language features
-    We'll need to load common-lisp functionality, but since we're only using macros, we can restrict it to the compliation step to monimize runtime bloat.
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (eval-when-compile
-	(require 'cl-lib))
-    #+END_SRC
-** Some helpful constants
-    There are some constants I will refer to often; this is a good place to put them.
-    These will often be things like quickly getting the operating system and user-defined directories and such.
- #+BEGIN_SRC emacs-lisp :tangle yes
-   (defconst gaelan/*is-osx* (eq system-type 'darwin)
-     "Is this operating system OSX?")
-   (defconst gaelan/*is-linux* (eq system-type 'gnu/linux)
-     "Is this operating system Linux?")
- #+END_SRC
-** Package Management
-   From this point out, we're likely going to be installing and configuration packages.
-   The first thing we should do is configure our packaging system
+** Set location of custom file
+   Emacs by default manages some forms for variables and faces and places them at the end of =init.el=. Since my =init.el= is generated, this would be difficult to manage.
+   I can tell Emacs to use a different location for these, which will not be checked into source control or regenerated and Emacs can manage it to its heart's content.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+   #+END_SRC
+** Who am I?
+   My name and email will be used by things like git and email plugins and so on.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq user-full-name "Gaelan D'costa"
+	   user-mail-address "gdcosta@gmail.com")
+   #+END_SRC
+** Enable Common Lisp language features
+   We'll need to load common-lisp functionality, but since we're only using macros, we can restrict it to the compliation step to monimize runtime bloat.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (eval-when-compile
+       (require 'cl-lib))
+   #+END_SRC
+* Some helpful constants
+   There are some constants I will refer to often; this is a good place to put them.
+   These will often be things like quickly getting the operating system and user-defined directories and such.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defconst gaelan/*is-osx* (eq system-type 'darwin)
+    "Is this operating system OSX?")
+  (defconst gaelan/*is-linux* (eq system-type 'gnu/linux)
+    "Is this operating system Linux?")
+#+END_SRC
+* Package Management
+  From this point out, we're likely going to be installing and configuration packages.
+  The first thing we should do is configure our packaging system
+
+  #+BEGIN_SRC emacs-lisp :tangle yes
+    (require 'package)
+  #+END_SRC
+** Enable package sources
+   By default, emacs' package manager only grabs packages from GNU's ELPA package library, which has a very tiny selection of packages.
+   We are going to add the following additional reposities:
+   - melpa :: Repository of almost every commonly-used package
+   - org :: The repository for org mode, my favourite emacs package :)
+
+   My understanding is that the order of repos =package-archives= does not matter, if this because a problem (i.e. the wrong versions of packages are being pulled because they exist in multiple archives) the solution is apparently to set values in =package-archive-priorities=
 
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (require 'package)
+     (add-to-list 'package-archives
+		  '("melpa" . "https://melpa.org/packages/"))
+     (add-to-list 'package-archives
+		  '("org" . "https://orgmode.org/elpa/"))
    #+END_SRC
-*** Enable package sources
-    By default, emacs' package manager only grabs packages from GNU's ELPA package library, which has a very tiny selection of packages.
-    We are going to add the following additional reposities:
-    - melpa :: Repository of almost every commonly-used package
-    - org :: The repository for org mode, my favourite emacs package :)
+** Initialize the package subsystem
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (package-initialize)
+   #+END_SRC
+** use-package, an easier way to manage package configuration
+   While ELPA is still Emacs' package management system, it is a pretty manual process.
+   Traditionally, one has to manually download the package, manually require the package in one's config, and then customize it by setting the appropriate variables and running the appropriate functions.
 
-    My understanding is that the order of repos =package-archives= does not matter, if this because a problem (i.e. the wrong versions of packages are being pulled because they exist in multiple archives) the solution is apparently to set values in =package-archive-priorities=
+   This is messy if one wants to always ensure that packages are installed, or if there is a logical ordering to packages (for example a base package must be loaded and configured before additional packages extend it.
+   In addition, there is a lot of repeated boilerplate around things like associating modes with file extensions or configuring key bindings for these packages.
 
+   John Wiegley has written a nice emacs plugin to manage these via a macro, which makes reading one's intended configuration for each package a lot more compact and easier to comprehend.
+
+   There is a fun chicken-and-the-egg problem where we need =use-package= installed to automatically install other packages, but how does =use-package= itself get installed? Well, we do it the old-fashioned way, with checks :)
+
+   Because it is a macro, we only need to require the package when compiling the configuration file.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+       (unless (package-installed-p 'use-package)
+	 (package-refresh-contents)
+	 (package-install 'use-package))
+
+       (eval-when-compile
+         (require 'use-package))
+   #+END_SRC
+** Always download packages, if required
+   I now want packages controlled by Nix
+
+   By default, use-package does not download emacs packages if they are missing.
+
+   I would like that to happen rather than having to install them all manually myself
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 'use-package-ensure)
+     (setq use-package-always-ensure t)
+   #+END_SRC
+** [Disabled] Automatically update packages
+   [Disabled] Nowadays we want this controlled by Nix
+
+   Emacs doesn't update packages automatically. There is a package which enables this.
+
+   #+BEGIN_SRC emacs-lisp :tangle no
+     (use-package auto-package-update
+       :config
+       (setq auto-package-update-delete-old-versions t)
+       (setq auto-package-update-hide-results t)
+       (auto-package-update-maybe))
+   #+END_SRC
+** Diminish 
+   Having the full name of every package displayed would clog our status line; there is a package that will appreviate the name of well-known packages to a couple of characters.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package diminish)
+   #+END_SRC
+** Bind-key
+    Since we're going to be using the =:bind= keyword to configure keybindings, we require the =bind-key= package
     #+BEGIN_SRC emacs-lisp :tangle yes
-      (add-to-list 'package-archives
-		   '("melpa" . "https://melpa.org/packages/"))
-      (add-to-list 'package-archives
-		   '("org" . "https://orgmode.org/elpa/"))
+      (use-package bind-key)
     #+END_SRC
-*** Initialize the package subsystem
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (package-initialize)
-    #+END_SRC
-*** use-package, an easier way to manage package configuration
-    While ELPA is still Emacs' package management system, it is a pretty manual process.
-    Traditionally, one has to manually download the package, manually require the package in one's config, and then customize it by setting the appropriate variables and running the appropriate functions.
-
-    This is messy if one wants to always ensure that packages are installed, or if there is a logical ordering to packages (for example a base package must be loaded and configured before additional packages extend it.
-    In addition, there is a lot of repeated boilerplate around things like associating modes with file extensions or configuring key bindings for these packages.
-
-    John Wiegley has written a nice emacs plugin to manage these via a macro, which makes reading one's intended configuration for each package a lot more compact and easier to comprehend.
-
-    There is a fun chicken-and-the-egg problem where we need =use-package= installed to automatically install other packages, but how does =use-package= itself get installed? Well, we do it the old-fashioned way, with checks :)
-
-    Because it is a macro, we only need to require the package when compiling the configuration file.
-    #+BEGIN_SRC emacs-lisp :tangle yes
-	(unless (package-installed-p 'use-package)
-	  (package-refresh-contents)
-	  (package-install 'use-package))
-
-        (eval-when-compile
-          (require 'use-package))
-    #+END_SRC
-*** [Disabled] Always download packages, if required
-    [Disabled] I now want packages controlled by Nix
-
-    By default, use-package does not download emacs packages if they are missing.
-
-    I would like that to happen rather than having to install them all manually myself
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (require 'use-package-ensure)
-      (setq use-package-always-ensure t)
-    #+END_SRC
-*** [Disabled] Automatically update packages
-    [Disabled] Nowadays we want this controlled by Nix
-
-    Emacs doesn't update packages automatically. There is a package which enables this.
-
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (use-package auto-package-update
-	:config
-	(setq auto-package-update-delete-old-versions t)
-	(setq auto-package-update-hide-results t)
-	(auto-package-update-maybe))
-    #+END_SRC
-**** Diminish 
-    Having the full name of every package displayed would clog our status line; there is a package that will appreviate the name of well-known packages to a couple of characters.
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (use-package diminish
-	:config (require 'diminish))
-    #+END_SRC
-**** Bind-key
-     Since we're going to be using the =:bind= keyword to configure keybindings, we require the =bind-key= package
-     #+BEGIN_SRC emacs-lisp :tangle yes
-       (use-package bind-key
-	 :config (require 'bind-key))
-     #+END_SRC
-** General editor behaviour
-*** Appearance
-**** Remove unnecessary chrome
-     I'm pretty minimalist and keyboard-driven in how I use Emacs, so I want to remove all mouse-based chrome
-     #+begin_src emacs-lisp :tangle yes
-       (menu-bar-mode -1)
-       (tool-bar-mode -1)
-       (scroll-bar-mode -1)
-       ;; The fringe is this small strip which sometimes indicates that line-specific information
-       ;; about that line is available (there is an error on that line, for example.)
-       (fringe-mode -1)
-
-       ;; Don't show Emacs' default splash screen
-       (setq inhibit-splash-screen t)
-     #+end_src
-**** Add useful chrome
-     It is very useful to know what column I am currently on
-     #+begin_src emacs-lisp :tangle yes
-       (column-number-mode +1)
-     #+end_src
-**** Use preferred typeface
-     Like a lot of developers, I am very particular about my monospaced font choices :)
-     #+begin_src emacs-lisp :tangle yes
-       (add-to-list 'default-frame-alist '(font . "CamingoCode-13"))
-     #+end_src
-**** Emacs theming
-     As far as I can tell, the combination of using Emacs in daemon mode and themes are a dark art, which often conflict with each other. The problem is that the daemon likely runs outside the graphical system, but the theme does load-time adjustments based on whether the frame is run in a console or graphical context.
-     #+begin_src emacs-lisp :tangle yes
-       (use-package rebecca-theme
-	 :config
-	 (if (daemonp)
-	   ;; We need this hack because when you initialize emacs as a daemon,
-	   ;; no frame is created so a lot of important theme loading computations
-	   ;; do not get run. However, this is especially hacky because we don't
-	   ;; want to reload the theme from scratch on every frame creation but
-	   ;; that's the only hook we can do this, so our hook has to remove itself
-	   ;; when it is done.
-	   (cl-labels ((load-my-theme (frame)
-				      (with-selected-frame frame
-					(load-theme 'rebecca t))
-				      (remove-hook 'after-make-frame-functions #'load-my-theme)))
-	     (add-hook 'after-make-frame-functions #'load-my-theme))
-	 (load-theme 'rebecca t)))
-     #+end_src
-*** Shorten yes/no prompts
-    I would much rather type Y/N over Yes/No in prompts
+* General editor behaviour
+** Appearance
+*** Remove unnecessary chrome
+    I'm pretty minimalist and keyboard-driven in how I use Emacs, so I want to remove all mouse-based chrome
     #+begin_src emacs-lisp :tangle yes
-      (defalias 'yes-or-no-p 'y-or-n-p)
-    #+end_src
-*** Follow symlinks in version control functions
-    Especially in my configuration and dotfiles, I often edit symlinks where applications expect those files, but the file lives in a git repo somewhere.
-    Emacs' default behaviour always prompts for me to follow the symlink back to the original file, but that's really annoying, so I will disable that.
-    #+begin_src emacs-lisp :tangle yes
-      (setq vc-follow-symlinks t)
-    #+end_src
-*** Revert buffer shortcut
-    I revert unsaved changes often enough that I should define a command for it.
-    #+begin_src emacs-lisp :tangle yes
-    (global-set-key (kbd "s-u") 'revert-buffer)
-    #+end_src
-*** Nicer window navigation
-    Have a nicer shortcut for navigating windows than C-x o
-    #+begin_src emacs-lisp :tangle yes
-      (global-set-key (kbd "s-o") 'other-window)
-    #+end_src
-*** Auto-revert files that have changed from under the editor
-    Sometimes files I have open are updated by a git checkout or some external process. I want to make sure emacs automatically reverts to those because I don't want to accidentally reintroduce stale files.
-    #+begin_src emacs-lisp :tangle yes
-    (global-auto-revert-mode +1)
-    #+end_src
-*** Show my options when I start an emacs key-chord
-    I do not have infinite memory, I would like emacs to tell me what commands I could run from all the possible completions of the keychord I have started.
-    #+begin_src emacs-lisp :tangle yes
-      (use-package which-key
-	:config
-	(which-key-mode))
-    #+end_src
-*** Make dired operations async
-    Make rename and copy operations in dired asynchronous, don't wait for them to finish.
-    #+begin_src emacs-lisp :tangle yes
-      (use-package async
-	:config
-	(dired-async-mode))
-    #+end_src
-*** Soft-word wrap long lines
-    I am a big fan of text always being capped at 80 characters
-    #+begin_src emacs-lisp :tangle yes
-      (setq fill-column 80)
-    #+end_src
+      (menu-bar-mode -1)
+      (tool-bar-mode -1)
+      (scroll-bar-mode -1)
 
-    I am not sure, however, whether I can safely force this to happen, esp. in shared work files.
-    I can at least start with soft-wrapping lines of text.
-    #+begin_src emacs-lisp :tangle yes
-      (visual-line-mode)
+      ;; Don't show Emacs' default splash screen
+      (setq inhibit-splash-screen t)
     #+end_src
-*** Centralize backups and store multiple copies
-    Backups are great but it's annoying to have backups cluttering up project directories.
-    Let's centralize them but also save multiple older copies of them! Also, let's copy them safely.
+*** Add current column position to modeline
+    It is very useful to know what column I am currently on
     #+begin_src emacs-lisp :tangle yes
-      (setq backup-directory-alist `(("." . "~/.emacs.d/backups"))
-	    delete-old-versions t
-	    kept-new-versions 8
-	    kept-old-versions 2
-	    version-control t)
+      (column-number-mode +1)
     #+end_src
-** Platform-specific tweaks
+*** Set fringe width
+    The fringe is this small strip which sometimes indicates that
+    line-specific information about that line is available (there is
+    an error on that line, for example.)
+    #+begin_src emacs-lisp :tangle yes
+      (set-fringe-mode 10)
+    #+end_src
+*** Use visual bell
+    Visual feedback is nicer than audio feedback
+
+    #+begin_src emacs-lisp :tangle yes
+      (setq visual-bell t)
+    #+end_src
+*** Show line numbers
+    #+begin_src emacs-lisp :tangle yes
+      (global-display-line-numbers-mode t)
+
+      ;; Disable line numbers for some modes
+      (dolist (mode '(org-mode-hook
+		      term-mode-hook
+		      shell-mode-hook
+		      treemacs-mode-hook
+		      eshell-mode-hook))
+	(add-hook mode (lambda () (display-line-numbers-mode 0))))
+    #+end_src
+*** Use preferred typeface
+    Like a lot of developers, I am very particular about my monospaced font choices :)
+
+    I currently use [[https://www.janfromm.de/typefaces/camingomono/camingocode/][Camingo Code]], which pleases my heart's eye greatly.
+    In the past I have used [[https://www.marksimonson.com/fonts/view/anonymous-pro][Anonymous Pro]], which is also quite wonderful.
+    #+begin_src emacs-lisp :tangle yes
+      (add-to-list 'default-frame-alist '(font . "CamingoCode-13"))
+    #+end_src
+*** Optimize mode line
+    By default, the emacs modeline is full of extraneous information and it's too hard to pick out relevant information at a glance.
+
+    Let's try doom-mode-line, a popular reorganization that people find aesthetically pleasing.
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package doom-modeline
+	:custom
+	(doom-modeline-height 1)
+	(doom-modeline-buffer-file-name 'truncate-upto-project)
+	:init
+	(doom-modeline-mode 1))
+    #+end_src
+*** Emacs theming
+    As far as I can tell, the combination of using Emacs in daemon mode and themes are a dark art, which often conflict with each other. The problem is that the daemon likely runs outside the graphical system, but the theme does load-time adjustments based on whether the frame is run in a console or graphical context.
+    #+begin_src emacs-lisp :tangle yes
+      (use-package rebecca-theme
+        :config
+        (if (daemonp)
+          ;; We need this hack because when you initialize emacs as a daemon,
+          ;; no frame is created so a lot of important theme loading computations
+          ;; do not get run. However, this is especially hacky because we don't
+          ;; want to reload the theme from scratch on every frame creation but
+          ;; that's the only hook we can do this, so our hook has to remove itself
+          ;; when it is done.
+          (cl-labels ((load-my-theme (frame)
+                                     (with-selected-frame frame
+                                       (load-theme 'rebecca t))
+                                     (remove-hook 'after-make-frame-functions #'load-my-theme)))
+            (add-hook 'after-make-frame-functions #'load-my-theme))
+        (load-theme 'rebecca t)))
+    #+end_src
+** Centralize backups and store multiple copies
+   Backups are great but it's annoying to have backups cluttering up project directories.
+   Let's centralize them but also save multiple older copies of them! Also, let's copy them safely.
+   #+begin_src emacs-lisp :tangle yes
+     (setq backup-directory-alist `(("." . "~/.emacs.d/backups"))
+	   delete-old-versions t
+	   kept-new-versions 8
+	   kept-old-versions 2
+	   version-control t)
+   #+end_src
+** Shorten yes/no prompts
+   I would much rather type Y/N over Yes/No in prompts
+   #+begin_src emacs-lisp :tangle yes
+     (defalias 'yes-or-no-p 'y-or-n-p)
+   #+end_src
+** Follow symlinks in version control functions
+   Especially in my configuration and dotfiles, I often edit symlinks where applications expect those files, but the file lives in a git repo somewhere.
+   Emacs' default behaviour always prompts for me to follow the symlink back to the original file, but that's really annoying, so I will disable that.
+   #+begin_src emacs-lisp :tangle yes
+     (setq vc-follow-symlinks t)
+   #+end_src
+** Revert buffer shortcut
+   I revert unsaved changes often enough that I should define a command for it.
+   #+begin_src emacs-lisp :tangle yes
+   (global-set-key (kbd "s-u") 'revert-buffer)
+   #+end_src
+** Nicer window navigation
+   Have a nicer shortcut for navigating windows than C-x o
+   #+begin_src emacs-lisp :tangle yes
+     (global-set-key (kbd "s-o") 'other-window)
+   #+end_src
+** Auto-revert files that have changed from under the editor
+   Sometimes files I have open are updated by a git checkout or some external process. I want to make sure emacs automatically reverts to those because I don't want to accidentally reintroduce stale files.
+   #+begin_src emacs-lisp :tangle yes
+   (global-auto-revert-mode +1)
+   #+end_src
+** Show my options when I start an emacs key-chord
+   I do not have infinite memory, I would like emacs to tell me what commands I could run from all the possible completions of the keychord I have started.
+   #+begin_src emacs-lisp :tangle yes
+     (use-package which-key
+       :custom (which-key-idle-delay 1)
+       :diminish which-key-mode
+       :init
+       (which-key-mode))
+   #+end_src
+** Improve help and documentation buffers
+   #+begin_src emacs-lisp :tangle yes
+     (use-package helpful
+       :bind
+       ([remap describe-function] . helpful-callable)
+       ([remap describe-variable] . helpful-variable)
+       ([remap describe-key] . helpful-key)
+       ("C-c C-d" . helpful-at-point))
+   #+end_src
+** Make dired operations async
+   Make rename and copy operations in dired asynchronous, don't wait for them to finish.
+   #+begin_src emacs-lisp :tangle yes
+     (use-package async
+       :config
+       (dired-async-mode))
+   #+end_src
+** Soft-word wrap long lines
+   I am a big fan of text always being capped at 80 characters
+   #+begin_src emacs-lisp :tangle yes
+     (setq fill-column 80)
+   #+end_src
+
+   I am not sure, however, whether I can safely force this to happen, esp. in shared work files.
+   I can at least start with soft-wrapping lines of text.
+   #+begin_src emacs-lisp :tangle yes
+     (visual-line-mode)
+   #+end_src
+* Platform-specific tweaks
 *** Load path from shell
     On graphical systems like X and OSX we need to load paths from our shell scripts rather than using some generic system path. Luckily Steve Purcell has written a helpful package to manage this.
     #+begin_src emacs-lisp :tangle yes
@@ -259,233 +310,233 @@
       (setq-default mac-command-modifier 'meta)
       (setq-default mac-option-modifier 'super)
     #+end_src
-** Editor workflow enhancements
-*** GPG pinentry support
-    The GPG agent usually spawns an external pinentry process; instead integrate with emacs
+* Editor workflow enhancements
+** GPG pinentry support
+   The GPG agent usually spawns an external pinentry process; instead integrate with emacs
 
-    (this requires some modifications to ~gpg-agent.conf~)
+   (this requires some modifications to ~gpg-agent.conf~)
 
+   #+begin_src emacs-lisp :tangle yes
+     (use-package pinentry
+       :custom
+       (epa-pinentry-mode 'loopback)
+       :config
+       (pinentry-start))
+   #+end_src
+** [Disabled] SSH key management
+   I use [[https://www.funtoo.org/Keychain][Keychain]] to manage my GPG and SSH keychains.
+   I want Emacs to leverage any keys I've added into this system.
+
+   #+begin_src emacs-lisp :tangle no
+     (use-package keychain-environment
+       :config
+       (keychain-refresh-environment))
+   #+end_src
+** Helm -- a better minibuffer workflow
+
+   Helm is a super powerful way to use the minibuffer that uses fuzzy searching to bring up candidate actions for that particular command.
+
+   It also allows for extensions to provide relevant completion options for context-sensitive minibuffers (language-aware functions, window manager buffer names, etc...)
+
+   A hard thing to get used to is that it chooses not to use TAB as the autocompletion, but purely relies on fuzzy searching and the TAB key just picks the 'default' option.
+
+   It requires a lot of config because it winds up latching onto a lot of Emacs functionalities.
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package helm
+       ;; Add recommended keybindings as found in Thierry Volpiatto's guide
+       ;; http://tuhdo.github.io/helm-intro.html
+       :bind (("M-x" . helm-M-x)
+	      ("C-x C-f" . helm-find-files)
+	      ("C-x r b" . helm-filtered-bookmarks)
+	      ("C-x C-b" . helm-mini)
+	      ("M-y" . helm-show-kill-ring)
+	      ("M-i" . helm-semantic-or-imenu)
+	      ("M-s o" . helm-occur)
+	      ("C-h SPC" . helm-all-mark-rings)
+	      ("C-x c h r" . helm-register)
+	      ("C-x c h g" . helm-google-suggest)
+	      ("C-c h M-:" . helm-eval-expression-with-eldoc))
+       :init
+       ;; Turn on fuzzy matching in a bunch of places
+       ;; turn it off if it is irritating or slows down searches.
+       (setq-default helm-recentf-fuzzy-match t
+		     helm-buffers-fuzzy-matching t
+		     helm-locate-fuzzy-match t
+		     helm-M-x-fuzzy-match t
+		     helm-semantic-fuzzy-match t
+		     helm-imenu-fuzzy-match t
+		     helm-apropos-fuzzy-match t
+		     helm-lisp-fuzzy-completion t
+		     helm-session-fuzzy-match t
+		     helm-etags-select t)
+       :config
+       (require 'helm-config)
+       (helm-mode +1)
+       (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+
+       ;; Add helmized history searching functionality for a variety of
+       ;; interfaces: `eshell`, `shell-mode`, `minibuffer`,
+       ;; using the same C-c C-l binding.
+       (add-hook 'eshell-mode-hook
+		 #'(lambda ()
+		     (define-key 'eshell-mode-map (kbd "C-c C-l") #'helm-eshell-history)))
+       (add-hook 'shell-mode-hook
+		 #'(lambda ()
+		     (define-key 'shell-mode-map (kbd "C-c C-l") #'helm-comint-input-ring)))
+       (define-key minibuffer-local-map (kbd "C-c C-l") #'helm-minibuffer-history))
+   #+end_src
+*** Helm git integration
+    There is a really cool interface for looking at files in git projects, called =helm-browse-project=     
     #+begin_src emacs-lisp :tangle yes
-      (use-package pinentry
-	:custom
-	(epa-pinentry-mode 'loopback)
+      (use-package helm-ls-git
+	:after helm
 	:config
-	(pinentry-start))
+	;; `helm-source-ls-git' must be defined manually
+	;; See https://github.com/emacs-helm/helm-ls-git/issues/34
+	(setq helm-source-ls-git
+	      (and (memq 'helm-source-ls-git helm-ls-git-default-sources)
+		   (helm-make-source "Git files" 'helm-ls-git-source
+		     :fuzzy-match helm-ls-git-fuzzy-match)))
+	(push 'helm-source-ls-git helm-mini-default-sources))
     #+end_src
-*** [Disabled] SSH key management
-    I use [[https://www.funtoo.org/Keychain][Keychain]] to manage my GPG and SSH keychains.
-    I want Emacs to leverage any keys I've added into this system.
+*** Helm descbinds
+    There's a really nice node that will list all the possible keybindings at your current moment, and you can choose one using helm.
+    #+begin_src emacs-lisp :tangle yes
+      (use-package helm-descbinds
+	:after helm
+	:config
+	(helm-descbinds-mode))
+    #+end_src
+*** [Inactive] Central helm buffer sources
+    Originally before I org-moded my config I had all my helm mini sources in a single =setq= which I tried to split out and keep with their original package installation forms.
+    I am not sure if this is a good idea or if this will pan out, so I'm leaving the original snippet here, untangled.
 
     #+begin_src emacs-lisp :tangle no
-      (use-package keychain-environment
-	:config
-	(keychain-refresh-environment))
+      (setq-default helm-mini-default-sources `(helm-exwm-emacs-buffers-source
+						helm-exwm-source
+						helm-source-recentf
+						,(when (boundp 'helm-source-ls-git)
+						   'helm-source-ls-git)
+						helm-source-bookmarks
+						helm-source-bookmark-set
+						helm-source-buffer-not-found))
     #+end_src
-*** Helm -- a better minibuffer workflow
+** Project Management
+   =projectile= is a package that adds a software development workflow to collections of files.
 
-    Helm is a super powerful way to use the minibuffer that uses fuzzy searching to bring up candidate actions for that particular command.
-
-    It also allows for extensions to provide relevant completion options for context-sensitive minibuffers (language-aware functions, window manager buffer names, etc...)
-
-    A hard thing to get used to is that it chooses not to use TAB as the autocompletion, but purely relies on fuzzy searching and the TAB key just picks the 'default' option.
-
-    It requires a lot of config because it winds up latching onto a lot of Emacs functionalities.
-
+   #+begin_src emacs-lisp :tangle yes
+     (use-package projectile
+       :config
+       (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+       (projectile-mode +1))
+   #+end_src
+*** Helm support
+    Use helm in projectile commands
     #+begin_src emacs-lisp :tangle yes
-      (use-package helm
-	;; Add recommended keybindings as found in Thierry Volpiatto's guide
-	;; http://tuhdo.github.io/helm-intro.html
-	:bind (("M-x" . helm-M-x)
-	       ("C-x C-f" . helm-find-files)
-	       ("C-x r b" . helm-filtered-bookmarks)
-	       ("C-x C-b" . helm-mini)
-	       ("M-y" . helm-show-kill-ring)
-	       ("M-i" . helm-semantic-or-imenu)
-	       ("M-s o" . helm-occur)
-	       ("C-h SPC" . helm-all-mark-rings)
-	       ("C-x c h r" . helm-register)
-	       ("C-x c h g" . helm-google-suggest)
-	       ("C-c h M-:" . helm-eval-expression-with-eldoc))
-	:init
-	;; Turn on fuzzy matching in a bunch of places
-	;; turn it off if it is irritating or slows down searches.
-	(setq-default helm-recentf-fuzzy-match t
-		      helm-buffers-fuzzy-matching t
-		      helm-locate-fuzzy-match t
-		      helm-M-x-fuzzy-match t
-		      helm-semantic-fuzzy-match t
-		      helm-imenu-fuzzy-match t
-		      helm-apropos-fuzzy-match t
-		      helm-lisp-fuzzy-completion t
-		      helm-session-fuzzy-match t
-		      helm-etags-select t)
+      (use-package helm-projectile
+	:after helm
 	:config
-	(require 'helm-config)
-	(helm-mode +1)
-	(add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
-
-	;; Add helmized history searching functionality for a variety of
-	;; interfaces: `eshell`, `shell-mode`, `minibuffer`,
-	;; using the same C-c C-l binding.
-	(add-hook 'eshell-mode-hook
-		  #'(lambda ()
-		      (define-key 'eshell-mode-map (kbd "C-c C-l") #'helm-eshell-history)))
-	(add-hook 'shell-mode-hook
-		  #'(lambda ()
-		      (define-key 'shell-mode-map (kbd "C-c C-l") #'helm-comint-input-ring)))
-	(define-key minibuffer-local-map (kbd "C-c C-l") #'helm-minibuffer-history))
+	(helm-projectile-on))
     #+end_src
-**** Helm git integration
-     There is a really cool interface for looking at files in git projects, called =helm-browse-project=     
-     #+begin_src emacs-lisp :tangle yes
-       (use-package helm-ls-git
-	 :after helm
-	 :config
-	 ;; `helm-source-ls-git' must be defined manually
-	 ;; See https://github.com/emacs-helm/helm-ls-git/issues/34
-	 (setq helm-source-ls-git
-	       (and (memq 'helm-source-ls-git helm-ls-git-default-sources)
-		    (helm-make-source "Git files" 'helm-ls-git-source
-		      :fuzzy-match helm-ls-git-fuzzy-match)))
-	 (push 'helm-source-ls-git helm-mini-default-sources))
-     #+end_src
-**** Helm descbinds
-     There's a really nice node that will list all the possible keybindings at your current moment, and you can choose one using helm.
-     #+begin_src emacs-lisp :tangle yes
-       (use-package helm-descbinds
-	 :after helm
-	 :config
-	 (helm-descbinds-mode))
-     #+end_src
-**** [Inactive] Central helm buffer sources
-     Originally before I org-moded my config I had all my helm mini sources in a single =setq= which I tried to split out and keep with their original package installation forms.
-     I am not sure if this is a good idea or if this will pan out, so I'm leaving the original snippet here, untangled.
-
-     #+begin_src emacs-lisp :tangle no
-       (setq-default helm-mini-default-sources `(helm-exwm-emacs-buffers-source
-						 helm-exwm-source
-						 helm-source-recentf
-						 ,(when (boundp 'helm-source-ls-git)
-						    'helm-source-ls-git)
-						 helm-source-bookmarks
-						 helm-source-bookmark-set
-						 helm-source-buffer-not-found))
-     #+end_src
-*** Project Management
-    =projectile= is a package that adds a software development workflow to collections of files.
-
+*** Ripgrep support
+    Ripgrep is my preferred choice in the "better than grep" software category
     #+begin_src emacs-lisp :tangle yes
-      (use-package projectile
-	:config
-	(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-	(projectile-mode +1))
-    #+end_src
-**** Helm support
-     Use helm in projectile commands
-     #+begin_src emacs-lisp :tangle yes
-       (use-package helm-projectile
-	 :after helm
-	 :config
-	 (helm-projectile-on))
-     #+end_src
-**** Ripgrep support
-     Ripgrep is my preferred choice in the "better than grep" software category
-     #+begin_src emacs-lisp :tangle yes
-       (use-package projectile-ripgrep
-	 :after projectile)
-
-       (use-package helm-rg
-	 :after helm)
-     #+end_src
-*** Directory Pane
-    Sometimes I want to see all the files in my current project structure in a tree structure similar to the Windows file manager.
-
-    The module I use has integrations with packages for my project management and git source control workflow
-
-    #+begin_src emacs-lisp :tangle yes
-      (use-package treemacs)
-
-      (use-package treemacs-projectile
+      (use-package projectile-ripgrep
 	:after projectile)
 
-      (use-package treemacs-magit
-	:after magit)
+      (use-package helm-rg
+	:after helm)
     #+end_src
-*** Error/Syntax checking
-    We use =flycheck= for things like on-the-fly syntax checking, linting, dynamic runtime analysis, etc...
-    #+begin_src emacs-lisp :tangle yes
-      (use-package flycheck
-	:init
-	(add-hook 'after-init-hook 'global-flycheck-mode))
-    #+end_src
-*** Snippet Manager
-    It's annoying to type the same things over and over. =yasnippet= is a tool that expands full templates from short snippets.
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (use-package yasnippet-snippets)
-      (use-package yasnippet
-	:after yasnippet-snippets
-	:config
-	(yas-global-mode 1))
-    #+END_SRC
-*** Autocompletion
-    It's nice to have autocompletion for things like functions and other possibilities that can be inferred from the editor mode.
+** Directory Pane
+   Sometimes I want to see all the files in my current project structure in a tree structure similar to the Windows file manager.
 
-    #+begin_src emacs-lisp :tangle yes
-      (use-package company
-	:init
-	(add-hook 'after-init-hook 'global-company-mode)
-	:bind (("M-TAB" . 'company-complete)))
-    #+end_src
+   The module I use has integrations with packages for my project management and git source control workflow
 
-    My autocompletion moder also has helm integration
-    #+begin_src emacs-lisp :tangle yes
-      (use-package helm-company
-	:after (helm company)
-	:config
-	(define-key company-mode-map (kbd "C-:") 'helm-company)
-	(define-key company-active-map (kbd "C-:") 'helm-company))
-    #+end_src
-*** Multiple cursors
-    Do the cool vim/sublime? thing where you can edit multiple lines in the same way.
+   #+begin_src emacs-lisp :tangle yes
+     (use-package treemacs)
 
-    (for example ... prefix every line in a region with the same text, or add a checkmark to every item in an org list.
+     (use-package treemacs-projectile
+       :after projectile)
 
-    #+begin_src emacs-lisp :tangle yes
-      (use-package multiple-cursors
-	:bind (("C-S-c C-S-c" . mc/edit-lines)
-	       ("C->" . mc/mark-more-like-this)
-	       ("C-<" . mc/mark-previous-like-this)
-	       ("C-c C-<" . mc/mark-all-like-this)))
-    #+end_src
-*** direnv
-    We use direnv in order to automatically load environment variables (or inherit nix-shell envs) when inside a project.
+     (use-package treemacs-magit
+       :after magit)
+   #+end_src
+** Error/Syntax checking
+   We use =flycheck= for things like on-the-fly syntax checking, linting, dynamic runtime analysis, etc...
+   #+begin_src emacs-lisp :tangle yes
+     (use-package flycheck
+       :init
+       (add-hook 'after-init-hook 'global-flycheck-mode))
+   #+end_src
+** Snippet Manager
+   It's annoying to type the same things over and over. =yasnippet= is a tool that expands full templates from short snippets.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package yasnippet-snippets)
+     (use-package yasnippet
+       :after yasnippet-snippets
+       :config
+       (yas-global-mode 1))
+   #+END_SRC
+** Autocompletion
+   It's nice to have autocompletion for things like functions and other possibilities that can be inferred from the editor mode.
 
-    #+begin_src emacs-lisp :tangle yes
-      (use-package direnv
-	:config
-	(direnv-mode))
-    #+end_src
-*** nix-shell support
-    #+begin_src emacs-lisp :tangle yes
-      (use-package nix-sandbox
-	:after flycheck
-	:config
-	; (setq flycheck-command-wrapper-function
-	;      (lambda (command) (apply 'nix-shell-command (nix-current-sandbox) command))
-	;      flycheck-executable-find
-	;      (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd))))
-	)
-      (use-package helm-nixos-options
-	:after helm
-	:if gaelan/*is-linux*
-	:bind (("C-c C-S-n" . helm-nixos-options)))
+   #+begin_src emacs-lisp :tangle yes
+     (use-package company
+       :init
+       (add-hook 'after-init-hook 'global-company-mode)
+       :bind (("M-TAB" . 'company-complete)))
+   #+end_src
 
-      (use-package company-nixos-options
-	:if gaelan/*is-linux*
-	:after company
-	:config (add-to-list 'company-backends 'company-nixos-options))
-    #+end_src
-** Document Viewing
+   My autocompletion moder also has helm integration
+   #+begin_src emacs-lisp :tangle yes
+     (use-package helm-company
+       :after (helm company)
+       :config
+       (define-key company-mode-map (kbd "C-:") 'helm-company)
+       (define-key company-active-map (kbd "C-:") 'helm-company))
+   #+end_src
+** Multiple cursors
+   Do the cool vim/sublime? thing where you can edit multiple lines in the same way.
+
+   (for example ... prefix every line in a region with the same text, or add a checkmark to every item in an org list.
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package multiple-cursors
+       :bind (("C-S-c C-S-c" . mc/edit-lines)
+	      ("C->" . mc/mark-more-like-this)
+	      ("C-<" . mc/mark-previous-like-this)
+	      ("C-c C-<" . mc/mark-all-like-this)))
+   #+end_src
+** direnv
+   We use direnv in order to automatically load environment variables (or inherit nix-shell envs) when inside a project.
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package direnv
+       :config
+       (direnv-mode))
+   #+end_src
+** nix-shell support
+   #+begin_src emacs-lisp :tangle yes
+     (use-package nix-sandbox
+       :after flycheck
+       :config
+       ; (setq flycheck-command-wrapper-function
+       ;      (lambda (command) (apply 'nix-shell-command (nix-current-sandbox) command))
+       ;      flycheck-executable-find
+       ;      (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd))))
+       )
+     (use-package helm-nixos-options
+       :after helm
+       :if gaelan/*is-linux*
+       :bind (("C-c C-S-n" . helm-nixos-options)))
+
+     (use-package company-nixos-options
+       :if gaelan/*is-linux*
+       :after company
+       :config (add-to-list 'company-backends 'company-nixos-options))
+   #+end_src
+* Document Viewing
 *** pdf-tools
     for viewing PDFs
     #+begin_src emacs-lisp :tangle no
@@ -497,591 +548,655 @@
       (use-package nov
 	:mode ("\\.epub\\'" . nov-mode))
     #+end_src
-** Org Mode
-   Org mode is my most essential emacs package, since it effectively manages my life.
+* Org Mode
+  Org mode is my most essential emacs package, since it effectively manages my life.
 
-   I am a heavy user of the Getting Things Done task/project management system.
-*** Some important variables
-    My central org mode files are installed in a folder that is automatically synced to the cloud. It is different depending on which operating system I am running.
-    #+begin_src emacs-lisp :tangle yes
-      (defconst gaelan/webdav-prefix
-	(if gaelan/*is-osx*
-	    (file-name-as-directory "~/Seafile/DocStore/")
-	  (file-name-as-directory "~/fallcube/DocStore/"))
-	"The root location of my emacs / org-mode files system")
+  I am a heavy user of the Getting Things Done task/project management system.
+** Some important variables
+   My central org mode files are installed in a folder that is automatically synced to the cloud. It is different depending on which operating system I am running.
+   #+begin_src emacs-lisp :tangle yes
+     (defconst gaelan/webdav-prefix
+       (if gaelan/*is-osx*
+	   (file-name-as-directory "~/Seafile/DocStore/")
+	 (file-name-as-directory "~/fallcube/DocStore/"))
+       "The root location of my emacs / org-mode files system")
 
-      (defconst gaelan/brain-prefix
-	(concat gaelan/webdav-prefix "brain/")
-	"The root directory of my org-roam knowledge store.")
+     (defconst gaelan/brain-prefix
+       (concat gaelan/webdav-prefix "brain/")
+       "The root directory of my org-roam knowledge store.")
 
-      (defconst gaelan/gtd-prefix
-	(concat gaelan/brain-prefix "gtd/")
-	"The root directory of my GTD task management system.")
-    #+end_src
-*** Basic org mode configuration
-    This is where I'm going to set up some really basic GTD stuff:
-    - Install org itself
-    - Install global hotkeys
-    - Setting available priority levels
-    - Configuring logging behaviour
-    - Configuring org capture tactics
-    - Configuring refile targets
-    - Configuring custom agenda views
-
-    #+begin_src emacs-lisp :tangle yes
-      (use-package org
-	:pin org
-	:init
-	(setq-default org-capture-templates
-		      `(("t" "Todo" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
-			 "* TODO %?")
-			 ("p" "Project" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
-			 "* [/] %? :project:")
-			("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
-			 "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
-			("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
-			 "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What things did I accomplish today?\n   1. %?\n** What did I learn?\n** What did I do to help my future?\n** What did I do to help others?\n")
-			("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
-			 "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week? What can you work on this week?\n** What can you learn this week?")
-			("m" "Monthly Reflection" entry (function gaelan/org-journal-find-location)
-			 "* %(format-time-string org-journal-time-format)Monthly Reflection\n** What were your biggest wins of the month?\n   - %?\n** What were you most grateful for this month?\n** What tensions have you removed this month?\n** What did you learn this month?\n** How have you grown this month?")
-			("y" "Yearly Reflection" entry (function gaelan/org-journal-find-location)
-			 "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
-	(setq-default org-refile-targets
-		      `((,(concat gaelan/gtd-prefix "gtd.org") . (:maxlevel . 2))
-			(,(concat gaelan/gtd-prefix "someday.org") . (:level . 1))
-			(nil . (:level . 1))))
-	(setq-default org-agenda-files
-		      `(,(concat gaelan/gtd-prefix "gtd.org")
-			,(concat gaelan/gtd-prefix "tickler.org")
-			,(concat gaelan/gtd-prefix "gcal/personal.org")
-			,(concat gaelan/gtd-prefix "gcal/work.org")))
-	:bind (("C-c l" . org-store-link)
-	       ("C-c a" . org-agenda)
-	       ("C-c c" . org-capture)))
-    #+end_src
-*** Org Roam
-    This seems to be the most promising way to deal with knowledge management, taking notes, things like that.
-    It follows some kind of funky process called the [[https://zettelkasten.de/posts/overview/][Zettelkasten]] method, and it seems designed to integrate nicely with tools I already use (org-journal) while not requiring a lot of work to convert existing org-mode files over.
-
-    So let's try it for a while and see if I like it!
-    #+begin_src emacs-lisp :tangle yes
-      (use-package org-roam
-	:bind (:map org-roam-mode-map
-		    ("C-c n l" . org-roam)
-		    ("C-c n f" . org-roam-find-file)
-		    ("C-c n g" . org-roam-graph-show)
-		    :map org-mode-map
-		    ("C-c n i" . org-roam-insert)
-		    ("C-c n I" . org-roam-insert-immediate))
-	:custom
-	(org-roam-directory gaelan/brain-prefix)
-	(org-roam-db-location (if gaelan/*is-osx*
-				  (concat org-roam-directory "/db/osx.db")
-				(concat org-roam-directory "/db/linux.db")))
-
-	(org-roam-completion-system 'helm)
-	;; I don't care about graphing daily notes, tasks, or historical stuff
-	(org-roam-graph-exclude-matcher '("journal" "gtd"))
-	(org-roam-capture-templates
-	 '(("d" "default" plain (function org-roam--capture-get-point)
-	    "%?"
-	    :file-name "%<%Y%m%d%H%M%S>-${slug}"
-	    :head "#+title: ${title}\n"
-	    :unnarrowed t)
-	   ("f" "fleeting" plain (function org-roam--capture-get-point)
-	    "%?"
-	    :file-name "%<%Y%m%d%H%M%S>-${slug}"
-	    :head "#+title: ${title}\n#+roam_tags: fleeting-note\n"
-	    :unnarrowed t)
-	   ("l" "literature" plain (function org-roam--capture-get-point)
-	    "%?"
-	    :file-name "%<%Y%m%d%H%M%S>-${slug}"
-	    :head "#+title: ${title}\n#+roam_tags: literature-note\n"
-	    :unnarrowed t)))
-	:config
-	(add-hook 'after-init-hook 'org-roam-mode)
-	;;  org-roam-protocol is used to handle weblinks (e.g. org-roam-server)
-	(require 'org-roam-protocol))
-    #+end_src
-
-    There is a webserver it uses which I guess is the best way to browse one's info
-    #+begin_src emacs-lisp :tangle yes
-      (use-package org-roam-server
-	:after org-roam
-	:config
-	(setq org-roam-server-host "127.0.0.1"
-	      org-roam-server-port 8080
-	      org-roam-server-export-inline-images t
-	      org-roam-server-authenticate nil
-	      org-roam-server-network-poll t
-	      org-roam-server-network-arrows nil
-	      org-roam-server-network-label-truncate t
-	      org-roam-server-network-label-truncate-length 60
-	      org-roam-server-network-label-wrap-length 20))
-    #+end_src
-
-    org-roam also recommends this thing called deft which I think is a way for browsing and filtering org files
-
-    #+begin_src emacs-lisp :tangle yes
-      (use-package deft
-	:after org
-	:bind ("C-c n d" . deft)
-	:custom
-	(deft-recursive t)
-	(deft-use-filter-string-for-filename t)
-	(deft-default-extension "org")
-	(deft-directory (concat gaelan/brain-prefix)))
-    #+end_src
-
-    org-roam also suggests some winner-mode config, which is a way to undo/redo changes in window configuration
-    #+begin_src emacs-lisp :tangle yes
-      (winner-mode +1)
-    #+end_src
-    
-*** Org Journal mode
-    I also use org mode for journalling my days
-    #+begin_src emacs-lisp :tangle yes
-      (use-package org-journal
-	:after org
-	:bind ("C-c n j" . org-journal-new-entry)
-	:custom
-	(org-journal-date-format "%A, %F")
-	(org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "brain/" "journal")))
-	(org-journal-file-format "%Y/%m/%Y-%m-%d.org"))
-    #+end_src
-
-    I would like to use capture mode to generate some standard journal entries for daily, weekly, monthly and yearly reflections. This requires invoking a function when inserting the template because I have to understand and manipulate the structure a little bit.
-    This function was kindly provided by =org-journal='s README.
-    #+begin_src emacs-lisp :tangle yes
-      (defun gaelan/org-journal-find-location ()
-	;; Open today's journal, but specify a non-nil prefix argument in order to
-	;; inhibit inserting the heading; org-capture will insert the heading.
-	(org-journal-new-entry t)
-	;; Position point on the journal's top-level heading so that org-capture
-	;; will add the new entry as a child entry.
-	(goto-char (point-min)))
-    #+end_src
-*** org-noter
-    A package for annotating PDF, DOC files, and the like into org files.
-    #+begin_src emacs-lisp :tangle yes
-      (use-package org-noter)
-    #+end_src
-*** Prettify org mode
-    Org files often look like a overwhelming wall of leading asterisks.
-    We use a mode to minimize the amount of chrome displayed in org mode while still clearly distinguishing between outline levels.
-    #+begin_src emacs-lisp :tangle yes
-      (use-package org-bullets
-	:after org
-	:hook (org-mode . org-bullets-mode))
-    #+end_src
-*** [Inactive] Org Mode / Google Calendar integration
-    In the past I tried and failed to use something that pulls appointment data from google calendar into my org mode.
-    #+begin_src emacs-lisp :tangle no
-      (use-package org-gcal
-	:init
-	(let* ((bwdata (elt (bitwarden-search "offlineimap") 0))
-	       (bwfields (gethash "fields" bwdata))
-	       (client-id (gethash "value" (elt bwfields 0)))
-	       (client-secret (gethash "value" (elt bwfields 1))))
-	  (setq-default 'org-gcal-client-id client-id)
-	  (setq-default 'org-gcal-client-secret client-secret))
-	(setq-default org-gcal-file-alist
-		      `(("gdcosta@gmail.com" . ,(concat webdav-prefix "gcal/personal.org"))
-			("gaelan@tulip.com" . ,(concat webdav-prefix "gcal/work.org")))))
-    #+end_src
-*** Some custom helper functions
-    #+begin_src emacs-lisp :tangle yes
-      (defun gaelan/org-replace-link-by-link-description ()
-	"Replace an org link by its description; or if empty, its address.
-
-	 Source: https://emacs.stackexchange.com/questions/10707/in-org-mode-how-to-remove-a-link
-	 and modified slightly to place the url in the kill ring."
-	(interactive)
-	(if (org-in-regexp org-link-bracket-re 1)
-	    (save-excursion
-	      (let ((remove (list (match-beginning 0) (match-end 0)))
-		    (description (if (match-end 3)
-				     (org-match-string-no-properties 3)
-				   (org-match-string-no-properties 1))))
-		(apply 'kill-region remove)
-		(insert description)))))
-    #+end_src
-
-** Software Development
-*** Git source control management
-    =magit= is a super awesome git package
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (use-package magit
-	;; I should have a keybinding that displays magit-status from anywhere
-	:bind (("C-x g" . magit-status))
-	:config
-	;; Enable pseudo-worktree for uncommitted files.
-	(require 'magit-wip)
-	(magit-wip-mode))
-    #+END_SRC
-*** Language Server Project
-    Traditionally completely different ecosystems need to be built to provide a rich language editor experience for every stack
-    Common Lisp for example has SLIME, Clojure has Clojure, Python has Anaconda, etc...
-
-    But a lot of stacks are consolidating on the "Language Server Project", which decouples the language backend and the editor frontend, so that the experience is as uniform and easy to expend as possible.
-
-    Most of my preferred languages don't implement this yet, but a few are starting.
-
-    At the very least we can automatically have file navigation and completion functionality out of the box.
-
-    #+begin_src emacs-lisp :tangle yes
-      (use-package lsp-mode
-	:commands (lsp lsp-deferred)
-	;; Enable some built-in LSP clients
-	:hook (go-mode . lsp-deferred))
-
-      (use-package lsp-ui
-	:after lsp-mode)
-    #+end_src
-**** LSP also has file navigation support
-    #+begin_src emacs-lisp :tangle yes
-      (use-package lsp-treemacs
-	:after lsp-mode
-	:config
-	(lsp-treemacs-sync-mode +1))
-    #+end_src
-**** LSP also has helm support
-    #+begin_src emacs-lisp :tangle yes
-      (use-package helm-lsp)
-    #+end_src
-
-*** Debug Adapter Protocol
-    Like LSP but for debugging
-
-    #+begin_src emacs-lisp :tangle yes
-      (use-package dap-mode
-	:config (dap-auto-configure-mode))
-    #+end_src
-*** Docker support
-    Because I use Docker for development, it'd be nice to be work with containers from within emacs (say while workin in a software project.)
-
-    #+begin_src emacs-lisp :tangle yes
-      (use-package docker
-	:bind ("C-c d" . docker))
-    #+end_src
-
-    When working with local docker containers, it might be nice to edit files inside them as I'm trying stuff out. We can use tramp mode for this.
-
-    #+begin_src emacs-lisp :tangle yes
-      (use-package docker-tramp)
-    #+end_src
-** Programming Language support
-*** Generic Lisp support
-    The various lisp modes tend to need the same basic configuration, so I will specify it here.
-**** Parentheses disambiguation
-     In lispy languages parentheses are often so nested that it is confusing to figure out which level of nesting you are about to close.
-     There is a nice package we can install to make each level's parentheses have a distinct colour, for easy identification.
-    #+begin_src emacs-lisp :tangle yes
-      (use-package rainbow-delimiters)
-    #+end_src
-**** Show matching paren
-     Along with colouring parentheses by level, we can also highlight the matching opening/closing parenthesis for the parenthesis your point is currently over.
-     #+begin_src emacs-lisp :tangle yes
-       (show-paren-mode)
-     #+end_src
-**** Structured parentheses editing
-     Lisp forms are often edited at a layer above words and characters.
-
-     For example, I often absorb adjacent tokens from my current s-expression, or eject tokens from the ends. I sometimes split a form into two at the current point. This is especially important in lisp languages where parentheses should never be imbalanced, but it works out for similar things like quotations and block syntaxes.
-
-     #+begin_src emacs-lisp :tangle yes
-       (use-package smartparens
-	 :config
-	 (require 'smartparens-config)
-	 (sp-use-smartparens-bindings))
-     #+end_src
-**** Generic Lisp hook
-     There are some things we always want to enable when entering the editor mode for any lisp
-     #+begin_src emacs-lisp :tangle yes
-       (defun gaelan/generic-lisp-mode-hook ()
-	 "Mode hook when working in any Lisp."
-	 ;; Unlike non-lispy editing modes, we should never allow unbalanced parens
-	 (smartparens-strict-mode)
-	 ;; Enable visual disambiguation of nested parentheses
-	 (rainbow-delimiters-mode)
-	 ;; Show documentation for a function/variable in the minibuffer
-	 (turn-on-eldoc-mode))
-     #+end_src
-*** Common lisp
-    SLIME was the fancy REPL environment we use for Common Lisp.
-    There is a fork of SLIME called SLY which is apparently more featureful
-
-    #+begin_src emacs-lisp :tangle yes
-      (use-package sly)
-      (use-package sly-quicklisp)
-    #+end_src
-
-    #+begin_src emacs-lisp :tangle yes
-      (use-package helm-sly
-	:after (sly helm-company)
-	:config
-	(add-hook 'sly-mrepl-hook #'company-mode)
-	(define-key sly-mrepl-mode-map (kbd "<tab>") 'helm-company))
-    #+end_src
-
-    We currently use Steel Bank Common Lisp as our runtime environment
-
-    #+begin_src emacs-lisp :tangle yes
-      (setq inferior-lisp-program "sbcl")
-    #+end_src
-
-    We should load our generic lisp mode hook in common lisp edit and REPL buffers
-    #+begin_src emacs-lisp :tangle yes
-      (add-hook 'lisp-mode-hook 'gaelan/generic-lisp-mode-hook)
-    #+end_src
-
-*** Emacs Lisp
-    Despite being the primordial Emacs programming language, a lot of standard workflow needs to be manually specified.
-
-    We need to add our generic lisp mode to our editor and REPL modes
-    #+begin_src emacs-lisp :tangle yes
-      (add-hook 'emacs-lisp-mode-hook 'gaelan/generic-lisp-mode-hook)
-    #+end_src
-
-    We also add keybindings found in other lispy environments like Clojure's CIDER and Emacs' SLIME.
-    #+begin_src emacs-lisp :tangle yes
-      (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-defun)
-      (define-key emacs-lisp-mode-map (kbd "C-c C-p") 'eval-print-last-sexp)
-      (define-key emacs-lisp-mode-map (kbd "C-c C-r") 'eval-region)
-      (define-key emacs-lisp-mode-map (kbd "C-c C-k") 'eval-buffer)
-      (define-key emacs-lisp-mode-map (kbd "C-c C-l") 'load-file)
-      (define-key emacs-lisp-mode-map (kbd "C-c RET") 'macroexpand-1)
-      (define-key emacs-lisp-mode-map (kbd "C-c M-m") 'macroexpand-all)
-    #+end_src
-*** Clojure
-    Clojure is a lisp that runs in the JVM, CLR, and also transpiles to JavaScript
-
-    #+begin_src emacs-lisp :tangle yes
-      (use-package clojure-mode
-	:config
-	(add-hook 'clojure-mode-hook #'gaelan/generic-lisp-mode-hook)
-	(add-hook 'clojure-mode-hook #'subword-mode))
-    #+end_src
-**** Cider
-     Clojure has a wonderful SLIME-like environment cnalled CIDER
-
-     #+begin_src emacs-lisp :tangle yes
-       (use-package cider
-	 :config
-	 (add-hook 'cider-repl-mode-hook #'gaelan/generic-lisp-mode-hook)
-	 (add-hook 'cider-repl-mode-hook #'subword-mode))
-     #+end_src
-***** Cider has Helm support
-      #+begin_src emacs-lisp :tangle yes
-	(use-package helm-cider
-	  :after helm)
-      #+end_src
-**** clj-refactor
-     #+begin_src emacs-lisp :tangle yes
-       (defun gaelan/clj-refactor-hook ()
-	 (clj-refactor-mode 1)
-	 (yas-minor-mode 1)
-	 (cljr-add-keybindings-with-prefix "C-c C-m"))
-
-       (use-package clj-refactor
-	 :config
-	 (add-hook 'clojure-mode-hook #'gaelan/clj-refactor-hook))
-     #+end_src
-**** clj-kondo
-     clj-kondo seems to be the clojure(script) linter that everyone is most into right now.
-
-     #+begin_src emacs-lisp :tangle yes
-       (use-package flycheck-clj-kondo
-	 :after clojure-mode)
-     #+end_src
-**** eval-sexp-fu
-     It's nice, when evaluatingn a line of clojure code, to have the value pop up inline rather than just in the mini-buffer
-
-     #+begin_src emacs-lisp :tangle yes
-       (use-package cider-eval-sexp-fu)
-     #+end_src
-**** Kaocha unit test runner
-     #+begin_src emacs-lisp :tangle yes
-       (use-package kaocha-runner
-	 :bind ((:map clojure-mode-map
-		      ("C-c k t" . kaocha-runner-run-test-at-point)
-		      ("C-c k r" . kaocha-runner-run-tests)
-		      ("C-c k a" . kaocha-runner-run-all-tests)
-		      ("C-c k w" . kaocha-runner-show-warnings)
-		      ("C-c k h" . kaocha-runner-hide-windows))))
-     #+end_src
-*** Go
-    #+begin_src emacs-lisp :tangle yes
-      (use-package go-mode)
-    #+end_src
-*** Python
-    I generally use pyenv to manage different versions of python
-    #+begin_src emacs-lisp :tangle yes
-      (use-package pyenv-mode
-	:config
-	(add-hook 'python-mode 'pyenv-mode))
-    #+end_src
-
-    I use anaconda mode to get inspection  and analysis from dynamic analysis, and I tie this to my completion framework.
-    #+begin_src emacs-lisp :tangle yes
-      (use-package anaconda-mode
-	:config
-	(add-hook 'python-mode-hook 'anaconda-mode)
-	(add-hook 'python-mode-hook 'anaconda-eldoc-mode))
-
-      (use-package company-anaconda
-	:after company
-	:config
-	(add-to-list 'company-backends '(company-anaconda :with company-capf)))
-    #+end_src
-*** Haskell
-    Haskell uses the language server project, so we can just hook into that
-    #+begin_src emacs-lisp :tangle yes
-      (use-package lsp-haskell
-	:hook (haskell-mode-hook . lsp-deferred))
-    #+end_src
-*** Terraform
-    #+begin_src emacs-lisp :tangle yes
-      (use-package terraform-mode)
-
-      (use-package company-terraform
-	:after company
-	:config
-	(company-terraform-init))
-    #+end_src
-*** YAML
-    #+begin_src emacs-lisp :tangle yes
-      (use-package yaml-mode)
-    #+end_src
-*** Nix Package Management
-    #+begin_src emacs-lisp :tangle yes
-      (use-package nix-mode)
-    #+end_src
-** Window Management
-   I love Emacs so much, I use it as my window manager :)
-*** Window title hook
-    By default, all X Window buffers have the title of =*EXWM*=. I want them to have the supplied window name of the application they contain, and I can perform that via a hook.
-
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (defun gaelan/exwm-update-title-hook ()
-	"EXWM hook for renaming buffer names to their associated X window title."
-	(exwm-workspace-rename-buffer exwm-title))
-
-      (defun gaelan/exwm-update-class-hook ()
-	"EXWM hook for renaming buffer names to their associated X window class."
-	(exwm-workspace-rename-buffer exwm-class-name))
-    #+END_SRC
-*** Monitor change hook
-    This hook invokes autorandr when we detect a monitor change. We assume autorandr has been previously configured.
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (defun gaelan/exwm-randr-screen-change-hook ()
-	(call-process "autorandr" nil nil nil "--change"))
-    #+END_SRC
-*** Configure EXWM
-    We enable exwm via ~(exwm-enable)~ when we start the emacs daemon
-
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (when gaelan/*is-linux*
-	(use-package exwm
-	  :config
-	  ;; Set some global window management bindings
-	  (setq exwm-input-global-keys
-		`(
-		  ;; 's-r': Reset to (line-mode).
-		  ([?\s-r] . exwm-reset)
-		  ;; 's-w': Switch workspace.
-		  ([?\s-w] . exwm-workspace-switch)
-		  ;; 's-b': Bring application to current workspace
-		  ([?\s-b] . exwm-workspace-switch-to-buffer)
-		  ;; 's-p': Launch application
-		  ([?\s-p] . (lambda (command)
-			       (interactive (list (read-shell-command "$ ")))
-			       (start-process-shell-command command nil command)))
-		  ;; 's-<N>': Switch to certain workspace.
-		  ,@(mapcar (lambda (i)
-			      `(,(kbd (format "s-%d" i)) .
-				(lambda ()
-				  (interactive)
-				  (exwm-workspace-switch-create ,i))))
-			    (number-sequence 0 9))))
-	  ;; translate emacs keybindings into CUA-like ones for most apps, since most
-	  ;; apps don't observe emacs kebindings and we would like a uniform experience.
-	  (setq exwm-input-simulation-keys
-		'(;; movement
-		  ([?\C-b] . [left])
-		  ([?\M-b] . [C-left])
-		  ([?\C-f] . [right])
-		  ([?\M-f] . [C-right])
-		  ([?\C-p] . [up])
-		  ([?\C-n] . [down])
-		  ([?\C-a] . [home])
-		  ([?\C-e] . [end])
-		  ([?\M-v] . [prior])
-		  ([?\C-v] . [next])
-		  ([?\C-d] . [delete])
-		  ([?\C-k] . [S-end delete])
-		  ;; cut/paste
-		  ([?\C-w] . [?\C-x])
-		  ([?\M-w] . [?\C-c])
-		  ([?\C-y] . [?\C-v])
-		  ;; search
-		  ([?\C-s] . [?\C-f])))
-	  ;; Configure workspaces 2,3 to display  on my portrait monitor.
-	  ;; By default, workspaces show up on the first, default, active monitor.
-	  (setq exwm-randr-workspace-monitor-plist
-		'(0 "DP-1-1" 1 "DP-1-1" 2 "DP-1-2" 3 "DP-1-2"))
-
-	  ;; Pin certain applications to specific workspaces
-	  (setq exwm-manage-configurations
-		'(((string= exwm-class-name "Firefox") workspace 2)
-		  ((string= exwm-class-name "Chromium-browser") workspace 3)
-		  ((string= exwm-class-name ".obs-wrapped") workspace 2)))
-
-
-	  (add-hook 'exwm-update-class-hook
-		    'gaelan/exwm-update-class-hook)
-	  (add-hook 'exwm-update-title-hook
-		    'gaelan/exwm-update-title-hook)
-
-	  ;; Enable multi-monitor support for EXWM
-	  (require 'exwm-randr)
-	  (add-hook 'exwm-randr-screen-change-hook
-		    'gaelan/exwm-randr-screen-change-hook)
-	  (exwm-randr-enable)))
-   #+END_SRC
-*** Multimedia keys
-    If Emacs is going to be our window manager, it only makes sense to have it handle things like multimedia keys on keyboards
-
-    =desktop-environment-mode= is a package that automatically hooks up handlers for things like brightness, volume, wireless disable, etc...
-
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (when gaelan/*is-linux*
-	(use-package desktop-environment
-	  :config
-	  (desktop-environment-mode)))
-    #+END_SRC
-*** Helm integration
-    #+begin_src emacs-lisp :tangle yes
-      (when gaelan/*is-linux*
-	(use-package helm-exwm
-	  :init
-	  (setq-default helm-source-names-using-follow '("EXWM buffers"))
-	  :config
-	  (setq helm-exwm-emacs-buffers-source (helm-exwm-build-emacs-buffers-source))
-	  (setq helm-exwm-source (helm-exwm-build-source))
-	  (push 'helm-exwm-emacs-buffers-source helm-mini-default-sources)
-	  (push 'helm-exwm-source helm-mini-default-sources)))
-    #+end_src
-** [Disabled] Emacs Server
-   It'd be nice if I could invoke emacs from anywhere (including the terminal or git hooks) and have buffers always collect in my main emacs instance.
-
-   There are all sorts of tricks to not have to start the emacs daemon inside the init file, but they all end up being kind of gross and have all sorts of gotchas.
-
-   #+begin_src emacs-lisp :tangle no
-     (unless (daemonp)
-       (server-start))
+     (defconst gaelan/gtd-prefix
+       (concat gaelan/brain-prefix "gtd/")
+       "The root directory of my GTD task management system.")
    #+end_src
-* Org Mode settings
-  #+STARTUP: content
-  #+STARTUP: showstars
+** Basic org mode configuration
+   This is where I'm going to set up some really basic GTD stuff:
+   - Install org itself
+   - Install global hotkeys
+   - Setting available priority levels
+   - Configuring logging behaviour
+   - Configuring org capture tactics
+   - Configuring refile targets
+   - Configuring custom agenda views
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package org
+       :pin org
+       :custom
+       ;; Have prettier chrome for headlines that can be expanded
+       (org-ellipsis " ▾")
+       ;; Show task state change logs in agenda mode
+       (org-agenda-start-with-log-mode  t)
+       ;; When we finish a task, log the time
+       (org-log-done 'time)
+       ;; Store task state changes into a dedicated drawer
+       (org-log-into-drawer t)
+
+       ;; The workhorse files in my GTD system
+       (org-agenda-files
+	`(,(concat gaelan/gtd-prefix "gtd.org")
+	  ,(concat gaelan/gtd-prefix "tickler.org")
+	  ,(concat gaelan/gtd-prefix "gcal/personal.org")
+	  ,(concat gaelan/gtd-prefix "gcal/work.org")))
+
+       ;; Things I want to quickly enter, tasks and journal entries
+       (org-capture-templates
+	`(("t" "Todo" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
+	   "* TODO %?")
+	  ("p" "Project" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
+	   "* [/] %? :project:")
+	  ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
+	   "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
+	  ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
+	   "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What things did I accomplish today?\n   1. %?\n** What did I learn?\n** What did I do to help my future?\n** What did I do to help others?\n")
+	  ("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
+	   "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week? What can you work on this week?\n** What can you learn this week?")
+	  ("m" "Monthly Reflection" entry (function gaelan/org-journal-find-location)
+	   "* %(format-time-string org-journal-time-format)Monthly Reflection\n** What were your biggest wins of the month?\n   - %?\n** What were you most grateful for this month?\n** What tensions have you removed this month?\n** What did you learn this month?\n** How have you grown this month?")
+	  ("y" "Yearly Reflection" entry (function gaelan/org-journal-find-location)
+	   "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
+
+       ;; Where do I tend to move files to?
+       (org-refile-targets
+	`((,(concat gaelan/gtd-prefix "gtd.org") . (:maxlevel . 2))
+	  (,(concat gaelan/gtd-prefix "someday.org") . (:level . 1))
+	  (,(concat gaelan/gtd-prefix "tickler.org") . (:level . 1))
+	  ;; Move targets within a file
+	  (nil . (:level . 1))))
+
+       ;; Handy search views for agenda mode
+       (org-agenda-custom-commands
+	'(("n" "Next Actions"
+	   ((todo "NEXT")))
+	  ("p" "Unplanned Projects"
+	   ((todo "PLAN")))
+	  ("r" "Reoccuring Tasks"
+	   ((tags-todo "+CATEGORY=\"tickler\"")))
+	  ("i" "Inbox Items"
+	   ((tags-todo "+CATEGORY=\"Inbox\"")))))
+
+       :config
+       ;; Save Org buffers after refiling!
+       (advice-add 'org-refile :after 'org-save-all-org-buffers)
+
+       :bind
+       (("C-c l" . org-store-link)
+	("C-c a" . org-agenda)
+	("C-c c" . org-capture)))
+   #+end_src
+
+** Habit tracking
+   Configure UI to show habit tasks in a way that measures and promotes keeping those habits.
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package org-habit
+       :ensure nil
+       :after org
+       :custom
+       (org-habit-graph-column 60)
+       :init
+       (add-to-list 'org-modules 'org-habit))
+   #+end_src
+
+** Org Roam
+   This seems to be the most promising way to deal with knowledge management, taking notes, things like that.
+   It follows some kind of funky process called the [[https://zettelkasten.de/posts/overview/][Zettelkasten]] method, and it seems designed to integrate nicely with tools I already use (org-journal) while not requiring a lot of work to convert existing org-mode files over.
+
+   So let's try it for a while and see if I like it!
+   #+begin_src emacs-lisp :tangle yes
+     (use-package org-roam
+       :bind (:map org-roam-mode-map
+		   ("C-c n l" . org-roam)
+		   ("C-c n f" . org-roam-find-file)
+		   ("C-c n g" . org-roam-graph-show)
+		   :map org-mode-map
+		   ("C-c n i" . org-roam-insert)
+		   ("C-c n I" . org-roam-insert-immediate))
+       :custom
+       (org-roam-directory gaelan/brain-prefix)
+       (org-roam-db-location (if gaelan/*is-osx*
+				 (concat org-roam-directory "/db/osx.db")
+			       (concat org-roam-directory "/db/linux.db")))
+
+       (org-roam-completion-system 'helm)
+       ;; I don't care about graphing daily notes, tasks, or historical stuff
+       (org-roam-graph-exclude-matcher '("journal" "gtd"))
+       (org-roam-capture-templates
+	'(("d" "default" plain (function org-roam--capture-get-point)
+	   "%?"
+	   :file-name "%<%Y%m%d%H%M%S>-${slug}"
+	   :head "#+title: ${title}\n"
+	   :unnarrowed t)
+	  ("f" "fleeting" plain (function org-roam--capture-get-point)
+	   "%?"
+	   :file-name "%<%Y%m%d%H%M%S>-${slug}"
+	   :head "#+title: ${title}\n#+roam_tags: fleeting-note\n"
+	   :unnarrowed t)
+	  ("l" "literature" plain (function org-roam--capture-get-point)
+	   "%?"
+	   :file-name "%<%Y%m%d%H%M%S>-${slug}"
+	   :head "#+title: ${title}\n#+roam_tags: literature-note\n"
+	   :unnarrowed t)))
+       :config
+       (add-hook 'after-init-hook 'org-roam-mode)
+       ;;  org-roam-protocol is used to handle weblinks (e.g. org-roam-server)
+       (require 'org-roam-protocol))
+   #+end_src
+
+   There is a webserver it uses which I guess is the best way to browse one's info
+   #+begin_src emacs-lisp :tangle yes
+     (use-package org-roam-server
+       :after org-roam
+       :config
+       (setq org-roam-server-host "127.0.0.1"
+	     org-roam-server-port 8080
+	     org-roam-server-export-inline-images t
+	     org-roam-server-authenticate nil
+	     org-roam-server-network-poll t
+	     org-roam-server-network-arrows nil
+	     org-roam-server-network-label-truncate t
+	     org-roam-server-network-label-truncate-length 60
+	     org-roam-server-network-label-wrap-length 20))
+   #+end_src
+
+   org-roam also recommends this thing called deft which I think is a way for browsing and filtering org files
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package deft
+       :after org
+       :bind ("C-c n d" . deft)
+       :custom
+       (deft-recursive t)
+       (deft-use-filter-string-for-filename t)
+       (deft-default-extension "org")
+       (deft-directory (concat gaelan/brain-prefix)))
+   #+end_src
+
+   org-roam also suggests some winner-mode config, which is a way to undo/redo changes in window configuration
+   #+begin_src emacs-lisp :tangle yes
+     (winner-mode +1)
+   #+end_src
+    
+** Org Journal mode
+   I also use org mode for journalling my days
+   #+begin_src emacs-lisp :tangle yes
+     (use-package org-journal
+       :after org
+       :bind ("C-c n j" . org-journal-new-entry)
+       :custom
+       (org-journal-date-format "%A, %F")
+       (org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "brain/" "journal")))
+       (org-journal-file-format "%Y/%m/%Y-%m-%d.org"))
+   #+end_src
+
+   I would like to use capture mode to generate some standard journal entries for daily, weekly, monthly and yearly reflections. This requires invoking a function when inserting the template because I have to understand and manipulate the structure a little bit.
+   This function was kindly provided by =org-journal='s README.
+   #+begin_src emacs-lisp :tangle yes
+     (defun gaelan/org-journal-find-location ()
+       ;; Open today's journal, but specify a non-nil prefix argument in order to
+       ;; inhibit inserting the heading; org-capture will insert the heading.
+       (org-journal-new-entry t)
+       ;; Position point on the journal's top-level heading so that org-capture
+       ;; will add the new entry as a child entry.
+       (goto-char (point-min)))
+   #+end_src
+** org-noter
+   A package for annotating PDF, DOC files, and the like into org files.
+   #+begin_src emacs-lisp :tangle yes
+     (use-package org-noter)
+   #+end_src
+** Prettify org mode
+   Org files often look like a overwhelming wall of leading asterisks.
+   We use a mode to minimize the amount of chrome displayed in org mode while still clearly distinguishing between outline levels.
+   #+begin_src emacs-lisp :tangle yes
+     (use-package org-bullets
+       :after org
+       :hook (org-mode . org-bullets-mode))
+   #+end_src
+** [Inactive] Org Mode / Google Calendar integration
+   In the past I tried and failed to use something that pulls appointment data from google calendar into my org mode.
+   #+begin_src emacs-lisp :tangle no
+     (use-package org-gcal
+       :init
+       (let* ((bwdata (elt (bitwarden-search "offlineimap") 0))
+	      (bwfields (gethash "fields" bwdata))
+	      (client-id (gethash "value" (elt bwfields 0)))
+	      (client-secret (gethash "value" (elt bwfields 1))))
+	 (setq-default 'org-gcal-client-id client-id)
+	 (setq-default 'org-gcal-client-secret client-secret))
+       (setq-default org-gcal-file-alist
+		     `(("gdcosta@gmail.com" . ,(concat webdav-prefix "gcal/personal.org"))
+		       ("gaelan@tulip.com" . ,(concat webdav-prefix "gcal/work.org")))))
+   #+end_src
+** Some custom helper functions
+   #+begin_src emacs-lisp :tangle yes
+     (defun gaelan/org-replace-link-by-link-description ()
+       "Replace an org link by its description; or if empty, its address.
+
+	Source: https://emacs.stackexchange.com/questions/10707/in-org-mode-how-to-remove-a-link
+	and modified slightly to place the url in the kill ring."
+       (interactive)
+       (if (org-in-regexp org-link-bracket-re 1)
+	   (save-excursion
+	     (let ((remove (list (match-beginning 0) (match-end 0)))
+		   (description (if (match-end 3)
+				    (org-match-string-no-properties 3)
+				  (org-match-string-no-properties 1))))
+	       (apply 'kill-region remove)
+	       (insert description)))))
+   #+end_src
+** Auto-tangle Configuration Files
+   This snippet adds a hook to =org-mode= buffers so that =gaelan/org-babel-tangle-config= gets executed each time such a buffer gets saved.  This function checks to see if the file being saved is the Emacs.org file you're looking at right now, and if so, automatically exports the configuration here to the associated output files.
+
+   Source: https://github.com/daviwil/emacs-from-scratch/blob/master/Emacs.org
+    
+   #+begin_src emacs-lisp :tangle yes
+     ;; Automatically tangle our Emacs.org config file when we save it
+     (defun gaelan/org-babel-tangle-config ()
+       (when (string-equal (file-name-directory (buffer-file-name))
+			   (expand-file-name user-emacs-directory))
+	 ;; Dynamic scoping to the rescue
+	 (let ((org-confirm-babel-evaluate nil))
+	   (org-babel-tangle))))
+
+     (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'gaelan/org-babel-tangle-config)))
+   #+end_src
+* Software Development
+** Git source control management
+   =magit= is a super awesome git package
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (use-package magit
+       ;; I should have a keybinding that displays magit-status from anywhere
+       :bind (("C-x g" . magit-status))
+       :config
+       ;; Enable pseudo-worktree for uncommitted files.
+       (require 'magit-wip)
+       (magit-wip-mode))
+   #+END_SRC
+** Language Server Project
+   Traditionally completely different ecosystems need to be built to provide a rich language editor experience for every stack
+   Common Lisp for example has SLIME, Clojure has Clojure, Python has Anaconda, etc...
+
+   But a lot of stacks are consolidating on the "Language Server Project", which decouples the language backend and the editor frontend, so that the experience is as uniform and easy to expend as possible.
+
+   Most of my preferred languages don't implement this yet, but a few are starting.
+
+   At the very least we can automatically have file navigation and completion functionality out of the box.
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package lsp-mode
+       :commands (lsp lsp-deferred)
+       ;; Enable some built-in LSP clients
+       :hook (go-mode . lsp-deferred))
+
+     (use-package lsp-ui
+       :after lsp-mode)
+   #+end_src
+*** LSP also has file navigation support
+   #+begin_src emacs-lisp :tangle yes
+     (use-package lsp-treemacs
+       :after lsp-mode
+       :config
+       (lsp-treemacs-sync-mode +1))
+   #+end_src
+*** LSP also has helm support
+   #+begin_src emacs-lisp :tangle yes
+     (use-package helm-lsp)
+   #+end_src
+
+** Debug Adapter Protocol
+   Like LSP but for debugging
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package dap-mode
+       :config (dap-auto-configure-mode))
+   #+end_src
+** Docker support
+   Because I use Docker for development, it'd be nice to be work with containers from within emacs (say while workin in a software project.)
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package docker
+       :bind ("C-c d" . docker))
+   #+end_src
+
+   When working with local docker containers, it might be nice to edit files inside them as I'm trying stuff out. We can use tramp mode for this.
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package docker-tramp)
+   #+end_src
+* Programming Language support
+** Generic Lisp support
+   The various lisp modes tend to need the same basic configuration, so I will specify it here.
+*** Parentheses disambiguation
+    In lispy languages parentheses are often so nested that it is confusing to figure out which level of nesting you are about to close.
+    There is a nice package we can install to make each level's parentheses have a distinct colour, for easy identification.
+   #+begin_src emacs-lisp :tangle yes
+     (use-package rainbow-delimiters)
+   #+end_src
+*** Show matching paren
+    Along with colouring parentheses by level, we can also highlight the matching opening/closing parenthesis for the parenthesis your point is currently over.
+    #+begin_src emacs-lisp :tangle yes
+      (show-paren-mode)
+    #+end_src
+*** Structured parentheses editing
+    Lisp forms are often edited at a layer above words and characters.
+
+    For example, I often absorb adjacent tokens from my current s-expression, or eject tokens from the ends. I sometimes split a form into two at the current point. This is especially important in lisp languages where parentheses should never be imbalanced, but it works out for similar things like quotations and block syntaxes.
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package smartparens
+	:config
+	(require 'smartparens-config)
+	(sp-use-smartparens-bindings))
+    #+end_src
+*** Generic Lisp hook
+    There are some things we always want to enable when entering the editor mode for any lisp
+
+    #+begin_src emacs-lisp :tangle yes
+      (defun gaelan/generic-lisp-mode-hook ()
+	"Mode hook when working in any Lisp."
+	;; Unlike non-lispy editing modes, we should never allow unbalanced parens
+	(smartparens-strict-mode)
+	;; Enable visual disambiguation of nested parentheses
+	(rainbow-delimiters-mode)
+	;; Show documentation for a function/variable in the minibuffer
+	(turn-on-eldoc-mode))
+    #+end_src
+** Common lisp
+   SLIME was the fancy REPL environment we use for Common Lisp.
+   There is a fork of SLIME called SLY which is apparently more featureful
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package sly)
+     (use-package sly-quicklisp)
+   #+end_src
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package helm-sly
+       :after (sly helm-company)
+       :config
+       (add-hook 'sly-mrepl-hook #'company-mode)
+       (define-key sly-mrepl-mode-map (kbd "<tab>") 'helm-company))
+   #+end_src
+
+   We currently use Steel Bank Common Lisp as our runtime environment
+
+   #+begin_src emacs-lisp :tangle yes
+     (setq inferior-lisp-program "sbcl")
+   #+end_src
+
+   We should load our generic lisp mode hook in common lisp edit and REPL buffers
+   #+begin_src emacs-lisp :tangle yes
+     (add-hook 'lisp-mode-hook 'gaelan/generic-lisp-mode-hook)
+   #+end_src
+** Emacs Lisp
+   Despite being the primordial Emacs programming language, a lot of standard workflow needs to be manually specified.
+
+   We need to add our generic lisp mode to our editor and REPL modes
+   #+begin_src emacs-lisp :tangle yes
+     (add-hook 'emacs-lisp-mode-hook 'gaelan/generic-lisp-mode-hook)
+   #+end_src
+
+   We also add keybindings found in other lispy environments like Clojure's CIDER and Emacs' SLIME.
+   #+begin_src emacs-lisp :tangle yes
+     (define-key emacs-lisp-mode-map (kbd "C-c C-c") 'eval-defun)
+     (define-key emacs-lisp-mode-map (kbd "C-c C-p") 'eval-print-last-sexp)
+     (define-key emacs-lisp-mode-map (kbd "C-c C-r") 'eval-region)
+     (define-key emacs-lisp-mode-map (kbd "C-c C-k") 'eval-buffer)
+     (define-key emacs-lisp-mode-map (kbd "C-c C-l") 'load-file)
+     (define-key emacs-lisp-mode-map (kbd "C-c RET") 'macroexpand-1)
+     (define-key emacs-lisp-mode-map (kbd "C-c M-m") 'macroexpand-all)
+   #+end_src
+** Clojure
+   Clojure is a lisp that runs in the JVM, CLR, and also transpiles to JavaScript
+
+   #+begin_src emacs-lisp :tangle yes
+     (use-package clojure-mode
+       :config
+       (add-hook 'clojure-mode-hook #'gaelan/generic-lisp-mode-hook)
+       (add-hook 'clojure-mode-hook #'subword-mode))
+   #+end_src
+*** Cider
+    Clojure has a wonderful SLIME-like environment cnalled CIDER
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package cider
+	:config
+	(add-hook 'cider-repl-mode-hook #'gaelan/generic-lisp-mode-hook)
+	(add-hook 'cider-repl-mode-hook #'subword-mode))
+    #+end_src
+**** Cider has Helm support
+     #+begin_src emacs-lisp :tangle yes
+       (use-package helm-cider
+	 :after helm)
+     #+end_src
+*** clj-refactor
+    #+begin_src emacs-lisp :tangle yes
+      (defun gaelan/clj-refactor-hook ()
+	(clj-refactor-mode 1)
+	(yas-minor-mode 1)
+	(cljr-add-keybindings-with-prefix "C-c C-m"))
+
+      (use-package clj-refactor
+	:config
+	(add-hook 'clojure-mode-hook #'gaelan/clj-refactor-hook))
+    #+end_src
+*** clj-kondo
+    clj-kondo seems to be the clojure(script) linter that everyone is most into right now.
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package flycheck-clj-kondo
+	:after clojure-mode)
+    #+end_src
+*** eval-sexp-fu
+    It's nice, when evaluatingn a line of clojure code, to have the value pop up inline rather than just in the mini-buffer
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package cider-eval-sexp-fu)
+    #+end_src
+*** Kaocha unit test runner
+    #+begin_src emacs-lisp :tangle yes
+      (use-package kaocha-runner
+	:bind ((:map clojure-mode-map
+		     ("C-c k t" . kaocha-runner-run-test-at-point)
+		     ("C-c k r" . kaocha-runner-run-tests)
+		     ("C-c k a" . kaocha-runner-run-all-tests)
+		     ("C-c k w" . kaocha-runner-show-warnings)
+		     ("C-c k h" . kaocha-runner-hide-windows))))
+    #+end_src
+** Go
+   #+begin_src emacs-lisp :tangle yes
+     (use-package go-mode)
+   #+end_src
+** Python
+   I generally use pyenv to manage different versions of python
+   #+begin_src emacs-lisp :tangle yes
+     (use-package pyenv-mode
+       :config
+       (add-hook 'python-mode 'pyenv-mode))
+   #+end_src
+
+   I use anaconda mode to get inspection  and analysis from dynamic analysis, and I tie this to my completion framework.
+   #+begin_src emacs-lisp :tangle yes
+     (use-package anaconda-mode
+       :config
+       (add-hook 'python-mode-hook 'anaconda-mode)
+       (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
+
+     (use-package company-anaconda
+       :after company
+       :config
+       (add-to-list 'company-backends '(company-anaconda :with company-capf)))
+   #+end_src
+** Haskell
+   Haskell uses the language server project, so we can just hook into that
+   #+begin_src emacs-lisp :tangle yes
+     (use-package lsp-haskell
+       :hook (haskell-mode-hook . lsp-deferred))
+   #+end_src
+** Rust
+   #+begin_src emacs-lisp :tangle yes
+     (use-package rustic)
+   #+end_src
+** Terraform
+   #+begin_src emacs-lisp :tangle yes
+     (use-package terraform-mode)
+
+     (use-package company-terraform
+       :after company
+       :config
+       (company-terraform-init))
+   #+end_src
+** YAML
+   #+begin_src emacs-lisp :tangle yes
+     (use-package yaml-mode)
+   #+end_src
+** Nix Package Management
+   #+begin_src emacs-lisp :tangle yes
+     (use-package nix-mode)
+   #+end_src
+* Window Management
+  I love Emacs so much, I use it as my window manager :)
+** Window title hook
+   By default, all X Window buffers have the title of =*EXWM*=. I want them to have the supplied window name of the application they contain, and I can perform that via a hook.
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (defun gaelan/exwm-update-title-hook ()
+       "EXWM hook for renaming buffer names to their associated X window title."
+       (exwm-workspace-rename-buffer exwm-title))
+
+     (defun gaelan/exwm-update-class-hook ()
+       "EXWM hook for renaming buffer names to their associated X window class."
+       (exwm-workspace-rename-buffer exwm-class-name))
+   #+END_SRC
+** Monitor change hook
+   This hook invokes autorandr when we detect a monitor change. We assume autorandr has been previously configured.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (defun gaelan/exwm-randr-screen-change-hook ()
+       (call-process "autorandr" nil nil nil "--change"))
+   #+END_SRC
+** Configure EXWM
+   We enable exwm via ~(exwm-enable)~ when we start the emacs daemon
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (when gaelan/*is-linux*
+       (use-package exwm
+	 :config
+	 ;; Set some global window management bindings
+	 (setq exwm-input-global-keys
+	       `(
+		 ;; 's-r': Reset to (line-mode).
+		 ([?\s-r] . exwm-reset)
+		 ;; 's-w': Switch workspace.
+		 ([?\s-w] . exwm-workspace-switch)
+		 ;; 's-b': Bring application to current workspace
+		 ([?\s-b] . exwm-workspace-switch-to-buffer)
+		 ;; 's-p': Launch application
+		 ([?\s-p] . (lambda (command)
+			      (interactive (list (read-shell-command "$ ")))
+			      (start-process-shell-command command nil command)))
+		 ;; 's-<N>': Switch to certain workspace.
+		 ,@(mapcar (lambda (i)
+			     `(,(kbd (format "s-%d" i)) .
+			       (lambda ()
+				 (interactive)
+				 (exwm-workspace-switch-create ,i))))
+			   (number-sequence 0 9))))
+	 ;; translate emacs keybindings into CUA-like ones for most apps, since most
+	 ;; apps don't observe emacs kebindings and we would like a uniform experience.
+	 (setq exwm-input-simulation-keys
+	       '(;; movement
+		 ([?\C-b] . [left])
+		 ([?\M-b] . [C-left])
+		 ([?\C-f] . [right])
+		 ([?\M-f] . [C-right])
+		 ([?\C-p] . [up])
+		 ([?\C-n] . [down])
+		 ([?\C-a] . [home])
+		 ([?\C-e] . [end])
+		 ([?\M-v] . [prior])
+		 ([?\C-v] . [next])
+		 ([?\C-d] . [delete])
+		 ([?\C-k] . [S-end delete])
+		 ;; cut/paste
+		 ([?\C-w] . [?\C-x])
+		 ([?\M-w] . [?\C-c])
+		 ([?\C-y] . [?\C-v])
+		 ;; search
+		 ([?\C-s] . [?\C-f])))
+	 ;; Configure workspaces 2,3 to display  on my portrait monitor.
+	 ;; By default, workspaces show up on the first, default, active monitor.
+	 (setq exwm-randr-workspace-monitor-plist
+	       '(0 "DP-1-1" 1 "DP-1-1" 2 "DP-1-2" 3 "DP-1-2"))
+
+	 ;; Pin certain applications to specific workspaces
+	 (setq exwm-manage-configurations
+	       '(((string= exwm-class-name "Firefox") workspace 2)
+		 ((string= exwm-class-name "Chromium-browser") workspace 3)
+		 ((string= exwm-class-name ".obs-wrapped") workspace 2)))
+
+
+	 (add-hook 'exwm-update-class-hook
+		   'gaelan/exwm-update-class-hook)
+	 (add-hook 'exwm-update-title-hook
+		   'gaelan/exwm-update-title-hook)
+
+	 ;; Enable multi-monitor support for EXWM
+	 (require 'exwm-randr)
+	 (add-hook 'exwm-randr-screen-change-hook
+		   'gaelan/exwm-randr-screen-change-hook)
+	 (exwm-randr-enable)))
+  #+END_SRC
+** Multimedia keys
+   If Emacs is going to be our window manager, it only makes sense to have it handle things like multimedia keys on keyboards
+
+   =desktop-environment-mode= is a package that automatically hooks up handlers for things like brightness, volume, wireless disable, etc...
+
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (when gaelan/*is-linux*
+       (use-package desktop-environment
+	 :config
+	 (desktop-environment-mode)))
+   #+END_SRC
+** Helm integration
+   #+begin_src emacs-lisp :tangle yes
+     (when gaelan/*is-linux*
+       (use-package helm-exwm
+	 :init
+	 (setq-default helm-source-names-using-follow '("EXWM buffers"))
+	 :config
+	 (setq helm-exwm-emacs-buffers-source (helm-exwm-build-emacs-buffers-source))
+	 (setq helm-exwm-source (helm-exwm-build-source))
+	 (push 'helm-exwm-emacs-buffers-source helm-mini-default-sources)
+	 (push 'helm-exwm-source helm-mini-default-sources)))
+   #+end_src
+* [Disabled] Emacs Server
+  It'd be nice if I could invoke emacs from anywhere (including the terminal or git hooks) and have buffers always collect in my main emacs instance.
+
+  There are all sorts of tricks to not have to start the emacs daemon inside the init file, but they all end up being kind of gross and have all sorts of gotchas.
+
+  #+begin_src emacs-lisp :tangle no
+    (unless (daemonp)
+      (server-start))
+  #+end_src
+

@@ -37,11 +37,11 @@ self: super: {
 
   Slack = self.installApplication rec {
     name = "Slack";
-    version = "4.11.1";
+    version = "4.12.0";
     sourceRoot = "Slack.app";
     src = super.fetchurl {
       url = "https://downloads.slack-edge.com/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-      sha256 = "0a5rq8zhgdckwxnyjv6nrgpnj682j1rd9yc4nwvsbvpzv15kmd35";
+      sha256 = "5990ec9106d0c8fb6eaaf6d845063bb254c9e80401d2aa5aac173988cd2e502f";
     };
     description = "Slack is the collaboration hub that brings the right people, information, and tools together to get work done.";
     homepage = https://slack.com;
@@ -49,11 +49,11 @@ self: super: {
 
   Bitwarden = self.installApplication rec {
     name = "Bitwarden";
-    version = "1.23.0";
+    version = "1.23.1";
     sourceRoot = "Bitwarden.app";
     src = super.fetchurl {
       url = "https://github.com/bitwarden/desktop/releases/download/v${version}/Bitwarden-${version}.dmg";
-      sha256 = "0md02zf1q415qfab4n32yzzxyi5j22y62iib29d1z4yfqkwl3gj9";
+      sha256 = "f5cdea985961f968073b272cb5c435219be861aead77ae09d4776215a57f8d6f";
     };
     description = "Bitwarden helps you generate, save and manage your passwords safely and securely.";
     homepage = https://bitwarden.com;
@@ -61,11 +61,11 @@ self: super: {
 
   Firefox = self.installApplication rec {
     name = "Firefox";
-    version = "83.0";
+    version = "84.0";
     sourceRoot = "Firefox.app";
     src = super.fetchurl {
       url = "https://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/mac/en-CA/Firefox%20${version}.dmg";
-      sha256 = "15qw0cl7r73233lbljg9pr86r4sdnww3pd1vlm61zvc8dn6zyf31";
+      sha256 = "0zkvlslv5n401hxylivj8yv5mpkhkfkmd85jj6d46pa2r0y2b18p";
       name = "Firefox-${version}.dmg";
     };
     description = "The browser that respects your privacy";
@@ -74,11 +74,11 @@ self: super: {
 
   Deezer = self.installApplication rec {
     name = "Deezer";
-    version = "4.27.0";
+    version = "4.29.0";
     sourceRoot = "Deezer.app";
     src = super.fetchurl {
       url = "http://cdn-content.deezer.com/builds/deezer-desktop/8cF2rAuKxLcU1oMDmCYm8Uiqe19Ql0HTySLssdzLkQ9ZWHuDTp2JBtQOvdrFzWPA/darwin/x64/${version}/DeezerDesktop_${version}.dmg";
-      sha256 = "1bzvpdjmvz2fsq9caqs564ljskbjg3g428gqx72rr160b36aickq";
+      sha256 = "5f390101ccb399865ac07847b15bfd0d7657ff030fb658d9313e71ab0301831b";
     };
     description = "A world of music in your pocket.";
     homepage = https://deezer.com;
@@ -90,7 +90,7 @@ self: super: {
     sourceRoot = "Seafile\ Client.app";
     src = super.fetchurl {
       url = "https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-client-${version}.dmg";
-      sha256 = "0dixypqajnpks7w47bv582qqi4a85y2zw24wxrs5wad3kafkyv7m";
+      sha256 = "f56c3f9d9aa3295e74ee9c08fe852f489188b14065af43f8d1f35aa9f0f53d36";
     };
     description = "Seafile is an open source enterprise file sync and share platform with high reliability and performance.";
     homepage = "https://seafile.com";
@@ -98,11 +98,11 @@ self: super: {
 
   Signal = self.installApplication rec {
     name = "Signal";
-    version = "1.38.1";
+    version = "1.39.4";
     sourceRoot = "Signal.app";
     src = super.fetchurl {
       url = "https://updates.signal.org/desktop/signal-desktop-mac-${version}.dmg";
-      sha256 = "1vf3rzzs8imbg3nmxikhqi48asldwv00wpmhvbisqn1bbrbias5x";
+      sha256 = "8697d193b8bcf064d54d6b2b4b4fa8fbc2806919f0bf1e280afe22070d1c2736";
     };
     description = "State-of-the-art end-to-end encryption";
     homepage = "https://www.signal.org/";
@@ -110,11 +110,11 @@ self: super: {
 
   Kobo = self.installApplication rec {
     name = "Kobo";
-    version = "0.0.1";
+    version = "4.24.11789";
     sourceRoot = "Kobo.app";
     src = super.fetchurl {
       url = "https://kbdownload1-a.akamaihd.net/desktop/kobodesktop/kobosetup.dmg";
-      sha256 = "23368860e3e9ec726538251cfb5589fb57a73ff2f4c13678246921c3f9a23e95";
+      sha256 = "f61bce74a1eebbe11c8b4d709c2b1266c36d288b056620e68628b39fb5f4bb37";
     };
     description = "kobo.com eBooks and Audiobooks";
     homepage = "https://www.kobo.com";
@@ -134,13 +134,25 @@ self: super: {
 
   Discord = self.installApplication rec {
     name = "Discord";
-    version = "0.0.259";
+    version = "0.0.260";
     sourceRoot = "Discord.app";
     src = super.fetchurl {
       url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
-      sha256 = "927b7174671aeede430e5a71f9a8eee1991e2dab5309a8ee623dd1fb04706517";
+      sha256 = "9cddabb13d862e45a0287591b38c13fde9b372edee7f7a538ba7e375c8b32088";
     };
     description = "Step up your game with a modern voice & text chat app.";
     homepage = "https://discord.com";
+  };
+
+  Remarkable = self.installApplication rec {
+    name = "Remarkable";
+    version = "2.3.1-126-a3a0129fd";
+    sourceRoot = "Remarkable.app";
+    src = super.fetchurl {
+      url = "https://downloads.remarkable.com/desktop/production/mac/reMarkable-${version}.dmg";
+      sha256 = "d16c8e2d6e388cf0f65706e4fff5ef93fa829ba74daae79c5bfe33b9af13aacf";
+    };
+    description = "The next-generation paper tablet.";
+    homepage = "https://remarkable.com";
   };
 }

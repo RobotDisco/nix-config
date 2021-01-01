@@ -39,25 +39,44 @@
 (eval-when-compile
   (require 'use-package))
 
-(use-package diminish
-  :config (require 'diminish))
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
 
-(use-package bind-key
-  :config (require 'bind-key))
+(use-package diminish)
+
+(use-package bind-key)
 
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-;; The fringe is this small strip which sometimes indicates that line-specific information
-;; about that line is available (there is an error on that line, for example.)
-(fringe-mode -1)
 
 ;; Don't show Emacs' default splash screen
 (setq inhibit-splash-screen t)
 
 (column-number-mode +1)
 
+(set-fringe-mode 10)
+
+(setq visual-bell t)
+
+(global-display-line-numbers-mode t)
+
+;; Disable line numbers for some modes
+(dolist (mode '(org-mode-hook
+		term-mode-hook
+		shell-mode-hook
+		treemacs-mode-hook
+		eshell-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
 (add-to-list 'default-frame-alist '(font . "CamingoCode-13"))
+
+(use-package doom-modeline
+  :custom
+  (doom-modeline-height 1)
+  (doom-modeline-buffer-file-name 'truncate-upto-project)
+  :init
+  (doom-modeline-mode 1))
 
 (use-package rebecca-theme
   :config
@@ -69,11 +88,17 @@
     ;; that's the only hook we can do this, so our hook has to remove itself
     ;; when it is done.
     (cl-labels ((load-my-theme (frame)
-			       (with-selected-frame frame
-				 (load-theme 'rebecca t))
-			       (remove-hook 'after-make-frame-functions #'load-my-theme)))
+                               (with-selected-frame frame
+                                 (load-theme 'rebecca t))
+                               (remove-hook 'after-make-frame-functions #'load-my-theme)))
       (add-hook 'after-make-frame-functions #'load-my-theme))
   (load-theme 'rebecca t)))
+
+(setq backup-directory-alist `(("." . "~/.emacs.d/backups"))
+      delete-old-versions t
+      kept-new-versions 8
+      kept-old-versions 2
+      version-control t)
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -86,8 +111,17 @@
 (global-auto-revert-mode +1)
 
 (use-package which-key
-  :config
+  :custom (which-key-idle-delay 1)
+  :diminish which-key-mode
+  :init
   (which-key-mode))
+
+(use-package helpful
+  :bind
+  ([remap describe-function] . helpful-callable)
+  ([remap describe-variable] . helpful-variable)
+  ([remap describe-key] . helpful-key)
+  ("C-c C-d" . helpful-at-point))
 
 (use-package async
   :config
@@ -96,12 +130,6 @@
 (setq fill-column 80)
 
 (visual-line-mode)
-
-(setq backup-directory-alist `(("." . "~/.emacs.d/backups"))
-      delete-old-versions t
-      kept-new-versions 8
-      kept-old-versions 2
-      version-control t)
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns x))
@@ -268,34 +296,75 @@
 
 (use-package org
   :pin org
+  :custom
+  ;; Have prettier chrome for headlines that can be expanded
+  (org-ellipsis " ▾")
+  ;; Show task state change logs in agenda mode
+  (org-agenda-start-with-log-mode  t)
+  ;; When we finish a task, log the time
+  (org-log-done 'time)
+  ;; Store task state changes into a dedicated drawer
+  (org-log-into-drawer t)
+
+  ;; The workhorse files in my GTD system
+  (org-agenda-files
+   `(,(concat gaelan/gtd-prefix "gtd.org")
+     ,(concat gaelan/gtd-prefix "tickler.org")
+     ,(concat gaelan/gtd-prefix "gcal/personal.org")
+     ,(concat gaelan/gtd-prefix "gcal/work.org")))
+
+  ;; Things I want to quickly enter, tasks and journal entries
+  (org-capture-templates
+   `(("t" "Todo" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
+      "* TODO %?")
+     ("p" "Project" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
+      "* [/] %? :project:")
+     ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
+      "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
+     ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
+      "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What things did I accomplish today?\n   1. %?\n** What did I learn?\n** What did I do to help my future?\n** What did I do to help others?\n")
+     ("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
+      "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week? What can you work on this week?\n** What can you learn this week?")
+     ("m" "Monthly Reflection" entry (function gaelan/org-journal-find-location)
+      "* %(format-time-string org-journal-time-format)Monthly Reflection\n** What were your biggest wins of the month?\n   - %?\n** What were you most grateful for this month?\n** What tensions have you removed this month?\n** What did you learn this month?\n** How have you grown this month?")
+     ("y" "Yearly Reflection" entry (function gaelan/org-journal-find-location)
+      "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
+
+  ;; Where do I tend to move files to?
+  (org-refile-targets
+   `((,(concat gaelan/gtd-prefix "gtd.org") . (:maxlevel . 2))
+     (,(concat gaelan/gtd-prefix "someday.org") . (:level . 1))
+     (,(concat gaelan/gtd-prefix "tickler.org") . (:level . 1))
+     ;; Move targets within a file
+     (nil . (:level . 1))))
+
+  ;; Handy search views for agenda mode
+  (org-agenda-custom-commands
+   '(("n" "Next Actions"
+      ((todo "NEXT")))
+     ("p" "Unplanned Projects"
+      ((todo "PLAN")))
+     ("r" "Reoccuring Tasks"
+      ((tags-todo "+CATEGORY=\"tickler\"")))
+     ("i" "Inbox Items"
+      ((tags-todo "+CATEGORY=\"Inbox\"")))))
+
+  :config
+  ;; Save Org buffers after refiling!
+  (advice-add 'org-refile :after 'org-save-all-org-buffers)
+
+  :bind
+  (("C-c l" . org-store-link)
+   ("C-c a" . org-agenda)
+   ("C-c c" . org-capture)))
+
+(use-package org-habit
+  :ensure nil
+  :after org
+  :custom
+  (org-habit-graph-column 60)
   :init
-  (setq-default org-capture-templates
-		`(("t" "Todo" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
-		   "* TODO %?")
-		   ("p" "Project" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
-		   "* [/] %? :project:")
-		  ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
-		   "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
-		  ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
-		   "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What things did I accomplish today?\n   1. %?\n** What did I learn?\n** What did I do to help my future?\n** What did I do to help others?\n")
-		  ("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
-		   "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week? What can you work on this week?\n** What can you learn this week?")
-		  ("m" "Monthly Reflection" entry (function gaelan/org-journal-find-location)
-		   "* %(format-time-string org-journal-time-format)Monthly Reflection\n** What were your biggest wins of the month?\n   - %?\n** What were you most grateful for this month?\n** What tensions have you removed this month?\n** What did you learn this month?\n** How have you grown this month?")
-		  ("y" "Yearly Reflection" entry (function gaelan/org-journal-find-location)
-		   "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
-  (setq-default org-refile-targets
-		`((,(concat gaelan/gtd-prefix "gtd.org") . (:maxlevel . 2))
-		  (,(concat gaelan/gtd-prefix "someday.org") . (:level . 1))
-		  (nil . (:level . 1))))
-  (setq-default org-agenda-files
-		`(,(concat gaelan/gtd-prefix "gtd.org")
-		  ,(concat gaelan/gtd-prefix "tickler.org")
-		  ,(concat gaelan/gtd-prefix "gcal/personal.org")
-		  ,(concat gaelan/gtd-prefix "gcal/work.org")))
-  :bind (("C-c l" . org-store-link)
-	 ("C-c a" . org-agenda)
-	 ("C-c c" . org-capture)))
+  (add-to-list 'org-modules 'org-habit))
 
 (use-package org-roam
   :bind (:map org-roam-mode-map
@@ -395,6 +464,16 @@
 			     (org-match-string-no-properties 1))))
 	  (apply 'kill-region remove)
 	  (insert description)))))
+
+;; Automatically tangle our Emacs.org config file when we save it
+(defun gaelan/org-babel-tangle-config ()
+  (when (string-equal (file-name-directory (buffer-file-name))
+		      (expand-file-name user-emacs-directory))
+    ;; Dynamic scoping to the rescue
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
+
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'gaelan/org-babel-tangle-config)))
 
 (use-package magit
   ;; I should have a keybinding that displays magit-status from anywhere
@@ -521,6 +600,8 @@
 
 (use-package lsp-haskell
   :hook (haskell-mode-hook . lsp-deferred))
+
+(use-package rustic)
 
 (use-package terraform-mode)
 

@@ -13,6 +13,8 @@
     awscli
     direnv
     google-cloud-sdk
+    jq
+    ripgrep
   ];
 
   time.timeZone = "America/Toronto";
