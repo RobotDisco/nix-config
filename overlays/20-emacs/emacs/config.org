@@ -804,14 +804,20 @@
 	 (turn-on-eldoc-mode))
      #+end_src
 *** Common lisp
-    SLIME is the fancy REPL environment we use for Common Lisp
+    SLIME was the fancy REPL environment we use for Common Lisp.
+    There is a fork of SLIME called SLY which is apparently more featureful
 
     #+begin_src emacs-lisp :tangle yes
-      (use-package slime
+      (use-package sly)
+      (use-package sly-quicklisp)
+    #+end_src
+
+    #+begin_src emacs-lisp :tangle yes
+      (use-package helm-sly
+	:after (sly helm-company)
 	:config
-	(require 'slime-autoloads)
-	(setq slime-contribs '(slime-repl slime-autodoc slime-references slime-scratch slime-mdot-fu slime-quicklisp))
-	(setq slime-lisp-implementations '((sbcl ("sbcl" "--core" "~/code/common-lisp/sbcl.core-for-slime")))))
+	(add-hook 'sly-mrepl-hook #'company-mode)
+	(define-key sly-mrepl-mode-map (kbd "<tab>") 'helm-company))
     #+end_src
 
     We currently use Steel Bank Common Lisp as our runtime environment
@@ -823,7 +829,6 @@
     We should load our generic lisp mode hook in common lisp edit and REPL buffers
     #+begin_src emacs-lisp :tangle yes
       (add-hook 'lisp-mode-hook 'gaelan/generic-lisp-mode-hook)
-      (add-hook 'slime-repl-mode-hook 'gaelan/generic-lisp-mode-hook)
     #+end_src
 
 *** Emacs Lisp

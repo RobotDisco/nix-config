@@ -443,16 +443,18 @@
   ;; Show documentation for a function/variable in the minibuffer
   (turn-on-eldoc-mode))
 
-(use-package slime
+(use-package sly)
+(use-package sly-quicklisp)
+
+(use-package helm-sly
+  :after (sly helm-company)
   :config
-  (require 'slime-autoloads)
-  (setq slime-contribs '(slime-repl slime-autodoc slime-references slime-scratch slime-mdot-fu slime-quicklisp))
-  (setq slime-lisp-implementations '((sbcl ("sbcl" "--core" "~/code/common-lisp/sbcl.core-for-slime")))))
+  (add-hook 'sly-mrepl-hook #'company-mode)
+  (define-key sly-mrepl-mode-map (kbd "<tab>") 'helm-company))
 
 (setq inferior-lisp-program "sbcl")
 
 (add-hook 'lisp-mode-hook 'gaelan/generic-lisp-mode-hook)
-(add-hook 'slime-repl-mode-hook 'gaelan/generic-lisp-mode-hook)
 
 (add-hook 'emacs-lisp-mode-hook 'gaelan/generic-lisp-mode-hook)
 
