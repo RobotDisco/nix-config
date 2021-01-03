@@ -22,6 +22,7 @@
     signal-desktop
     unzip
     yubioath-desktop
+    playerctl
   ];
 
   security.wrappers = {

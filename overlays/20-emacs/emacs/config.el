@@ -84,19 +84,31 @@
 		eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-(set-face-attribute 'default nil :font gaelan/default-font-face :height gaelan/default-font-size)
+(defun gaelan/set-font-faces ()
+  (set-face-attribute 'default nil :font gaelan/default-font-face :height gaelan/default-font-size)
+  ;; Set the fixed font face and height
+  (set-face-attribute 'fixed-pitch nil :font gaelan/default-font-face :height gaelan/default-font-size)
+  ;; Set the variable font face and height
+  (set-face-attribute 'variable-pitch nil :font gaelan/default-variable-font-face :height gaelan/default-variable-font-size))
 
-;; Set the fixed font face and height
-(set-face-attribute 'fixed-pitch nil :font gaelan/default-font-face :height gaelan/default-font-size)
-
-;; Set the variable font face and height
-(set-face-attribute 'variable-pitch nil :font gaelan/default-variable-font-face :height gaelan/default-variable-font-size)
+;; Starting emacs as a daemon confuses things because it doesn't necessarily know
+;; it will be used in a GUI, which makes certain configuration calls misbehave since
+;; they are run before an Emacs frame is launched.
+;;
+;; So here we set up fonts/icons immediately if we're not running as a daemon, and we
+;; set up a special hook if we are running as a daemon.
+(if (daemonp)
+    (add-hook 'server-after-make-frame-hook
+              (lambda ()
+                (setq doom-modeline-icon t)
+                (gaelan/set-font-faces)))
+  (gaelan/set-font-faces))
 
 (use-package all-the-icons)
 
 (use-package doom-modeline
   :custom
-  (doom-modeline-height 1)
+  (doom-modeline-height 21)
   (doom-modeline-buffer-file-name 'truncate-upto-project)
   :init
   (doom-modeline-mode 1))
@@ -569,7 +581,8 @@
   :after (sly helm-company)
   :config
   (add-hook 'sly-mrepl-hook #'company-mode)
-  (define-key sly-mrepl-mode-map (kbd "<tab>") 'helm-company))
+  ; (define-key sly-mrepl-mode-map (kbd "<tab>") 'helm-company)
+  )
 
 (setq inferior-lisp-program "sbcl")
 
@@ -652,87 +665,175 @@
 
 (use-package nix-mode)
 
+(defun gaelan/run-in-background (command)
+  (let ((command-parts (split-string command "[ ]+")))
+    (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
+
+(defun gaelan/set-wallpaper ()
+  (interactive)
+  (start-process-shell-command
+   "feh" nil "feh --bg-scale ~/Pictures/Wallpaper/Vapourwave.jpg"))
+
+(defun gaelan/exwm-init-hook ()
+  ;; Make workspace 1 be the one which we activate at startup
+  (exwm-workspace-switch-create 1)
+
+  ;; Start our dashboard panel
+  ;; (gaelan/start-panel)
+
+  ;; Launch apps that will run in the background
+  (gaelan/run-in-background "dunst")
+  (gaelan/run-in-background "nm-applet")
+  (gaelan/run-in-background "pasystray")
+  (gaelan/run-in-background "blueman-applet"))
+
 (defun gaelan/exwm-update-title-hook ()
   "EXWM hook for renaming buffer names to their associated X window title."
-  (exwm-workspace-rename-buffer exwm-title))
+
+  (pcase exwm-class-name
+    ("Firefox" (exwm-workspace-rename-buffer
+                (format "Firefox: %s" exwm-title)))))
 
 (defun gaelan/exwm-update-class-hook ()
   "EXWM hook for renaming buffer names to their associated X window class."
   (exwm-workspace-rename-buffer exwm-class-name))
 
 (defun gaelan/exwm-randr-screen-change-hook ()
-  (call-process "autorandr" nil nil nil "--change"))
+  (gaelan/run-in-background "autorandr --change --force")
+  (gaelan/set-wallpaper)
+  (message "Display config: %s"
+           (string-trim (shell-command-to-string "autorandr --current"))))
 
 (when gaelan/*is-linux*
   (use-package exwm
+    :bind
+    (:map exwm-mode-map
+          ;; C-q will enable the next key to be sent directly
+          ([?\C-q] . 'exwm-input-send-next-key))
     :config
-    ;; Set some global window management bindings
-    (setq exwm-input-global-keys
-	  `(
-	    ;; 's-r': Reset to (line-mode).
-	    ([?\s-r] . exwm-reset)
-	    ;; 's-w': Switch workspace.
-	    ([?\s-w] . exwm-workspace-switch)
-	    ;; 's-b': Bring application to current workspace
-	    ([?\s-b] . exwm-workspace-switch-to-buffer)
-	    ;; 's-p': Launch application
-	    ([?\s-p] . (lambda (command)
-			 (interactive (list (read-shell-command "$ ")))
-			 (start-process-shell-command command nil command)))
-	    ;; 's-<N>': Switch to certain workspace.
-	    ,@(mapcar (lambda (i)
-			`(,(kbd (format "s-%d" i)) .
-			  (lambda ()
-			    (interactive)
-			    (exwm-workspace-switch-create ,i))))
-		      (number-sequence 0 9))))
-    ;; translate emacs keybindings into CUA-like ones for most apps, since most
-    ;; apps don't observe emacs kebindings and we would like a uniform experience.
-    (setq exwm-input-simulation-keys
-	  '(;; movement
-	    ([?\C-b] . [left])
-	    ([?\M-b] . [C-left])
-	    ([?\C-f] . [right])
-	    ([?\M-f] . [C-right])
-	    ([?\C-p] . [up])
-	    ([?\C-n] . [down])
-	    ([?\C-a] . [home])
-	    ([?\C-e] . [end])
-	    ([?\M-v] . [prior])
-	    ([?\C-v] . [next])
-	    ([?\C-d] . [delete])
-	    ([?\C-k] . [S-end delete])
-	    ;; cut/paste
-	    ([?\C-w] . [?\C-x])
-	    ([?\M-w] . [?\C-c])
-	    ([?\C-y] . [?\C-v])
-	    ;; search
-	    ([?\C-s] . [?\C-f])))
-    ;; Configure workspaces 2,3 to display  on my portrait monitor.
-    ;; By default, workspaces show up on the first, default, active monitor.
-    (setq exwm-randr-workspace-monitor-plist
-	  '(0 "DP-1-1" 1 "DP-1-1" 2 "DP-1-2" 3 "DP-1-2"))
+    ;; Set default number of workspaces
+    (setq exwm-workspace-number 5)
 
-    ;; Pin certain applications to specific workspaces
-    (setq exwm-manage-configurations
-	  '(((string= exwm-class-name "Firefox") workspace 2)
-	    ((string= exwm-class-name "Chromium-browser") workspace 3)
-	    ((string= exwm-class-name ".obs-wrapped") workspace 2)))
-
-
+    ;; Set up management hooks
     (add-hook 'exwm-update-class-hook
-	      'gaelan/exwm-update-class-hook)
+              #'gaelan/exwm-update-class-hook)
     (add-hook 'exwm-update-title-hook
-	      'gaelan/exwm-update-title-hook)
+              #'gaelan/exwm-update-title-hook)
+    ;; (add-hook 'exwm-manage-finish-hook
+    ;;  	      #'gaelan/exwm-manage-finish-hook)
+    (add-hook 'exwm-init-hook
+              #'gaelan/exwm-init-hook)
 
     ;; Enable multi-monitor support for EXWM
     (require 'exwm-randr)
+    ;; Configure monitor change hooks
     (add-hook 'exwm-randr-screen-change-hook
-	      'gaelan/exwm-randr-screen-change-hook)
-    (exwm-randr-enable)))
+              'gaelan/exwm-randr-screen-change-hook)
+    (exwm-randr-enable)
+    ;; Call the monitor configuration hook for the first time
+    (gaelan/run-in-background "autorandr --change --force")
+    (gaelan/set-wallpaper)
+
+    ;; My workspaces includes specific ones for browsing, mail, slack
+    ;; By default, workspaces show up on the first, default, active monitor.
+    (setq exwm-randr-workspace-monitor-plist
+          '(3 "DP-1-2" 4 "DP-1-2"))
+
+    ;; Set up exwm's systembar since xmobar doesn't support it
+    ;; Note: This has to be done before (exwm-init)
+    (require 'exwm-systemtray)
+    (setq exwm-systemtray-height 20)
+    (exwm-systemtray-enable)
+
+    ;; Automatically send mouse cursor to selected workspace's display
+    (setq exwm-workspace-warp-cursor t)
+
+    ;; Window focus should follow mouse pointer
+    (setq mouse-autoselect-window t
+          focus-follows-mouse t)
+
+    ;; Set some global window management bindings. These always work
+    ;; regardless of EXWM state.
+    ;; Note: Changing this list after (exwm-enable) takes no effect.   
+    (setq exwm-input-global-keys
+          `(
+            ;; 's-r': Reset to (line-mode).
+            ([?\s-r] . exwm-reset)
+
+            ;; Move between windows
+            ([?\s-h] . windmove-left)
+            ([?\s-l] . windmove-right)
+            ([?\s-k] . windmove-up)
+            ([?\s-j] . windmove-down)
+
+            ;; 's-w': Switch workspace.
+            ([?\s-w] . exwm-workspace-switch)
+            ;; 's-b': Bring application to current workspace
+            ([?\s-b] . exwm-workspace-switch-to-buffer)
+
+            ;; s-0 is an inconvenient shortcut sequence, given 0 is before 1
+            ([?\s-`] . (exwm-workspace-switch-create 0))
+            ([s-escape] . (exwm-workspace-switch-create 0))
+
+            ;; 's-p': Launch application a la dmenu
+            ([?\s-p] . (lambda (command)
+                         (interactive (list (read-shell-command "$ ")))
+                         (start-process-shell-command command nil command)))
+
+            ;; 's-<N>': Switch to certain workspace.
+            ,@(mapcar (lambda (i)
+                        `(,(kbd (format "s-%d" i)) .
+                          (lambda ()
+                            (interactive)
+                            (exwm-workspace-switch-create ,i))))
+                      (number-sequence 0 9))))
+
+    ;; Certain important emacs keystrokes should always be handled by
+    ;; emacs in preference over the application handling them
+    ;; (setq exwm-input-prefix-keys
+    ;; 	  '(?\C-x
+    ;; 	    ?\C-u
+    ;; 	    ?\C-h
+    ;; 	    ?\M-x
+    ;; 	    ?\M-`
+    ;; 	    ?\M-&
+    ;; 	    ?\M-:))
+
+    ;; translate emacs keybindings into CUA-like ones for most apps, since most
+    ;; apps don't observe emacs kebindings and we would like a uniform experience.
+    (setq exwm-input-simulation-keys
+          '(;; movement
+            ([?\C-b] . [left])
+            ([?\M-b] . [C-left])
+            ([?\C-f] . [right])
+            ([?\M-f] . [C-right])
+            ([?\C-p] . [up])
+            ([?\C-n] . [down])
+            ([?\C-a] . [home])
+            ([?\C-e] . [end])
+            ([?\M-v] . [prior])
+            ([?\C-v] . [next])
+            ([?\C-d] . [delete])
+            ([?\C-k] . [S-end delete])
+            ;; cut/paste
+            ([?\C-w] . [?\C-x])
+            ([?\M-w] . [?\C-c])
+            ([?\C-y] . [?\C-v])
+            ;; search (this should really be a firefox-only thing)
+            ([?\C-s] . [?\C-f])))
+
+    ;; Pin certain applications to specific workspaces
+    (setq exwm-manage-configurations
+          '(((string= exwm-class-name "Firefox") workspace 2)
+            ((string= exwm-class-name "Chromium-browser") workspace 3)
+            ((string= exwm-class-name ".obs-wrapped") workspace 2)))
+
+    ;; Enable EXWM
+    (exwm-enable)))
 
 (when gaelan/*is-linux*
   (use-package desktop-environment
+    :requires (exwm)
     :config
     (desktop-environment-mode)))
 
