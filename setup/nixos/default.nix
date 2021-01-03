@@ -13,6 +13,7 @@
     cifs-utils
     file
     firefox
+    fwupd
     dwarf-fortress-packages.dwarf-fortress-full
     inotify-tools
     mkpasswd
