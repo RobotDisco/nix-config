@@ -1325,6 +1325,13 @@ There are certain workspaces that are assigned to specific purposes. This hook a
          ;; Enable EXWM
          (exwm-enable)))
       #+END_SRC
+** Ediff workaround
+ediff doesn't render correctly in exwm. Fix this by creating "Ediff Control Panel" in a floating frame rather than as an Emacs window.
+#+begin_src emacs-lisp :tangle yes
+  (with-eval-after-load 'ediff-wind
+    (setq ediff-control-frame-parameters
+          (cons '(unsplittable . t)  ediff-control-frame-parameters)))
+#+end_src
 ** Multimedia keys
    If Emacs is going to be our window manager, it only makes sense to have it handle things like multimedia keys on keyboards
 

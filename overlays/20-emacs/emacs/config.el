@@ -831,6 +831,10 @@
     ;; Enable EXWM
     (exwm-enable)))
 
+(with-eval-after-load 'ediff-wind
+  (setq ediff-control-frame-parameters
+        (cons '(unsplittable . t)  ediff-control-frame-parameters)))
+
 (when gaelan/*is-linux*
   (use-package desktop-environment
     :requires (exwm)
