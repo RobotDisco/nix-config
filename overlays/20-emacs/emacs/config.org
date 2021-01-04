@@ -194,11 +194,12 @@
 
       ;; Disable line numbers for some modes
       (dolist (mode '(org-mode-hook
-		      term-mode-hook
-		      shell-mode-hook
-		      treemacs-mode-hook
-		      eshell-mode-hook))
-	(add-hook mode (lambda () (display-line-numbers-mode 0))))
+                      term-mode-hook
+                      vterm-mode-hook
+                      shell-mode-hook
+                      treemacs-mode-hook
+                      eshell-mode-hook))
+        (add-hook mode (lambda () (display-line-numbers-mode 0))))
     #+end_src
 *** Use preferred typeface
     Like a lot of developers, I am very particular about my monospaced font choices :)
@@ -878,6 +879,12 @@
 
      (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'gaelan/org-babel-tangle-config)))
    #+end_src
+* Terminal environment
+** Install emacs vterm
+Vterm is a library that allows for a nice terminal emulator over the builtin environments
+#+begin_src emacs-lisp :tangle yes
+  (use-package vterm)
+#+end_src
 * Software Development
 ** Git source control management
    =magit= is a super awesome git package
