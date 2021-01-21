@@ -37,11 +37,11 @@ self: super: {
 
   Slack = self.installApplication rec {
     name = "Slack";
-    version = "4.12.0";
+    version = "4.12.2";
     sourceRoot = "Slack.app";
     src = super.fetchurl {
       url = "https://downloads.slack-edge.com/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-      sha256 = "5990ec9106d0c8fb6eaaf6d845063bb254c9e80401d2aa5aac173988cd2e502f";
+      sha256 = "0qflv2glfy7d77zjgqi7qcjr53c9dni26gmqkg9vk2xijmmd3xy7";
     };
     description = "Slack is the collaboration hub that brings the right people, information, and tools together to get work done.";
     homepage = https://slack.com;
@@ -74,11 +74,11 @@ self: super: {
 
   Deezer = self.installApplication rec {
     name = "Deezer";
-    version = "4.29.0";
+    version = "4.31.0";
     sourceRoot = "Deezer.app";
     src = super.fetchurl {
       url = "http://cdn-content.deezer.com/builds/deezer-desktop/8cF2rAuKxLcU1oMDmCYm8Uiqe19Ql0HTySLssdzLkQ9ZWHuDTp2JBtQOvdrFzWPA/darwin/x64/${version}/DeezerDesktop_${version}.dmg";
-      sha256 = "5f390101ccb399865ac07847b15bfd0d7657ff030fb658d9313e71ab0301831b";
+      sha256 = "11ck2m752adrj1syascmvvm9c3npbawr8jl7559kh3b1agkdfijb";
     };
     description = "A world of music in your pocket.";
     homepage = https://deezer.com;
