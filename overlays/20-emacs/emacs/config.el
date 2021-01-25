@@ -78,10 +78,11 @@
 
 ;; Disable line numbers for some modes
 (dolist (mode '(org-mode-hook
-		term-mode-hook
-		shell-mode-hook
-		treemacs-mode-hook
-		eshell-mode-hook))
+                term-mode-hook
+                vterm-mode-hook
+                shell-mode-hook
+                treemacs-mode-hook
+                eshell-mode-hook))
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 (defun gaelan/set-font-faces ()
@@ -324,7 +325,7 @@
   "The root directory of my org-roam knowledge store.")
 
 (defconst gaelan/gtd-prefix
-  (concat gaelan/brain-prefix "gtd/")
+  (concat gaelan/webdav-prefix "gtd/")
   "The root directory of my GTD task management system.")
 
 (defun gaelan/org-mode-setup ()
@@ -524,6 +525,8 @@
       (org-babel-tangle))))
 
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'gaelan/org-babel-tangle-config)))
+
+(use-package vterm)
 
 (use-package magit
   ;; I should have a keybinding that displays magit-status from anywhere

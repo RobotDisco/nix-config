@@ -598,7 +598,7 @@
        "The root directory of my org-roam knowledge store.")
 
      (defconst gaelan/gtd-prefix
-       (concat gaelan/brain-prefix "gtd/")
+       (concat gaelan/webdav-prefix "gtd/")
        "The root directory of my GTD task management system.")
    #+end_src
 ** Make text work for org buffers
