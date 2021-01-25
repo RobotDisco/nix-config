@@ -74,11 +74,11 @@ self: super: {
 
   Deezer = self.installApplication rec {
     name = "Deezer";
-    version = "4.31.0";
+    version = "4.32.0";
     sourceRoot = "Deezer.app";
     src = super.fetchurl {
       url = "http://cdn-content.deezer.com/builds/deezer-desktop/8cF2rAuKxLcU1oMDmCYm8Uiqe19Ql0HTySLssdzLkQ9ZWHuDTp2JBtQOvdrFzWPA/darwin/x64/${version}/DeezerDesktop_${version}.dmg";
-      sha256 = "11ck2m752adrj1syascmvvm9c3npbawr8jl7559kh3b1agkdfijb";
+      sha256 = "1wslgi2q4m3qj7vpqp2pzd0bh2zbgw5npid5578nyvn9qycgwq4k";
     };
     description = "A world of music in your pocket.";
     homepage = https://deezer.com;
