@@ -134,11 +134,11 @@ self: super: {
 
   Discord = self.installApplication rec {
     name = "Discord";
-    version = "0.0.260";
+    version = "0.0.261";
     sourceRoot = "Discord.app";
     src = super.fetchurl {
       url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
-      sha256 = "9cddabb13d862e45a0287591b38c13fde9b372edee7f7a538ba7e375c8b32088";
+      sha256 = "1afb0qj23hmhsz9jgzwaj5gqsxdwdxi8bcc656s27qhydnbxbgpn";
     };
     description = "Step up your game with a modern voice & text chat app.";
     homepage = "https://discord.com";
@@ -146,11 +146,11 @@ self: super: {
 
   Remarkable = self.installApplication rec {
     name = "Remarkable";
-    version = "2.3.1-126-a3a0129fd";
+    version = "2.5.0";
     sourceRoot = "Remarkable.app";
     src = super.fetchurl {
       url = "https://downloads.remarkable.com/desktop/production/mac/reMarkable-${version}.dmg";
-      sha256 = "d16c8e2d6e388cf0f65706e4fff5ef93fa829ba74daae79c5bfe33b9af13aacf";
+      sha256 = "17s3nfn7xfz939ap7zrvbng8ssc992spdm6nsjhzhfn34fhl4qpc";
     };
     description = "The next-generation paper tablet.";
     homepage = "https://remarkable.com";
