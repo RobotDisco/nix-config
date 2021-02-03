@@ -418,40 +418,38 @@
   (add-to-list 'org-modules 'org-habit))
 
 (use-package org-roam
-  :bind (:map org-roam-mode-map
-	      ("C-c n l" . org-roam)
-	      ("C-c n f" . org-roam-find-file)
-	      ("C-c n g" . org-roam-graph-show)
-	      :map org-mode-map
-	      ("C-c n i" . org-roam-insert)
-	      ("C-c n I" . org-roam-insert-immediate))
-  :custom
-  (org-roam-directory gaelan/brain-prefix)
-  (org-roam-db-location (if gaelan/*is-osx*
-			    (concat org-roam-directory "/db/osx.db")
-			  (concat org-roam-directory "/db/linux.db")))
-
-  (org-roam-completion-system 'helm)
-  ;; I don't care about graphing daily notes, tasks, or historical stuff
-  (org-roam-graph-exclude-matcher '("journal" "gtd"))
-  (org-roam-capture-templates
-   '(("d" "default" plain (function org-roam--capture-get-point)
-      "%?"
-      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+title: ${title}\n"
-      :unnarrowed t)
-     ("f" "fleeting" plain (function org-roam--capture-get-point)
-      "%?"
-      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+title: ${title}\n#+roam_tags: fleeting-note\n"
-      :unnarrowed t)
-     ("l" "literature" plain (function org-roam--capture-get-point)
-      "%?"
-      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+title: ${title}\n#+roam_tags: literature-note\n"
-      :unnarrowed t)))
-  :config
+  :init
+  (setq org-roam-directory gaelan/brain-prefix
+        org-roam-completion-system 'helm
+        ;; I don't care about graphing daily notes, tasks, or historical stuff
+        org-roam-graph-exclude-matcher '("journal")
+        org-roam-capture-templates '(("d" "default" plain (function org-roam--capture-get-point)
+                                      "%?"
+                                      :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                                      :head "#+title: ${title}\n"
+                                      :unnarrowed t)
+                                     ("f" "fleeting" plain (function org-roam--capture-get-point)
+                                      "%?"
+                                      :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                                      :head "#+title: ${title}\n#+roam_tags: fleeting-note\n"
+                                      :unnarrowed t)
+                                     ("l" "literature" plain (function org-roam--capture-get-point)
+                                      "%?"
+                                      :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                                      :head "#+title: ${title}\n#+roam_tags: literature-note\n"
+                                      :unnarrowed t)))
+  (setq org-roam-db-location (if gaelan/*is-osx*
+                                 (concat org-roam-directory "/db/osx.db")
+                               (concat org-roam-directory "/db/linux.db")))
   (add-hook 'after-init-hook 'org-roam-mode)
+  :bind (:map org-roam-mode-map
+              ("C-c n l" . org-roam)
+              ("C-c n f" . org-roam-find-file)
+              ("C-c n g" . org-roam-graph-show)
+              :map org-mode-map
+              ("C-c n i" . org-roam-insert)
+              ("C-c n I" . org-roam-insert-immediate))
+  :config
   ;;  org-roam-protocol is used to handle weblinks (e.g. org-roam-server)
   (require 'org-roam-protocol))
 
