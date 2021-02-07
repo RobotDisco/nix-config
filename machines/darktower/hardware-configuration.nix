@@ -36,21 +36,21 @@
   networking.nameservers = [ "192.168.10.1"];
   networking.defaultGateway = {
     address = "192.168.10.1";
-    interface = "br-trunk";
+    interface = "eno1";
   };
   
-  networking.bridges = {
-    br-trunk = {
-      # Trunk
-      interfaces = [ "enp5s0f2" ];
-      rstp = true;
-    };
-  };
+  #networking.bridges = {
+  #  br-trunk = {
+  #    # Trunk
+  #    interfaces = [ "eno" ];
+  #    rstp = true;
+  #  };
+  #};
 
-  networking.interfaces.br-trunk.ipv4 = {
-    addresses = [ { address = "192.168.10.4"; prefixLength = 24; } ];
-    routes = [ { address = "192.168.10.1"; prefixLength = 32; } ];
-  };
+  #networking.interfaces.br-trunk.ipv4 = {
+  #  addresses = [ { address = "192.168.10.4"; prefixLength = 24; } ];
+  #  routes = [ { address = "192.168.10.1"; prefixLength = 32; } ];
+  #};
   
   fileSystems."/" =
     { device = "rootpool/safe/ROOT/nixos";
