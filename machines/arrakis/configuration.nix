@@ -238,6 +238,8 @@ in
   services.pcscd.enable = true;
 
   hardware.enableRedistributableFirmware = true;
-  hardware.cpu.intel.updateMicrocode = true;  
+  hardware.cpu.intel.updateMicrocode = true;
+
+  services.logind.lidSwitch = "hybrid-sleep";  
 }
 
