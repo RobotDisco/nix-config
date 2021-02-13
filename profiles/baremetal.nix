@@ -9,4 +9,10 @@
       "-i 3600"
     ];
   };
+
+  # Scrub all ZFS pools monthly
+  services.zfs.autoScrub = {
+    interval = "monthly";
+    enable = true;
+  };
 }

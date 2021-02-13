@@ -92,4 +92,30 @@
     /salusajail/data/bitwarden salusa0(rw,no_root_squash)
   '';
   networking.firewall.enable = false;
+
+  services.sanoid = {
+    enable = true;
+
+    datasets = {
+      "salusajail/data" = {
+        recursive = true;
+        daily = 90;
+        hourly = 72;
+        monthly = 36;
+        autosnap = true;
+        autoprune = true;
+      };
+    };
+  };
+
+  services.syncoid = {
+    enable = true;
+
+    commands = {
+      "salusajail/data" = {
+        target = "backuppool/saluajail/data";
+        recursive = true;
+      };
+    };
+  };
 }
