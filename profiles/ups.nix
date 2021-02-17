@@ -3,7 +3,7 @@
 {
   power.ups = {
     enable = true;
-    mode = "netserver";
+    mode = "standalone";
     ups = {
       ups = {
         driver = "usbhid-ups";

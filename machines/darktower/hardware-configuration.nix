@@ -29,28 +29,35 @@
   networking.hostId = "526b897e";
 
   # Manually configure networking, which I _think_ is cattle configuration
-  networking.interfaces.eno1.ipv4 = {
+  networking.interfaces.br-admin.ipv4 = {
     addresses = [ { address = "192.168.10.3"; prefixLength = 24; } ];
   };
 
   networking.nameservers = [ "192.168.10.1"];
   networking.defaultGateway = {
     address = "192.168.10.1";
-    interface = "eno1";
+    interface = "br-admin";
   };
-  
-  #networking.bridges = {
-  #  br-trunk = {
-  #    # Trunk
-  #    interfaces = [ "eno" ];
-  #    rstp = true;
-  #  };
-  #};
 
-  #networking.interfaces.br-trunk.ipv4 = {
-  #  addresses = [ { address = "192.168.10.4"; prefixLength = 24; } ];
-  #  routes = [ { address = "192.168.10.1"; prefixLength = 32; } ];
-  #};
+  networking.vlans = {
+    home20 = { id=20; interface="enp5s0f0"; };
+    cloud50 = { id=50; interface="enp5s0f0"; };
+  };
+
+  networking.bridges = {
+    br-admin = {
+      interfaces = [ "eno1" ];
+      rstp = true;
+    };
+    br-home = {
+      interfaces = [ "home20" ];
+      rstp = true;
+    };
+    br-cloud = {
+      interfaces = [ "cloud50" ];
+      rstp = true;
+    };
+  };
   
   fileSystems."/" =
     { device = "rootpool/safe/ROOT/nixos";
@@ -77,7 +84,7 @@
       fsType = "zfs";
     };
 
-  boot.zfs.extraPools = [ "vmpool" ];
+  boot.zfs.extraPools = [ "vmpool" "salusajail" "backuppool" ];
 
   swapDevices =
     [ { device = "/dev/disk/by-label/swappart"; }
@@ -113,7 +120,7 @@
 
     commands = {
       "salusajail/data" = {
-        target = "backuppool/saluajail/data";
+        target = "backuppool/salusajail/data";
         recursive = true;
       };
     };
