@@ -1,7 +1,7 @@
 {
   salusa0 = {
     deployment.targetHost = "salusa0.admin.robot-disco.net";
-    networking.hostName = "salusa0.admin.robot-disco.net";
+    networking.hostName = "salusa0";
     imports = [
       ../profiles/kvm-guest.nix
       ../profiles/docker.nix

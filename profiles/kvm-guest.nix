@@ -13,12 +13,9 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  # handle case where too many hardlinks in nix store for ZFS.
-  boot.loader.grub.copyKernels = true;
-
-  boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
-  boot.loader.grub.device = "/dev/vda";
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
 
   networking.useDHCP = false;
   networking.interfaces.ens3.useDHCP = true;
@@ -26,6 +23,11 @@
   fileSystems."/" =
     { device = "/dev/disk/by-label/rootpart";
       fsType = "ext4";
+    };
+
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-label/EFIBOOT";
+      fsType = "msdos";
     };
 
   fileSystems."/home" =
