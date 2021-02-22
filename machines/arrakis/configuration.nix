@@ -233,13 +233,15 @@ in
   };
 
   services.fwupd.enable = true;
+  services.logind.lidSwitch = "hybrid-sleep";
 
-  services.udev.packages = [ pkgs.yubikey-personalization pkgs.libu2f-host ];
+  services.udev.extraRules = ''
+# Initialise Apple SuperDrive
+ACTION=="add", ATTRS{idProduct}=="1500", ATTRS{idVendor}=="05ac", DRIVERS=="usb", RUN+="${pkgs.sg3_utils}/bin/sg_raw /dev/$kernel EA 00 00 00 00 00 01"
+'';
   services.pcscd.enable = true;
 
   hardware.enableRedistributableFirmware = true;
   hardware.cpu.intel.updateMicrocode = true;
-
-  services.logind.lidSwitch = "hybrid-sleep";  
 }
 
