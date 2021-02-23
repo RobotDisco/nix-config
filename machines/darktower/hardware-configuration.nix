@@ -39,22 +39,13 @@
     interface = "br-admin";
   };
 
-  networking.vlans = {
-    home20 = { id=20; interface="enp5s0f0"; };
-    cloud50 = { id=50; interface="enp5s0f0"; };
-  };
-
   networking.bridges = {
     br-admin = {
       interfaces = [ "eno1" ];
       rstp = true;
     };
-    br-home = {
-      interfaces = [ "home20" ];
-      rstp = true;
-    };
-    br-cloud = {
-      interfaces = [ "cloud50" ];
+    br-trunk = {
+      interfaces = [ "enp5s0f0" ];
       rstp = true;
     };
   };
@@ -97,9 +88,40 @@
   services.nfs.server.exports = ''
     /salusajail/data/webdav salusa0.admin.robot-disco.net(rw,no_root_squash)
     /salusajail/data/bitwarden salusa0.admin.robot-disco.net(rw,no_root_squash)
+    /salusajail/data/minecraft salusa1.admin.robot-disco.net(rw,no_root_squash)
   '';
   networking.firewall.enable = false;
 
+  services.samba = {
+    enable = true;
+    syncPasswordsByPam = true;
+
+    extraConfig = ''
+     workgroup=ROBOT-DISCO
+     server string = fileserver
+     netbios name = fileserver
+#     hosts allow = 192.168.20 localhost
+#     hosts deny = 0.0.0.0/0
+     guest account = nobody
+     map to guest = bad user
+    '';
+    
+    shares = {
+      fileserver = {
+        path = "/salusajail/data/fileserver";
+        browseable = "yes";
+        comment = "Gaelan's fileserver";
+        "read only" = "no";
+        "create mask" = "0644";
+        "directory mask" = "0755";
+        "force user" = "gaelan";
+        "force group" = "users";
+      };
+    };
+  };
+  networking.firewall.allowedTCPPorts = [ 445 139 ];
+  networking.firewall.allowedUDPPorts = [ 137 138 ];
+  
   services.sanoid = {
     enable = true;
 

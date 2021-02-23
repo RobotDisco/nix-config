@@ -1,3 +1,5 @@
+{ pkgs, ... }:
+
 {
   users.users.gaelan = {
     extraGroups = [ "docker" ];
@@ -5,5 +7,7 @@
 
   virtualisation.docker.enable = true;
 
-  services.traefik.group = "docker";
+  environment.systemPackages = [
+    pkgs.docker-compose
+  ];
 }

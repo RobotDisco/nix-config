@@ -8,26 +8,25 @@
     [ <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
     ];
 
-  boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "virtio_pci" "sr_mod" "virtio_blk" ];
+  boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "echi_pci" "virtio_pci" "sr_mod" "virtio_blk" ];
   boot.initrd.kernelModules = [ "dm-snapshot" ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
+  # Use the GRUB 2 boot loader.
+  boot.loader.grub.enable = true;
+  boot.loader.grub.version = 2;
+  # boot.loader.grub.efiSupport = true;
+  # boot.loader.grub.efiInstallAsRemovable = true;
+  # boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  # Define on which hard drive you want to install Grub.
+  boot.loader.grub.device = "/dev/vda"; # or "nodev" for efi only
+  
   networking.useDHCP = false;
-  networking.interfaces.ens3.useDHCP = true;
 
   fileSystems."/" =
     { device = "/dev/disk/by-label/rootpart";
       fsType = "ext4";
-    };
-
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-label/EFIBOOT";
-      fsType = "msdos";
     };
 
   fileSystems."/home" =
@@ -49,5 +48,5 @@
     [ { device = "/dev/disk/by-label/swappart"; }
     ];
 
-  nix.maxJobs = lib.mkDefault 1;
+  nix.maxJobs = lib.mkDefault 2;
 }
