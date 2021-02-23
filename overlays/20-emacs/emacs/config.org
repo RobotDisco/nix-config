@@ -801,8 +801,9 @@
        :bind ("C-c n j" . org-journal-new-entry)
        :custom
        (org-journal-date-format "%A, %F")
-       (org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "brain/" "journal")))
-       (org-journal-file-format "%Y/%m/%Y-%m-%d.org"))
+       (org-journal-file-type 'yearly)
+       (org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "journal")))
+       (org-journal-file-format "%Y.org"))
    #+end_src
 
    I would like to use capture mode to generate some standard journal entries for daily, weekly, monthly and yearly reflections. This requires invoking a function when inserting the template because I have to understand and manipulate the structure a little bit.
