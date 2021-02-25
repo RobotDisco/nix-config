@@ -93,26 +93,6 @@
     };
   };
 
-  programs.zsh = {
-    enable = true;
-    enableAutosuggestions = true;
-    enableCompletion = true;
-    defaultKeymap = "emacs";
-
-    shellAliases = {
-      tdl = "tdocker login";
-      e = "$VISUAL";
-      killemacs = "emacsclient -e '(kill-emacs)'";
-      pgrep = "pgrep -a";
-      ls = "ls -FGh";
-      grep = "grep --colour=auto";
-      nix-install = "nix-env -f '<nixpkgs>' -iA";
-      nix-upgrade = if pkgs.stdenvNoCC.isLinux
-        then ""
-        else "sudo -i sh -c 'nix-channel --update && nix-env -iA nixpkgs.nix && launchctl remove org.nixos.nix-daemon && launchctl load /Library/LaunchDaemons/org.nixos.nix-daemon.plist'";
-    };
-  };
-
   # We need git's config found in a legacy place because of how certain devtools tooling
   # mounts it into dockerized tools.
   home.activation.gitConfigSymlink = config.lib.dag.entryAfter ["writeBoundary"] ''
