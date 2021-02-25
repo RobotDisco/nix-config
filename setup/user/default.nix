@@ -58,29 +58,6 @@
     forwardAgent = false;
 
     matchBlocks = {
-      "bastion pfsense cisco" = {
-        hostname = "192.168.20.2";
-        localForwards = [
-          {
-            bind.port = 4200;
-            host.address = "192.168.10.1";
-            host.port = 80;
-          }
-          {
-            bind.port = 4201;
-            host.address = "192.168.10.2";
-            host.port = 80;
-          }
-        ];
-      };
-      jails = {
-        hostname = "192.168.10.4";
-        proxyJump = "bastion";
-      };
-      docker = {
-        hostname = "192.168.10.50";
-        proxyJump = "bastion";
-      };
       "bastion01-tulip-prod" = {
         hostname = "34.192.243.137";
         user = "welladmin";
