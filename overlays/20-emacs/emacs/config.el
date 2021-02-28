@@ -482,8 +482,9 @@
   :bind ("C-c n j" . org-journal-new-entry)
   :custom
   (org-journal-date-format "%A, %F")
-  (org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "brain/" "journal")))
-  (org-journal-file-format "%Y/%m/%Y-%m-%d.org"))
+  (org-journal-file-type 'yearly)
+  (org-journal-dir (file-name-as-directory (concat gaelan/webdav-prefix "journal")))
+  (org-journal-file-format "%Y.org"))
 
 (defun gaelan/org-journal-find-location ()
   ;; Open today's journal, but specify a non-nil prefix argument in order to
