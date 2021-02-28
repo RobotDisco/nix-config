@@ -15,7 +15,7 @@
   environment.etc."nut/upsd.conf" = {
     text = "
 LISTEN 127.0.0.1
-#LISTEN 192.168.60.2
+LISTEN 192.168.10.3
 ";
     mode = "600";
   };
