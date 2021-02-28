@@ -3,7 +3,7 @@
 {
   power.ups = {
     enable = true;
-    mode = "standalone";
+    mode = "netserver";
     ups = {
       ups = {
         driver = "usbhid-ups";
@@ -43,4 +43,6 @@ SHUTDOWNCMD /run/current-system/sw/bin/poweroff
 ";
     mode = "600";
   };
+
+  networking.firewall.allowedTCPPorts = [ 3493 ];
 }
