@@ -3,7 +3,7 @@
 {
   power.ups = {
     enable = true;
-    mode = "standalone";
+    mode = "netserver";
     ups = {
       ups = {
         driver = "usbhid-ups";
@@ -15,7 +15,7 @@
   environment.etc."nut/upsd.conf" = {
     text = "
 LISTEN 127.0.0.1
-#LISTEN 192.168.60.2
+LISTEN 192.168.10.3
 ";
     mode = "600";
   };
@@ -43,4 +43,6 @@ SHUTDOWNCMD /run/current-system/sw/bin/poweroff
 ";
     mode = "600";
   };
+
+  networking.firewall.allowedTCPPorts = [ 3493 ];
 }
