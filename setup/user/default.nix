@@ -62,6 +62,23 @@
         hostname = "34.192.243.137";
         user = "welladmin";
       };
+      "bastion01-s5a-devstaging" = {
+        hostname = "34.233.233.36";
+        user = "welladmin";
+      };
+      "*.s5a.dev *.s5a.staging" = {
+        user = "welladmin";
+        proxyJump = "bastion01-s5a-devstaging";
+      };
+      "bastion01-s5a-prod" = {
+        user = "welladmin";
+        hostname = "34.233.233.36";
+      };
+      "*.s5a.prod" = {
+        user = "welladmin";
+        proxyJump = "bastion01-s5a-prod";
+      };
+
       tulip-servers = {
         host = "*.dev *.staging *.demo *.prod *.internal";
         proxyCommand = "ssh -q bastion01-tulip-prod -- /usr/local/bin/central_ssh.sh %h";
