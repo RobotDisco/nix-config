@@ -672,8 +672,10 @@
        (org-agenda-custom-commands
         '(("n" "Next Actions"
            ((todo "NEXT")))
-          ("p" "Unplanned Projects"
+          ("u" "Unplanned Projects"
            ((todo "PLAN")))
+          ("p" "All Projects"
+           ((tags-todo "project")))
           ("r" "Reoccuring Tasks"
            ((tags-todo "+CATEGORY=\"tickler\"")))
           ("i" "Inbox Items"
