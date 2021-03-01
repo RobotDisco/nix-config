@@ -496,6 +496,8 @@
   ;; will add the new entry as a child entry.
   (goto-char (point-min)))
 
+(use-package org-pomodoro)
+
 (use-package org-noter)
 
 (use-package org-bullets

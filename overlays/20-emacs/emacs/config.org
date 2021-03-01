@@ -819,6 +819,11 @@
        ;; will add the new entry as a child entry.
        (goto-char (point-min)))
    #+end_src
+** Org-Pomodoro
+Integrate a Pomodoro Technique into clocking in
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-pomodoro)
+#+end_src
 ** org-noter
    A package for annotating PDF, DOC files, and the like into org files.
    #+begin_src emacs-lisp :tangle yes
