@@ -381,8 +381,9 @@
 
   ;; Handy search views for agenda mode
   (org-agenda-custom-commands
-   '(("n" "Next Actions"
-      ((todo "NEXT")))
+   '(("n" "Current Actions"
+      ((todo "NEXT")
+       (todo "STARTED")))
      ("u" "Unplanned Projects"
       ((todo "PLAN")))
      ("p" "All Projects"
