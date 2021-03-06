@@ -504,6 +504,15 @@
   :after org
   :hook (org-mode . org-bullets-mode))
 
+(use-package org-gcal
+  :init
+  (load-library (concat user-emacs-directory "secrets.el"))
+  (setq org-gcal-client-id gaelan/gcal-client-id)
+  (setq org-gcal-client-secret gaelan/gcal-client-secret)
+  (setq org-gcal-file-alist
+        `(("gdcosta@gmail.com" . ,(concat gaelan/gtd-prefix "gcal/personal.org"))
+          ("gaelan@tulip.com" . ,(concat gaelan/gtd-prefix "gcal/work.org")))))
+
 (defun gaelan/org-replace-link-by-link-description ()
   "Replace an org link by its description; or if empty, its address.
 

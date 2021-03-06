@@ -98,7 +98,10 @@
     source = <dotfiles/overlays/20-emacs/emacs/config.el>;
     target = ".emacs.d/init.el";
   };
-
+  home.file.emacsSecrets = {
+    source = <dotfiles/overlays/20-emacs/emacs/secrets.el>;
+    target = ".emacs.d/secrets.el";
+  };
   home.file.xmobarConfig = {
     source = <dotfiles/setup/user/xmobarrc>;
     target = ".xmobarrc";

@@ -837,20 +837,17 @@ Integrate a Pomodoro Technique into clocking in
        :after org
        :hook (org-mode . org-bullets-mode))
    #+end_src
-** [Inactive] Org Mode / Google Calendar integration
-   In the past I tried and failed to use something that pulls appointment data from google calendar into my org mode.
-   #+begin_src emacs-lisp :tangle no
+** Org Mode / Google Calendar integration
+   Pull appointment data from google calendar into my org mode.
+   #+begin_src emacs-lisp :tangle yes
      (use-package org-gcal
        :init
-       (let* ((bwdata (elt (bitwarden-search "offlineimap") 0))
-	      (bwfields (gethash "fields" bwdata))
-	      (client-id (gethash "value" (elt bwfields 0)))
-	      (client-secret (gethash "value" (elt bwfields 1))))
-	 (setq-default 'org-gcal-client-id client-id)
-	 (setq-default 'org-gcal-client-secret client-secret))
-       (setq-default org-gcal-file-alist
-		     `(("gdcosta@gmail.com" . ,(concat webdav-prefix "gcal/personal.org"))
-		       ("gaelan@tulip.com" . ,(concat webdav-prefix "gcal/work.org")))))
+       (load-library (concat user-emacs-directory "secrets.el"))
+       (setq org-gcal-client-id gaelan/gcal-client-id)
+       (setq org-gcal-client-secret gaelan/gcal-client-secret)
+       (setq org-gcal-file-alist
+             `(("gdcosta@gmail.com" . ,(concat gaelan/gtd-prefix "gcal/personal.org"))
+               ("gaelan@tulip.com" . ,(concat gaelan/gtd-prefix "gcal/work.org")))))
    #+end_src
 ** Some custom helper functions
    #+begin_src emacs-lisp :tangle yes
