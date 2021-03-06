@@ -1,0 +1,1 @@
+overlays/20-emacs/emacs/secrets.el filter=git-crypt diff=git-crypt
