@@ -579,7 +579,7 @@
 (use-package smartparens
   :config
   (require 'smartparens-config)
-  (sp-use-smartparens-bindings))
+  (show-smartparens-global-mode +1))
 
 (defun gaelan/generic-lisp-mode-hook ()
   "Mode hook when working in any Lisp."

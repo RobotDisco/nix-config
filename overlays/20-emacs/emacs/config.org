@@ -973,9 +973,9 @@ Vterm is a library that allows for a nice terminal emulator over the builtin env
 
     #+begin_src emacs-lisp :tangle yes
       (use-package smartparens
-	:config
-	(require 'smartparens-config)
-	(sp-use-smartparens-bindings))
+        :config
+        (require 'smartparens-config)
+        (show-smartparens-global-mode +1))
     #+end_src
 *** Generic Lisp hook
     There are some things we always want to enable when entering the editor mode for any lisp
