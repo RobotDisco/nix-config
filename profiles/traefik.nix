@@ -62,5 +62,5 @@
   };
 
   networking.firewall.checkReversePath = "loose";
-  networking.firewall.allowedTCPPorts = [ 8080 80 443 ];
+  networking.firewall.allowedTCPPorts = [ 8080 80 443 3000 ];
 }
