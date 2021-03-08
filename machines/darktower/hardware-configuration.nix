@@ -45,7 +45,7 @@
       rstp = true;
     };
     br-trunk = {
-      interfaces = [ "enp5s0f0" ];
+      interfaces = [ "enp6s0f0" ];
       rstp = true;
     };
   };
