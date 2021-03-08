@@ -31,6 +31,8 @@
       fsType = "nfs";
     };
 
+    networking.firewall.allowedTCPPorts = [ 2222 ];
+
     containers.git = {
       bindMounts = {
         "/srv/git" = {
@@ -71,13 +73,22 @@
             repositoryRoot = "/srv/git/repositories";
             enable = true;
             disableRegistration = true;
+            httpAddress = "127.0.0.1";
           };
+
+          services.openssh = {
+            enable = true;
+            ports = [ 2222 ];
+            allowSFTP = false;
+          };
+
+          services.sshguard.enable = true;
         };
     };
 
-    networking.nat.enable = true;
-    networking.nat.internalInterfaces = ["ve-+"];
-    networking.nat.externalInterface = "vlan50";
+    #networking.nat.enable = true;
+    #networking.nat.internalInterfaces = ["ve-+"];
+    #networking.nat.externalInterface = "vlan50";
   };
 
   salusa1 = {
