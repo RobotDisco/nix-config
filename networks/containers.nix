@@ -56,6 +56,7 @@
       ../profiles/baseline.nix
       ../profiles/ssh.nix
       ../profiles/users.nix
+      ../profiles/mta.nix
     ];
   };
 }

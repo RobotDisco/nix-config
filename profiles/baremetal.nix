@@ -8,6 +8,12 @@
       "-A /var/log/smartd/"
       "-i 3600"
     ];
+    notifications = {
+      test = true;
+      mail.sender = "root@robot-disco.net";
+      mail.enable = true;
+      mail.recipient = "gdcosta@gmail.com";
+    };
   };
 
   # Scrub all ZFS pools monthly
