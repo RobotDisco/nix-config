@@ -84,6 +84,26 @@
         proxyCommand = "ssh -q bastion01-tulip-prod -- /usr/local/bin/central_ssh.sh %h";
         user = "welladmin";
       };
+
+      db01-timekit-prod= {
+        hostname = "104.236.178.35";
+        user = "forge";
+      };
+
+      db02-timekit-prod = {
+        hostname="143.110.224.127";
+        user = "forge";
+      };
+
+      api-timekit-prod = {
+        hostname="104.131.159.91";
+        user = "forge";
+      };
+
+      api-timekit-staging = {
+        hostname="104.236.145.40";
+        user = "forge";
+      };
     };
   };
 
