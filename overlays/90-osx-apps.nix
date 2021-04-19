@@ -155,4 +155,16 @@ self: super: {
     description = "The next-generation paper tablet.";
     homepage = "https://remarkable.com";
   };
+
+  Tidal = self.installApplication rec {
+    name = "TIDAL";
+    version = "2.27.6.234";
+    sourceRoot = "TIDAL.app";
+    src = super.fetchurl {
+      url = "https://download.tidal.com/desktop/TIDAL.dmg";
+      sha256 = "0v5s6bwna2jhks4721fn1x3f6yhzgwbn5skimj8rgd4jp85i2h56";
+    };
+    description = "70+ million songs. Ad-free.";
+    homepage = "https://tidal.com";
+  };
 }

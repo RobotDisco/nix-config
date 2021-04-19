@@ -9,7 +9,7 @@
   environment.systemPackages = with pkgs; [
     Bitwarden
     # Calibre # Uses an APFS dmg which isn't supported by undmg
-    Deezer
+    # Deezer
     Discord
     Firefox
     Kobo
@@ -18,6 +18,7 @@
     Signal
     Slack
     Steam
+    Tidal
   ];
 
   # Spotlight (and Alfred) don't index symlinks, and the ~/Applications and/or
