@@ -23,7 +23,7 @@ self: super: {
 
   Calibre = self.installApplication rec {
     name = "Calibre";
-    version = "4.22.0";
+    version = "5.14.0";
     sourceRoot = "Calibre.app";
     src = super.fetchurl {
       url = "https://download.calibre-ebook.com/${version}/calibre-${version}.dmg";
@@ -37,11 +37,11 @@ self: super: {
 
   Slack = self.installApplication rec {
     name = "Slack";
-    version = "4.12.2";
+    version = "4.15.0";
     sourceRoot = "Slack.app";
     src = super.fetchurl {
       url = "https://downloads.slack-edge.com/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-      sha256 = "0qflv2glfy7d77zjgqi7qcjr53c9dni26gmqkg9vk2xijmmd3xy7";
+      sha256 = "12mfha0f7nciszsv7fb0zk4y10p63mh7kaw8gbk3q2fmyp8aij6l";
     };
     description = "Slack is the collaboration hub that brings the right people, information, and tools together to get work done.";
     homepage = https://slack.com;
@@ -49,11 +49,11 @@ self: super: {
 
   Bitwarden = self.installApplication rec {
     name = "Bitwarden";
-    version = "1.23.1";
+    version = "1.25.1";
     sourceRoot = "Bitwarden.app";
     src = super.fetchurl {
       url = "https://github.com/bitwarden/desktop/releases/download/v${version}/Bitwarden-${version}.dmg";
-      sha256 = "f5cdea985961f968073b272cb5c435219be861aead77ae09d4776215a57f8d6f";
+      sha256 = "0m897d0rhkxwcvzdhylwk1b86mzyislrkkzxk59c4jpj573v4s7s";
     };
     description = "Bitwarden helps you generate, save and manage your passwords safely and securely.";
     homepage = https://bitwarden.com;
@@ -61,11 +61,11 @@ self: super: {
 
   Firefox = self.installApplication rec {
     name = "Firefox";
-    version = "84.0";
+    version = "87.0";
     sourceRoot = "Firefox.app";
     src = super.fetchurl {
       url = "https://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/mac/en-CA/Firefox%20${version}.dmg";
-      sha256 = "0zkvlslv5n401hxylivj8yv5mpkhkfkmd85jj6d46pa2r0y2b18p";
+      sha256 = "115kj04ap6622iaw75fxqi6rvj5k6hrqxi9igxsxb8ghhdh62frq";
       name = "Firefox-${version}.dmg";
     };
     description = "The browser that respects your privacy";
@@ -98,11 +98,11 @@ self: super: {
 
   Signal = self.installApplication rec {
     name = "Signal";
-    version = "1.39.6";
+    version = "5.0.0";
     sourceRoot = "Signal.app";
     src = super.fetchurl {
       url = "https://updates.signal.org/desktop/signal-desktop-mac-${version}.dmg";
-      sha256 = "0sayvjimxavd4c4h7n4i78rny4nk94cnlblwq90kw0ypfkx8garf";
+      sha256 = "09ag5mmpx7vqz5dg2fd89sgj6y89q4kin7rnn5zjsbyig6m6xp0y";
     };
     description = "State-of-the-art end-to-end encryption";
     homepage = "https://www.signal.org/";
@@ -134,7 +134,7 @@ self: super: {
 
   Discord = self.installApplication rec {
     name = "Discord";
-    version = "0.0.261";
+    version = "0.0.262";
     sourceRoot = "Discord.app";
     src = super.fetchurl {
       url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
