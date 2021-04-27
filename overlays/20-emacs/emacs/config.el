@@ -522,7 +522,14 @@
   ;; will add the new entry as a child entry.
   (goto-char (point-min)))
 
-(use-package org-pomodoro)
+(use-package org-pomodoro
+  :init
+  (setq org-pomodoro-start-spound (concat user-emacs-directory "ds9intercom.mp3")
+        org-pomodoro-finished-sound (concat user-emacs-directory "ds9intercom.mp3")
+        org-pomodoro-overtime-sound (concat user-emacs-directory "ds9intercom.mp3")
+        org-pomodoro-short-break-sound (concat user-emacs-directory "ds9intercom.mp3")
+        org-pomodoro-long-break-sound (concat user-emacs-directory "computerbeepsequence1.mp3")
+        org-pomodoro-ticking-sound (concat user-emacs-directory "incoming_hail2.mp3")))
 
 (use-package org-noter)
 
