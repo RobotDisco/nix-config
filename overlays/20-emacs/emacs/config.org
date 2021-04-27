@@ -718,7 +718,35 @@
        :init
        (add-to-list 'org-modules 'org-habit))
    #+end_src
+** Org Ref
+Webs of knowledge will often cite sources, so we'll use the industry-standard bibtex format for collecting and referencing primary texts
 
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-ref
+    :init
+    ;; Set where my general citation souce doc is, and some
+    ;; additive information.
+    ;; TODO Unsure if I need or want to use this PDF reference setting.
+    (setq reftex-default-bibliography (list (concat gaelan/brain-prefix
+                                              "bibliography/references.bib")))
+    (setq org-ref-bibliography-notes (concat gaelan/brain-prefix
+                                             "bibliography/notes.org")
+          org-ref-default-bibliography (list (concat gaelan/brain-prefix
+                                               "bibliography/references.bib"))
+          org-ref-pdf-directory (concat gaelan/brain-prefix
+                                        "bibliography/bibtex-pdfs")))
+
+  (use-package helm-bibtex
+    :after (helm)
+    :init
+    ;; org-ref and helm-bibtext seem to point to the same thing.
+    (setq bibtex-completion-notes-path (concat gaelan/brain-prefix
+                                             "bibliography/notes.org")
+          bibtex-completion-bibliography (concat gaelan/brain-prefix
+                                               "bibliography/references.bib")
+          bibtex-completion-library-path (concat gaelan/brain-prefix
+                                        "bibliography/bibtex-pdfs")))
+#+end_src
 ** Org Roam
    This seems to be the most promising way to deal with knowledge management, taking notes, things like that.
    It follows some kind of funky process called the [[https://zettelkasten.de/posts/overview/][Zettelkasten]] method, and it seems designed to integrate nicely with tools I already use (org-journal) while not requiring a lot of work to convert existing org-mode files over.

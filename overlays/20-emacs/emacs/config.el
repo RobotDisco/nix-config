@@ -420,6 +420,31 @@
   :init
   (add-to-list 'org-modules 'org-habit))
 
+(use-package org-ref
+  :init
+  ;; Set where my general citation souce doc is, and some
+  ;; additive information.
+  ;; TODO Unsure if I need or want to use this PDF reference setting.
+  (setq reftex-default-bibliography (list (concat gaelan/brain-prefix
+                                            "bibliography/references.bib")))
+  (setq org-ref-bibliography-notes (concat gaelan/brain-prefix
+                                           "bibliography/notes.org")
+        org-ref-default-bibliography (list (concat gaelan/brain-prefix
+                                             "bibliography/references.bib"))
+        org-ref-pdf-directory (concat gaelan/brain-prefix
+                                      "bibliography/bibtex-pdfs")))
+
+(use-package helm-bibtex
+  :after (helm)
+  :init
+  ;; org-ref and helm-bibtext seem to point to the same thing.
+  (setq bibtex-completion-notes-path (concat gaelan/brain-prefix
+                                           "bibliography/notes.org")
+        bibtex-completion-bibliography (concat gaelan/brain-prefix
+                                             "bibliography/references.bib")
+        bibtex-completion-library-path (concat gaelan/brain-prefix
+                                      "bibliography/bibtex-pdfs")))
+
 (use-package org-roam
   :init
   (setq org-roam-directory gaelan/brain-prefix
