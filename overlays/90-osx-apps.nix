@@ -37,7 +37,7 @@ self: super: {
 
   Slack = self.installApplication rec {
     name = "Slack";
-    version = "4.15.0";
+    version = "4.16.2";
     sourceRoot = "Slack.app";
     src = super.fetchurl {
       url = "https://downloads.slack-edge.com/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
@@ -49,7 +49,7 @@ self: super: {
 
   Bitwarden = self.installApplication rec {
     name = "Bitwarden";
-    version = "1.25.1";
+    version = "1.26.0";
     sourceRoot = "Bitwarden.app";
     src = super.fetchurl {
       url = "https://github.com/bitwarden/desktop/releases/download/v${version}/Bitwarden-${version}.dmg";
@@ -61,11 +61,11 @@ self: super: {
 
   Firefox = self.installApplication rec {
     name = "Firefox";
-    version = "87.0";
+    version = "88.0.1";
     sourceRoot = "Firefox.app";
     src = super.fetchurl {
       url = "https://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/mac/en-CA/Firefox%20${version}.dmg";
-      sha256 = "115kj04ap6622iaw75fxqi6rvj5k6hrqxi9igxsxb8ghhdh62frq";
+      sha256 = "0k09d92d06jm7589bac1jjjlz3lvmw321a5lg1lnn076qkla70qv";
       name = "Firefox-${version}.dmg";
     };
     description = "The browser that respects your privacy";
@@ -98,7 +98,7 @@ self: super: {
 
   Signal = self.installApplication rec {
     name = "Signal";
-    version = "5.0.0";
+    version = "5.1.0";
     sourceRoot = "Signal.app";
     src = super.fetchurl {
       url = "https://updates.signal.org/desktop/signal-desktop-mac-${version}.dmg";
@@ -146,7 +146,7 @@ self: super: {
 
   Remarkable = self.installApplication rec {
     name = "Remarkable";
-    version = "2.5.0";
+    version = "2.7.1.162";
     sourceRoot = "Remarkable.app";
     src = super.fetchurl {
       url = "https://downloads.remarkable.com/desktop/production/mac/reMarkable-${version}.dmg";
