@@ -79,6 +79,15 @@
         proxyJump = "bastion01-s5a-prod";
       };
 
+      "bastion01-michaelkors-prod" = {
+        user = "welladmin";
+        hostname = "34.203.100.128";
+      };
+      "*.michaelkors.prod" = {
+        user = "welladmin";
+        proxyJump = "bastion01-michaelkors-prod";
+      };
+
       tulip-servers = {
         host = "*.dev *.staging *.demo *.prod *.internal";
         proxyCommand = "ssh -q bastion01-tulip-prod -- /usr/local/bin/central_ssh.sh %h";
