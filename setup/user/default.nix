@@ -79,6 +79,14 @@
         proxyJump = "bastion01-s5a-prod";
       };
 
+      "bastion01-michaelkors-devstaging" = {
+        user = "welladmin";
+        hostname = "34.204.211.250";
+      };
+      "*.michaelkors.dev *.michaelkors.staging" = {
+        user = "welladmin";
+        proxyJump = "bastion01-michaelkors-devstaging";
+      };
       "bastion01-michaelkors-prod" = {
         user = "welladmin";
         hostname = "34.203.100.128";
