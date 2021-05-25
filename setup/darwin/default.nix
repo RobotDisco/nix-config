@@ -47,7 +47,7 @@
       echo "Linking $f"
       src=$(/usr/bin/stat -f%Y $f)
       appname="$(basename $src)"
-      osascript -e "do shell script \"/bin/rm /Applications/$appname\"";
+      osascript -e "do shell script \"/bin/rm -rf /Applications/$appname\"";
       osascript -e "tell app \"Finder\" to make alias file at POSIX file \"/Applications/\" to POSIX file \"$src\" with properties {name: \"$appname\"}";
       done
     ''
