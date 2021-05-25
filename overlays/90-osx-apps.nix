@@ -41,7 +41,7 @@ self: super: {
     sourceRoot = "Slack.app";
     src = super.fetchurl {
       url = "https://downloads.slack-edge.com/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-      sha256 = "12mfha0f7nciszsv7fb0zk4y10p63mh7kaw8gbk3q2fmyp8aij6l";
+      sha256 = "1chl7fksf988v1xvpvrjdqfk8v1yqaz6bhzf1zp5drv2q1q9ngld";
     };
     description = "Slack is the collaboration hub that brings the right people, information, and tools together to get work done.";
     homepage = https://slack.com;
@@ -53,7 +53,7 @@ self: super: {
     sourceRoot = "Bitwarden.app";
     src = super.fetchurl {
       url = "https://github.com/bitwarden/desktop/releases/download/v${version}/Bitwarden-${version}.dmg";
-      sha256 = "0m897d0rhkxwcvzdhylwk1b86mzyislrkkzxk59c4jpj573v4s7s";
+      sha256 = "1bnv1hx29605dnywiw9lz67qy7dm26vbc4c5zcfkxgm5ab23qa6r";
     };
     description = "Bitwarden helps you generate, save and manage your passwords safely and securely.";
     homepage = https://bitwarden.com;
@@ -65,7 +65,7 @@ self: super: {
     sourceRoot = "Firefox.app";
     src = super.fetchurl {
       url = "https://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/mac/en-CA/Firefox%20${version}.dmg";
-      sha256 = "0k09d92d06jm7589bac1jjjlz3lvmw321a5lg1lnn076qkla70qv";
+      sha256 = "03wch82bz5vq1g167msxhyfnl0pai14iqydcvs9jnrzyh858f9hg";
       name = "Firefox-${version}.dmg";
     };
     description = "The browser that respects your privacy";
@@ -98,11 +98,11 @@ self: super: {
 
   Signal = self.installApplication rec {
     name = "Signal";
-    version = "5.1.0";
+    version = "5.2.1";
     sourceRoot = "Signal.app";
     src = super.fetchurl {
       url = "https://updates.signal.org/desktop/signal-desktop-mac-${version}.dmg";
-      sha256 = "09ag5mmpx7vqz5dg2fd89sgj6y89q4kin7rnn5zjsbyig6m6xp0y";
+      sha256 = "1ibr136gkz71vkcqyjhrg72lrhqrg29ryy48i4x647xpzcz78gxs";
     };
     description = "State-of-the-art end-to-end encryption";
     homepage = "https://www.signal.org/";
@@ -150,7 +150,7 @@ self: super: {
     sourceRoot = "Remarkable.app";
     src = super.fetchurl {
       url = "https://downloads.remarkable.com/desktop/production/mac/reMarkable-${version}.dmg";
-      sha256 = "17s3nfn7xfz939ap7zrvbng8ssc992spdm6nsjhzhfn34fhl4qpc";
+      sha256 = "16rpjmh666mpwgm6jcm26z8dxlmncbqvy777qbpzknkx3bxnhrcq";
     };
     description = "The next-generation paper tablet.";
     homepage = "https://remarkable.com";
