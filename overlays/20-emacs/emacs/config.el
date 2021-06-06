@@ -428,6 +428,7 @@
   (org-roam-db-location (if gaelan/*is-osx*
                             (concat gaelan/brain-prefix "/db/osx.db")
                           (concat gaelan/brain-prefix "/db/linux.db")))
+  (org-roam-tag-sources '(prop last-directory))
   :bind (:map org-roam-mode-map
               (("C-c n l" . org-roam)
               ("C-c n f" . org-roam-find-file)
@@ -445,6 +446,11 @@
   (deft-default-extension "org")
   (deft-directory (concat gaelan/brain-prefix)))
 
+(use-package helm-bibtex
+  :custom
+  (bibtex-completion-bibliography (concat gaelan/brain-prefix "/literature-note/references.bib"))
+  :after helm)
+
 (use-package org-roam-bibtex
   :after org-roam
   :hook (org-roam-mode . org-roam-bibtex-mode)
@@ -452,6 +458,23 @@
   (orb-insert-interface 'helm-bibtex)
   (orb-file-field-extensions '("pdf" "epub"))
   (orb-note-actions-interface 'helm)
+  (orb-templates
+   '(("r" "ref" plain (function org-roam-capture--get-point)
+      ""
+      :file-name "literature-note/${citekey}"
+      :head "#+TITLE: ${citekey}: ${title}\n#+ROAM_KEY: ${ref}
+
+- tags ::
+- keywords :: ${keywords}
+
+* ${title}
+:PROPERTIES:
+:Custom_ID: ${citekey}
+:URL: ${url}
+:AUTHOR: ${author-or-editor}
+:NOTER_DOCUMENT: ${file}
+:NOTER_PAGE:
+:END:")))
   :config
   (require 'org-ref))
 
