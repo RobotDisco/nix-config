@@ -49,11 +49,11 @@ self: super: {
 
   Bitwarden = self.installApplication rec {
     name = "Bitwarden";
-    version = "1.26.0";
+    version = "1.26.5";
     sourceRoot = "Bitwarden.app";
     src = super.fetchurl {
       url = "https://github.com/bitwarden/desktop/releases/download/v${version}/Bitwarden-${version}.dmg";
-      sha256 = "1bnv1hx29605dnywiw9lz67qy7dm26vbc4c5zcfkxgm5ab23qa6r";
+      sha256 = "0nv905mvxvzgnsa2g913fj8bcxbpz6s1hhl44l368bqc5sz0kdjq";
     };
     description = "Bitwarden helps you generate, save and manage your passwords safely and securely.";
     homepage = https://bitwarden.com;
@@ -61,11 +61,11 @@ self: super: {
 
   Firefox = self.installApplication rec {
     name = "Firefox";
-    version = "88.0.1";
+    version = "89.0";
     sourceRoot = "Firefox.app";
     src = super.fetchurl {
       url = "https://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/mac/en-CA/Firefox%20${version}.dmg";
-      sha256 = "03wch82bz5vq1g167msxhyfnl0pai14iqydcvs9jnrzyh858f9hg";
+      sha256 = "1p83c1q3v6czba7612lk57rrilwyclv3jd9837qwv09wahmlcxm7";
       name = "Firefox-${version}.dmg";
     };
     description = "The browser that respects your privacy";
@@ -86,11 +86,11 @@ self: super: {
 
   SeafileClient = self.installApplication rec {
     name = "SeafileClient";
-    version = "7.0.10";
+    version = "8.0.2";
     sourceRoot = "Seafile\ Client.app";
     src = super.fetchurl {
       url = "https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-client-${version}.dmg";
-      sha256 = "f56c3f9d9aa3295e74ee9c08fe852f489188b14065af43f8d1f35aa9f0f53d36";
+      sha256 = "19arxbms1d3apj2il0i83s53iflzap6c1fsxhskwja3bwha3znzv";
     };
     description = "Seafile is an open source enterprise file sync and share platform with high reliability and performance.";
     homepage = "https://seafile.com";
@@ -98,11 +98,11 @@ self: super: {
 
   Signal = self.installApplication rec {
     name = "Signal";
-    version = "5.2.1";
+    version = "5.4.0";
     sourceRoot = "Signal.app";
     src = super.fetchurl {
       url = "https://updates.signal.org/desktop/signal-desktop-mac-${version}.dmg";
-      sha256 = "1ibr136gkz71vkcqyjhrg72lrhqrg29ryy48i4x647xpzcz78gxs";
+      sha256 = "0rkbg67kajhykdsx799ljphbz00fak9dyyp4sxl12sdv77ajzc8j";
     };
     description = "State-of-the-art end-to-end encryption";
     homepage = "https://www.signal.org/";
