@@ -448,6 +448,10 @@
 (use-package org-roam-bibtex
   :after org-roam
   :hook (org-roam-mode . org-roam-bibtex-mode)
+  :custom
+  (orb-insert-interface 'helm-bibtex)
+  (orb-file-field-extensions '("pdf" "epub"))
+  (orb-note-actions-interface 'helm)
   :config
   (require 'org-ref))
 
