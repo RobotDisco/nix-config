@@ -420,79 +420,21 @@
   :init
   (add-to-list 'org-modules 'org-habit))
 
-(use-package org-ref
-  :init
-  ;; Set where my general citation souce doc is, and some
-  ;; additive information.
-  ;; TODO Unsure if I need or want to use this PDF reference setting.
-  (setq reftex-default-bibliography (list (concat gaelan/brain-prefix
-                                            "bibliography/references.bib")))
-  (setq org-ref-bibliography-notes (concat gaelan/brain-prefix
-                                           "bibliography/notes.org")
-        org-ref-default-bibliography (list (concat gaelan/brain-prefix
-                                             "bibliography/references.bib"))
-        org-ref-pdf-directory (concat gaelan/brain-prefix
-                                      "bibliography/bibtex-pdfs")))
-
-(use-package helm-bibtex
-  :after (helm)
-  :init
-  ;; org-ref and helm-bibtext seem to point to the same thing.
-  (setq bibtex-completion-notes-path (concat gaelan/brain-prefix
-                                           "bibliography/notes.org")
-        bibtex-completion-bibliography (concat gaelan/brain-prefix
-                                             "bibliography/references.bib")
-        bibtex-completion-library-path (concat gaelan/brain-prefix
-                                      "bibliography/bibtex-pdfs")))
-
 (use-package org-roam
-  :init
-  (setq org-roam-directory gaelan/brain-prefix
-        org-roam-completion-system 'helm
-        ;; I don't care about graphing daily notes, tasks, or historical stuff
-        org-roam-graph-exclude-matcher '("journal")
-        org-roam-capture-templates '(("d" "default" plain (function org-roam--capture-get-point)
-                                      "%?"
-                                      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                                      :head "#+title: ${title}\n"
-                                      :unnarrowed t)
-                                     ("f" "fleeting" plain (function org-roam--capture-get-point)
-                                      "%?"
-                                      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                                      :head "#+title: ${title}\n#+roam_tags: fleeting-note\n"
-                                      :unnarrowed t)
-                                     ("l" "literature" plain (function org-roam--capture-get-point)
-                                      "%?"
-                                      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-                                      :head "#+title: ${title}\n#+roam_tags: literature-note\n"
-                                      :unnarrowed t)))
-  (setq org-roam-db-location (if gaelan/*is-osx*
-                                 (concat org-roam-directory "/db/osx.db")
-                               (concat org-roam-directory "/db/linux.db")))
-  (add-hook 'after-init-hook 'org-roam-mode)
+  :hook (after-init . org-roam-mode)
+  :custom
+  (org-roam-directory gaelan/brain-prefix)
+  (org-roam-completion-system 'helm)
+  (org-roam-db-location (if gaelan/*is-osx*
+                            (concat gaelan/brain-prefix "/db/osx.db")
+                          (concat gaelan/brain-prefix "/db/linux.db")))
   :bind (:map org-roam-mode-map
-              ("C-c n l" . org-roam)
+              (("C-c n l" . org-roam)
               ("C-c n f" . org-roam-find-file)
-              ("C-c n g" . org-roam-graph-show)
+              ("C-c n g" . org-roam-graph))
               :map org-mode-map
-              ("C-c n i" . org-roam-insert)
-              ("C-c n I" . org-roam-insert-immediate))
-  :config
-  ;;  org-roam-protocol is used to handle weblinks (e.g. org-roam-server)
-  (require 'org-roam-protocol))
-
-(use-package org-roam-server
-  :after org-roam
-  :config
-  (setq org-roam-server-host "127.0.0.1"
-	org-roam-server-port 8080
-	org-roam-server-export-inline-images t
-	org-roam-server-authenticate nil
-	org-roam-server-network-poll t
-	org-roam-server-network-arrows nil
-	org-roam-server-network-label-truncate t
-	org-roam-server-network-label-truncate-length 60
-	org-roam-server-network-label-wrap-length 20))
+              (("C-c n i" . org-roam-insert)
+              ("C-c n I" . org-roam-insert-immediate))))
 
 (use-package deft
   :after org
@@ -503,7 +445,11 @@
   (deft-default-extension "org")
   (deft-directory (concat gaelan/brain-prefix)))
 
-(winner-mode +1)
+(use-package org-roam-bibtex
+  :after org-roam
+  :hook (org-roam-mode . org-roam-bibtex-mode)
+  :config
+  (require 'org-ref))
 
 (use-package org-journal
   :after org
