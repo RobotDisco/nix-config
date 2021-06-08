@@ -37,11 +37,11 @@ self: super: {
 
   Slack = self.installApplication rec {
     name = "Slack";
-    version = "4.16.2";
+    version = "4.17.0";
     sourceRoot = "Slack.app";
     src = super.fetchurl {
       url = "https://downloads.slack-edge.com/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
-      sha256 = "1chl7fksf988v1xvpvrjdqfk8v1yqaz6bhzf1zp5drv2q1q9ngld";
+      sha256 = "0r5cafxw73qnn14ljprn7w8bfn67zbkcniq60k9pf2zbqgb4cyj9";
     };
     description = "Slack is the collaboration hub that brings the right people, information, and tools together to get work done.";
     homepage = https://slack.com;
