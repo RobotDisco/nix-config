@@ -102,22 +102,22 @@
         user = "welladmin";
       };
 
-      db01-timekit-prod= {
-        hostname = "104.236.178.35";
-        user = "forge";
-      };
-
       db02-timekit-prod = {
         hostname="143.110.224.127";
         user = "forge";
       };
 
-      api-timekit-prod = {
+      api01-timekit-prod = {
         hostname="104.131.159.91";
         user = "forge";
       };
 
-      api-timekit-staging = {
+      api02-timekit-prod = {
+        hostname="164.90.247.44";
+        user = "forge";
+      };
+
+      api01-timekit-staging = {
         hostname="104.236.145.40";
         user = "forge";
       };
