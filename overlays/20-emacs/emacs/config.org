@@ -762,11 +762,14 @@ With the Zettelkasten process we want our literature notes in org-roam. There's 
     :custom
     (bibtex-completion-bibliography (concat gaelan/brain-prefix "/literature-note/references.bib"))
     :after helm)
-
+  
   (use-package org-roam-bibtex
     :after org-roam
+    :bind ("C-c n a" . orb-note-actions)
     :hook (org-roam-mode . org-roam-bibtex-mode)
     :custom
+    (orb-preformat-keywords '("citekey" "title" "url" "keywords" "author-or-editor" "file"))
+    (org-process-file-keyword t)
     (orb-insert-interface 'helm-bibtex)
     (orb-file-field-extensions '("pdf" "epub"))
     (orb-note-actions-interface 'helm)
@@ -775,10 +778,10 @@ With the Zettelkasten process we want our literature notes in org-roam. There's 
         ""
         :file-name "literature-note/${citekey}"
         :head "#+TITLE: ${citekey}: ${title}\n#+ROAM_KEY: ${ref}
-
+  
   - tags ::
   - keywords :: ${keywords}
-
+  
   ,* ${title}
   :PROPERTIES:
   :Custom_ID: ${citekey}
@@ -786,7 +789,8 @@ With the Zettelkasten process we want our literature notes in org-roam. There's 
   :AUTHOR: ${author-or-editor}
   :NOTER_DOCUMENT: ${file}
   :NOTER_PAGE:
-  :END:")))
+  :END:"
+        :unnarrowed t)))
     :config
     (require 'org-ref))
 #+end_src

@@ -453,8 +453,11 @@
 
 (use-package org-roam-bibtex
   :after org-roam
+  :bind ("C-c n a" . orb-note-actions)
   :hook (org-roam-mode . org-roam-bibtex-mode)
   :custom
+  (orb-preformat-keywords '("citekey" "title" "url" "keywords" "author-or-editor" "file"))
+  (org-process-file-keyword t)
   (orb-insert-interface 'helm-bibtex)
   (orb-file-field-extensions '("pdf" "epub"))
   (orb-note-actions-interface 'helm)
@@ -474,7 +477,8 @@
 :AUTHOR: ${author-or-editor}
 :NOTER_DOCUMENT: ${file}
 :NOTER_PAGE:
-:END:")))
+:END:"
+      :unnarrowed t)))
   :config
   (require 'org-ref))
 
