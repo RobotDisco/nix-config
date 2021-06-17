@@ -72,7 +72,7 @@
       };
       "bastion01-s5a-prod" = {
         user = "welladmin";
-        hostname = "34.233.233.36";
+        hostname = "35.169.186.80";
       };
       "*.s5a.prod" = {
         user = "welladmin";
@@ -94,12 +94,6 @@
       "*.michaelkors.prod" = {
         user = "welladmin";
         proxyJump = "bastion01-michaelkors-prod";
-      };
-
-      tulip-servers = {
-        host = "*.dev *.staging *.demo *.prod *.internal";
-        proxyCommand = "ssh -q bastion01-tulip-prod -- /usr/local/bin/central_ssh.sh %h";
-        user = "welladmin";
       };
 
       db02-timekit-prod = {
