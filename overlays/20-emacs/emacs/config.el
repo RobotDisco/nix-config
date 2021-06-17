@@ -443,16 +443,21 @@
      ("f" "fleeting" plain (function org-roam--capture-get-point)
       "%?"
       :file-name "%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+title: ${title}\n#+roam_tags: fleeting-note\n"
+      :head "#+title: ${title}\n#+roam_tags: fleeting\n"
+      :unnarrowed t)
+     ("t" "topic" plain (function org-roam--capture-get-point)
+      "%?"
+      :file-name "%<%Y%m%d%H%M%S>-${slug}"
+      :head "#+title: ${title}\n#+roam_tags: topic"
       :unnarrowed t)))
   (org-roam-tag-sources '(prop last-directory))
   :bind (:map org-roam-mode-map
               (("C-c n l" . org-roam)
-              ("C-c n f" . org-roam-find-file)
-              ("C-c n g" . org-roam-graph))
+               ("C-c n f" . org-roam-find-file)
+               ("C-c n g" . org-roam-graph))
               :map org-mode-map
               (("C-c n i" . org-roam-insert)
-              ("C-c n I" . org-roam-insert-immediate))))
+               ("C-c n I" . org-roam-insert-immediate))))
 
 (use-package deft
   :after org
