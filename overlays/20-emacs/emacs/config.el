@@ -333,6 +333,14 @@
   (variable-pitch-mode 1)
   (visual-line-mode))
 
+(defun gaelan/org-journal-find-location ()
+  ;; Open today's journal, but specify a non-nil prefix argument in order to
+  ;; inhibit inserting the heading; org-capture will insert the heading.
+  (org-journal-new-entry t)
+  (unless (eq org-journal-file-type 'daily)
+    (org-narrow-to-subtree))
+  (goto-char (point-max)))
+
 (use-package org
   :pin org
   :hook
@@ -358,12 +366,10 @@
   (org-capture-templates
    `(("t" "Todo" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
       "* TODO %?")
-     ("p" "Project" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
-      "* [/] %? :project:")
      ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
       "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
      ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
-      "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What things did I accomplish today?\n   1. %?\n** What did I learn?\n** What did I do to help my future?\n** What did I do to help others?\n")
+      "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What were my wins today?\n   1. %?\n** What did I learn today?\n** What did not go according to plan today?\n** What did I do to help my future?\n** What did I do to help others?\n")
      ("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
       "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week? What can you work on this week?\n** What can you learn this week?")
      ("m" "Monthly Reflection" entry (function gaelan/org-journal-find-location)
