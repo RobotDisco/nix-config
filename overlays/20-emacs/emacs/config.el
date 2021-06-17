@@ -470,7 +470,7 @@
 
 (use-package helm-bibtex
   :custom
-  (bibtex-completion-bibliography (concat gaelan/brain-prefix "/literature-note/references.bib"))
+  (bibtex-completion-bibliography (concat gaelan/brain-prefix "/literature/references.bib"))
   :after helm)
 
 (use-package org-roam-bibtex
@@ -486,7 +486,7 @@
   (orb-templates
    '(("r" "ref" plain (function org-roam-capture--get-point)
       ""
-      :file-name "literature-note/${citekey}"
+      :file-name "literature/${citekey}"
       :head "#+TITLE: ${citekey}: ${title}\n#+ROAM_KEY: ${ref}
 
 - tags ::

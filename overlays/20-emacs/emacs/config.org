@@ -782,7 +782,7 @@ With the Zettelkasten process we want our literature notes in org-roam. There's 
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-bibtex
     :custom
-    (bibtex-completion-bibliography (concat gaelan/brain-prefix "/literature-note/references.bib"))
+    (bibtex-completion-bibliography (concat gaelan/brain-prefix "/literature/references.bib"))
     :after helm)
   
   (use-package org-roam-bibtex
@@ -798,7 +798,7 @@ With the Zettelkasten process we want our literature notes in org-roam. There's 
     (orb-templates
      '(("r" "ref" plain (function org-roam-capture--get-point)
         ""
-        :file-name "literature-note/${citekey}"
+        :file-name "literature/${citekey}"
         :head "#+TITLE: ${citekey}: ${title}\n#+ROAM_KEY: ${ref}
   
   - tags ::
