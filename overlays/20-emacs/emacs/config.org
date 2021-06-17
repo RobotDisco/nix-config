@@ -738,6 +738,17 @@
        (org-roam-db-location (if gaelan/*is-osx*
                                  (concat gaelan/brain-prefix "/db/osx.db")
                                (concat gaelan/brain-prefix "/db/linux.db")))
+       (org-roam-capture-templates
+        '(("d" "default" plain (function org-roam--capture-get-point)
+           "%?"
+           :file-name "%<%Y%m%d%H%M%S>-${slug}"
+           :head "#+title: ${title}\n"
+           :unnarrowed t)
+          ("f" "fleeting" plain (function org-roam--capture-get-point)
+           "%?"
+           :file-name "%<%Y%m%d%H%M%S>-${slug}"
+           :head "#+title: ${title}\n#+roam_tags: fleeting-note\n"
+           :unnarrowed t)))
        (org-roam-tag-sources '(prop last-directory))
        :bind (:map org-roam-mode-map
                    (("C-c n l" . org-roam)
