@@ -98,11 +98,11 @@ self: super: {
 
   Signal = self.installApplication rec {
     name = "Signal";
-    version = "5.4.0";
+    version = "5.5.0";
     sourceRoot = "Signal.app";
     src = super.fetchurl {
       url = "https://updates.signal.org/desktop/signal-desktop-mac-${version}.dmg";
-      sha256 = "0rkbg67kajhykdsx799ljphbz00fak9dyyp4sxl12sdv77ajzc8j";
+      sha256 = "0sm5x31a8b9w9scgj5dybc0ri6y31za4zv884sg3px52ngf76yhl";
     };
     description = "State-of-the-art end-to-end encryption";
     homepage = "https://www.signal.org/";
@@ -146,11 +146,11 @@ self: super: {
 
   Remarkable = self.installApplication rec {
     name = "Remarkable";
-    version = "2.7.1.162";
+    version = "2.8.0.166";
     sourceRoot = "Remarkable.app";
     src = super.fetchurl {
       url = "https://downloads.remarkable.com/desktop/production/mac/reMarkable-${version}.dmg";
-      sha256 = "16rpjmh666mpwgm6jcm26z8dxlmncbqvy777qbpzknkx3bxnhrcq";
+      sha256 = "1n4gl55sp4gxcl7sjj0aj7dhxs0if93yk61w1yk6yb0b9p59sd4q";
     };
     description = "The next-generation paper tablet.";
     homepage = "https://remarkable.com";
