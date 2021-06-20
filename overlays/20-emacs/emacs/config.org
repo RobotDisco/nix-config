@@ -656,15 +656,15 @@
         `(("t" "Todo" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
            "* TODO %?")
           ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
-           "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
+           "** %(format-time-string org-journal-time-format)Daily Morning Reflection\n*** Things that will be achieved today\n     - [ ] %?\n*** What am I grateful for?\n")
           ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
-           "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What were my wins today?\n   1. %?\n** What did I learn today?\n** What did not go according to plan today?\n** What did I do to help my future?\n** What did I do to help others?\n")
+           "** %(format-time-string org-journal-time-format)Daily Evening Reflection\n*** What were my wins today?\n   1. %?\n*** What did I learn today?\n*** What did not go according to plan today?\n*** What did I do to help my future?\n*** What did I do to help others?\n")
           ("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
-           "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week? What can you work on this week?\n** What can you learn this week?")
+           "** %(format-time-string org-journal-time-format)Weekly Reflection\n*** What were you grateful for this week? Pick one and go deep.\n   %?\n*** What were your biggest wins this week?\n*** What tensions are you feeling this week? What is causing these tensions?\n*** What can wait to happen this week? What can you work on this week?\n*** What can you learn this week?")
           ("m" "Monthly Reflection" entry (function gaelan/org-journal-find-location)
-           "* %(format-time-string org-journal-time-format)Monthly Reflection\n** What were your biggest wins of the month?\n   - %?\n** What were you most grateful for this month?\n** What tensions have you removed this month?\n** What did you learn this month?\n** How have you grown this month?")
+           "** %(format-time-string org-journal-time-format)Monthly Reflection\n*** What were your biggest wins of the month?\n   - %?\n*** What were you most grateful for this month?\n*** What tensions have you removed this month?\n*** What did you learn this month?\n*** How have you grown this month?")
           ("y" "Yearly Reflection" entry (function gaelan/org-journal-find-location)
-           "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
+           "** %(format-time-string) org-journal-time-format)Yearly Reflection\n*** What were your biggest wins of the year?\n   - %?\n*** What were you most grateful for this year?\n*** What tensions have you removed this year?\n*** What did you learn this year?\n*** How have you grown this year?")))
      
        ;; Where do I tend to move files to?
        (org-refile-targets
@@ -839,6 +839,8 @@ With the Zettelkasten process we want our literature notes in org-roam. There's 
        (org-journal-new-entry t)
        ;; Position point on the journal's top-level heading so that org-capture
        ;; will add the new entry as a child entry.
+       (unless (eq org-journal-file-type 'daily)
+         (org-narrow-to-subtree))
        (goto-char (point-min)))
    #+end_src
 ** Org-Pomodoro
