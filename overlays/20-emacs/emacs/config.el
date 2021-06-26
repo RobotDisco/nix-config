@@ -390,14 +390,14 @@
    '(("n" "Current Actions"
       ((todo "NEXT")
        (todo "STARTED")))
-     ("u" "Unplanned Projects"
-      ((todo "PLAN")))
-     ("p" "All Projects"
-      ((tags-todo "project")))
-     ("r" "Reoccuring Tasks"
-      ((tags-todo "+CATEGORY=\"tickler\"")))
      ("i" "Inbox Items"
-      ((tags-todo "+CATEGORY=\"Inbox\"")))))
+      ((tags-todo "+CATEGORY=\"Inbox\"")))
+     ("u" "Unplanned Projects"
+      ((tags-todo "PROJECT/PLAN")))
+     ("p" "All Projects"
+      ((tags-todo "PROJECT")))))
+  (org-stuck-projects
+   '("+PROJECT+LEVEL=2/-COMPLETED-ABANDONED-PAUSED" ("TODO" "NEXT" "STARTED") nil ""))
 
   :config
   ;; Save Org buffers after refiling!
