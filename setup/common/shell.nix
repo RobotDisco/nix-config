@@ -8,7 +8,7 @@
     enableCompletion = true;
     # enableFzfGit = true;
     # enableFzfHistory = true;
-    enableSyntaxHighlighting = true;
+    syntaxHighlighting.enable = true;
   };
 
   environment.shellAliases = {
