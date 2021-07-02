@@ -22,11 +22,6 @@
     target = ".gnupg/gpg-agent.conf";
   };
 
-  programs.fzf = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
   programs.git = {
     enable = true;
     extraConfig = {
@@ -43,13 +38,6 @@
                 else "gaelan@tulip.com";
     userName = "Gaelan D'costa";
   };
-
-  # programs.keychain = {
-  #   enable = true;
-  #   enableXsessionIntegration = true;
-  #   enableZshIntegration = true;
-  #   agents = ["gpg-agent"];
-  # };
 
   programs.ssh = {
     enable = true;
@@ -150,4 +138,3 @@
     target = ".xmobarrc";
   };
 }
-    
