@@ -333,14 +333,6 @@
   (variable-pitch-mode 1)
   (visual-line-mode))
 
-(defun gaelan/org-journal-find-location ()
-  ;; Open today's journal, but specify a non-nil prefix argument in order to
-  ;; inhibit inserting the heading; org-capture will insert the heading.
-  (org-journal-new-entry t)
-  (unless (eq org-journal-file-type 'daily)
-    (org-narrow-to-subtree))
-  (goto-char (point-max)))
-
 (use-package org
   :pin org
   :hook
@@ -367,15 +359,15 @@
    `(("t" "Todo" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
       "* TODO %?")
      ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
-      "** %(format-time-string org-journal-time-format)Daily Morning Reflection\n*** Things that will be achieved today\n     - [ ] %?\n*** What am I grateful for?\n")
+      "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
      ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
-      "** %(format-time-string org-journal-time-format)Daily Evening Reflection\n*** What were my wins today?\n   1. %?\n*** What did I learn today?\n*** What did not go according to plan today?\n*** What did I do to help my future?\n*** What did I do to help others?\n")
+      "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What were my wins today?\n   1. %?\n** What did I learn today?\n** What did not go according to plan today?\n** What did I do to help my future?\n** What did I do to help others?\n")
      ("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
-      "** %(format-time-string org-journal-time-format)Weekly Reflection\n*** What were you grateful for this week? Pick one and go deep.\n   %?\n*** What were your biggest wins this week?\n*** What tensions are you feeling this week? What is causing these tensions?\n*** What can wait to happen this week? What can you work on this week?\n*** What can you learn this week?")
+      "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week? What can you work on this week?\n** What can you learn this week?")
      ("m" "Monthly Reflection" entry (function gaelan/org-journal-find-location)
-      "** %(format-time-string org-journal-time-format)Monthly Reflection\n*** What were your biggest wins of the month?\n   - %?\n*** What were you most grateful for this month?\n*** What tensions have you removed this month?\n*** What did you learn this month?\n*** How have you grown this month?")
+      "* %(format-time-string org-journal-time-format)Monthly Reflection\n** What were your biggest wins of the month?\n   - %?\n** What were you most grateful for this month?\n** What tensions have you removed this month?\n** What did you learn this month?\n** How have you grown this month?")
      ("y" "Yearly Reflection" entry (function gaelan/org-journal-find-location)
-      "** %(format-time-string) org-journal-time-format)Yearly Reflection\n*** What were your biggest wins of the year?\n   - %?\n*** What were you most grateful for this year?\n*** What tensions have you removed this year?\n*** What did you learn this year?\n*** How have you grown this year?")))
+      "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
 
   ;; Where do I tend to move files to?
   (org-refile-targets
@@ -449,6 +441,11 @@
       "%?"
       :file-name "%<%Y%m%d%H%M%S>-${slug}"
       :head "#+title: ${title}\n#+roam_tags: topic"
+      :unnarrowed t)
+     ("p" "private" plain (function org-roam--capture-get-point)
+      "%?"
+      :file-name "private/%<%Y%m%d%H%M%S>-${slug}"
+      :head "#+title: ${title}"
       :unnarrowed t)))
   (org-roam-tag-sources '(prop last-directory))
   :bind (:map org-roam-mode-map
@@ -470,7 +467,7 @@
 
 (use-package helm-bibtex
   :custom
-  (bibtex-completion-bibliography (concat gaelan/brain-prefix "/literature/references.bib"))
+  (bibtex-completion-bibliography (list (concat gaelan/brain-prefix "literature/references.bib")))
   :after helm)
 
 (use-package org-roam-bibtex
@@ -487,7 +484,7 @@
    '(("r" "ref" plain (function org-roam-capture--get-point)
       ""
       :file-name "literature/${citekey}"
-      :head "#+TITLE: ${citekey}: ${title}\n#+ROAM_KEY: ${ref}
+      :head "#+TITLE: ${citekey}: ${title}\n#+ROAM_KEY: ${ref}\n#+ROAM_TAGS: fleeting
 
 - tags ::
 - keywords :: ${keywords}
@@ -517,9 +514,9 @@
   ;; Open today's journal, but specify a non-nil prefix argument in order to
   ;; inhibit inserting the heading; org-capture will insert the heading.
   (org-journal-new-entry t)
-  ;; Position point on the journal's top-level heading so that org-capture
-  ;; will add the new entry as a child entry.
   (unless (eq org-journal-file-type 'daily)
+    (while (> (org-current-level) 1)
+      (org-up-heading-safe))
     (org-narrow-to-subtree))
   (goto-char (point-min)))
 
