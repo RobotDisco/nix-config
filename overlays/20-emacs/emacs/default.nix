@@ -37,20 +37,21 @@ let
     '';
   };
 in
-stdenv.mkDerivation {
-  pname = "emacs-config";
+emacsEnv
+# stdenv.mkDerivation {
+#   pname = "emacs-config";
 
-  src = lib.sourceByRegex ./. [
-    "audio"
-    "audio/.*"
-  ];
+#   src = lib.sourceByRegex ./. [
+#     "audio"
+#     "audio/.*"
+#   ];
 
-  dontUnpack = true;
+#   dontUnpack = true;
 
-  buildInputs = [ pkgs.emacs-all-the-icons-fonts pkgs.python3Minimal pkgs.ripgrep ];
+#   buildInputs = [ pkgs.emacs-all-the-icons-fonts pkgs.python3Minimal pkgs.ripgrep ];
 
-  installPhase = ''
-    install -D -t $out ${init}/share/emacs/site-lisp/*
-    cp -R $src/{audio} $out/.
-  '';
-}
+#   installPhase = ''
+#     install -D -t $out ${init}/share/emacs/site-lisp/*
+#     cp -R $src/{audio} $out/.
+#   '';
+# }
