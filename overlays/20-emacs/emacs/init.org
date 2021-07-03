@@ -1,6 +1,6 @@
 # -*- mode: org; coding: utf-8; -*-
 #+title: Emacs Configuration
-#+PROPERTY: header-args:emacs-lisp :tangle ./config.el :mkdirp yes
+#+PROPERTY: header-args:emacs-lisp :tangle ./init.el :mkdirp yes
 #+STARTUP: content showstars
 * Welcome!
   This is my emacs config; there are many like it, but this one is mine.
