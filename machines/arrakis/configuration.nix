@@ -24,6 +24,7 @@ in
       ./hardware-configuration.nix
       <dotfiles/setup/nixos>
       <dotfiles/home-manager/nixos>
+      ./cachix.nix
     ];
 
   nix.nixPath = [
