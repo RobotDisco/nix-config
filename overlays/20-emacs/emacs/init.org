@@ -873,12 +873,12 @@ Integrate a Pomodoro Technique into clocking in
   (use-package org-pomodoro
     :ensure t
     :init
-    (setq org-pomodoro-start-spound (concat user-emacs-directory "ds9intercom.mp3")
-          org-pomodoro-finished-sound (concat user-emacs-directory "ds9intercom.mp3")
-          org-pomodoro-overtime-sound (concat user-emacs-directory "ds9intercom.mp3")
-          org-pomodoro-short-break-sound (concat user-emacs-directory "ds9intercom.mp3")
-          org-pomodoro-long-break-sound (concat user-emacs-directory "computerbeepsequence1.mp3")
-          org-pomodoro-ticking-sound (concat user-emacs-directory "incoming_hail2.mp3")))
+    (setq org-pomodoro-start-spound (concat user-emacs-directory "audio/ds9intercom.mp3")
+          org-pomodoro-finished-sound (concat user-emacs-directory "audio/ds9intercom.mp3")
+          org-pomodoro-overtime-sound (concat user-emacs-directory "audio/ds9intercom.mp3")
+          org-pomodoro-short-break-sound (concat user-emacs-directory "audio/ds9intercom.mp3")
+          org-pomodoro-long-break-sound (concat user-emacs-directory "audio/computerbeepsequence1.mp3")
+          org-pomodoro-ticking-sound (concat user-emacs-directory "audio/incoming_hail2.mp3")))
 #+end_src
 ** org-noter
    A package for annotating PDF, DOC files, and the like into org files.

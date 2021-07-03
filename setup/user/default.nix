@@ -113,22 +113,6 @@
     $HOME/.config/git/config $HOME/.gitconfig
   '';
 
-  home.file.emacsConfig = {
-    source = <dotfiles/overlays/20-emacs/emacs/config.el>;
-    target = ".emacs.d/init.el";
-  };
-  home.file.emacsPomodoroStartSound = {
-    source = <dotfiles/overlays/20-emacs/emacs/incoming_hail2.mp3>;
-    target = ".emacs.d/incoming_hail2.mp3";
-  };
-  home.file.emacsPomodoroFinishSound = {
-    source = <dotfiles/overlays/20-emacs/emacs/ds9intercom.mp3>;
-    target = ".emacs.d/ds9intercom.mp3";
-  };
-  home.file.emacsPomodoroFinishLongSound = {
-    source = <dotfiles/overlays/20-emacs/emacs/computerbeepsequence1.mp3>;
-    target = ".emacs.d/computerbeepsequence1.mp3";
-  };
   home.file.emacsSecrets = {
     source = <dotfiles/overlays/20-emacs/emacs/secrets.el>;
     target = ".emacs.d/secrets.el";
