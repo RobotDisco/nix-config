@@ -3,6 +3,5 @@
 }))];} }:
 
 pkgs.emacsWithPackagesFromUsePackage {
-  config = ./config.org;
-  alwaysEnsure = true;
+  config = ./init.org;
 }
