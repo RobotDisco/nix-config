@@ -114,20 +114,20 @@
   '';
 
   home.file.emacsConfig = {
-    source = <dotfiles/overlays/20-emacs/emacs/config.el>;
+    source = <dotfiles/overlays/20-emacs/emacs/init.el>;
     target = ".emacs.d/init.el";
   };
   home.file.emacsPomodoroStartSound = {
     source = <dotfiles/overlays/20-emacs/emacs/audio/incoming_hail2.mp3>;
-    target = ".emacs.d/incoming_hail2.mp3";
+    target = ".emacs.d/audio/incoming_hail2.mp3";
   };
   home.file.emacsPomodoroFinishSound = {
     source = <dotfiles/overlays/20-emacs/emacs/audio/ds9intercom.mp3>;
-    target = ".emacs.d/ds9intercom.mp3";
+    target = ".emacs.d/audio/ds9intercom.mp3";
   };
   home.file.emacsPomodoroFinishLongSound = {
     source = <dotfiles/overlays/20-emacs/emacs/audio/computerbeepsequence1.mp3>;
-    target = ".emacs.d/computerbeepsequence1.mp3";
+    target = ".emacs.d/audio/computerbeepsequence1.mp3";
   };
   home.file.emacsSecrets = {
     source = <dotfiles/overlays/20-emacs/emacs/secrets.el>;
