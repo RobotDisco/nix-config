@@ -1,5 +1,8 @@
-self: pkgs:
+final: prev:
 
 {
-  emacs = import ./emacs {};
+  emacs = import ./emacs {
+    lib = prev.lib;
+    stdenv = prev.stdenv;
+  };
 }
