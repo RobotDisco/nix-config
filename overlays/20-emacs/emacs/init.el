@@ -357,7 +357,6 @@
 
 (use-package org
   :ensure t
-  :pin org
   :hook
   (org-mode . gaelan/org-mode-setup)
   :custom

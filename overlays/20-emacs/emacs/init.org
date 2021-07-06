@@ -643,7 +643,6 @@ Thanks to quickstart producing autoloads and all packages being auto-downloaded,
    #+begin_src emacs-lisp :tangle yes
      (use-package org
        :ensure t
-       :pin org
        :hook
        (org-mode . gaelan/org-mode-setup)
        :custom
