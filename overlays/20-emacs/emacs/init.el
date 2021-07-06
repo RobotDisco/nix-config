@@ -440,7 +440,7 @@
   :custom
   (org-habit-graph-column 60)
   :init
-  (add-to-list 'org-modules 'org-habit))
+  (add-to-list 'org-modules 'habits))
 
 (use-package org-roam
   :ensure t
