@@ -49,11 +49,11 @@ self: super: {
 
   Bitwarden = self.installApplication rec {
     name = "Bitwarden";
-    version = "1.26.5";
+    version = "1.27.1";
     sourceRoot = "Bitwarden.app";
     src = super.fetchurl {
       url = "https://github.com/bitwarden/desktop/releases/download/v${version}/Bitwarden-${version}.dmg";
-      sha256 = "0nv905mvxvzgnsa2g913fj8bcxbpz6s1hhl44l368bqc5sz0kdjq";
+      sha256 = "0659h1d2cjbhzk53fjx7ybl27xrd7xla2f4qr0zj7hlpi6g6m9j7";
     };
     description = "Bitwarden helps you generate, save and manage your passwords safely and securely.";
     homepage = https://bitwarden.com;
@@ -61,11 +61,11 @@ self: super: {
 
   Firefox = self.installApplication rec {
     name = "Firefox";
-    version = "89.0";
+    version = "89.0.2";
     sourceRoot = "Firefox.app";
     src = super.fetchurl {
       url = "https://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/mac/en-CA/Firefox%20${version}.dmg";
-      sha256 = "1p83c1q3v6czba7612lk57rrilwyclv3jd9837qwv09wahmlcxm7";
+      sha256 = "0nd2mv0x73gbapaxzwjywb0kxh5cspa26nfx3yxjpp91n54kb28s";
       name = "Firefox-${version}.dmg";
     };
     description = "The browser that respects your privacy";
@@ -86,11 +86,11 @@ self: super: {
 
   SeafileClient = self.installApplication rec {
     name = "SeafileClient";
-    version = "8.0.2";
+    version = "8.0.3";
     sourceRoot = "Seafile\ Client.app";
     src = super.fetchurl {
       url = "https://s3.eu-central-1.amazonaws.com/download.seadrive.org/seafile-client-${version}.dmg";
-      sha256 = "19arxbms1d3apj2il0i83s53iflzap6c1fsxhskwja3bwha3znzv";
+      sha256 = "174qjamb3yhyj2bvbq05jrknjmy2fn2p4x5nb9gzfd589jaq1hkw";
     };
     description = "Seafile is an open source enterprise file sync and share platform with high reliability and performance.";
     homepage = "https://seafile.com";
@@ -134,11 +134,11 @@ self: super: {
 
   Discord = self.installApplication rec {
     name = "Discord";
-    version = "0.0.262";
+    version = "0.0.263";
     sourceRoot = "Discord.app";
     src = super.fetchurl {
       url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
-      sha256 = "1afb0qj23hmhsz9jgzwaj5gqsxdwdxi8bcc656s27qhydnbxbgpn";
+      sha256 = "1x9cyc3l1h17gdx9bh4qn2qmgf2v2nh7a25sx818zkpw5ck8xr96";
     };
     description = "Step up your game with a modern voice & text chat app.";
     homepage = "https://discord.com";
@@ -158,11 +158,11 @@ self: super: {
 
   Tidal = self.installApplication rec {
     name = "TIDAL";
-    version = "2.27.6.234";
+    version = "2.28.0.275";
     sourceRoot = "TIDAL.app";
     src = super.fetchurl {
       url = "https://download.tidal.com/desktop/TIDAL.dmg";
-      sha256 = "0v5s6bwna2jhks4721fn1x3f6yhzgwbn5skimj8rgd4jp85i2h56";
+      sha256 = "6b206fb21ba423046c3dea66280ce96e838f6cab0823334bb10bd49e55fdc7fe";
     };
     description = "70+ million songs. Ad-free.";
     homepage = "https://tidal.com";
