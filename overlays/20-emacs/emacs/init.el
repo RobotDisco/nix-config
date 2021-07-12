@@ -394,7 +394,7 @@
 
   ;; Where do I tend to move files to?
   (org-refile-targets
-   `((,(concat gaelan/gtd-prefix "inbox.org") . (:level 1))
+   `((,(concat gaelan/gtd-prefix "inbox.org") . (:level . 0))
      (,(concat gaelan/gtd-prefix "gtd.org") . (:maxlevel . 2))
      (,(concat gaelan/gtd-prefix "someday.org") . (:level . 1))
      (,(concat gaelan/gtd-prefix "tickler.org") . (:level . 1))
