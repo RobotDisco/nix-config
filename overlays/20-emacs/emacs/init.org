@@ -657,29 +657,31 @@ Thanks to quickstart producing autoloads and all packages being auto-downloaded,
      
        ;; The workhorse files in my GTD system
        (org-agenda-files
-        `(,(concat gaelan/gtd-prefix "gtd.org")
+        `(,(concat gaelan/gtd-prefix "inbox.org")
+          ,(concat gaelan/gtd-prefix "gtd.org")
           ,(concat gaelan/gtd-prefix "tickler.org")
           ,(concat gaelan/gtd-prefix "gcal/personal.org")
           ,(concat gaelan/gtd-prefix "gcal/work.org")))
      
        ;; Things I want to quickly enter, tasks and journal entries
        (org-capture-templates
-        `(("t" "Todo" entry (file+headline ,(concat gaelan/gtd-prefix "gtd.org") "Inbox")
+        `(("t" "Todo" entry (file ,(concat gaelan/gtd-prefix "gtd.org"))
            "* TODO %?")
           ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
            "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
           ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
-           "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What were my wins today?\n   1. %?\n** What did I learn today?\n** What did not go according to plan today?\n** What did I do to help my future?\n** What did I do to help others?\n")
+           "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What were my wins today?\n   1. %?\n** What did I learn today?\n** What did not go according to plan today?\n** What did I do to help my future?\n** What did I do to help others?\n" :unnarrowed t)
           ("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
-           "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week? What can you work on this week?\n** What can you learn this week?")
+           "* %(format-time-string org-journal-time-format)Weekly Reflection\n** What were you grateful for this week? Pick one and go deep.\n   %?\n** What were your biggest wins this week?\n** What tensions are you feeling this week? What is causing these tensions?\n** What can wait to happen this week? What can you work on this week?\n** What can you learn this week?" :unnarrowed t)
           ("m" "Monthly Reflection" entry (function gaelan/org-journal-find-location)
-           "* %(format-time-string org-journal-time-format)Monthly Reflection\n** What were your biggest wins of the month?\n   - %?\n** What were you most grateful for this month?\n** What tensions have you removed this month?\n** What did you learn this month?\n** How have you grown this month?")
+           "* %(format-time-string org-journal-time-format)Monthly Reflection\n** What were your biggest wins of the month?\n   - %?\n** What were you most grateful for this month?\n** What tensions have you removed this month?\n** What did you learn this month?\n** How have you grown this month?" :unnarrowed t)
           ("y" "Yearly Reflection" entry (function gaelan/org-journal-find-location)
-           "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?")))
+           "* %(format-time-string) org-journal-time-format)Yearly Reflection\n** What were your biggest wins of the year?\n   - %?\n** What were you most grateful for this year?\n** What tensions have you removed this year?\n** What did you learn this year?\n** How have you grown this year?" :unnarrowed t)))
      
        ;; Where do I tend to move files to?
        (org-refile-targets
-        `((,(concat gaelan/gtd-prefix "gtd.org") . (:maxlevel . 2))
+        `((,(concat gaelan/gtd-prefix "inbox.org") . (:level . 0))
+          (,(concat gaelan/gtd-prefix "gtd.org") . (:maxlevel . 2))
           (,(concat gaelan/gtd-prefix "someday.org") . (:level . 1))
           (,(concat gaelan/gtd-prefix "tickler.org") . (:level . 1))
           ;; Move targets within a file
@@ -691,7 +693,7 @@ Thanks to quickstart producing autoloads and all packages being auto-downloaded,
            ((todo "NEXT")
             (todo "STARTED")))
           ("i" "Inbox Items"
-           ((tags-todo "+CATEGORY=\"Inbox\"")))
+           ((tags "+CATEGORY=\"Inbox\"")))
           ("u" "Unplanned Projects"
            ((tags-todo "PROJECT/PLAN")))
           ("p" "All Projects"
