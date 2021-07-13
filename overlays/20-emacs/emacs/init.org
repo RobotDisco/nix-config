@@ -737,7 +737,7 @@ Thanks to quickstart producing autoloads and all packages being auto-downloaded,
        :custom
        (org-habit-graph-column 60)
        :init
-       (add-to-list 'org-modules 'habits))
+       (add-to-list 'org-modules 'habit))
    #+end_src
 ** Org Roam
    This seems to be the most promising way to deal with knowledge management, taking notes, things like that.
