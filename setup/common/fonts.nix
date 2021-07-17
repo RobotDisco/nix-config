@@ -2,8 +2,6 @@
 
 {
   fonts = {
-    # fontDir.enable = true;
-    enableFontDir = true;
     fonts = [
       pkgs.corefonts
       pkgs.camingo-code

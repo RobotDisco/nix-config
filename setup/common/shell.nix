@@ -8,7 +8,6 @@
     enableCompletion = true;
     # enableFzfGit = true;
     # enableFzfHistory = true;
-    enableSyntaxHighlighting = true;
   } // (if pkgs.stdenv.isLinux
         then { syntaxHighlighting.enable = true; }
         else { enableSyntaxHighlighting = true; });
