@@ -405,7 +405,8 @@
   (org-agenda-custom-commands
    '(("n" "Current Actions"
       ((todo "NEXT")
-       (todo "STARTED")))
+       (todo "STARTED")
+       (todo "WAITING")))
      ("i" "Inbox Items"
       ((tags "+CATEGORY=\"Inbox\"")))
      ("u" "Unplanned Projects"

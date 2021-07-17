@@ -691,7 +691,8 @@ Thanks to quickstart producing autoloads and all packages being auto-downloaded,
        (org-agenda-custom-commands
         '(("n" "Current Actions"
            ((todo "NEXT")
-            (todo "STARTED")))
+            (todo "STARTED")
+            (todo "WAITING")))
           ("i" "Inbox Items"
            ((tags "+CATEGORY=\"Inbox\"")))
           ("u" "Unplanned Projects"
