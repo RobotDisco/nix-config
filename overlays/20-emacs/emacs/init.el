@@ -452,47 +452,45 @@
 
 (use-package org-roam
   :ensure t
-  :hook (after-init . org-roam-mode)
+  :hook (after-init . org-roam-setup)
   :custom
   (org-roam-directory gaelan/brain-prefix)
   (org-roam-completion-system 'helm)
-  (org-roam-db-location (if gaelan/*is-osx*
-                            (concat gaelan/brain-prefix "/db/osx.db")
-                          (concat gaelan/brain-prefix "/db/linux.db")))
   (org-roam-capture-templates
-   '(("d" "default" plain (function org-roam--capture-get-point)
-      "%?"
-      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+title: ${title}\n"
+   '(("d" "default" plain "%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n")
       :unnarrowed t)
-     ("f" "fleeting" plain (function org-roam--capture-get-point)
-      "%?"
-      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+title: ${title}\n#+roam_tags: fleeting\n"
+     ("f" "fleeting" plain "%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n#+FILETAGS: fleeting\n")
       :unnarrowed t)
-     ("t" "topic" plain (function org-roam--capture-get-point)
-      "%?"
-      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+title: ${title}\n#+roam_tags: topic"
+     ("p" "people" plain "%?"
+      :if-new (file+head "private/%<%Y%m%d%H%M%S>-${slug}.org.gpg"
+                         "#+title: ${title}")
       :unnarrowed t)
-     ("p" "private" plain (function org-roam--capture-get-point)
-      "%?"
-      :file-name "private/%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+title: ${title}"
+     ("r" "reference" plain "%?"
+      :if-new (file-head "references/${citekey.org"
+                         "#+title: ${title}\n")
       :unnarrowed t)))
-  (org-roam-tag-sources '(prop last-directory))
-  :bind (:map org-roam-mode-map
-              (("C-c n l" . org-roam)
-               ("C-c n f" . org-roam-find-file)
-               ("C-c n g" . org-roam-graph))
-              :map org-mode-map
-              (("C-c n i" . org-roam-insert)
-               ("C-c n I" . org-roam-insert-immediate))))
+  :bind (("C-c n t" . org-roam-buffer-toggle)
+         ("C-c n b" . org-roam-buffer)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)))
+:init
+(add-to-list 'display-buffer-alist
+             '("\\*org-roam\\*"
+               (display-buffer-in-direction)
+               (direction . right)
+               (window-width . 0.33)
+               (window-height . fit-window-to-buffer))))
 
 (use-package deft
   :ensure t
   :after org
-  :bind ("C-c n d" . deft)
+  :bind (:map org-mode-map
+	      (("C-c n d" . deft)))
   :custom
   (deft-recursive t)
   (deft-use-filter-string-for-filename t)
@@ -508,32 +506,12 @@
 (use-package org-roam-bibtex
   :ensure t
   :after org-roam
-  :bind ("C-c n a" . orb-note-actions)
+  :bind (("C-c n a" . orb-note-actions)
+         ("C-c n l" . orb-insert-link))
   :hook (org-roam-mode . org-roam-bibtex-mode)
   :custom
-  (orb-preformat-keywords '("citekey" "title" "url" "keywords" "author-or-editor" "file"))
-  (org-process-file-keyword t)
-  (orb-insert-interface 'helm-bibtex)
-  (orb-file-field-extensions '("pdf" "epub"))
   (orb-note-actions-interface 'helm)
-  (orb-templates
-   '(("r" "ref" plain (function org-roam-capture--get-point)
-      ""
-      :file-name "literature/${citekey}"
-      :head "#+TITLE: ${citekey}: ${title}\n#+ROAM_KEY: ${ref}\n#+ROAM_TAGS: fleeting
-
-- tags ::
-- keywords :: ${keywords}
-
-* ${title}
-:PROPERTIES:
-:Custom_ID: ${citekey}
-:URL: ${url}
-:AUTHOR: ${author-or-editor}
-:NOTER_DOCUMENT: ${file}
-:NOTER_PAGE:
-:END:"
-      :unnarrowed t)))
+  (orb-autokey-format "%a%y%t")
   :config
   (require 'org-ref))
 
