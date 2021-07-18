@@ -238,6 +238,8 @@ Thanks to quickstart producing autoloads and all packages being auto-downloaded,
     As far as I can tell, the combination of using Emacs in daemon mode and themes are a dark art, which often conflict with each other. The problem is that the daemon likely runs outside the graphical system, but the theme does load-time adjustments based on whether the frame is run in a console or graphical context.
     #+begin_src emacs-lisp :tangle yes
       (use-package rebecca-theme
+        ;; I guess themes can't be deferred
+        :demand t
         :ensure t
         :config
         (if (daemonp)
@@ -316,6 +318,9 @@ Thanks to quickstart producing autoloads and all packages being auto-downloaded,
      (use-package async
        :ensure t
        :config
+       ;; Because this command gets loaded from an unusal file path, we need
+       ;; to explicitly set up the autoload
+       (autoload 'dired-async-mode "dired-async.el" nil t)
        (dired-async-mode))
    #+end_src
 ** Cap line length to 80

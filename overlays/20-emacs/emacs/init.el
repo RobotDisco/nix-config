@@ -110,6 +110,8 @@
   (doom-modeline-mode 1))
 
 (use-package rebecca-theme
+  ;; I guess themes can't be deferred
+  :demand t
   :ensure t
   :config
   (if (daemonp)
@@ -160,6 +162,9 @@
 (use-package async
   :ensure t
   :config
+  ;; Because this command gets loaded from an unusal file path, we need
+  ;; to explicitly set up the autoload
+  (autoload 'dired-async-mode "dired-async.el" nil t)
   (dired-async-mode))
 
 (setq fill-column 80)
