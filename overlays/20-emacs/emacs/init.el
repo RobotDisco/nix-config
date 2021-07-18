@@ -105,8 +105,8 @@
   :ensure t
   :custom
   (doom-modeline-height 21)
-  (doom-modeline-buffer-file-name 'truncate-upto-project)
-  :init
+  (doom-modeline-buffer-file-name-style 'truncate-upto-project)
+  :config
   (doom-modeline-mode 1))
 
 (use-package rebecca-theme
@@ -146,7 +146,7 @@
   :ensure t
   :custom (which-key-idle-delay 1)
   :diminish which-key-mode
-  :init
+  :config
   (which-key-mode))
 
 (use-package helpful

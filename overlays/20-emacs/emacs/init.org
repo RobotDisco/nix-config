@@ -224,15 +224,15 @@ Thanks to quickstart producing autoloads and all packages being auto-downloaded,
 
     #+begin_src emacs-lisp :tangle yes
       (use-package all-the-icons
-        :ensure t)
+	:ensure t)
       
       (use-package doom-modeline
-        :ensure t
-        :custom
-        (doom-modeline-height 21)
-        (doom-modeline-buffer-file-name 'truncate-upto-project)
-        :init
-        (doom-modeline-mode 1))
+	:ensure t
+	:custom
+	(doom-modeline-height 21)
+	(doom-modeline-buffer-file-name-style 'truncate-upto-project)
+	:config
+	(doom-modeline-mode 1))
     #+end_src
 *** Emacs theming
     As far as I can tell, the combination of using Emacs in daemon mode and themes are a dark art, which often conflict with each other. The problem is that the daemon likely runs outside the graphical system, but the theme does load-time adjustments based on whether the frame is run in a console or graphical context.
@@ -297,7 +297,7 @@ Thanks to quickstart producing autoloads and all packages being auto-downloaded,
        :ensure t
        :custom (which-key-idle-delay 1)
        :diminish which-key-mode
-       :init
+       :config
        (which-key-mode))
    #+end_src
 ** Improve help and documentation buffers
