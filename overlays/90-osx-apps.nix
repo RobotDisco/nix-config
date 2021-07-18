@@ -14,7 +14,7 @@ self: super: {
       mkdir -p "$out/Applications/${appname}.app"
       cp -pR * "$out/Applications/${appname}.app"
     '' + postInstall;
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = description;
         homepage = homepage;
         platforms = platforms.darwin;
@@ -61,11 +61,11 @@ self: super: {
 
   Firefox = self.installApplication rec {
     name = "Firefox";
-    version = "89.0.2";
+    version = "90.0";
     sourceRoot = "Firefox.app";
     src = super.fetchurl {
       url = "https://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/mac/en-CA/Firefox%20${version}.dmg";
-      sha256 = "0nd2mv0x73gbapaxzwjywb0kxh5cspa26nfx3yxjpp91n54kb28s";
+      sha256 = "1lnwl4alsnp8xzix5d0mg6i6ii02irb70l0ff5zlrs8wa58k1pq2";
       name = "Firefox-${version}.dmg";
     };
     description = "The browser that respects your privacy";
@@ -110,11 +110,11 @@ self: super: {
 
   Kobo = self.installApplication rec {
     name = "Kobo";
-    version = "4.24.11789";
+    version = "4.28.13879";
     sourceRoot = "Kobo.app";
     src = super.fetchurl {
       url = "https://kbdownload1-a.akamaihd.net/desktop/kobodesktop/kobosetup.dmg";
-      sha256 = "f61bce74a1eebbe11c8b4d709c2b1266c36d288b056620e68628b39fb5f4bb37";
+      sha256 = "09q4wqhpajnm0a2gz5hik9mpapj1b12lrapav5ql19d8jy029ilr";
     };
     description = "kobo.com eBooks and Audiobooks";
     homepage = "https://www.kobo.com";
@@ -126,7 +126,7 @@ self: super: {
     sourceRoot = "Steam.app";
     src = super.fetchurl {
       url = "https://cdn.cloudflare.steamstatic.com/client/installer/steam.dmg";
-      sha256 = "dda4744327fe200e08d132ccbba9828b6bde8672080a69f69d52e72e9a6bda17";
+      sha256 = "1sd0fr9s75zkbl7wfl3w8rsys5k2dfgfx6ib26ca7pgmm4sp2y6s";
     };
     description = "Steam is the ultimate destination for playing, discussing, and creating games.";
     homepage = "https://steampowered.com";
