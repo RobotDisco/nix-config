@@ -72,7 +72,7 @@
 ;; Disable line numbers for some modes
 (dolist (mode '(org-mode-hook
                 term-mode-hook
-                vterm-mode-hook
+                ;; vterm-mode-hook
                 shell-mode-hook
                 treemacs-mode-hook
                 eshell-mode-hook))
@@ -384,7 +384,7 @@
 
   ;; Things I want to quickly enter, tasks and journal entries
   (org-capture-templates
-   `(("t" "Todo" entry (file ,(concat gaelan/gtd-prefix "gtd.org"))
+   `(("t" "Todo" entry (file ,(concat gaelan/gtd-prefix "inbox.org"))
       "* TODO %?")
      ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
       "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
@@ -459,32 +459,32 @@
   (org-roam-capture-templates
    '(("d" "default" plain "%?"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                         "#+title: ${title}\n")
+			 "#+title: ${title}\n")
       :unnarrowed t)
      ("f" "fleeting" plain "%?"
       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                         "#+title: ${title}\n#+FILETAGS: fleeting\n")
+			 "#+title: ${title}\n#+FILETAGS: fleeting\n")
       :unnarrowed t)
      ("p" "people" plain "%?"
       :if-new (file+head "private/%<%Y%m%d%H%M%S>-${slug}.org.gpg"
-                         "#+title: ${title}")
+			 "#+title: ${title}")
       :unnarrowed t)
      ("r" "reference" plain "%?"
       :if-new (file-head "references/${citekey.org"
-                         "#+title: ${title}\n")
+			 "#+title: ${title}\n")
       :unnarrowed t)))
   :bind (("C-c n t" . org-roam-buffer-toggle)
-         ("C-c n b" . org-roam-buffer)
-         ("C-c n i" . org-roam-node-insert)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n g" . org-roam-graph)))
-:init
-(add-to-list 'display-buffer-alist
-             '("\\*org-roam\\*"
-               (display-buffer-in-direction)
-               (direction . right)
-               (window-width . 0.33)
-               (window-height . fit-window-to-buffer))))
+	 ("C-c n b" . org-roam-buffer)
+	 ("C-c n i" . org-roam-node-insert)
+	 ("C-c n f" . org-roam-node-find)
+	 ("C-c n g" . org-roam-graph))
+  :init
+  (add-to-list 'display-buffer-alist
+	       '("\\*org-roam\\*"
+		 (display-buffer-in-direction)
+		 (direction . right)
+		 (window-width . 0.33)
+		 (window-height . fit-window-to-buffer))))
 
 (use-package deft
   :ensure t
@@ -508,7 +508,7 @@
   :after org-roam
   :bind (("C-c n a" . orb-note-actions)
          ("C-c n l" . orb-insert-link))
-  :hook (org-roam-mode . org-roam-bibtex-mode)
+  :hook (after-init . org-roam-bibtex-mode)
   :custom
   (orb-note-actions-interface 'helm)
   (orb-autokey-format "%a%y%t")
@@ -589,7 +589,7 @@
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'gaelan/org-babel-tangle-config)))
 
 (use-package vterm
-  :ensure t)
+  :ensure nil)
 
 (use-package magit
   :ensure t
@@ -802,7 +802,7 @@
 
 (when gaelan/*is-linux*
   (use-package exwm
-    :ensure t
+    :ensure nil
     :bind
     (:map exwm-mode-map
           ;; C-q will enable the next key to be sent directly
@@ -934,14 +934,14 @@
 
 (when gaelan/*is-linux*
   (use-package desktop-environment
-    :ensure t
+    :ensure nil
     :requires (exwm)
     :config
     (desktop-environment-mode)))
 
 (when gaelan/*is-linux*
   (use-package helm-exwm
-    :ensure t
+    :ensure nil
     :init
     (setq-default helm-source-names-using-follow '("EXWM buffers"))
     :config
