@@ -67,6 +67,24 @@
         proxyJump = "bastion01-s5a-prod";
       };
 
+      "bastion01-hbc-devstaging" = {
+        user = "welladmin";
+        hostname = "52.23.191.235";
+      };
+      "*.hbcgr-bay.dev *.hbcgr-bay.staging *.hbc.dev" = {
+        user = "welladmin";
+        proxyJump = "bastion01-hbc-devstaging";
+      };
+      
+      "bastion01-hbc-prod" = {
+        user = "welladmin";
+        hostname = "34.194.98.35";
+      };
+      "*.hbcgr-bay.prod *.hbcgr-bay.prod *.hbc.prod" = {
+        user = "welladmin";
+        proxyJump = "bastion01-hbc-prod";
+      };
+      
       "bastion01-michaelkors-devstaging" = {
         user = "welladmin";
         hostname = "34.204.211.250";
