@@ -479,6 +479,7 @@
 	 ("C-c n f" . org-roam-node-find)
 	 ("C-c n g" . org-roam-graph))
   :init
+  (setq org-roam-v2-ack t)
   (add-to-list 'display-buffer-alist
 	       '("\\*org-roam\\*"
 		 (display-buffer-in-direction)
