@@ -98,11 +98,11 @@ self: super: {
 
   Signal = self.installApplication rec {
     name = "Signal";
-    version = "5.5.0";
+    version = "5.9.0";
     sourceRoot = "Signal.app";
     src = super.fetchurl {
       url = "https://updates.signal.org/desktop/signal-desktop-mac-${version}.dmg";
-      sha256 = "0sm5x31a8b9w9scgj5dybc0ri6y31za4zv884sg3px52ngf76yhl";
+      sha256 = "1qhjpng59rmrvlbz5rp5rsczkci3gkjj9w188a4rrwhy10an8qfh";
     };
     description = "State-of-the-art end-to-end encryption";
     homepage = "https://www.signal.org/";
