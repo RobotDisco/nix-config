@@ -490,6 +490,23 @@ Thanks to quickstart producing autoloads and all packages being auto-downloaded,
         :ensure t
         :after helm)
     #+end_src
+** Perspective mode
+Perspective is a way of setting up "workspaces" in emacs, so you can focus on buffers that are relevant to your task at hand.
+
+A nice thing about Perspective in particular is that it integrates with Projectile.
+
+#+begin_src emacs-lisp :tangle yes
+      (use-package perspective
+        :ensure t
+        :bind ("C-x C-b" . persp-list-buffers)
+        :config (persp-mode))
+    
+      (use-package persp-projectile
+        :ensure t
+        :after (perspective projectile)
+        :bind (:map projectile-mode-map
+                    (("s-s" . projectile-persp-switch-project-project))))
+#+end_src
 ** Directory Pane
    Sometimes I want to see all the files in my current project structure in a tree structure similar to the Windows file manager.
 

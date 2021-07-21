@@ -267,6 +267,17 @@
   :ensure t
   :after helm)
 
+(use-package perspective
+  :ensure t
+  :bind ("C-x C-b" . persp-list-buffers)
+  :config (persp-mode))
+
+(use-package persp-projectile
+  :ensure t
+  :after (perspective projectile)
+  :bind (:map projectile-mode-map
+              (("s-s" . projectile-persp-switch-project-project))))
+
 (use-package treemacs
   :ensure t)
 
