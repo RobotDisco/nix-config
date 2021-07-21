@@ -102,6 +102,15 @@
         proxyJump = "bastion01-michaelkors-prod";
       };
 
+      "bastion01-well-devstaging" = {
+        user = "welladmin";
+        hostname = "54.88.81.148";
+      };
+      "*.well.dev *.well.staging" = {
+        user = "welladmin";
+        proxyJump = "bastion01-well-devstaging";
+      };
+
       db02-timekit-prod = {
         hostname="143.110.224.127";
         user = "forge";
