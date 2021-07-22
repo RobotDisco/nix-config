@@ -237,4 +237,3 @@ ACTION=="add", ATTRS{idProduct}=="1500", ATTRS{idVendor}=="05ac", DRIVERS=="usb"
   hardware.enableRedistributableFirmware = true;
   hardware.cpu.intel.updateMicrocode = true;
 }
-

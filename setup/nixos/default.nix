@@ -10,6 +10,7 @@
     beets
     bitwarden
     brightnessctl
+    chromium
     cifs-utils
     file
     firefox
