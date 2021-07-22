@@ -72,7 +72,7 @@
 ;; Disable line numbers for some modes
 (dolist (mode '(org-mode-hook
                 term-mode-hook
-                ;; vterm-mode-hook
+                vterm-mode-hook
                 shell-mode-hook
                 treemacs-mode-hook
                 eshell-mode-hook))
@@ -601,7 +601,7 @@
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'gaelan/org-babel-tangle-config)))
 
 (use-package vterm
-  :ensure nil)
+  :ensure t)
 
 (use-package magit
   :ensure t
