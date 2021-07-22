@@ -815,133 +815,134 @@
   (message "Display config: %s"
            (string-trim (shell-command-to-string "autorandr --current"))))
 
-(when gaelan/*is-linux*
-  (use-package exwm
-    :ensure t
-    :bind
-    (:map exwm-mode-map
-          ;; C-q will enable the next key to be sent directly
-          ([?\C-q] . 'exwm-input-send-next-key))
-    :config
-    ;; Set default number of workspaces
-    (setq exwm-workspace-number 5)
+(use-package exwm
+  :demand t
+  :if gaelan/*is-linux*
+  :ensure t
+  :bind
+  (:map exwm-mode-map
+        ;; C-q will enable the next key to be sent directly
+        ([?\C-q] . 'exwm-input-send-next-key))
+  :config
+  ;; Set default number of workspaces
+  (setq exwm-workspace-number 5)
 
-    ;; Set up management hooks
-    (add-hook 'exwm-update-class-hook
-              #'gaelan/exwm-update-class-hook)
-    (add-hook 'exwm-update-title-hook
-              #'gaelan/exwm-update-title-hook)
-    ;; (add-hook 'exwm-manage-finish-hook
-    ;;  	      #'gaelan/exwm-manage-finish-hook)
-    (add-hook 'exwm-init-hook
-              #'gaelan/exwm-init-hook)
+  ;; Set up management hooks
+  (add-hook 'exwm-update-class-hook
+            #'gaelan/exwm-update-class-hook)
+  (add-hook 'exwm-update-title-hook
+            #'gaelan/exwm-update-title-hook)
+  ;; (add-hook 'exwm-manage-finish-hook
+  ;;  	      #'gaelan/exwm-manage-finish-hook)
+  (add-hook 'exwm-init-hook
+            #'gaelan/exwm-init-hook)
 
-    ;; Enable multi-monitor support for EXWM
-    (require 'exwm-randr)
-    ;; Configure monitor change hooks
-    (add-hook 'exwm-randr-screen-change-hook
-              'gaelan/exwm-randr-screen-change-hook)
-    (exwm-randr-enable)
-    ;; Call the monitor configuration hook for the first time
-    (gaelan/run-in-background "autorandr --change --force")
-    (gaelan/set-wallpaper)
+  ;; Enable multi-monitor support for EXWM
+  (require 'exwm-randr)
+  ;; Configure monitor change hooks
+  (add-hook 'exwm-randr-screen-change-hook
+            'gaelan/exwm-randr-screen-change-hook)
+  (exwm-randr-enable)
+  ;; Call the monitor configuration hook for the first time
+  (gaelan/run-in-background "autorandr --change --force")
+  (gaelan/set-wallpaper)
 
-    ;; My workspaces includes specific ones for browsing, mail, slack
-    ;; By default, workspaces show up on the first, default, active monitor.
-    (setq exwm-randr-workspace-monitor-plist
-          '(3 "DP-1-2" 4 "DP-1-2"))
+  ;; My workspaces includes specific ones for browsing, mail, slack
+  ;; By default, workspaces show up on the first, default, active monitor.
+  (setq exwm-randr-workspace-monitor-plist
+        '(3 "DP-1-2" 4 "DP-1-2"))
 
-    ;; Set up exwm's systembar since xmobar doesn't support it
-    ;; Note: This has to be done before (exwm-init)
-    (require 'exwm-systemtray)
-    (setq exwm-systemtray-height 20)
-    (exwm-systemtray-enable)
+  ;; Set up exwm's systembar since xmobar doesn't support it
+  ;; Note: This has to be done before (exwm-init)
+  (require 'exwm-systemtray)
+  (setq exwm-systemtray-height 20)
+  (exwm-systemtray-enable)
 
-    ;; Automatically send mouse cursor to selected workspace's display
-    (setq exwm-workspace-warp-cursor t)
+  ;; Automatically send mouse cursor to selected workspace's display
+  (setq exwm-workspace-warp-cursor t)
 
-    ;; Window focus should follow mouse pointer
-    (setq mouse-autoselect-window t
-          focus-follows-mouse t)
+  ;; Window focus should follow mouse pointer
+  (setq mouse-autoselect-window t
+        focus-follows-mouse t)
 
-    ;; Set some global window management bindings. These always work
-    ;; regardless of EXWM state.
-    ;; Note: Changing this list after (exwm-enable) takes no effect.   
-    (setq exwm-input-global-keys
-          `(
-            ;; 's-r': Reset to (line-mode).
-            ([?\s-r] . exwm-reset)
+  ;; Set some global window management bindings. These always work
+  ;; regardless of EXWM state.
+  ;; Note: Changing this list after (exwm-enable) takes no effect.   
+  (setq exwm-input-global-keys
+        `(
+          ;; 's-r': Reset to (line-mode).
+          ([?\s-r] . exwm-reset)
 
-            ;; Move between windows
-            ([?\s-h] . windmove-left)
-            ([?\s-l] . windmove-right)
-            ([?\s-k] . windmove-up)
-            ([?\s-j] . windmove-down)
+          ;; Move between windows
+          ([?\s-h] . windmove-left)
+          ([?\s-l] . windmove-right)
+          ([?\s-k] . windmove-up)
+          ([?\s-j] . windmove-down)
 
-            ;; 's-w': Switch workspace.
-            ([?\s-w] . exwm-workspace-switch)
-            ;; 's-b': Bring application to current workspace
-            ([?\s-b] . exwm-workspace-switch-to-buffer)
+          ;; 's-w': Switch workspace.
+          ([?\s-w] . exwm-workspace-switch)
+          ;; 's-b': Bring application to current workspace
+          ([?\s-b] . exwm-workspace-switch-to-buffer)
 
-            ;; s-0 is an inconvenient shortcut sequence, given 0 is before 1
-            ([?\s-`] . (exwm-workspace-switch-create 0))
-            ([s-escape] . (exwm-workspace-switch-create 0))
+          ;; s-0 is an inconvenient shortcut sequence, given 0 is before 1
+          ([?\s-`] . (exwm-workspace-switch-create 0))
+          ([s-escape] . (exwm-workspace-switch-create 0))
 
-            ;; 's-p': Launch application a la dmenu
-            ([?\s-p] . (lambda (command)
-                         (interactive (list (read-shell-command "$ ")))
-                         (start-process-shell-command command nil command)))
+          ;; 's-p': Launch application a la dmenu
+          ([?\s-p] . (lambda (command)
+                       (interactive (list (read-shell-command "$ ")))
+                       (start-process-shell-command command nil command)))
 
-            ;; 's-<N>': Switch to certain workspace.
-            ,@(mapcar (lambda (i)
-                        `(,(kbd (format "s-%d" i)) .
-                          (lambda ()
-                            (interactive)
-                            (exwm-workspace-switch-create ,i))))
-                      (number-sequence 0 9))))
+          ;; 's-<N>': Switch to certain workspace.
+          ,@(mapcar (lambda (i)
+                      `(,(kbd (format "s-%d" i)) .
+                        (lambda ()
+                          (interactive)
+                          (exwm-workspace-switch-create ,i))))
+                    (number-sequence 0 9))))
 
-    ;; Certain important emacs keystrokes should always be handled by
-    ;; emacs in preference over the application handling them
-    ;; (setq exwm-input-prefix-keys
-    ;; 	  '(?\C-x
-    ;; 	    ?\C-u
-    ;; 	    ?\C-h
-    ;; 	    ?\M-x
-    ;; 	    ?\M-`
-    ;; 	    ?\M-&
-    ;; 	    ?\M-:))
+  ;; Certain important emacs keystrokes should always be handled by
+  ;; emacs in preference over the application handling them
+  ;; (setq exwm-input-prefix-keys
+  ;; 	  '(?\C-x
+  ;; 	    ?\C-u
+  ;; 	    ?\C-h
+  ;; 	    ?\M-x
+  ;; 	    ?\M-`
+  ;; 	    ?\M-&
+  ;; 	    ?\M-:))
 
-    ;; translate emacs keybindings into CUA-like ones for most apps, since most
-    ;; apps don't observe emacs kebindings and we would like a uniform experience.
-    (setq exwm-input-simulation-keys
-          '(;; movement
-            ([?\C-b] . [left])
-            ([?\M-b] . [C-left])
-            ([?\C-f] . [right])
-            ([?\M-f] . [C-right])
-            ([?\C-p] . [up])
-            ([?\C-n] . [down])
-            ([?\C-a] . [home])
-            ([?\C-e] . [end])
-            ([?\M-v] . [prior])
-            ([?\C-v] . [next])
-            ([?\C-d] . [delete])
-            ([?\C-k] . [S-end delete])
-            ;; cut/paste
-            ([?\C-w] . [?\C-x])
-            ([?\M-w] . [?\C-c])
-            ([?\C-y] . [?\C-v])
-            ;; search (this should really be a firefox-only thing)
-            ([?\C-s] . [?\C-f])))
+  ;; translate emacs keybindings into CUA-like ones for most apps, since most
+  ;; apps don't observe emacs kebindings and we would like a uniform experience.
+  (setq exwm-input-simulation-keys
+        '(;; movement
+          ([?\C-b] . [left])
+          ([?\M-b] . [C-left])
+          ([?\C-f] . [right])
+          ([?\M-f] . [C-right])
+          ([?\C-p] . [up])
+          ([?\C-n] . [down])
+          ([?\C-a] . [home])
+          ([?\C-e] . [end])
+          ([?\M-v] . [prior])
+          ([?\C-v] . [next])
+          ([?\C-d] . [delete])
+          ([?\C-k] . [S-end delete])
+          ;; cut/paste
+          ([?\C-w] . [?\C-x])
+          ([?\M-w] . [?\C-c])
+          ([?\C-y] . [?\C-v])
+          ;; search (this should really be a firefox-only thing)
+          ([?\C-s] . [?\C-f])))
 
-    ;; Pin certain applications to specific workspaces
-    (setq exwm-manage-configurations
-          '(((string= exwm-class-name "Firefox") workspace 2)
-            ((string= exwm-class-name "Chromium-browser") workspace 3)
-            ((string= exwm-class-name ".obs-wrapped") workspace 2)))
+  ;; Pin certain applications to specific workspaces
+  (setq exwm-manage-configurations
+        '(((string= exwm-class-name "Firefox") workspace 2)
+          ((string= exwm-class-name "Chromium-browser") workspace 3)
+          ((string= exwm-class-name ".obs-wrapped") workspace 2)))
 
-    ;; Enable EXWM
-    (exwm-enable)))
+  ;; Enable EXWM
+  (exwm-enable))
 
 (with-eval-after-load 'ediff-wind
   (setq ediff-control-frame-parameters
