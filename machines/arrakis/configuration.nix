@@ -33,6 +33,10 @@ in
     "dotfiles=/home/gaelan/code/dotfiles"
     "/nix/var/nix/profiles/per-user/root/channels"
   ];
+  nix.package = pkgs.nixFlakes;
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+  '';
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
