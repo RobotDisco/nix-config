@@ -817,7 +817,7 @@
 
 (when gaelan/*is-linux*
   (use-package exwm
-    :ensure nil
+    :ensure t
     :bind
     (:map exwm-mode-map
           ;; C-q will enable the next key to be sent directly
@@ -949,14 +949,14 @@
 
 (when gaelan/*is-linux*
   (use-package desktop-environment
-    :ensure nil
+    :ensure t
     :requires (exwm)
     :config
     (desktop-environment-mode)))
 
 (when gaelan/*is-linux*
   (use-package helm-exwm
-    :ensure nil
+    :ensure t
     :init
     (setq-default helm-source-names-using-follow '("EXWM buffers"))
     :config

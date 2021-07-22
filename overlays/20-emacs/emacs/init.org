@@ -1304,7 +1304,7 @@ There are certain workspaces that are assigned to specific purposes. This hook a
    #+BEGIN_SRC emacs-lisp :tangle yes
      (when gaelan/*is-linux*
        (use-package exwm
-         :ensure nil
+         :ensure t
          :bind
          (:map exwm-mode-map
                ;; C-q will enable the next key to be sent directly
@@ -1445,7 +1445,7 @@ ediff doesn't render correctly in exwm. Fix this by creating "Ediff Control Pane
    #+BEGIN_SRC emacs-lisp :tangle yes
      (when gaelan/*is-linux*
        (use-package desktop-environment
-         :ensure nil
+         :ensure t
          :requires (exwm)
          :config
          (desktop-environment-mode)))
@@ -1454,7 +1454,7 @@ ediff doesn't render correctly in exwm. Fix this by creating "Ediff Control Pane
    #+begin_src emacs-lisp :tangle yes
      (when gaelan/*is-linux*
        (use-package helm-exwm
-         :ensure nil
+         :ensure t
          :init
          (setq-default helm-source-names-using-follow '("EXWM buffers"))
          :config
