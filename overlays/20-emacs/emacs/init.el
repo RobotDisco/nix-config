@@ -348,6 +348,8 @@
   :after company
   :config (add-to-list 'company-backends 'company-nixos-options))
 
+(use-package pdf-tools)
+
 (use-package nov
   :ensure t
   :mode ("\\.epub\\'" . nov-mode))
