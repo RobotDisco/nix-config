@@ -12,6 +12,8 @@
     brightnessctl
     chromium
     cifs-utils
+    dunst
+    feh
     file
     firefox
     fwupd
