@@ -1242,27 +1242,28 @@ Vterm is a library that allows for a nice terminal emulator over the builtin env
 Here are a bunch of functions and hooks we use to set up our desktop environment.
 
 #+begin_src emacs-lisp :tangle yes
-    (defun gaelan/run-in-background (command)
-      (let ((command-parts (split-string command "[ ]+")))
-        (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
-
-    (defun gaelan/set-wallpaper ()
-      (interactive)
-      (start-process-shell-command
-       "feh" nil "feh --bg-scale ~/Pictures/Wallpaper/Vapourwave.jpg"))
-
-    (defun gaelan/exwm-init-hook ()
-      ;; Make workspace 1 be the one which we activate at startup
-      (exwm-workspace-switch-create 1)
-
-      ;; Start our dashboard panel
-      ;; (gaelan/start-panel)
-
-      ;; Launch apps that will run in the background
-      (gaelan/run-in-background "dunst")
-      (gaelan/run-in-background "nm-applet")
-      (gaelan/run-in-background "pasystray")
-      (gaelan/run-in-background "blueman-applet"))
+  (defun gaelan/run-in-background (command)
+    (let ((command-parts (split-string command "[ ]+")))
+      (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
+  
+  (defun gaelan/set-wallpaper ()
+    (interactive)
+    (start-process-shell-command
+     "feh" nil "feh --bg-scale ~/Pictures/Wallpaper/Vapourwave.jpg"))
+  
+  (defun gaelan/exwm-init-hook ()
+    ;; Make workspace 1 be the one which we activate at startup
+    (exwm-workspace-switch-create 1)
+  
+    ;; Start our dashboard panel
+    ;; (gaelan/start-panel)
+  
+    ;; Launch apps that will run in the background
+    (gaelan/run-in-background "dunst")
+    (gaelan/run-in-background "nm-applet")
+    (gaelan/run-in-background "pasystray")
+    (gaelan/run-in-background "blueman-applet")
+    (gaelan/run-in-background "seafile-applet"))
 #+end_src
 ** Window title hook
    By default, all X Window buffers have the title of =*EXWM*=. I want them to have the supplied window name of the application they contain, and I can perform that via a hook.

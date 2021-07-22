@@ -793,7 +793,8 @@
   (gaelan/run-in-background "dunst")
   (gaelan/run-in-background "nm-applet")
   (gaelan/run-in-background "pasystray")
-  (gaelan/run-in-background "blueman-applet"))
+  (gaelan/run-in-background "blueman-applet")
+  (gaelan/run-in-background "seafile-applet"))
 
 (defun gaelan/exwm-update-title-hook ()
   "EXWM hook for renaming buffer names to their associated X window title."

@@ -19,7 +19,7 @@
     mkpasswd
     nethack
     scrot
-    seafile-shared
+    seafile-client
     signal-desktop
     unzip
     yubioath-desktop
