@@ -514,7 +514,7 @@
 (use-package helm-bibtex
   :ensure t
   :custom
-  (bibtex-completion-bibliography (list (concat gaelan/brain-prefix "literature/references.bib")))
+  (bibtex-completion-bibliography (list (concat gaelan/brain-prefix "literature/REFERENCES.bib")))
   :after helm)
 
 (use-package org-roam-bibtex
