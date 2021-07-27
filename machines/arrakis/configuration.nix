@@ -149,7 +149,7 @@ in
     isNormalUser = true;
     home = "/home/gaelan";
     description = "Gaelan D'costa";
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" ];
   };
 
   home-manager.users = {
@@ -235,4 +235,6 @@ ACTION=="add", ATTRS{idProduct}=="1500", ATTRS{idVendor}=="05ac", DRIVERS=="usb"
 
   hardware.enableRedistributableFirmware = true;
   hardware.cpu.intel.updateMicrocode = true;
+
+  virtualisation.docker.enable = true;
 }
