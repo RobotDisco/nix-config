@@ -10,20 +10,24 @@
     beets
     bitwarden
     brightnessctl
+    calibre
     chromium
     cifs-utils
-    dunst
-    feh
+    direnv
+    discord
+    dwarf-fortress-packages.dwarf-fortress-full
     file
     firefox
     fwupd
-    dwarf-fortress-packages.dwarf-fortress-full
+    git-crypt
     inotify-tools
     mkpasswd
     nethack
+    nixops
     scrot
     seafile-client
     signal-desktop
+    slack
     unzip
     yubioath-desktop
     playerctl

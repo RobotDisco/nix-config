@@ -3,10 +3,12 @@
 {
   environment.systemPackages = with pkgs; [
     emacs
+    feh
     xmobar
     networkmanagerapplet
     dunst
     pasystray
+    pavucontrol
   ];
   
   services.xserver.windowManager.session = with pkgs; lib.singleton {
@@ -18,7 +20,7 @@
       ${xmobar}/bin/xmobar -d &
 
       # Start emacs server
-      exec dbus-launch --exit-with-session emacsclient -c
+      exec dbus-launch --exit-with-session emacs
     '';
   };
 
