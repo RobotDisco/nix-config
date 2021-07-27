@@ -1337,7 +1337,7 @@ There are certain workspaces that are assigned to specific purposes. This hook a
        ;; My workspaces includes specific ones for browsing, mail, slack
        ;; By default, workspaces show up on the first, default, active monitor.
        (setq exwm-randr-workspace-monitor-plist
-             '(3 "DP-1-2" 4 "DP-1-2"))
+             '(1 "DP-1-1" 2 "DP-1-1" 3 "DP-2" 4 "DP-2"))
      
        ;; Set up exwm's systembar since xmobar doesn't support it
        ;; Note: This has to be done before (exwm-init)
