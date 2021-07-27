@@ -97,8 +97,17 @@ in
   # services.printing.enable = true;
 
   # Enable sound.
-  # sound.enable = true;
-  # hardware.pulseaudio.enable = true;
+  sound.enable = true;
+
+  hardware.pulseaudio = {
+    enable = true;
+    
+    # Need full pulseaudio package for bluetooth audio
+    package = pkgs.pulseaudioFull;
+
+    # Want good audio codecs (APTX, LDAC) not garbage SBC
+    extraModules = [ pkgs.pulseaudio-modules-bt ];
+  };
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -108,6 +117,9 @@ in
   # Enable touchpad support.
   services.xserver.libinput.enable = true;
   services.xserver.libinput.touchpad.tapping = false;
+  services.xserver.libinput.mouse = {
+    buttonMapping = "1 2 8 4 5 6 7 3";
+  };
 
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.sddm.enable = true;
@@ -150,19 +162,6 @@ in
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
-
-  # Enable sound.
-  sound.enable = true;
-
-  hardware.pulseaudio = {
-    enable = true;
-
-    # Need full pulseaudio package for bluetooth audio
-    package = pkgs.pulseaudioFull;
-
-    # Want good audio codecs (APTX, LDAC) not garbage SBC
-    extraModules = [ pkgs.pulseaudio-modules-bt ];
-  };
 
   hardware.sane.enable = true;
   nixpkgs.config.sane.extraFirmware = [
