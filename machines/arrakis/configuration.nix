@@ -151,7 +151,7 @@ in
     isNormalUser = true;
     home = "/home/gaelan";
     description = "Gaelan D'costa";
-    extraGroups = [ "wheel" "networkmanager" "docker" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" "video" ];
   };
 
   home-manager.users = {
