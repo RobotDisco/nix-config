@@ -117,7 +117,9 @@ in
   # Enable touchpad support.
   services.xserver.libinput.enable = true;
   services.xserver.libinput.touchpad.tapping = false;
+  # Remap buttons for my kensington trackball
   services.xserver.libinput.mouse = {
+    dev = "/dev/input/by-id/usb-047d_Kensington_Expert_Mouse-mouse";
     buttonMapping = "1 2 8 4 5 6 7 3";
   };
 
