@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# This mostly follows the standard NixOS installation instuctions and
+# the ZFS wisdom found at https://nixos.wiki/wiki/NixOS_on_ZFS
+# A few ideas came from my experiences with ZFS on FreeBSD.
+
 # Fail on errors, undefined variables and print all commands
 set -uex
 
