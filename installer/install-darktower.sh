@@ -11,8 +11,8 @@ set -uex
 # very specific IDs as we do not want to format the wrong disks
 # which will contain irreplacable NAS data
 
-DISK0 = /dev/disk/by-id/ata-WDC_WDS500G2B0A-00SM50_19107F801948
-DISK1 = /dev/disk/by-id/ata-WDC_WDS500G2B0A-00SM50_19136D800887
+DISK0=/dev/disk/by-id/ata-WDC_WDS500G2B0A-00SM50_19107F801948
+DISK1=/dev/disk/by-id/ata-WDC_WDS500G2B0A-00SM50_19136D800887
 
 for DSK in ${DISK0} ${DISK1}; do
     parted ${DSK} -- mklabel gpt
@@ -34,7 +34,7 @@ mkfs.fat -F 32 -n EFIBOOT1 ${DISK1}-part1
 # fletcher & lz4 are the best balance of speedy/useful checksumming/compression
 # xattr and acltype set extended attributres, which systemd/journald needs
 # disabling atime is a performance improvement; only /var needs it.
-zpool create -O atime=off -O checksum=fletcher4 -O compression=lz4 \
+zpool create -f -O atime=off -O checksum=fletcher4 -O compression=lz4 \
       -O xattr=sa -O acltype=posixacl -O mountpoint=none \
       rootpool mirror ${DISK0}-part2 ${DISK1}-part2
 
@@ -58,7 +58,7 @@ mount -t zfs rootpool/local/nix /mnt/nix
 mount -t zfs rootpool/safe/var /mnt/var
 
 # Format VM ZFS pool
-zpool create -O atime=off -O checksum=fletcher4 -O compression=lz4 \
+zpool create -f -O atime=off -O checksum=fletcher4 -O compression=lz4 \
       -O mountpoint=none \
       vmpool mirror ${DISK0}-part3 ${DISK1}-part3
 
@@ -72,11 +72,14 @@ swapon ${DISK1}-part4
 
 nixos-generate-config --root /mnt
 
-cp --no-clobber /etc/configuration-darktower.nix /mnt/etc/nixos/configuration.nix
+cp /etc/configuration-darktower.nix /mnt/etc/nixos/configuration.nix
 
 echo "Please edit the nix configuration as needed."
 echo "$ vi /mnt/etc/nixos/configuratoin.nix"
 echo
-echo "When ready, install the system and reboot:"
+echo "When ready, install the system, export ZFS volumes, and reboot:"
 echo "$ nix-install"
+echo "$ umount /mnt/boot && ummount /mnt/home && umount /mnt/var && umount /mnt"
+echo "$ zpool export rootpool"
+echo "$ zpool export vmpool"
 echo "$ reboot"

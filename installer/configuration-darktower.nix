@@ -21,7 +21,7 @@
   boot.loader.grub.copyKernels = true;
   
   # Enable ZFS for booting
-  boot.supportedFileSystems = [ "zfs" ];
+  boot.supportedFilesystems = [ "zfs" ];
 
   # Enable sshd for bootstrapping
   services.openssh.enable = true;
