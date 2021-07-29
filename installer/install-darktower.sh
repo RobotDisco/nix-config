@@ -72,7 +72,7 @@ swapon ${DISK1}-part4
 
 nixos-generate-config --root /mnt
 
-cp --no-clobber /etc/configuration.nix /mnt/etc/nixos/configuration/nix
+cp --no-clobber /etc/configuration-darktower.nix /mnt/etc/nixos/configuration.nix
 
 echo "Please edit the nix configuration as needed."
 echo "$ vi /mnt/etc/nixos/configuratoin.nix"
