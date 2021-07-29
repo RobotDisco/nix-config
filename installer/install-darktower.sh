@@ -37,6 +37,8 @@ mkfs.fat -F 32 -n EFIBOOT1 ${DISK1}-part1
 zpool create -f -O atime=off -O checksum=fletcher4 -O compression=lz4 \
       -O xattr=sa -O acltype=posixacl -O mountpoint=none \
       rootpool mirror ${DISK0}-part2 ${DISK1}-part2
+# Reserve some free space, just in case
+zfs create -o refreservation=1G -o mountpoint=none rootpool/reserved
 
 # Create ZFS filesystems
 # Anything in rootpool/safe can be backed up if required
@@ -61,6 +63,8 @@ mount -t zfs rootpool/safe/var /mnt/var
 zpool create -f -O atime=off -O checksum=fletcher4 -O compression=lz4 \
       -O mountpoint=none \
       vmpool mirror ${DISK0}-part3 ${DISK1}-part3
+# Reserve some free space, just in case
+zfs create -o refreservation=1G -o mountpoint=none vmpool/reserved
 
 # Format and enable swap partitions.
 mkswap -L swap0 ${DISK0}-part4
