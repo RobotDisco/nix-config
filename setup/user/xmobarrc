@@ -6,12 +6,11 @@ Config { font = "xft:Anonymous Pro"
        , persistent = True
        , commands = [ Run Memory [] 10, Run Swap [] 10
                     , Run Weather "CYYZ" [] 10
-                    , Run Weather "CYKF" [] 10
                     , Run Wireless "wlp4s0" [] 10
                     , Run MultiCpu [] 10
                     , Run Battery [] 10
                     , Run Volume "default" "Master" [] 10
                     , Run Date "%F %R" "date" 30
                     ]
-       , template = "%CYYZ% %CYKF% %wlp4s0wi% %memory% %swap% %multicpu% %battery% %default:Master% %date%"
+       , template = "%CYYZ% %wlp4s0wi% } %memory% %swap% { %multicpu% %battery% %default:Master% %date%"
        }
