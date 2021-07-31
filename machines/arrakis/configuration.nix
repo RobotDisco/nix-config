@@ -245,4 +245,6 @@ ACTION=="add", ATTRS{idProduct}=="1500", ATTRS{idVendor}=="05ac", DRIVERS=="usb"
   virtualisation.docker.enable = true;
 
   services.lorri.enable = true;
+
+  services.hardware.bolt.enable = true;
 }
