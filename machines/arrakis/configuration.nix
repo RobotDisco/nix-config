@@ -145,7 +145,11 @@ in
 
   networking.hostId = "140f9be5";
 
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    enableStrongSwan = true;
+    wifi.powersave = true;
+  };
 
   users.users.gaelan = {
     isNormalUser = true;
