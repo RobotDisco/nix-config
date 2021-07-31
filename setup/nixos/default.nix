@@ -21,6 +21,7 @@
     fwupd
     git-crypt
     inotify-tools
+    mattermost-desktop
     mkpasswd
     nethack
     nixops

@@ -46,10 +46,6 @@
     forwardAgent = false;
 
     matchBlocks = {
-      "bastion01-tulip-prod" = {
-        hostname = "34.192.243.137";
-        user = "welladmin";
-      };
       "bastion01-s5a-devstaging" = {
         hostname = "34.233.233.36";
         user = "welladmin";
@@ -109,6 +105,15 @@
       "*.well.dev *.well.staging" = {
         user = "welladmin";
         proxyJump = "bastion01-well-devstaging";
+      };
+
+      "bastion01-tulip-prod" = {
+        user = "welladmin";
+        hostname = "34.192.243.137";
+      };
+      "*.tulip.prod" = {
+        user = "welladmin";
+        proxyJump = "bastion01-tulip-prod";
       };
 
       db02-timekit-prod = {
