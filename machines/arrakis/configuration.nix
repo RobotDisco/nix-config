@@ -243,4 +243,6 @@ ACTION=="add", ATTRS{idProduct}=="1500", ATTRS{idVendor}=="05ac", DRIVERS=="usb"
   hardware.cpu.intel.updateMicrocode = true;
 
   virtualisation.docker.enable = true;
+
+  services.lorri.enable = true;
 }
