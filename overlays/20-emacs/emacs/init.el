@@ -602,6 +602,10 @@
 
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'gaelan/org-babel-tangle-config)))
 
+(use-package ox-hugo
+  :ensure t
+  :after ox)
+
 (use-package vterm
   :ensure t)
 

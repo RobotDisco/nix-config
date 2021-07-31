@@ -944,6 +944,12 @@ Integrate a Pomodoro Technique into clocking in
 
      (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'gaelan/org-babel-tangle-config)))
    #+end_src
+* Blogging platform
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ox-hugo
+    :ensure t
+    :after ox)
+#+END_SRC
 * Terminal environment
 ** Install emacs vterm
 Vterm is a library that allows for a nice terminal emulator over the builtin environments
