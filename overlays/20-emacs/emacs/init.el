@@ -249,8 +249,9 @@
 
 (use-package projectile
   :ensure t
+  :bind (:map projectile-mode-map
+              ("C-c p" . projectile-command-map))
   :config
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (projectile-mode +1))
 
 (use-package helm-projectile
@@ -952,20 +953,20 @@
   (setq ediff-control-frame-parameters
         (cons '(unsplittable . t)  ediff-control-frame-parameters)))
 
-(when gaelan/*is-linux*
-  (use-package desktop-environment
-    :ensure t
-    :requires (exwm)
-    :config
-    (desktop-environment-mode)))
+(use-package desktop-environment
+  :ensure t
+  :if gaelan/*is-linux*
+  :after exwm
+  :config
+  (desktop-environment-mode))
 
-(when gaelan/*is-linux*
-  (use-package helm-exwm
-    :ensure t
-    :init
-    (setq-default helm-source-names-using-follow '("EXWM buffers"))
-    :config
-    (setq helm-exwm-emacs-buffers-source (helm-exwm-build-emacs-buffers-source))
-    (setq helm-exwm-source (helm-exwm-build-source))
-    (push 'helm-exwm-emacs-buffers-source helm-mini-default-sources)
-    (push 'helm-exwm-source helm-mini-default-sources)))
+(use-package helm-exwm
+  :ensure t
+  :if gaelan/*is-linux*
+  :init
+  (setq-default helm-source-names-using-follow '("EXWM buffers"))
+  :config
+  (setq helm-exwm-emacs-buffers-source (helm-exwm-build-emacs-buffers-source))
+  (setq helm-exwm-source (helm-exwm-build-source))
+  (push 'helm-exwm-emacs-buffers-source helm-mini-default-sources)
+  (push 'helm-exwm-source helm-mini-default-sources))

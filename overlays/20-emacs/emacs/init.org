@@ -466,8 +466,9 @@ Thanks to quickstart producing autoloads and all packages being auto-downloaded,
    #+begin_src emacs-lisp :tangle yes
      (use-package projectile
        :ensure t
+       :bind (:map projectile-mode-map
+                   ("C-c p" . projectile-command-map))
        :config
-       (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
        (projectile-mode +1))
    #+end_src
 *** Helm support
@@ -1450,25 +1451,25 @@ ediff doesn't render correctly in exwm. Fix this by creating "Ediff Control Pane
    =desktop-environment-mode= is a package that automatically hooks up handlers for things like brightness, volume, wireless disable, etc...
 
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (when gaelan/*is-linux*
-       (use-package desktop-environment
-         :ensure t
-         :requires (exwm)
-         :config
-         (desktop-environment-mode)))
+     (use-package desktop-environment
+       :ensure t
+       :if gaelan/*is-linux*
+       :after exwm
+       :config
+       (desktop-environment-mode))
    #+END_SRC
 ** Helm integration
    #+begin_src emacs-lisp :tangle yes
-     (when gaelan/*is-linux*
-       (use-package helm-exwm
-         :ensure t
-         :init
-         (setq-default helm-source-names-using-follow '("EXWM buffers"))
-         :config
-         (setq helm-exwm-emacs-buffers-source (helm-exwm-build-emacs-buffers-source))
-         (setq helm-exwm-source (helm-exwm-build-source))
-         (push 'helm-exwm-emacs-buffers-source helm-mini-default-sources)
-         (push 'helm-exwm-source helm-mini-default-sources)))
+     (use-package helm-exwm
+       :ensure t
+       :if gaelan/*is-linux*
+       :init
+       (setq-default helm-source-names-using-follow '("EXWM buffers"))
+       :config
+       (setq helm-exwm-emacs-buffers-source (helm-exwm-build-emacs-buffers-source))
+       (setq helm-exwm-source (helm-exwm-build-source))
+       (push 'helm-exwm-emacs-buffers-source helm-mini-default-sources)
+       (push 'helm-exwm-source helm-mini-default-sources))
    #+end_src
 * [Disabled] Emacs Server
   It'd be nice if I could invoke emacs from anywhere (including the terminal or git hooks) and have buffers always collect in my main emacs instance.
