@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
 
@@ -12,31 +12,21 @@ hostName = "arrakis";
 in
 
 {
-  nixpkgs.overlays =
-    let path = <dotfiles/overlays>; in with builtins;
-      map (n: import (path + ("/" + n)))
-          (filter (n: match ".*\\.nix" n != null ||
-	              pathExists (path + ("/" + n + "/default.nix")))
-		  (attrNames (readDir path)));
-
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      <dotfiles/setup/nixos>
-      <dotfiles/home-manager/nixos>
-      ./cachix.nix
+      ../../profiles/tulip.nix
+      ../../profiles/fonts.nix
+      ../../profiles/gnupg.nix
+      ../../profiles/packages.nix
+      ../../profiles/dev.nix
+      ../../profiles/shell.nix
+      ../../profiles/editor.nix
+      ../../profiles/window-manager.nix
+      ../../profiles/shit-gaelan-likes.nix
+      ../../profiles/misc.nix
+      ../../profiles/cachix.nix
     ];
-
-  nix.nixPath = [
-    "nixos-config=/etc/nixos/configuration.nix"
-    "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-    "dotfiles=/home/gaelan/code/dotfiles"
-    "/nix/var/nix/profiles/per-user/root/channels"
-  ];
-  nix.package = pkgs.nixFlakes;
-  nix.extraOptions = ''
-    experimental-features = nix-command flakes
-  '';
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -158,8 +148,10 @@ in
     extraGroups = [ "wheel" "networkmanager" "docker" "video" ];
   };
 
+  home-manager.useUserPackages = true;
+  home-manager.useGlobalPkgs = true;
   home-manager.users = {
-    gaelan = import <dotfiles/setup/user>;
+    gaelan = import ../../users/gaelan { inherit config; inherit pkgs; inherit lib; };
   };
 
   services.tlp.enable = true;
@@ -243,8 +235,6 @@ ACTION=="add", ATTRS{idProduct}=="1500", ATTRS{idVendor}=="05ac", DRIVERS=="usb"
   hardware.cpu.intel.updateMicrocode = true;
 
   virtualisation.docker.enable = true;
-
-  services.lorri.enable = true;
 
   services.hardware.bolt.enable = true;
 }

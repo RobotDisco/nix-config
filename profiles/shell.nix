@@ -1,3 +1,5 @@
+# My current shell of choice (outside Emacs, at least) is zsh
+
 { pkgs, ... }:
 
 {  

@@ -1,4 +1,35 @@
-{ config, pkgs, ... }:
+{ pkgs, lib, ... }:
+
+let
+  dag = import ../../ext/dag.nix { inherit lib; };
+  
+  emacsEnv = pkgs.emacsWithPackagesFromUsePackage {
+    config = ./emacs/init.org;
+  };
+  # init-el = pkgs.emacs.trivialBuild {
+  #   pname = "init-el";
+  #   src = lib.sourceByRegex ./emacs [ "*.org" ];
+
+  #   preBuild = ''
+  #     # Tangle org files
+  #     emacs --batch -Q \
+  #       -l org \
+  #       *.org \
+  #       -f org-babel-tangle
+
+  #     # Fake config directory in order to have files on load-path
+  #     mkdir -p .xdg-config
+  #     ln -s $PWD .xdg-config/emacs
+  #     export XDG_CONFIG_HOME="$PWD/.xdg-config"
+
+  #     emacs --batch -Q \
+  #       -l package \
+  #       -eval '(setq package-quickstart t)' \
+  #       -f package-quickstart-refresh
+  #   '';
+  # };
+
+in
 
 {
   home.file.gpg-conf = {
@@ -14,7 +45,7 @@
       enable-ssh-support
       default-cache-ttl 60
       max-cache-ttl 120
-      ${if pkgs.stdenvNoCC.isLinux then
+      ${if pkgs.stdenv.isLinux then
         "pinentry-program ${pkgs.pinentry}/bin/pinentry-curses"
         else
           "pinentry-program ${pkgs.pinentry_mac}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"}
@@ -33,7 +64,7 @@
         protocol = "https";
       };
     };
-    userEmail = if pkgs.stdenvNoCC.isLinux
+    userEmail = if pkgs.stdenv.isLinux
                 then "gdcosta@gmail.com"
                 else "gaelan@tulip.com";
     userName = "Gaelan D'costa";
@@ -140,37 +171,38 @@
 
   # We need git's config found in a legacy place because of how certain devtools tooling
   # mounts it into dockerized tools.
-  home.activation.gitConfigSymlink = config.lib.dag.entryAfter ["writeBoundary"] ''
+  home.activation.gitConfigSymlink = dag.dagEntryAfter ["writeBoundary"] ''
     $DRY_RUN_CMD ln -sf $VERBOSE_ARG \
     $HOME/.config/git/config $HOME/.gitconfig
   '';
 
   home.file.emacsConfig = {
-    source = <dotfiles/overlays/20-emacs/emacs/init.el>;
+    #sourceFile = "${init-el}/.xdg-config/emacs/init.el";
+    source = ./emacs/init.el;
     target = ".emacs.d/init.el";
   };
   home.file.emacsPomodoroStartSound = {
-    source = <dotfiles/overlays/20-emacs/emacs/audio/incoming_hail2.mp3>;
+    source = ./emacs/audio/incoming_hail2.mp3;
     target = ".emacs.d/audio/incoming_hail2.mp3";
   };
   home.file.emacsPomodoroFinishSound = {
-    source = <dotfiles/overlays/20-emacs/emacs/audio/ds9intercom.mp3>;
+    source = ./emacs/audio/ds9intercom.mp3;
     target = ".emacs.d/audio/ds9intercom.mp3";
   };
   home.file.emacsPomodoroFinishLongSound = {
-    source = <dotfiles/overlays/20-emacs/emacs/audio/computerbeepsequence1.mp3>;
+    source = ./emacs/audio/computerbeepsequence1.mp3;
     target = ".emacs.d/audio/computerbeepsequence1.mp3";
   };
   home.file.emacsSecrets = {
-    source = <dotfiles/overlays/20-emacs/emacs/secrets.el>;
+    source = ./emacs/secrets.el;
     target = ".emacs.d/secrets.el";
   };
     home.file.stalonetrayConfig = {
-    source = <dotfiles/setup/user/stalonetrayrc>;
+    source = ./stalonetrayrc;
     target = ".stalonetrayrc";
   };
   home.file.xmobarConfig = {
-    source = <dotfiles/setup/user/xmobarrc>;
+    source = ./xmobarrc;
     target = ".xmobarrc";
   };
 }
