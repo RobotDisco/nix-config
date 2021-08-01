@@ -165,6 +165,10 @@
     source = <dotfiles/overlays/20-emacs/emacs/secrets.el>;
     target = ".emacs.d/secrets.el";
   };
+    home.file.stalonetrayConfig = {
+    source = <dotfiles/setup/user/stalonetrayrc>;
+    target = ".stalonetrayrc";
+  };
   home.file.xmobarConfig = {
     source = <dotfiles/setup/user/xmobarrc>;
     target = ".xmobarrc";

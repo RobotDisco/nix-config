@@ -2,23 +2,20 @@
 
 {
   environment.systemPackages = with pkgs; [
+    dunst
     emacs
     feh
-    xmobar
     networkmanagerapplet
-    dunst
     pasystray
     pavucontrol
+    slock
+    stalonetray
+    xmobar
   ];
   
   services.xserver.windowManager.session = with pkgs; lib.singleton {
     name = "exwm";
     start = ''
-
-
-      # Start status bar
-      ${xmobar}/bin/xmobar -d &
-
       # Start emacs server
       exec dbus-launch --exit-with-session emacs
     '';

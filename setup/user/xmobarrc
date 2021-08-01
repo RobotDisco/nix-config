@@ -1,16 +1,28 @@
 Config { font = "xft:Anonymous Pro"
-       , position = Top
+       , position = TopP 120 0
        , bgColor = "black"
        , fgColor = "white"
        , allDesktops = True
        , persistent = True
+       , pickBroadest = True
        , commands = [ Run Memory [] 10, Run Swap [] 10
-                    , Run Weather "CYYZ" [] 10
-                    , Run Wireless "wlp4s0" [] 10
-                    , Run MultiCpu [] 10
-                    , Run Battery [] 10
+                    , Run Weather "CYYZ"
+                      [ "-t", "<tempC>°C <skyCondition>, wind <windKmh> rh <rh>% (<hour>)"
+                      , "-L", "-1", "-H", "25", "-h", "orange1", "-l", "aqua"
+                      ] 9000
+                    , Run Wireless "wlp4s0" [] 50
+                    , Run MultiCpu [] 50
+                    , Run Battery ["-t", "<acstatus>: <watts> (<left> / <timeleft>)"
+                                  , "-L", "10", "-H", "90"
+                                  , "-l", "red", "-h", "green"
+                                  , "--"
+                                  , "-p", "orange1"
+                                  , "-P"
+				  , "-O", "charging", "-i", "not charging"
+				  , "-o", "draining"
+                                  ] 50
                     , Run Volume "default" "Master" [] 10
-                    , Run Date "%F %R" "date" 30
+                    , Run Date "%F %R" "date" 300
                     ]
-       , template = "%CYYZ% %wlp4s0wi% } %memory% %swap% { %multicpu% %battery% %default:Master% %date%"
+       , template = "%date% %battery% %default:Master% } %memory% %swap% %multicpu% { %wlp4s0wi% %CYYZ%"
        }

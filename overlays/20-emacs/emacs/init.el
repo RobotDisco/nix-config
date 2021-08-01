@@ -793,15 +793,14 @@
   ;; Make workspace 1 be the one which we activate at startup
   (exwm-workspace-switch-create 1)
 
-  ;; Start our dashboard panel
-  ;; (gaelan/start-panel)
-
   ;; Launch apps that will run in the background
   (gaelan/run-in-background "dunst")
   (gaelan/run-in-background "nm-applet")
   (gaelan/run-in-background "pasystray")
   (gaelan/run-in-background "blueman-applet")
-  (gaelan/run-in-background "seafile-applet"))
+  (gaelan/run-in-background "seafile-applet")
+  (gaelan/run-in-background "stalonetray")
+  (gaelan/run-in-background "xmobar -d"))
 
 (defun gaelan/exwm-update-title-hook ()
   "EXWM hook for renaming buffer names to their associated X window title."
@@ -856,12 +855,6 @@
   ;; By default, workspaces show up on the first, default, active monitor.
   (setq exwm-randr-workspace-monitor-plist
         '(1 "DP-1-1" 2 "DP-1-1" 3 "DP-2" 4 "DP-2"))
-
-  ;; Set up exwm's systembar since xmobar doesn't support it
-  ;; Note: This has to be done before (exwm-init)
-  (require 'exwm-systemtray)
-  (setq exwm-systemtray-height 20)
-  (exwm-systemtray-enable)
 
   ;; Automatically send mouse cursor to selected workspace's display
   (setq exwm-workspace-warp-cursor t)
