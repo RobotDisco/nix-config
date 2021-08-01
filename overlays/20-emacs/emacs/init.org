@@ -403,16 +403,23 @@ Make it easy (and fabulous) to quickly see how far down a file we are at a glanc
        :config
        ;; Turn on fuzzy matching in a bunch of places
        ;; turn it off if it is irritating or slows down searches.
-       (setq helm-recentf-fuzzy-match t
+       (setq helm-apropos-fuzzy-match t
              helm-buffers-fuzzy-matching t
-             helm-locate-fuzzy-match t
-             helm-M-x-fuzzy-match t
-             helm-semantic-fuzzy-match t
+             helm-company-fuzzy-match t
+             helm-etags-fuzzy-match t
              helm-imenu-fuzzy-match t
-             helm-apropos-fuzzy-match t
              helm-lisp-fuzzy-completion t
+             helm-locate-fuzzy-match t
+             helm-locate-library-fuzzy-match t
+             helm-ls-git-fuzzy-match t
+             helm-M-x-fuzzy-match t
+             helm-recentf-fuzzy-match t
              helm-session-fuzzy-match t
-             helm-etags-select t)
+             helm-semantic-fuzzy-match t)
+       ;; Enable fancy Emacs 27+ fuzzy matching globally
+       (setq helm-completion-style 'emacs)
+       (add-to-list 'completion-styles 'flex)
+     
        (require 'helm-config)
        (helm-mode +1)
        (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
