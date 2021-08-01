@@ -106,6 +106,10 @@
   :config
   (doom-modeline-mode 1))
 
+(use-package nyan-mode
+  :ensure t
+  :config (nyan-mode))
+
 (use-package rebecca-theme
   ;; I guess themes can't be deferred
   :demand t

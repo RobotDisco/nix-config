@@ -234,6 +234,13 @@ Thanks to quickstart producing autoloads and all packages being auto-downloaded,
 	:config
 	(doom-modeline-mode 1))
     #+end_src
+*** Nyan mode for file position
+Make it easy (and fabulous) to quickly see how far down a file we are at a glance
+#+begin_src emacs-lisp :tangle yes
+  (use-package nyan-mode
+    :ensure t
+    :config (nyan-mode))
+#+end_src
 *** Emacs theming
     As far as I can tell, the combination of using Emacs in daemon mode and themes are a dark art, which often conflict with each other. The problem is that the daemon likely runs outside the graphical system, but the theme does load-time adjustments based on whether the frame is run in a console or graphical context.
     #+begin_src emacs-lisp :tangle yes
