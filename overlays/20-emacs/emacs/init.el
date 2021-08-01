@@ -39,9 +39,6 @@
 (eval-when-compile
   (require 'use-package))
 
-(eval-and-compile
-  (setq use-package-always-defer t))
-
 (use-package diminish
   :ensure t)
 

@@ -101,7 +101,7 @@ Because it is a macro, we only need to require the package when compiling the co
  #+END_SRC
 ** Always defer loading packages
 Thanks to quickstart producing autoloads and all packages being auto-downloaded, let's avoid loading packages unless we actually use them
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   (eval-and-compile
     (setq use-package-always-defer t))
 #+end_src
