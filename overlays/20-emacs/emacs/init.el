@@ -197,20 +197,19 @@
          ("C-x c h r" . helm-register)
          ("C-x c h g" . helm-google-suggest)
          ("C-c h M-:" . helm-eval-expression-with-eldoc))
-  :init
+  :config
   ;; Turn on fuzzy matching in a bunch of places
   ;; turn it off if it is irritating or slows down searches.
-  (setq-default helm-recentf-fuzzy-match t
-                helm-buffers-fuzzy-matching t
-                helm-locate-fuzzy-match t
-                helm-M-x-fuzzy-match t
-                helm-semantic-fuzzy-match t
-                helm-imenu-fuzzy-match t
-                helm-apropos-fuzzy-match t
-                helm-lisp-fuzzy-completion t
-                helm-session-fuzzy-match t
-                helm-etags-select t)
-  :config
+  (setq helm-recentf-fuzzy-match t
+        helm-buffers-fuzzy-matching t
+        helm-locate-fuzzy-match t
+        helm-M-x-fuzzy-match t
+        helm-semantic-fuzzy-match t
+        helm-imenu-fuzzy-match t
+        helm-apropos-fuzzy-match t
+        helm-lisp-fuzzy-completion t
+        helm-session-fuzzy-match t
+        helm-etags-select t)
   (require 'helm-config)
   (helm-mode +1)
   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
