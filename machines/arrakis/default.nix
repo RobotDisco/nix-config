@@ -215,6 +215,7 @@ EndSection
   services.upower.enable = true;
 
   hardware.bluetooth.enable = true;
+  services.blueman.enable = true;
 
   services.fwupd.enable = true;
   services.logind.lidSwitch = "hybrid-sleep";
@@ -231,4 +232,5 @@ ACTION=="add", ATTRS{idProduct}=="1500", ATTRS{idVendor}=="05ac", DRIVERS=="usb"
   virtualisation.docker.enable = true;
 
   services.hardware.bolt.enable = true;
+  services.udisks2.enable = true;
 }

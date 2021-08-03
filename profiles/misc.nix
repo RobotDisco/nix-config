@@ -4,7 +4,6 @@
 {
   environment.systemPackages = with pkgs; [
     file
-    fwupd
     mkpasswd
     unzip
   ];
