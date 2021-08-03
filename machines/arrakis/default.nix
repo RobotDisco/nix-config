@@ -108,20 +108,14 @@ in
   services.xserver.libinput.enable = true;
   services.xserver.libinput.touchpad.tapping = false;
   # Remap buttons for my kensington trackball
-  services.xserver.libinput.mouse = {
-    dev = "/dev/input/by-id/usb-047d_Kensington_Expert_Mouse-mouse";
-    buttonMapping = "1 2 8 4 5 6 7 3";
-  };
-
-  # Enable the KDE Desktop Environment.
-  # services.xserver.displayManager.sddm.enable = true;
-  # services.xserver.desktopManager.plasma5.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.jane = {
-  #   isNormalUser = true;
-  #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-  # };
+  services.xserver.config = ''
+Section "InputClass"
+        Identifier "Kensington Expert Mouse"
+        MatchUSBID "047d:1020"
+        Driver "libinput"
+        Option "ButtonMapping" "1 2 8 4 5 6 7 3 9"
+EndSection
+  '';
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
