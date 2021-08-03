@@ -21,8 +21,9 @@ Config { font = "xft:Anonymous Pro"
 				  , "-O", "charging", "-i", "not charging"
 				  , "-o", "draining"
                                   ] 50
-                    , Run Volume "default" "Master" [] 10
+--                    , Run Volume "default" "Master" [] 10
+                    , Run Alsa "default" "Master" []
                     , Run Date "%F %R" "date" 300
                     ]
-       , template = "%date% %battery% %default:Master% } %memory% %swap% %multicpu% { %wlp4s0wi% %CYYZ%"
+       , template = "%date% %battery% %alsa:default:Master% } %memory% %swap% %multicpu% { %wlp4s0wi% %CYYZ%"
        }
