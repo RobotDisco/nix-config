@@ -233,4 +233,6 @@ ACTION=="add", ATTRS{idProduct}=="1500", ATTRS{idVendor}=="05ac", DRIVERS=="usb"
 
   services.hardware.bolt.enable = true;
   services.udisks2.enable = true;
+
+  services.throttled.enable = true;
 }
