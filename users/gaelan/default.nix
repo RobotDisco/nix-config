@@ -138,6 +138,15 @@ in
         proxyJump = "bastion01-well-devstaging";
       };
 
+      "bastion01-well-prod" = {
+        user = "welladmin";
+        hostname = "34.194.205.63";
+      };
+      "*.well.prod" = {
+        user = "welladmin";
+        proxyJump = "bastion01-well-prod";
+      };
+
       "bastion01-tulip-prod" = {
         user = "welladmin";
         hostname = "34.192.243.137";
