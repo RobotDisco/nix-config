@@ -82,5 +82,4 @@ in
   # ";
 
   services.hardware.bolt.enable = true;
-  services.throttled.enable = true;
 }
