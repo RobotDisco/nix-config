@@ -1288,25 +1288,36 @@ Here are a bunch of functions and hooks we use to set up our desktop environment
    By default, all X Window buffers have the title of =*EXWM*=. I want them to have the supplied window name of the application they contain, and I can perform that via a hook.
 
    #+BEGIN_SRC emacs-lisp :tangle yes
+     (require 's)
+     
      (defun gaelan/exwm-update-title-hook ()
        "EXWM hook for renaming buffer names to their associated X window title."
-
+     
        (pcase exwm-class-name
          ("Firefox" (exwm-workspace-rename-buffer
-                     (format "Firefox: %s" exwm-title)))))
-
+                     (format "Firefox: %s" (s-chop-suffix " — Mozilla Firefox"
+                                                          exwm-title))))
+         ("Chromium-browser" (exwm-workspace-rename-buffer
+                              (format "Chromium: %s"
+                                      (s-chop-suffix " - Chromium" exwm-title))))))
+     
      (defun gaelan/exwm-update-class-hook ()
        "EXWM hook for renaming buffer names to their associated X window class."
        (exwm-workspace-rename-buffer exwm-class-name))
+     
+     
+     
    #+END_SRC
 ** Move certain apps to purpose-specific workspaces
 There are certain workspaces that are assigned to specific purposes. This hook automatically assigns apps to these workspaces when launched.
 
 #+begin_src emacs-lisp :tangle no
   (defun gaelan/configure-window-by-class-hook ()
-    (interactive)
     (pcase exwm-class-name
-      ("Firefox" (exwm-workspace-move-window 2)))
+      ("Firefox" (exwm-workspace-move-window 2))
+      ("Chromium-browser" (exwm-workspace-move-window 2))
+      ("Slack" (exwm-workspace-move-window 3))
+      ("Mattermost" (exwm-workspace-move-window 3))))
 #+end_src
 ** Monitor change hook
    This hook invokes autorandr when we detect a monitor change. We assume autorandr has been previously configured.

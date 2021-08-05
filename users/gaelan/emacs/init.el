@@ -809,12 +809,18 @@
   (gaelan/run-in-background "stalonetray")
   (gaelan/run-in-background "xmobar -d"))
 
+(require 's)
+
 (defun gaelan/exwm-update-title-hook ()
   "EXWM hook for renaming buffer names to their associated X window title."
 
   (pcase exwm-class-name
     ("Firefox" (exwm-workspace-rename-buffer
-                (format "Firefox: %s" exwm-title)))))
+                (format "Firefox: %s" (s-chop-suffix " — Mozilla Firefox"
+                                                     exwm-title))))
+    ("Chromium-browser" (exwm-workspace-rename-buffer
+                         (format "Chromium: %s"
+                                 (s-chop-suffix " - Chromium" exwm-title))))))
 
 (defun gaelan/exwm-update-class-hook ()
   "EXWM hook for renaming buffer names to their associated X window class."
