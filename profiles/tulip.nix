@@ -6,4 +6,7 @@
     google-cloud-sdk
     mattermost-desktop
   ];
+
+  # We need strongswan support for Tulip's VPN.
+  networking.networkmanager.enableStrongSwan = true;
 }

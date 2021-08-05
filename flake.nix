@@ -31,8 +31,14 @@
           specialArgs = { inherit inputs; };
           
           modules = [
+	    ./machines/arrakis
             home-manager.nixosModules.home-manager
-            ./machines/arrakis
+	    {
+	        home-manager.useUserPackages = true;
+		home-manager.useGlobalPkgs = true;
+		home-manager.users.gaelan =
+      		  import ./users/gaelan/home-manager.nix;
+            }
           ];
         };
     };

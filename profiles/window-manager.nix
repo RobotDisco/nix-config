@@ -17,6 +17,9 @@
     stalonetray
     xmobar
   ];
+
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
   
   services.xserver.windowManager.session = with pkgs; lib.singleton {
     name = "exwm";

@@ -9,4 +9,6 @@
     jq
     ripgrep
   ];
+
+  virtualisation.docker.enable = true;
 }
