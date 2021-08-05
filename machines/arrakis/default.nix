@@ -26,6 +26,7 @@ in
       ../../profiles/shit-gaelan-likes.nix
       ../../profiles/misc.nix
       ../../profiles/cachix.nix
+      ../../profiles/nix-dev.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
