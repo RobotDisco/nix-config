@@ -1,10 +1,4 @@
 {
-  # Honour the same settings in the linux console as in X11
-  console.useXkbConfig = true;
-
-  # Caps Lock must die; replace with Ctrl
-  services.xserver.xkbOptions = "ctrl:nocaps";
-
   # Enable touchpad support.
   services.xserver.libinput.enable = true;
   # Turn off touchpad tapping, it is very annoying and disruptive

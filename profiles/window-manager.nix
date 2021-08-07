@@ -37,4 +37,7 @@
   services.avahi.enable = true;
   services.picom.enable = true;
   services.blueman.enable = true;
+
+  # Enable locking of machines (for when I step away)
+  programs.slock.enable = true;
 }
