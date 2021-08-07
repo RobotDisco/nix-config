@@ -581,6 +581,7 @@
   (load-library (concat user-emacs-directory "secrets.el"))
   (setq org-gcal-client-id gaelan/gcal-client-id)
   (setq org-gcal-client-secret gaelan/gcal-client-secret)
+  (setq org-gcal-remove-api-cancelled-events nil)
   (setq org-gcal-file-alist
         `(("gdcosta@gmail.com" . ,(concat gaelan/gtd-prefix "gcal/personal.org"))
           ("gaelan@tulip.com" . ,(concat gaelan/gtd-prefix "gcal/work.org")))))
