@@ -13,10 +13,6 @@
 
   # This is where we define our own stuff
   outputs = { self, nixpkgs, emacs-overlay, home-manager, ... }@inputs:
-    let
-      timeZone = "America/Toronto"; # time.timeZone
-    in
-      
     {
       overlays = {
         emacs-overlay = emacs-overlay.overlay;
@@ -31,13 +27,22 @@
           specialArgs = { inherit inputs; };
           
           modules = [
-	    ./machines/arrakis
+	          ./nixos/machines/arrakis
+            {
+              users.users.gaelan = {
+                isNormalUser = true;
+                home = "/home/gaelan";
+                description = "Gaelan D'costa";
+                # TODO if I have role profiles elsewhere, these should be confingured there
+                extraGroups = [ "wheel" "networkmanager" "docker" "video" ];
+              };
+            }
             home-manager.nixosModules.home-manager
-	    {
-	        home-manager.useUserPackages = true;
-		home-manager.useGlobalPkgs = true;
-		home-manager.users.gaelan =
-      		  import ./users/gaelan/home-manager.nix;
+	          {
+	            home-manager.useUserPackages = true;
+		          home-manager.useGlobalPkgs = true;
+		          home-manager.users.gaelan =
+      		      import ./home-manager/users/gaelan/default.nix;
             }
           ];
         };
