@@ -54,6 +54,8 @@
   #     exec ${dbus}/bin/dbus-launch --exit-with-session ${emacs}/bin/emacs
   #   '';
   # };
+  # We need _SOME_ window manager enabled because lightdm fails if none are defined.
+  services.xserver.desktopManager.xterm.enable = true;
 
   programs = {
     # Enable locking of machines (for when I step away)

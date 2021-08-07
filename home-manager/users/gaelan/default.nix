@@ -16,6 +16,8 @@
       pkgs.camingo-code
       # My old fav programming typeface, still used in places
       pkgs.anonymousPro
+      # I use Lato for non-monospaced text
+      pkgs.lato
   ];
 
   # Enable my favourite fonts.
