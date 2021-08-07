@@ -49,7 +49,7 @@
 
   # We need git's config found in a legacy place because of how certain tools
   # mount it into dockerized tools. (axe in particular)
-  home.activation.gitConfigSymlink = lib.hm.dag.dagEntryAfter ["writeBoundary"] ''
+  home.activation.gitConfigSymlink = lib.hm.dag.entryAfter ["writeBoundary"] ''
     $DRY_RUN_CMD ln -sf $VERBOSE_ARG \
     $HOME/.config/git/config $HOME/.gitconfig
   '';
