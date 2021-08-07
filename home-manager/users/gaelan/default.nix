@@ -23,6 +23,12 @@
       pkgs.lato
   ];
 
+  # Home manager handles its own keyboard management
+  # disable caps lock for it is terrible
+  home.keyboard = {
+    options = [ "ctrl:nocaps" ];
+  };
+
   # Enable my favourite fonts.
   fonts.fontconfig.enable = true;
 
