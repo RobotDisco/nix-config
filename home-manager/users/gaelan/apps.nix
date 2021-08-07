@@ -1,5 +1,5 @@
 # Applications gaelan uses a lot
-{ pkgs }:
+{ pkgs, ... }:
 
 {
   home.packages = with pkgs; [

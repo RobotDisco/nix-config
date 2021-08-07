@@ -4,10 +4,9 @@
 {
   imports = [
     ./apps.nix
-    ./emacs.nix
-    ./exwm.nix
+    ./emacs
     ./tulip.nix
-    ../profiles/dev.nix
+    ../../profiles/dev.nix
   ];
 
   home.packages = with pkgs; [
@@ -55,17 +54,19 @@
     $HOME/.config/git/config $HOME/.gitconfig
   '';
 
+  # Document these
   programs.zsh = {
     enable = true;
-    enableAutoSuggestions = true;
+    enableAutosuggestions = true;
     enableCompletion = true;
-    enableSyntaxHighlighting = true;
-    enableVtrIntegration = true;
+    # Not in home-manager anymore??
+    #enableSyntaxHighlighting = true;
+    enableVteIntegration = true;
     autocd = true;
   };
 
   # Fuzzy finding on the shell
-  programs.fzf.enable = {
+  programs.fzf = {
     enable = true;
     enableZshIntegration = true;
   };

@@ -29,10 +29,11 @@ in
   # Do the equivalent of an fsck periodically
   services.zfs.autoScrub.enable = true;
 
-  
+
+  ## Enable some thinkpad-specific kernel modules
+  boot.kernelModules = [ "tp_smapi" ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.tp_smapi ];
   environment.systemPackages = with pkgs; [
-    # Thinkpad power management helpers
-    tp_smapi
     tpacpi-bat
   ];
 

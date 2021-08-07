@@ -18,18 +18,17 @@
   
   console = {
     # Honour the same settings as the linux console as in X11
-    console.useXkbConfig = true;
-
-    # Caps Lock must die; replace with Ctrl
-    services.xserver.xkbOptions = "ctrl:nocaps";
+    useXkbConfig = true;
   };
+  # Caps Lock must die; replace with Ctrl
+  services.xserver.xkbOptions = "ctrl:nocaps";
   
 
   environment = {
     # These are some handy misc. utilities to have around
     systemPackages = with pkgs; [
       file
-      mkpassword
+      mkpasswd
       unzip
     ];
     # Allow zsh to autocomplete system packages, if installed
@@ -41,7 +40,7 @@
     enableRedistributableFirmware = true;
 
     # All my hardware is Intel, so
-    hardware.cpu.intel.updateMicrocode = true;
+    cpu.intel.updateMicrocode = true;
   };
 
   # The global useDHCP flag is deprecated,

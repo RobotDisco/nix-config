@@ -2,7 +2,7 @@
 {pkgs, ... }:
 
 {
-  import = [
+  imports = [
     ./audio.nix
     ./common.nix
     ./hardware/home-devices.nix

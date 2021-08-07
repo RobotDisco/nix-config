@@ -21,9 +21,8 @@ in
     # Work chat tool
     mattermost-desktop
   ] ++ [
-    # Cloudformation templates
-    python.troposphere
-    python.awacs
+    # We'll need virtualenvs for Cloudformation templates
+    python.virtualenv
   ];
 
   # Because we have a bajillion EC2 VMs, each customer in their own VPC,
