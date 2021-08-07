@@ -1,3 +1,4 @@
+# Enable audio support via the venerable pulseaudio
 {
   # Enable sound.
   sound.enable = true;

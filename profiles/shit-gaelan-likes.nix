@@ -8,7 +8,6 @@
 
     # Credential Management
     bitwarden
-    yubioath-desktop
 
     # Books
     calibre

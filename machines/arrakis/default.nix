@@ -39,6 +39,12 @@ in
       ../../users/gaelan/default.nix
     ];
 
+  environment.systemPackages = with pkgs; [
+    # Thinkpad power management helpers
+    tp_smapi
+    tpacpi-bat
+  ];
+
   networking.hostName = hostName; # Define your hostname.
 
   boot.supportedFilesystems = [ "zfs" ];
@@ -81,4 +87,8 @@ in
   # ";
 
   services.hardware.bolt.enable = true;
+
+  # Enable trackpoint support and enable scrolling.
+  hardware.trackpoint.enable = true;
+  hardware.trackpoint.emulateWheel = true;
 }

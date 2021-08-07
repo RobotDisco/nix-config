@@ -26,4 +26,14 @@
 # Initialise Apple SuperDrive
 ACTION=="add", ATTRS{idProduct}=="1500", ATTRS{idVendor}=="05ac", DRIVERS=="usb", RUN+="${pkgs.sg3_utils}/bin/sg_raw /dev/$kernel EA 00 00 00 00 00 01"
 '';
+
+  # Remap buttons for my kensington trackball
+  services.xserver.config = ''
+Section "InputClass"
+        Identifier "Kensington Expert Mouse"
+        MatchUSBID "047d:1020"
+        Driver "libinput"
+        Option "ButtonMapping" "1 2 8 4 5 6 7 3 9"
+EndSection
+  '';
 }

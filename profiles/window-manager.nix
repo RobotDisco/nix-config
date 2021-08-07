@@ -40,4 +40,7 @@
 
   # Enable locking of machines (for when I step away)
   programs.slock.enable = true;
+
+  # Enable touchpad support.
+  services.xserver.libinput.enable = true;
 }
