@@ -9,6 +9,9 @@
     ../../profiles/dev.nix
   ];
 
+  # Define what configuration schema version we are using
+  home.stateVersion = "21.05";
+
   home.packages = with pkgs; [
       # A nice default spread of fonts, albeit stolen from Microsoft
       pkgs.corefonts
