@@ -72,6 +72,6 @@
     # avahi.enable = true;
     
     # Enable X11 composite managemr for graphics card acceleration
-    services.picom.enable = true;
+    picom.enable = true;
   };
 }

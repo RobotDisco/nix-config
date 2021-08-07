@@ -74,7 +74,7 @@ in
   # TODO this possibly should be a custom package
   # We're leveraging .xsession support to load our window manager
   xsession.enable = true;
-  xsession.windowManager.command = "${emacsEnv}/bin/emacs";
+  xsession.windowManager.command = "emacs";
     
   ## Put down configuration for my system tray + systembar
   home.file.stalonetrayConfig = {

@@ -13,6 +13,8 @@ in
       ./hardware-configuration.nix
       # This is a laptop
       ../../profiles/laptop.nix
+      ../../profiles/window-manager.nix
+      ../../profiles/tulip.nix
     ];
 
   ## Use the systemd-boot EFI boot loader.
