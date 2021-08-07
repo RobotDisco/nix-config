@@ -12,10 +12,6 @@
     # Books
     calibre
 
-    # Browsers
-    chromium
-    firefox
-
     # Chat apps
     discord
     signal-desktop

@@ -2,7 +2,7 @@
 { pkgs, ... }:
 
 {
-  imports = [ ./yubikey/hardware.nix ];
+  imports = [ ./hardware/yubikey/base.nix ];
   
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

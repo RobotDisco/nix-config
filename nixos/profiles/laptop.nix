@@ -2,8 +2,17 @@
 {pkgs, ... }:
 
 {
-  import = [ ./audio.nix ];
-  
+  import = [
+    ./audio.nix
+    ./hardware/home-devices.nix
+    ./networking/smb-client.nix
+  ];
+
+  environment.systemPackages = with pkgs; [
+    # Control laptop screen brightness
+    brightnessctl
+  ];
+    
   # Enable network manager for dynamic network configuration
   networking.networkmanager = {
     enable = true;

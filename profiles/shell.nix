@@ -1,4 +1,5 @@
 # My current shell of choice (outside Emacs, at least) is zsh
+# This should be home-manager stuff honestly
 
 { pkgs, ... }:
 

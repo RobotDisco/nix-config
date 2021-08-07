@@ -1,3 +1,5 @@
+# This should be Gaelan's home manager stuff honestly
+# Unless xmobar uses one of these...
 { pkgs, ... }:
 
 {

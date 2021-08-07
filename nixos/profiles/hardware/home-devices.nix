@@ -1,10 +1,11 @@
-# Support for devices around the house
+# Support for various devices found around the house
 { pkgs, ... }:
 
 {
-  # Enable CUPS to print documents.
+  # Enable CUPS to print documents, since I got one
   services.printing.enable = true;
 
+  # I hae a ScanSnap scanner. It has proprietary firmware...
   hardware.sane.enable = true;
   nixpkgs.config.sane.extraFirmware = [
     {
@@ -28,6 +29,8 @@ ACTION=="add", ATTRS{idProduct}=="1500", ATTRS{idVendor}=="05ac", DRIVERS=="usb"
 '';
 
   # Remap buttons for my kensington trackball
+  # NOTE For xserver config limitation reasons I can see this moving into a
+  # dedicated module, it doesn't seem composable.
   services.xserver.config = ''
 Section "InputClass"
         Identifier "Kensington Expert Mouse"
