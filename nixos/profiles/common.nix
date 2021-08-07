@@ -24,12 +24,17 @@
     services.xserver.xkbOptions = "ctrl:nocaps";
   };
   
-  # These are some handy misc. utilities to have around
-  environment.systemPackages = with pkgs; [
-    file
-    mkpassword
-    unzip
-  ];
+
+  environment = {
+    # These are some handy misc. utilities to have around
+    systemPackages = with pkgs; [
+      file
+      mkpassword
+      unzip
+    ];
+    # Allow zsh to autocomplete system packages, if installed
+    pathsToLink = [ "/share/zsh" ];
+  };
 
   hardware = {
     # Assume we have nonfree hardware

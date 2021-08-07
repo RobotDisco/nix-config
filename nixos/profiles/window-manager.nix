@@ -22,13 +22,7 @@
     playerctl
     # Screenshot taker
     scrot
-    # Minimalist standalone systemtray + info bar...
-    # TODO These could be personal packages given I load
-    # them in emacs ... or maybe that makes them systemm
-    # packages now? Unsure!
-    stalonetray
-    xmobar
-
+    
     # Let's be nice and install some basic user applications
     # like a web browser
     chromium
@@ -53,13 +47,13 @@
   # The EXWM package _does_ load user scripts afterwards, so it's viable!
   # I'd still have to worry about my emacs including local packages though...
   # How does the emacs-overlay play with home-manager?
-  services.xserver.windowManager.session = with pkgs; lib.singleton {
-    name = "exwm";
-    start = ''
-      # Start emacs server
-      exec ${dbus}/bin/dbus-launch --exit-with-session ${emacs}/bin/emacs
-    '';
-  };
+  # services.xserver.windowManager.session = with pkgs; lib.singleton {
+  #   name = "exwm";
+  #   start = ''
+  #     # Start emacs server
+  #     exec ${dbus}/bin/dbus-launch --exit-with-session ${emacs}/bin/emacs
+  #   '';
+  # };
 
   programs = {
     # Enable locking of machines (for when I step away)
