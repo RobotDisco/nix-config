@@ -977,3 +977,11 @@
   (setq helm-exwm-source (helm-exwm-build-source))
   (push 'helm-exwm-emacs-buffers-source helm-mini-default-sources)
   (push 'helm-exwm-source helm-mini-default-sources))
+
+(use-package org-jira
+  :ensure t
+  :config
+  (setq org-jira-working-dir (concat gaelan/webdav-prefix "ops-jira")
+        jiralib-url "https://tulipio.atlassian.net")
+  :custom
+  (org-jira-keymap-prefix "s-c"))

@@ -1489,6 +1489,17 @@ ediff doesn't render correctly in exwm. Fix this by creating "Ediff Control Pane
        (push 'helm-exwm-emacs-buffers-source helm-mini-default-sources)
        (push 'helm-exwm-source helm-mini-default-sources))
    #+end_src
+* Tulip-related things
+** JIRA
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-jira
+    :ensure t
+    :config
+    (setq org-jira-working-dir (concat gaelan/webdav-prefix "ops-jira")
+          jiralib-url "https://tulipio.atlassian.net")
+    :custom
+    (org-jira-keymap-prefix "s-c"))
+#+end_src
 * [Disabled] Emacs Server
   It'd be nice if I could invoke emacs from anywhere (including the terminal or git hooks) and have buffers always collect in my main emacs instance.
 
