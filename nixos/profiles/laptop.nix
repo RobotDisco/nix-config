@@ -4,6 +4,7 @@
 {
   import = [
     ./audio.nix
+    ./common.nix
     ./hardware/home-devices.nix
     ./networking/smb-client.nix
   ];

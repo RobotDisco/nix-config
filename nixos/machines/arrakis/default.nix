@@ -1,57 +1,64 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
+# My Lenovo X1 Carbon, 5th Generation
 { config, pkgs, lib, inputs, ... }:
 
 let
-
-username = "gaelan";
-hostName = "arrakis";
-
+  hostName = "arrakis";
 in
 
 {
+  networking.hostName = hostName; # Define your hostname.
+  
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      ../../profiles/audio.nix
-      ../../profiles/cachix.nix
-      ../../profiles/common.nix
-      ../../profiles/dev.nix
-      ../../profiles/fonts.nix
-      ../../profiles/gnupg.nix
-      ../../profiles/home-hardware.nix
-      ../../profiles/keeb-mouse-opinions.nix
+      # This is a laptop
       ../../profiles/laptop.nix
-      ../../profiles/nix-dev.nix
-      ../../profiles/packages.nix
-      ../../profiles/regional-settings.nix
-      ../../profiles/shell.nix
-      ../../profiles/shit-gaelan-likes.nix
-      ../../profiles/smb.nix
-      ../../profiles/ssd.nix
-      ../../profiles/tulip.nix
-      ../../profiles/uefi-boot.nix
-      ../../profiles/window-manager.nix
-      ../../profiles/yubikey.nix
-      ../../profiles/zfs.nix
-      ../../users/gaelan/default.nix
     ];
 
+  ## Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  
+  ## ZFS-specific configuration
+  boot.supportedFilesystems = [ "zfs" ];
+  # ZFS requires us to generate a networking Host ID
+  networking.hostId = "140f9be5";
+  # Since this is an SSD, enable TRIM support
+  services.zfs.trim.enable = true;
+  # Do the equivalent of an fsck periodically
+  services.zfs.autoScrub.enable = true;
+
+  
   environment.systemPackages = with pkgs; [
     # Thinkpad power management helpers
     tp_smapi
     tpacpi-bat
   ];
 
-  networking.hostName = hostName; # Define your hostname.
+  
+  hardware = {
+    # Lenovos have their famous trackpoint nib; enable
+    trackpoint = {
+      enable = true;
+      emulateWheel = true;
+    };
+  };
 
-  boot.supportedFilesystems = [ "zfs" ];
-
-  networking.hostId = "140f9be5";
-
+  
+  # Support for OPAL self-encrypting drives
   programs.sedutil.enable = true;
+
+  # The Lenovo supports secure thunderbolt, which requires
+  # a daemon to manage device authorization
+  services.hardware.bolt.enable = true;
+
+  ## The following is old support for having full-disk-encruption
+  ## using the lenovo OPAL's built-in encryption. In theory it is
+  ## faster than putting a software layer like LUKS on top of it,
+  ## but LUKS and ZFS encryption are more streamlined, and they
+  ## support Suspend-to-RAM even if it is arguably not secure
+  ## enough for the paranoid
 
   # Self-encrypting drive (OPAL)
   # nixpkgs.config.packageOverrides = pkgs: {
@@ -85,10 +92,4 @@ in
   #   SuspendState=disk
   #   SuspendMode=suspend
   # ";
-
-  services.hardware.bolt.enable = true;
-
-  # Enable trackpoint support and enable scrolling.
-  hardware.trackpoint.enable = true;
-  hardware.trackpoint.emulateWheel = true;
 }
