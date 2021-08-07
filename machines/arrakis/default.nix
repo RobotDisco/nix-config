@@ -19,7 +19,6 @@ in
       ../../profiles/cachix.nix
       ../../profiles/common.nix
       ../../profiles/dev.nix
-      ../../profiles/editor.nix
       ../../profiles/fonts.nix
       ../../profiles/gnupg.nix
       ../../profiles/home-hardware.nix
