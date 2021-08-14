@@ -18,12 +18,14 @@ in
     # Docker orchestration
     kubectl
 
-    # Work chat tool
-    mattermost-desktop
   ] ++ [
     # We'll need virtualenvs for Cloudformation templates
     python.virtualenv
-  ];
+  ] ++ (if pkgs.stdenv.isDarwin then []
+        else with pkgs; [
+          # Work chat tool
+          mattermost-desktop
+        ]);
 
   # Because we have a bajillion EC2 VMs, each customer in their own VPC,
   # We have to set up a million jump hosts for a million custom domains

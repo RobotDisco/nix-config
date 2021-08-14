@@ -2,22 +2,26 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    # Music library organizer
-    beets
+  home.packages =
+    # home-manager seemas basically useless on Darwin for packages
+    if pkgs.stdenv.isDarwin
+    then []
+    else with pkgs; [
+      # Music library organizer
+      beets
 
-    # Credential management
-    bitwarden
+      # Credential management
+      bitwarden
 
-    # Books
-    calibre
+      # Books
+      calibre
 
-    # Chat apps
-    discord
-    signal-desktop
-    slack
+      # Chat apps
+      discord
+      signal-desktop
+      slack
 
-    # File syncing across desktops
-    seafile-client
-  ];
+      # File syncing across desktops
+      seafile-client
+    ];
 }
