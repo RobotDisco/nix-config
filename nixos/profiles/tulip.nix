@@ -2,4 +2,6 @@
 {
   # We need strongswan support for Tulip's VPN.
   networking.networkmanager.enableStrongSwan = true;
+
+  virtualisation.docker.enable = true;
 }
