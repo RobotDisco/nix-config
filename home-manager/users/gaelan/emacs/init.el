@@ -675,9 +675,13 @@
 
 (use-package smartparens
   :ensure t
+  :hook ((eval-expression-minibuffer-setup-hook . turn-on-strict-smartparens-mode)
+         (minibuffer-setup-hook . turn-on-smartparens-mode))
   :config
   (require 'smartparens-config)
-  (show-smartparens-global-mode +1))
+  (show-smartparens-global-mode +1)
+  (smartparens-global-mode +1)
+  (sp-use-smartparens-bindings))
 
 (defun gaelan/generic-lisp-mode-hook ()
   "Mode hook when working in any Lisp."
