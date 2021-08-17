@@ -83,25 +83,21 @@
   };
   
   ## TODO Do I still need to manually write my own "secure" gpg config?
+  services.gpg-agent = {
+    enable = true;
+    enableExtraSocket = true;
+    enableSshSupport = true;
+    pinentryFlavor = "emacs";
+    extraConfig = ''
+    allow-emacs-pinentry
+    allow-loopback-pinentry
+    '';
+    defaultCacheTtl = 60;
+    maxCacheTtl = 120;
+  };
 
   # home.file.gpg-conf = {
   #   source = ./gpg.conf;
   #   target = ".gnupg/gpg.conf";
-  # };
-  # home.file.gpg-agent-conf = {
-  #   text = ''
-  #     # https://github.com/drduh/config/blob/master/gpg-agent.conf
-  #     # https://www.gnupg.org/documentation/manuals/gnupg/Agent-Options.html
-  #     allow-emacs-pinentry
-  #     allow-loopback-pinentry
-  #     enable-ssh-support
-  #     default-cache-ttl 60
-  #     max-cache-ttl 120
-  #     ${if pkgs.stdenv.isLinux then
-  #       "pinentry-program ${pkgs.pinentry}/bin/pinentry-curses"
-  #       else
-  #         "pinentry-program ${pkgs.pinentry_mac}/Applications/pinentry-mac.app/Contents/MacOS/pinentry-mac"}
-  #   '';
-  #   target = ".gnupg/gpg-agent.conf";
   # };
 }
