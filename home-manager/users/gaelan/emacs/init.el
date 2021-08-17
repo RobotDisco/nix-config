@@ -201,30 +201,30 @@
          ("C-x c h r" . helm-register)
          ("C-x c h g" . helm-google-suggest)
          ("C-c h M-:" . helm-eval-expression-with-eldoc))
-  :config
+  :custom
   ;; Turn on fuzzy matching in a bunch of places
   ;; turn it off if it is irritating or slows down searches.
-  (setq helm-apropos-fuzzy-match t
-        helm-buffers-fuzzy-matching t
-        helm-company-fuzzy-match t
-        helm-etags-fuzzy-match t
-        helm-imenu-fuzzy-match t
-        helm-lisp-fuzzy-completion t
-        helm-locate-fuzzy-match t
-        helm-locate-library-fuzzy-match t
-        helm-ls-git-fuzzy-match t
-        helm-M-x-fuzzy-match t
-        helm-recentf-fuzzy-match t
-        helm-session-fuzzy-match t
-        helm-semantic-fuzzy-match t)
+  (helm-apropos-fuzzy-match t)
+  (helm-buffers-fuzzy-matching t)
+  (helm-company-fuzzy-match t)
+  (helm-etags-fuzzy-match t)
+  (helm-imenu-fuzzy-match t)
+  (helm-lisp-fuzzy-completion t)
+  (helm-locate-fuzzy-match t)
+  (helm-locate-library-fuzzy-match t)
+  (helm-ls-git-fuzzy-match t)
+  (helm-M-x-fuzzy-match t)
+  (helm-recentf-fuzzy-match t)
+  (helm-session-fuzzy-match t)
+  (helm-semantic-fuzzy-match t)
   ;; Enable fancy Emacs 27+ fuzzy matching globally
-  (setq helm-completion-style 'emacs)
+  (helm-completion-style 'emacs)
+  :init
   (add-to-list 'completion-styles 'flex)
-
+  :config
   (require 'helm-config)
-  (helm-mode +1)
   (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
-
+  (helm-mode +1)
   ;; Add helmized history searching functionality for a variety of
   ;; interfaces: `eshell`, `shell-mode`, `minibuffer`,
   ;; using the same C-c C-l binding.
