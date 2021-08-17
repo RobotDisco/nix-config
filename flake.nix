@@ -34,17 +34,18 @@
             system = "x86_64-linux";
             modules = common-nixos-modules ++ [
 	            ./nixos/machines/arrakis
-              {
+              ({pkgs, ... }: {
                 # Maybe this will get shared, but for now use an anonymous
                 # nix xpression to create my user
                 users.users.gaelan = {
+                  shell = pkgs.zsh;
                   isNormalUser = true;
                   home = "/home/gaelan";
                   description = "Gaelan D'costa";
                   # TODO if I have role profiles elsewhere, these should be confingured there
                   extraGroups = [ "wheel" "networkmanager" "docker" "video" ];
                 };
-              }
+              })
               # The module that loads home-manager
               home-manager.nixosModules.home-manager
               # My anonymous module that has some (probably oughta be common
