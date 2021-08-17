@@ -6,7 +6,6 @@
 {
   home.packages = with pkgs; [
     # Nix-based development
-    direnv
     any-nix-shell
 
     # Storing secrets in git
@@ -16,4 +15,13 @@
     jq
     ripgrep
   ];
+
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv = {
+      enable = false;
+      enableFlakes = true;
+    };
+  };
 }
