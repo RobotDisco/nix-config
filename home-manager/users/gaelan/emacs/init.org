@@ -1248,6 +1248,16 @@ Vterm is a library that allows for a nice terminal emulator over the builtin env
        :ensure t
        :hook (haskell-mode-hook . lsp-deferred))
    #+end_src
+** Racket
+Racket is a language evolved from Scheme. It is language often used for designing Domain Specific Languages, teaching/exploring computer science, and writing smaller games.
+#+begin_src emacs-lisp :tangle yes
+  (use-package geiser-racket
+    :ensure t)
+
+  (use-package racket-mode
+    :hook (racket-mode-hook . gaelan/generic-lisp-mode-hook)
+    :ensure t)
+#+end_src
 ** Rust
    #+begin_src emacs-lisp :tangle yes
      (use-package rustic

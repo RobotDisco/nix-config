@@ -785,6 +785,13 @@
   :ensure t
   :hook (haskell-mode-hook . lsp-deferred))
 
+(use-package geiser-racket
+  :ensure t)
+
+(use-package racket-mode
+  :hook (racket-mode-hook . gaelan/generic-lisp-mode-hook)
+  :ensure t)
+
 (use-package rustic
   :ensure t)
 
