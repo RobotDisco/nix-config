@@ -37,6 +37,9 @@
     # Monitor hotplugging
     autorandr.enable = true;
 
+    # A lot of useful tools (chromecast, etc..) use mDNS for local discovery
+    avahi.enable = true;
+
     # Enable a nice bluetooth manager GUI
     blueman.enable = true;
 
