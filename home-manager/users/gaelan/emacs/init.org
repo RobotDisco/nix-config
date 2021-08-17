@@ -655,6 +655,10 @@ A nice thing about Perspective in particular is that it integrates with Projecti
      (defconst gaelan/gtd-prefix
        (concat gaelan/webdav-prefix "gtd/")
        "The root directory of my GTD task management system.")
+
+     (defconst gaelan/reference-prefix
+       (concat gaelan/webdav-prefix "reference-library/")
+       "The root directory of where we store our research PDFs")
    #+end_src
 ** Make text work for org buffers
    In text-based files like org mode, we don't want to force hard line wrapping but instead will do it virtually
@@ -834,27 +838,36 @@ A nice thing about Perspective in particular is that it integrates with Projecti
 	    (deft-default-extension "org")
 	    (deft-directory (concat gaelan/brain-prefix)))
    #+end_src
-*** Org-roam + Bibtex
+*** Org-roam + org-ref + bibtex
 With the Zettelkasten process we want our literature notes in org-roam. There's integration for nice workflows between org-roam, bibtex (+ bibtex completion engines) + org-noter templates
+
+Although zotero is honestly the smartest option, as a casual researcher I'm going to try using org-ref for everything.
 
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-bibtex
     :ensure t
     :custom
-    (bibtex-completion-bibliography (list (concat gaelan/brain-prefix "literature/REFERENCES.bib")))
+    (bibtex-completion-bibliography (list (concat gaelan/reference-prefix "REFERENCES.bib")))
+    (bibtex-completion-library-path (concat gaelan/reference-prefix "pdfs/"))
+    (bibtex-completion-notes-path (concat gaelan/brain-prefix "literature/"))
     :after helm)
-  
+
+  (use-package org-ref
+    :ensure t
+    :custom
+    (reftex-default-bibliography (list (concat gaelan/reference-prefix "REFERENCES.bib")))
+    (org-ref-bibliography-notes (concat gaelan/brain-prefix "literature/default-notes.org"))
+    (org-ref-pdf-directory (concat gaelan/reference-prefix "pdfs/")))
+
   (use-package org-roam-bibtex
     :ensure t
-    :after org-roam
+    :after (org-roam org-ref)
     :bind (("C-c n a" . orb-note-actions)
            ("C-c n l" . orb-insert-link))
     :hook (after-init . org-roam-bibtex-mode)
     :custom
     (orb-note-actions-interface 'helm)
-    (orb-autokey-format "%a%y%t")
-    :config
-    (require 'org-ref))
+    (orb-autokey-format "%a%y%t"))
 #+end_src
     
 ** Org Journal mode

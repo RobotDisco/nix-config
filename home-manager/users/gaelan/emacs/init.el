@@ -376,6 +376,10 @@
   (concat gaelan/webdav-prefix "gtd/")
   "The root directory of my GTD task management system.")
 
+(defconst gaelan/reference-prefix
+  (concat gaelan/webdav-prefix "reference-library/")
+  "The root directory of where we store our research PDFs")
+
 (defun gaelan/org-mode-setup ()
   (org-indent-mode)
   (variable-pitch-mode 1)
@@ -522,20 +526,27 @@
 (use-package helm-bibtex
   :ensure t
   :custom
-  (bibtex-completion-bibliography (list (concat gaelan/brain-prefix "literature/REFERENCES.bib")))
+  (bibtex-completion-bibliography (list (concat gaelan/reference-prefix "REFERENCES.bib")))
+  (bibtex-completion-library-path (concat gaelan/reference-prefix "pdfs/"))
+  (bibtex-completion-notes-path (concat gaelan/brain-prefix "literature/"))
   :after helm)
+
+(use-package org-ref
+  :ensure t
+  :custom
+  (reftex-default-bibliography (list (concat gaelan/reference-prefix "REFERENCES.bib")))
+  (org-ref-bibliography-notes (concat gaelan/brain-prefix "literature/default-notes.org"))
+  (org-ref-pdf-directory (concat gaelan/reference-prefix "pdfs/")))
 
 (use-package org-roam-bibtex
   :ensure t
-  :after org-roam
+  :after (org-roam org-ref)
   :bind (("C-c n a" . orb-note-actions)
          ("C-c n l" . orb-insert-link))
   :hook (after-init . org-roam-bibtex-mode)
   :custom
   (orb-note-actions-interface 'helm)
-  (orb-autokey-format "%a%y%t")
-  :config
-  (require 'org-ref))
+  (orb-autokey-format "%a%y%t"))
 
 (use-package org-journal
   :ensure t
