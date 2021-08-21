@@ -25,9 +25,9 @@
 
   # Home manager handles its own keyboard management
   # disable caps lock for it is terrible
-  home.keyboard = {
-    options = [ "ctrl:nocaps" ];
-  };
+  home.keyboard = if pkgs.stdenv.isLinux
+                  then { options = [ "ctrl:nocaps" ]; }
+                  else {};
 
   # Enable my favourite fonts.
   fonts.fontconfig.enable = true;
@@ -72,7 +72,7 @@
     enableCompletion = true;
     # Not in home-manager anymore??
     #enableSyntaxHighlighting = true;
-    enableVteIntegration = true;
+    enableVteIntegration = if pkgs.stdenv.isLinux then true else false;
     autocd = true;
   };
 

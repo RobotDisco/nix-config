@@ -44,10 +44,13 @@ in
 
 {
   # Install additional packages like system tray + status bar
-  home.packages = with pkgs; [
-    stalonetray
-    xmobar
-  ];
+  home.packages =
+    if pkgs.stdenv.isDarwin
+    then []
+    else with pkgs; [
+      stalonetray
+      xmobar
+    ];
   
   ## Install our emacs
   programs.emacs = {
@@ -91,7 +94,7 @@ in
   # I use emacs as my window manager, which makes things funky :D
   # TODO this possibly should be a custom package
   # We're leveraging .xsession support to load our window manager
-  xsession.enable = true;
+  xsession.enable = if pkgs.stdenv.isLinux then true else false;
   xsession.windowManager.command = "emacs";
     
   ## Put down configuration for my system tray + systembar
