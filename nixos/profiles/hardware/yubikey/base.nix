@@ -17,15 +17,6 @@
     udev.packages = [ pkgs.yubikey-personalization ];
   };
 
-  programs = {
-    # We'll need to use gpg-agent over sshagent for SSH key support.
-    gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-    };
-    ssh.startAgent = false;
-  };
-
   # Enable yubikey as a way to login
   security.pam.yubico = {
     enable = true;
