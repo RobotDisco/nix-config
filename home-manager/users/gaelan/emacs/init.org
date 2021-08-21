@@ -435,6 +435,7 @@ Make it easy (and fabulous) to quickly see how far down a file we are at a glanc
                      (define-key 'shell-mode-map (kbd "C-c C-l") #'helm-comint-input-ring)))
        (define-key minibuffer-local-map (kbd "C-c C-l") #'helm-minibuffer-history))
    #+end_src
+
 *** Helm git integration
     There is a really cool interface for looking at files in git projects, called =helm-browse-project=     
     #+begin_src emacs-lisp :tangle yes

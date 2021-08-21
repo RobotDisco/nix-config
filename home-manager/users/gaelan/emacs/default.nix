@@ -1,32 +1,45 @@
 # home-manager module for gaelan's personal emacs
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
-  emacsEnv = pkgs.emacsWithPackagesFromUsePackage {
+  emacsP = pkgs.emacsWithPackagesFromUsePackage {
     config = ./init.org;
   };
-  # init-el = pkgs.emacs.trivialBuild {
-  #   pname = "init-el";
-  #   src = lib.sourceByRegex ./emacs [ "*.org" ];
+  emacsConfig = pkgs.stdenv.mkDerivation {
+    ## I am indebted to
+    ## https://github.com/terlar/emacs-config/blob/main/default.nix
+    ## for insight into how to autogenerate a tangled org
+    ## as part of a nix derivation.
+    name = "gaelan-emacs-config";
 
-  #   preBuild = ''
-  #     # Tangle org files
-  #     emacs --batch -Q \
-  #       -l org \
-  #       *.org \
-  #       -f org-babel-tangle
+    src = lib.sourceByRegex ./. ["init.org"];
 
-  #     # Fake config directory in order to have files on load-path
-  #     mkdir -p .xdg-config
-  #     ln -s $PWD .xdg-config/emacs
-  #     export XDG_CONFIG_HOME="$PWD/.xdg-config"
+    buildInputs = [ emacsP ];
+    buildPhase = ''
+      # Generate elisp from org file
+      # We need to load our org file in the load path
+      emacs --batch -Q \
+        -l org \
+        init.org \
+        -f org-babel-tangle
 
-  #     emacs --batch -Q \
-  #       -l package \
-  #       -eval '(setq package-quickstart t)' \
-  #       -f package-quickstart-refresh
-  #   '';
-  # };
+      # Fake config directory in order to have file in load-path
+      mkdir -p .xdg-config
+      ln -s $PWD .xdg-config/emacs
+      export XDG_CONFIG_HOME="$PWD/.xdg-config"
+
+      # Refresh emacs-quickstart package deferral
+      emacs --batch -Q \
+        -l package \
+        -eval '(setq package-quickstart t)' \
+        -f package-quickstart-refresh
+    '';
+    installPhase = ''
+      # Export generated elisp files for home-manager to install
+      install -D -t $out $PWD/*.el
+    '';
+  };
+
 in
 
 {
@@ -39,15 +52,20 @@ in
   ## Install our emacs
   programs.emacs = {
     enable = true;
-    package = emacsEnv;
+    package = emacsP;
   };
   
   ## Emacs config needs copying to my homedir
   home.file.emacsConfig = {
-    #sourceFile = "${init-el}/.xdg-config/emacs/init.el";
-    source = ./init.el;
+    source = "${emacsConfig}/init.el";
+    # source = ./init.el;
     target = ".emacs.d/init.el";
   };
+  home.file.packageQuickstartElisp = {
+    source = "${emacsConfig}/package-quickstart.el";
+    target = ".emacs.d/package-quickstart.el";
+  };
+  
   # TODO this is insecure because /nix/store stores this.
   # Use SOP to fix
   home.file.emacsSecrets = {
