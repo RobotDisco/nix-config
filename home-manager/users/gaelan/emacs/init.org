@@ -793,36 +793,31 @@ A nice thing about Perspective in particular is that it integrates with Projecti
        :custom
        (org-roam-directory gaelan/brain-prefix)
        (org-roam-completion-system 'helm)
+       (org-roam-completion-everywhere t)
        (org-roam-capture-templates
-	'(("d" "default" plain "%?"
-	   :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-			      "#+title: ${title}\n")
-	   :unnarrowed t)
-	  ("f" "fleeting" plain "%?"
-	   :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-			      "#+title: ${title}\n#+FILETAGS: fleeting\n")
-	   :unnarrowed t)
-	  ("p" "people" plain "%?"
-	   :if-new (file+head "private/%<%Y%m%d%H%M%S>-${slug}.org.gpg"
-			      "#+title: ${title}")
-	   :unnarrowed t)
-	  ("r" "reference" plain "%?"
-	   :if-new (file-head "references/${citekey.org"
-			      "#+title: ${title}\n")
-	   :unnarrowed t)))
+        '(("d" "default" plain "%?"
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t)
+          ("f" "fleeting" plain "%?"
+           :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                              "#+title: ${title}\n#+FILETAGS: fleeting\n")
+           :unnarrowed t)
+          ("p" "people" plain "%?"
+           :if-new (file+head "private/%<%Y%m%d%H%M%S>-${slug}.org.gpg"
+                              "#+title: ${title}")
+           :unnarrowed t)
+          ("r" "reference" plain "%?"
+           :if-new (file-head "references/${citekey.org"
+                              "#+title: ${title}\n")
+           :unnarrowed t)))
        :bind (("C-c n t" . org-roam-buffer-toggle)
-	      ("C-c n b" . org-roam-buffer)
-	      ("C-c n i" . org-roam-node-insert)
-	      ("C-c n f" . org-roam-node-find)
-	      ("C-c n g" . org-roam-graph))
+              ("C-c n b" . org-roam-buffer)
+              ("C-c n i" . org-roam-node-insert)
+              ("C-c n f" . org-roam-node-find)
+              ("C-c n g" . org-roam-graph))
        :init
-       (setq org-roam-v2-ack t)
-       (add-to-list 'display-buffer-alist
-		    '("\\*org-roam\\*"
-		      (display-buffer-in-direction)
-		      (direction . right)
-		      (window-width . 0.33)
-		      (window-height . fit-window-to-buffer))))
+       (setq org-roam-v2-ack t))
    #+end_src
 
    org-roam also recommends this thing called deft which I think is a way for browsing and filtering org files

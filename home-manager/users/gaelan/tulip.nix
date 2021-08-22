@@ -102,6 +102,23 @@ in
         proxyJump = "bastion01-well-prod";
       };
 
+      "bastion01-chanel-prod" = {
+        user = "welladmin";
+        hostname = "34.225.210.71";
+      };
+      "*.chanel.prod" = {
+        user = "welladmin";
+        proxyJump = "bastion01-chanel-prod";
+      };
+      "bastion01-chanel-devstaging" = {
+        user = "welladmin";
+        hostname = "34.201.87.83";
+      };
+      "*.chanel.dev *.chanel.staging" = {
+        user = "welladmin";
+        proxyJump = "bastion01-chanel-staging";
+      };
+
       "bastion01-tulip-prod" = {
         user = "welladmin";
         hostname = "34.192.243.137";

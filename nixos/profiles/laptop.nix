@@ -38,7 +38,11 @@
     autorandr.enable = true;
 
     # A lot of useful tools (chromecast, etc..) use mDNS for local discovery
-    avahi.enable = true;
+    avahi = {
+      enable = true;
+      # Possibly need this for chromecast
+      nssmdns = true;
+    };
 
     # Enable a nice bluetooth manager GUI
     blueman.enable = true;
