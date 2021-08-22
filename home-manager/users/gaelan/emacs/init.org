@@ -709,7 +709,7 @@ A nice thing about Perspective in particular is that it integrates with Projecti
         `(("t" "Todo" entry (file ,(concat gaelan/gtd-prefix "inbox.org"))
            "* TODO %?")
           ("d" "Daily Morning Reflection" entry (function gaelan/org-journal-find-location)
-           "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** Things that will be achieved today\n     - [ ] %?\n** What am I grateful for?\n")
+           "* %(format-time-string org-journal-time-format)Daily Morning Reflection\n** What are the most important things to do today?\n     - [ ] %?\n** What am I grateful for?\n")
           ("e" "Daily Evening Reflection" entry (function gaelan/org-journal-find-location)
            "* %(format-time-string org-journal-time-format)Daily Evening Reflection\n** What were my wins today?\n   1. %?\n** What did I learn today?\n** What did not go according to plan today?\n** What did I do to help my future?\n** What did I do to help others?\n" :unnarrowed t)
           ("w" "Weekly Reflection" entry (function gaelan/org-journal-find-location)
@@ -739,7 +739,7 @@ A nice thing about Perspective in particular is that it integrates with Projecti
           ("u" "Unplanned Projects"
            ((tags-todo "PROJECT/PLAN")))
           ("p" "All Projects"
-           ((tags-todo "PROJECT")))))
+           ((tags-todo "PROJECT+LEVEL=2")))))
        (org-stuck-projects
         '("+PROJECT+LEVEL=2/-COMPLETED-ABANDONED-PAUSED" ("TODO" "NEXT" "STARTED") nil ""))
      
@@ -870,7 +870,26 @@ Although zotero is honestly the smartest option, as a casual researcher I'm goin
     (orb-note-actions-interface 'helm)
     (orb-autokey-format "%a%y%t"))
 #+end_src
-    
+
+There's also some shiny UI server that lets us look at our cards visually to form connections
+#+begin_src emacs-lisp :tangle yes
+  (use-package websocket
+    :ensure t)
+  (use-package f
+    :ensure t)
+  (use-package simple-httpd
+    :ensure t)
+  (use-package org-roam-ui
+    :init (add-to-list 'load-path "~/.emacs.d/private/org-roam-ui")
+    :after org-roam
+    :hook (after-init . org-roam-ui-mode)
+    :custom
+    (org-roam-ui-sync-theme t)
+    (org-roam-ui-follow t)
+    (org-roam-ui-update-on-save t)
+    (org-roam-ui-open-on-start t))
+#+end_src
+
 ** Org Journal mode
    I also use org mode for journalling my days
    #+begin_src emacs-lisp :tangle yes
