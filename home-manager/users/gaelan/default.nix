@@ -7,6 +7,7 @@
     ./emacs
     ./tulip.nix
     ../../profiles/dev.nix
+    ./games.nix
   ];
 
   # Define what configuration schema version we are using

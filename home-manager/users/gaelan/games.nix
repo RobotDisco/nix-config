@@ -1,9 +1,12 @@
 # Games worth playing
-{ pkgs }:
+{ pkgs, ... }:
 
 {
   home.packages = with pkgs; [
-    dwarf-fortress-packages.dwarf-fortress-full
+    (dwarf-fortress-packages.dwarf-fortress-full.override {
+      theme = "cla";
+      enableFPS = false;
+    })
     nethack
   ];
 }

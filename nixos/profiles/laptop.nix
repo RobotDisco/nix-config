@@ -7,7 +7,6 @@
     ./common.nix
     ./hardware/home-devices.nix
     ./networking/smb-client.nix
-    ./software/steam.nix
   ];
 
   environment.systemPackages = with pkgs; [

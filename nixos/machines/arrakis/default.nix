@@ -15,6 +15,8 @@ in
       ../../profiles/laptop.nix
       ../../profiles/window-manager.nix
       ../../profiles/tulip.nix
+      # Let's play games
+      ../../profiles/software/steam.nix
     ];
 
   ## Use the systemd-boot EFI boot loader.
