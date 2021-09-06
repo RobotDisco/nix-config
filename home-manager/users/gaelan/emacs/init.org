@@ -843,7 +843,7 @@ Although zotero is honestly the smartest option, as a casual researcher I'm goin
   (use-package helm-bibtex
     :ensure t
     :custom
-    (bibtex-completion-bibliography (list (concat gaelan/reference-prefix "REFERENCES.bib")))
+    (bibtex-completion-bibliography (concat gaelan/reference-prefix "REFERENCES.bib"))
     (bibtex-completion-library-path (concat gaelan/reference-prefix "pdfs/"))
     (bibtex-completion-notes-path (concat gaelan/brain-prefix "literature/"))
     :after helm)
@@ -852,6 +852,7 @@ Although zotero is honestly the smartest option, as a casual researcher I'm goin
     :ensure t
     :custom
     (reftex-default-bibliography (list (concat gaelan/reference-prefix "REFERENCES.bib")))
+    (org-ref-default-bibliography (list (concat gaelan/reference-prefix "REFERENCES.bib")))
     (org-ref-bibliography-notes (concat gaelan/brain-prefix "literature/default-notes.org"))
     (org-ref-pdf-directory (concat gaelan/reference-prefix "pdfs/")))
 
