@@ -544,8 +544,8 @@ A nice thing about Perspective in particular is that it integrates with Projecti
    #+begin_src emacs-lisp :tangle yes
      (use-package flycheck
        :ensure t
-       :init
-       (add-hook 'after-init-hook 'global-flycheck-mode))
+       :config
+       (global-flycheck-mode))
    #+end_src
 ** Snippet Manager
    It's annoying to type the same things over and over. =yasnippet= is a tool that expands full templates from short snippets.
@@ -564,9 +564,9 @@ A nice thing about Perspective in particular is that it integrates with Projecti
    #+begin_src emacs-lisp :tangle yes
      (use-package company
        :ensure t
-       :init
-       (add-hook 'after-init-hook 'global-company-mode)
-       :bind (("M-TAB" . 'company-complete)))
+       :config
+       (global-company-mode))
+;       :bind (("M-TAB" . 'company-complete)))
    #+end_src
 
    My autocompletion moder also has helm integration
@@ -789,7 +789,6 @@ A nice thing about Perspective in particular is that it integrates with Projecti
    #+begin_src emacs-lisp :tangle yes
      (use-package org-roam
        :ensure t
-       :hook (after-init . org-roam-setup)
        :custom
        (org-roam-directory gaelan/brain-prefix)
        (org-roam-completion-system 'helm)
@@ -817,7 +816,9 @@ A nice thing about Perspective in particular is that it integrates with Projecti
               ("C-c n f" . org-roam-node-find)
               ("C-c n g" . org-roam-graph))
        :init
-       (setq org-roam-v2-ack t))
+       (setq org-roam-v2-ack t)
+       :config
+       (org-roam-db-autosync-mode))
    #+end_src
 
    org-roam also recommends this thing called deft which I think is a way for browsing and filtering org files
@@ -847,7 +848,7 @@ Although zotero is honestly the smartest option, as a casual researcher I'm goin
     (bibtex-completion-library-path (concat gaelan/reference-prefix "pdfs/"))
     (bibtex-completion-notes-path (concat gaelan/brain-prefix "literature/"))
     :after helm)
-
+  
   (use-package org-ref
     :ensure t
     :custom
@@ -855,16 +856,17 @@ Although zotero is honestly the smartest option, as a casual researcher I'm goin
     (org-ref-default-bibliography (list (concat gaelan/reference-prefix "REFERENCES.bib")))
     (org-ref-bibliography-notes (concat gaelan/brain-prefix "literature/default-notes.org"))
     (org-ref-pdf-directory (concat gaelan/reference-prefix "pdfs/")))
-
+  
   (use-package org-roam-bibtex
     :ensure t
     :after (org-roam org-ref)
     :bind (("C-c n a" . orb-note-actions)
            ("C-c n l" . orb-insert-link))
-    :hook (after-init . org-roam-bibtex-mode)
     :custom
     (orb-note-actions-interface 'helm)
-    (orb-autokey-format "%a%y%t"))
+    (orb-autokey-format "%a%y%t")
+    :config
+    (org-roam-bibtex-mode))
 #+end_src
 
 There's also some shiny UI server that lets us look at our cards visually to form connections
@@ -878,12 +880,13 @@ There's also some shiny UI server that lets us look at our cards visually to for
   (use-package org-roam-ui
     :init (add-to-list 'load-path "~/.emacs.d/private/org-roam-ui")
     :after org-roam
-    :hook (after-init . org-roam-ui-mode)
     :custom
     (org-roam-ui-sync-theme t)
     (org-roam-ui-follow t)
     (org-roam-ui-update-on-save t)
-    (org-roam-ui-open-on-start t))
+    (org-roam-ui-open-on-start t)
+    :config
+    (org-roam-ui-mode))
 #+end_src
 
 ** Org Journal mode
