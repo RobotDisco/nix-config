@@ -792,7 +792,6 @@ A nice thing about Perspective in particular is that it integrates with Projecti
        :custom
        (org-roam-directory gaelan/brain-prefix)
        (org-roam-completion-system 'helm)
-       (org-roam-completion-everywhere t)
        (org-roam-capture-templates
         '(("d" "default" plain "%?"
            :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
