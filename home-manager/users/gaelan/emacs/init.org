@@ -513,7 +513,6 @@ A nice thing about Perspective in particular is that it integrates with Projecti
 #+begin_src emacs-lisp :tangle yes
       (use-package perspective
         :ensure t
-        :bind ("C-x C-b" . persp-list-buffers)
         :config (persp-mode))
     
       (use-package persp-projectile
