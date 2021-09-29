@@ -796,7 +796,7 @@ A nice thing about Perspective in particular is that it integrates with Projecti
        :custom
        (org-habit-graph-column 60)
        :init
-       (add-to-list 'org-modules 'habit))
+       (add-to-list 'org-modules 'habits))
    #+end_src
 ** Org Roam
    This seems to be the most promising way to deal with knowledge management, taking notes, things like that.
@@ -859,6 +859,7 @@ Although zotero is honestly the smartest option, as a casual researcher I'm goin
 #+begin_src emacs-lisp :tangle yes
   (use-package helm-bibtex
     :ensure t
+    :bind (("C-c n c" . helm-bibtex))
     :custom
     (bibtex-completion-bibliography (concat gaelan/reference-prefix "REFERENCES.bib"))
     (bibtex-completion-library-path (concat gaelan/reference-prefix "pdfs/"))
