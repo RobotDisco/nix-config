@@ -85,7 +85,8 @@
 
         deploy.nodes.darktower = {
           fastConnection = true;
-          sshUser = "gaelan";
+          user = "root";
+          sshUser = "root";
           hostname = "192.168.10.3";
           profiles.system = {
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.darktower;
