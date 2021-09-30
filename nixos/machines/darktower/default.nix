@@ -13,10 +13,10 @@
   # Modules from hardware scan on install
   boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelModules = [ "kvm-intel" "vfio-pci" ];
   boot.extraModulePackages = [ ];
   # ModeSetting kernel panics when I connect via VNC / Intel AMT
-  boot.kernelParams = [ "nomodeset" ];
+  boot.kernelParams = [ "intel_iommu=on nomodeset" ];
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/7677ff30-29a9-4501-a248-18a480736cbc";
@@ -47,7 +47,19 @@
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.interfaces.eno1.ipv4.addresses = [{
+
+  networking.bridges = {
+    br-admin = {
+      interfaces = [ "eno1" ];
+      rstp = true;
+    };
+    br-trunk = {
+      interfaces = [ "enp6s0f0" ];
+      rstp = true;
+    };
+  };
+  
+  networking.interfaces.br-admin.ipv4.addresses = [{
     address = "192.168.10.3";
     prefixLength = 24;
   }];
@@ -55,7 +67,10 @@
   networking.interfaces.enp6s0f0.useDHCP = false;
   networking.interfaces.enp6s0f1.useDHCP = false;
 
-  networking.defaultGateway = "192.168.10.1";
+  networking.defaultGateway = {
+    address = "192.168.10.1";
+    interface = "br-admin";
+  };
   networking.nameservers = [ "192.168.10.1" ];
 
   # Configure network proxy if necessary
@@ -117,7 +132,7 @@
   services.openssh.enable = true;
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ 22 ];
+  # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
