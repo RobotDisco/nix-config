@@ -77,9 +77,20 @@
           darktower = nixpkgs.lib.nixosSystem
             {
               system = "x86_64-linux";
+
               modules = common-nixos-modules ++ [
                 ./nixos/machines/darktower
                 ({
+                  users.mutableUsers = false;
+
+                  users.users.gaelan = {
+                    isNormalUser = true;
+                    extraGroups = [ "wheel" ];
+                    openssh.authorizedKeys.keys = [
+                      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJOz9up91JWgD0QeCr4ub4C+a8w0SgFfdh/NE743B1aF gaelan@arrakis"
+                    ];
+                  };
+
                   security.sudo.extraRules = [
                     {
                       users = [ "gaelan" ];
