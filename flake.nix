@@ -79,6 +79,18 @@
               system = "x86_64-linux";
               modules = common-nixos-modules ++ [
                 ./nixos/machines/darktower
+                ({
+                  security.sudo.extraRules = [
+                    {
+                      users = [ "gaelan" ];
+                      runAs = "root";
+                      commands = [
+                        "NOPASSWD:ALL"
+                      ];
+                    }
+                  ];
+                  security.sudo.execWheelOnly = true;
+                })
               ];
             };
         };
@@ -86,7 +98,7 @@
         deploy.nodes.darktower = {
           fastConnection = true;
           user = "root";
-          sshUser = "root";
+          sshUser = "gaelan";
           hostname = "192.168.10.3";
           profiles.system = {
             path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.darktower;
