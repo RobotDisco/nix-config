@@ -19,18 +19,18 @@
   boot.kernelParams = [ "intel_iommu=on nomodeset" ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/7677ff30-29a9-4501-a248-18a480736cbc";
+    { device = "/dev/disk/by-label/rootpart0";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/AAF7-9302";
+    { device = "/dev/disk/by-label/EFIBOOT0";
       fsType = "vfat";
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/9a379088-8979-409f-a2ae-efb3f0de9f23"; }
-      { device = "/dev/disk/by-uuid/4eb298f4-6f32-4f81-9f5c-d317c8c79022"; }
+    [ { device = "/dev/disk/by-label/swappart0"; }
+      { device = "/dev/disk/by-label/swappart1"; }
     ];
 
   # Use the systemd-boot EFI boot loader.
