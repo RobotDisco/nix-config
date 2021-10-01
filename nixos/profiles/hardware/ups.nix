@@ -1,6 +1,15 @@
-# TODO somehow create /var/lib/nut
-
 {
+  users.users.nut = {
+    uid = 84;
+    home = "/var/lib/nut";
+    createHome = true;
+    group = "nut";
+    description = "Network UPS Tools service account";
+  };
+  users.groups."nut" = {
+    gid = 84;
+  };
+  
   power.ups = {
     enable = true;
     mode = "netserver";

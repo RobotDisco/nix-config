@@ -80,6 +80,8 @@
 
               modules = common-nixos-modules ++ [
                 ./nixos/machines/darktower
+                ./nixos/profiles/hardware/ups.nix
+                ./nixos/profiles/hypervisor.nix
                 ({
                   users.mutableUsers = false;
 
