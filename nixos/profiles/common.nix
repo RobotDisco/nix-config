@@ -2,8 +2,6 @@
 { pkgs, ... }:
 
 {
-  imports = [ ./hardware/yubikey/base.nix ];
-  
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
@@ -33,14 +31,6 @@
     ];
     # Allow zsh to autocomplete system packages, if installed
     pathsToLink = [ "/share/zsh" ];
-  };
-
-  hardware = {
-    # Assume we have nonfree hardware
-    enableRedistributableFirmware = true;
-
-    # All my hardware is Intel, so
-    cpu.intel.updateMicrocode = true;
   };
 
   # The global useDHCP flag is deprecated,
@@ -73,8 +63,7 @@
     config.allowUnfree = true;
   };
 
-  services = {
-    # tool for updating system firmware
-    fwupd.enable = true;
-  };
+  # Don't allow anyone except those in the admin group to
+  # perform a sudo.
+  security.sudo.execWheelOnly = true;
 }

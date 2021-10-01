@@ -9,6 +9,10 @@
     ./networking/smb-client.nix
   ];
 
+  users.users.gaelan = {
+    extraGroups = [ "networkmanager" "video" ];
+  };
+
   environment.systemPackages = with pkgs; [
     # Control laptop screen brightness
     brightnessctl

@@ -2,18 +2,11 @@
 { pkgs, ... }:
 
 {
-  # Useful commandline packages
-  environment.systemPackages = with pkgs; [
-    yubikey-manager
-    yubikey-personalization
-    yubico-piv-tool
-  ];
-  
   services = {
     # Enable smart card (CCID) mode
     pcscd.enable = true;
 
-    # udev rules needed by many yubikey apps
+    # udev rules often needed for yubikey support
     udev.packages = [ pkgs.yubikey-personalization ];
   };
 

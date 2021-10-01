@@ -5,7 +5,7 @@
     extraGroups = [ "libvirtd" ];
   };
 
-  boot.kernelParams = [ "kvm-intel" ];
+  boot.kernelModules = [ "kvm-intel" ];
   
   virtualisation.libvirtd = {
     enable = true;

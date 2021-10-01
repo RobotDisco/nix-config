@@ -3,11 +3,11 @@
 
   inputs = {
     # Flakes we're going to depend on
-    nixpkgs.url = "github:nixos/nixpkgs/21.05";
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
-    home-manager.url = "github:nix-community/home-manager/release-21.05";
-    darwin.url = "github:lnl7/nix-darwin/master";
-    deploy-rs.url = "github:serokell/deploy-rs";
+    nixpkgs.url = github:nixos/nixpkgs/21.05;
+    emacs-overlay.url = github:nix-community/emacs-overlay;
+    home-manager.url = github:nix-community/home-manager/release-21.05;
+    darwin.url = github:lnl7/nix-darwin/master;
+    deploy-rs.url = github:serokell/deploy-rs;
 
     # Hook up our chosen dependencies to be the ones our other dependencies use
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -19,11 +19,13 @@
     let
       common-nixos-modules = [
         ./nixos/profiles/common.nix
+        ({ users.mutableUsers = false; })
+        ./nixos/users/gaelan.nix
         {
           # I guess the nix overlays form doesn't do anything
           # magic, so I'm overriding it to add overlays
           # within the nixos module system itself?
-          nixpkgs.overlays = with inputs; [
+          nixpkgs.overlays = [
             emacs-overlay.overlay
           ];
         }
@@ -35,7 +37,7 @@
           # I guess the nix overlays form doesn't do anything
           # magic, so I'm overriding it to add overlays
           # within the nixos module system itself?
-          nixpkgs.overlays = with inputs; [
+          nixpkgs.overlays = [
             emacs-overlay.overlay
           ];
         }
@@ -49,21 +51,10 @@
             {
               system = "x86_64-linux";
               modules = common-nixos-modules ++ [
-	              ./nixos/machines/arrakis
+                ./nixos/profiles/baremetal.nix
+                ./nixos/machines/arrakis
                 # The module that loads home-manager
                 home-manager.nixosModules.home-manager
-                ({pkgs, ... }: {
-                  # Maybe this will get shared, but for now use an anonymous
-                  # nix xpression to create my user
-                  users.users.gaelan = {
-                    shell = pkgs.zsh;
-                    isNormalUser = true;
-                    home = "/home/gaelan";
-                    description = "Gaelan D'costa";
-                    # TODO if I have role profiles elsewhere, these should be confingured there
-                    extraGroups = [ "wheel" "networkmanager" "docker" "video" ];
-                  };
-                })
                 # My anonymous module that has some (probably oughta be common
                 # settings and my user's customized home-manager config
 	              {
@@ -79,38 +70,10 @@
               system = "x86_64-linux";
 
               modules = common-nixos-modules ++ [
+                ./nixos/profiles/baremetal.nix
                 ./nixos/machines/darktower
                 ./nixos/profiles/hypervisor.nix
                 ./nixos/profiles/hardware/ups.nix
-                ({
-                  users.mutableUsers = false;
-
-                  users.users.gaelan = {
-                    isNormalUser = true;
-                    extraGroups = [ "wheel" ];
-                    openssh.authorizedKeys.keys = [
-                      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJOz9up91JWgD0QeCr4ub4C+a8w0SgFfdh/NE743B1aF gaelan@arrakis"
-                    ];
-                  };
-
-                  security.sudo.extraRules = [
-                    {
-                      users = [ "gaelan" ];
-                      runAs = "root";
-                      commands = [
-                        "NOPASSWD:ALL"
-                      ];
-                    }
-                  ];
-                  security.sudo.execWheelOnly = true;
-                })
-                # ({
-                #   security.pam.yubico = {
-                #     enable = true;
-                #     debug = true;
-                #     mode = "challenge-response";
-                #   };
-                # })
               ];
             };
         };
