@@ -13,10 +13,10 @@
   # Modules from hardware scan on install
   boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" "vfio-pci" ];
+  boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
   # ModeSetting kernel panics when I connect via VNC / Intel AMT
-  boot.kernelParams = [ "intel_iommu=on nomodeset" ];
+  boot.kernelParams = [ "nomodeset" ];
 
   fileSystems."/" =
     { device = "/dev/disk/by-label/rootpart0";
