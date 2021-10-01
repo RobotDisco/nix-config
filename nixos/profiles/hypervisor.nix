@@ -4,6 +4,8 @@
   users.users.gaelan = {
     extraGroups = [ "libvirtd" ];
   };
+
+  boot.kernelParams = [ "kvm-intel" ];
   
   virtualisation.libvirtd = {
     enable = true;
