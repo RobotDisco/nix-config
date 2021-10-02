@@ -21,5 +21,7 @@
     [ { device = "/dev/disk/by-label/swappart0"; }
     ];
 
+  networking.interfaces.enp2s0.useDHCP = true;
+
   services.openssh.enable = true;
 }
