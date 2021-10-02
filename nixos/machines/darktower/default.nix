@@ -57,19 +57,8 @@
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-
-  networking.bridges = {
-    br-admin = {
-      interfaces = [ "eno1" ];
-      rstp = true;
-    };
-    br-trunk = {
-      interfaces = [ "enp6s0f0" ];
-      rstp = true;
-    };
-  };
   
-  networking.interfaces.br-admin.ipv4.addresses = [{
+  networking.interfaces.eno1.ipv4.addresses = [{
     address = "192.168.10.3";
     prefixLength = 24;
   }];
@@ -77,10 +66,7 @@
   networking.interfaces.enp6s0f0.useDHCP = false;
   networking.interfaces.enp6s0f1.useDHCP = false;
 
-  networking.defaultGateway = {
-    address = "192.168.10.1";
-    interface = "br-admin";
-  };
+  networking.defaultGateway = "192.168.10.1";
   networking.nameservers = [ "192.168.10.1" ];
 
   # Configure network proxy if necessary
