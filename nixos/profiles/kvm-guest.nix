@@ -1,10 +1,10 @@
-{ modulePath, ... }:
+{ modulesPath, ... }:
 
 {
   imports =
     [
-      (modulePath + /profiles/qemu-guest.nix)
-      (modulePath + /virtualisation/qemu-guest-agent.nix)
+      (modulesPath + "/profiles/qemu-guest.nix")
+      (modulesPath + "/virtualisation/qemu-guest-agent.nix")
     ];
 
   # Use the GRUB 2 boot loader.
