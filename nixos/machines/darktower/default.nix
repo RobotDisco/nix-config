@@ -11,12 +11,22 @@
     ];
 
   # Modules from hardware scan on install
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" "vfio" "vfio-pci" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ ];
   boot.extraModulePackages = [ ];
   # ModeSetting kernel panics when I connect via VNC / Intel AMT
-  boot.kernelParams = [ "nomodeset" ];
+  boot.kernelParams = [ "nomodeset" "intel_iommu=on" "iommu=pt" ];
+
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  boot.initrd.preDeviceCommands = ''
+    DEVS="0000:01:00.0 0000:05:00.0"
+    for DEV in $DEVS; do
+      echo "vfio-pci" > /sys/bus/pci/devices/$DEV/driver_override
+    done
+    modprobe -i vfio-pci
+  '';
 
   fileSystems."/" =
     { device = "/dev/disk/by-label/rootpart0";
@@ -146,4 +156,3 @@
   system.stateVersion = "21.05"; # Did you read the comment?
 
 }
-
