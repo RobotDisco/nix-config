@@ -15,7 +15,8 @@
   };
 
   # This is where we define our own stuff
-  outputs = { self, nixpkgs, darwin, deploy-rs, emacs-overlay, home-manager, ... }@inputs:
+  outputs = { self, nixpkgs, darwin, deploy-rs, emacs-overlay, home-manager,
+              ... }:
     let
       common-nixos-modules = [
         ./nixos/profiles/common.nix
@@ -45,7 +46,6 @@
     in
 
       {
-          
         nixosConfigurations = {
           arrakis = nixpkgs.lib.nixosSystem
             {
