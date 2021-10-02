@@ -80,7 +80,8 @@
             system = "x86_64-linux";
 
             modules = common-nixos-modules ++ [
-              ./nixos/profiles/kvm-guest.nix { hostName = "chapterhouse"; }
+              ./nixos/profiles/kvm-guest.nix
+              { networking.hostName = "chapterhouse"; }
             ];
           };
         };

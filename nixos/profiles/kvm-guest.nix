@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulePath, hostName, ... }:
+{ modulePath, ... }:
 
 {
   imports =
@@ -6,8 +6,6 @@
       (modulePath + /profiles/qemu-guest.nix)
       (modulePath + /virtualisation/qemu-guest-agent.nix)
     ];
-
-  networking.hostName = hostName;
 
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
