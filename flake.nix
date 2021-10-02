@@ -76,6 +76,13 @@
                 ./nixos/profiles/hardware/ups.nix
               ];
             };
+          chapterhouse = nixpkgs.lib.nixosSystem {
+            system = "x86_64-linux";
+
+            modules = common-nixos-modules ++ [
+              ./nixos/profiles/kvm-guest.nix { hostName = "chapterhouse"; }
+            ];
+          };
         };
 
         deploy.nodes.darktower = {
