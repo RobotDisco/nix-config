@@ -81,7 +81,56 @@
 
             modules = common-nixos-modules ++ [
               ./nixos/profiles/kvm-guest.nix
-              { networking.hostName = "chapterhouse"; }
+              {
+                networking.hostName = "chapterhouse";
+                networking.hostId = "bff65b11";
+              }
+              {
+                boot.supportedFilesystems = [ "zfs" ];
+
+                # Scrub all ZFS pools monthly
+                services.zfs.autoScrub = {
+                  interval = "monthly";
+                  enable = true;
+                };
+
+                services.smartd = {
+                  enable = true;
+                  notifications = {
+                    test = true;
+                    mail.sender = "root@robot-disco.net";
+                    mail.enable = true;
+                    mail.recipient = "gdcosta@gmail.com";
+                  };
+                };
+              }
+              {
+                services.sanoid = {
+                  enable = true;
+
+                  datasets = {
+                    "salusajail/data" = {
+                      recursive = true;
+                      daily = 90;
+                      hourly = 72;
+                      monthly = 36;
+                      autosnap = true;
+                      autoprune = true;
+                    };
+                  };
+                };
+
+                services.syncoid = {
+                  enable = true;
+
+                  commands = {
+                    "salusajail/data" = {
+                      target = "backuppool/salusajail/data";
+                      recursive = true;
+                    };
+                  };
+                };
+              }
             ];
           };
         };

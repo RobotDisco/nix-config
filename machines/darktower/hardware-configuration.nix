@@ -1,3 +1,4 @@
+{
   services.nfs.server.enable = true;
   services.nfs.server.exports = ''
     /salusajail/data/webdav salusa?.admin.robot-disco.net(rw,no_root_squash)
@@ -35,30 +36,4 @@
   };
   networking.firewall.allowedTCPPorts = [ 445 139 ];
   networking.firewall.allowedUDPPorts = [ 137 138 ];
-  
-  services.sanoid = {
-    enable = true;
-
-    datasets = {
-      "salusajail/data" = {
-        recursive = true;
-        daily = 90;
-        hourly = 72;
-        monthly = 36;
-        autosnap = true;
-        autoprune = true;
-      };
-    };
-  };
-
-  services.syncoid = {
-    enable = true;
-
-    commands = {
-      "salusajail/data" = {
-        target = "backuppool/salusajail/data";
-        recursive = true;
-      };
-    };
-  };
 }
