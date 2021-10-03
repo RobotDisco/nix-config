@@ -74,6 +74,7 @@
                 ./nixos/machines/darktower
                 ./nixos/profiles/hypervisor.nix
                 ./nixos/profiles/hardware/ups.nix
+                ./nixos/profiles/sendmail.nix
               ];
             };
           chapterhouse = nixpkgs.lib.nixosSystem {
@@ -81,6 +82,7 @@
 
             modules = common-nixos-modules ++ [
               ./nixos/profiles/kvm-guest.nix
+              ./nixos/profiles/sendmail.nix
               {
                 networking.hostName = "chapterhouse";
                 networking.hostId = "bff65b11";

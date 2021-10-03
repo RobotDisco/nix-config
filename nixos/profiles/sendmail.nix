@@ -1,3 +1,5 @@
+{ isPortable ? false, ... }:
+
 {
   services.postfix = {
     enable = true;
