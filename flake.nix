@@ -86,25 +86,60 @@
                 networking.hostId = "bff65b11";
               }
               {
+                # Storage configuration for our fileserver
                 boot.supportedFilesystems = [ "zfs" ];
 
-                # Scrub all ZFS pools monthly
+                # Using interleaved schedule of bimonthly scrubs
+                # and long SMART tests (and weekly short SMART tests)
+                # found at https://www.truenas.com/community/threads/scrub-and-smart-testing-schedules.20108/      
+                # Scrub ZFS pools every bimonthly
                 services.zfs.autoScrub = {
-                  interval = "monthly";
+                  interval = "*-*-01,15 02:00";
                   enable = true;
                 };
 
+                # I very much care about the health of my fileserver data
                 services.smartd = {
                   enable = true;
+                  # I only care about real drives, not system VM drives
+                  devices = [
+                    {
+                      device = "/dev/sda";
+                    }
+                    {
+                      device = "/dev/sdb";
+                    }
+                    {
+                      device = "/dev/sdc";
+                    }
+                    {
+                      device = "/dev/sdd";
+                    }
+                    {
+                      device = "/dev/sde";
+                    }
+                    {
+                      device = "/dev/sdf";
+                    }
+                    {
+                      device = "/dev/sdg";
+                    }
+                    {
+                      device = "/dev/sdh";
+                    }                      
+                  ];
+                  autodetect = false;
                   notifications = {
-                    test = true;
                     mail.sender = "root@robot-disco.net";
                     mail.enable = true;
                     mail.recipient = "gdcosta@gmail.com";
                   };
+                  # Enable offline tests, schedule long/sort SMART tests as above
+                  defaults.monitored = "-a -o on -s (S/../(05|12|19|26)/./02|L/../(08|22)/./02)";
                 };
               }
               {
+                # Automatically snapshot ZFS volumes
                 services.sanoid = {
                   enable = true;
 
@@ -120,6 +155,7 @@
                   };
                 };
 
+                # Automatically replicate data pool to onsite backup
                 services.syncoid = {
                   enable = true;
 
