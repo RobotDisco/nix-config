@@ -91,6 +91,16 @@
                 # Storage configuration for our fileserver
                 boot.supportedFilesystems = [ "zfs" ];
 
+                fileSystems."/storagepool" =
+                  { device = "storagepool";
+                    fsType = "zfs";
+                  };
+                fileSystems."/backuppool" =
+                  { device = "backuppool";
+                    fsType = "zfs";
+                  };
+              }
+              {
                 # Using interleaved schedule of bimonthly scrubs
                 # and long SMART tests (and weekly short SMART tests)
                 # found at https://www.truenas.com/community/threads/scrub-and-smart-testing-schedules.20108/      
