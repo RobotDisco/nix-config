@@ -63,7 +63,7 @@
                   virtualisation.docker.enable = true;
 
                   environment.systemPackages = [
-                    nixpkgs.pkgs.docker-compose
+                    nixpkgs.docker-compose
                   ];
                 }
               ];
