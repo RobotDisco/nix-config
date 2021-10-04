@@ -146,7 +146,14 @@
                   enable = true;
 
                   datasets = {
-                    "salusajail/data" = {
+                    "storagepool" = {
+                      daily = 90;
+                      hourly = 72;
+                      monthly = 36;
+                      autosnap = true;
+                      autoprune = true;
+                    };
+                    "storagepool/data" = {
                       recursive = true;
                       daily = 90;
                       hourly = 72;
@@ -162,8 +169,8 @@
                   enable = true;
 
                   commands = {
-                    "salusajail/data" = {
-                      target = "backuppool/salusajail/data";
+                    "storagepool/data" = {
+                      target = "backuppool/storagepool/data";
                       recursive = true;
                     };
                   };
