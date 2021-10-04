@@ -47,6 +47,27 @@
 
       {
         nixosConfigurations = {
+          salusaold = nixpkgs.lib.nixosSystem
+            {
+              system = "x86_64-linux";
+              modules = common-nixos-modules ++ [
+                ./nixos/profiles/kvm-guest.nix
+                {
+                  networking.hostName = "salusa-old";
+                }
+                {
+                  users.users.gaelan = {
+                    extraGroups = [ "docker" ];
+                  };
+
+                  virtualisation.docker.enable = true;
+
+                  environment.systemPackages = [
+                    nixpkgs.pkgs.docker-compose
+                  ];
+                }
+              ];
+            };
           arrakis = nixpkgs.lib.nixosSystem
             {
               system = "x86_64-linux";
