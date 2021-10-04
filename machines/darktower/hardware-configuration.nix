@@ -1,8 +1,5 @@
 {
-  services.nfs.server.enable = true;
   services.nfs.server.exports = ''
-    /salusajail/data/webdav salusa?.admin.robot-disco.net(rw,no_root_squash)
-    /salusajail/data/bitwarden salusa?.admin.robot-disco.net(rw,no_root_squash)
     /salusajail/data/minecraft salusa?.admin.robot-disco.net(rw)
     /salusajail/data/git salusa?.admin.robot-disco.net(rw)
   '';

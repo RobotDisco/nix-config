@@ -84,6 +84,10 @@
               ./nixos/profiles/kvm-guest.nix
               ./nixos/profiles/sendmail.nix
               {
+                services.nfs.server.enable = true;
+                networking.firewall.allowedTCPPorts = [ 2049 ];
+              }
+              {
                 networking.hostName = "chapterhouse";
                 networking.hostId = "bff65b11";
               }
