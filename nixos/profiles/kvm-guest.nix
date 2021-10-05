@@ -5,7 +5,7 @@
     [
       (modulesPath + "/profiles/qemu-guest.nix")
       (modulesPath + "/virtualisation/qemu-guest-agent.nix")
-      (modulesPath + "/profiles/headless.nix")
+#      (modulesPath + "/profiles/headless.nix")
     ];
 
   # Use the GRUB 2 boot loader.
