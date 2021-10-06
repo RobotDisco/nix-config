@@ -96,6 +96,12 @@
                 ./nixos/profiles/hypervisor.nix
                 ./nixos/profiles/hardware/ups.nix
                 ./nixos/profiles/sendmail.nix
+                {
+                  networking.macvlans.admin = {
+                    interface = "eno1";
+                    mode  ="bridge";
+                  };
+                }
               ];
             };
           chapterhouse = nixpkgs.lib.nixosSystem {
