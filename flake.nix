@@ -122,14 +122,7 @@
                 # Storage configuration for our fileserver
                 boot.supportedFilesystems = [ "zfs" ];
 
-                fileSystems."/storagepool" =
-                  { device = "storagepool";
-                    fsType = "zfs";
-                  };
-                fileSystems."/backuppool" =
-                  { device = "backuppool";
-                    fsType = "zfs";
-                  };
+                boot.zfs.extraPools = [ "storagepool" "backuppool" ];
               }
               {
                 # Using interleaved schedule of bimonthly scrubs
