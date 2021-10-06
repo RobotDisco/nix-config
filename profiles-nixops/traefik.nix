@@ -7,9 +7,9 @@
 
       #defaultEntryPoints = ["web" "websecure"];
 
-      entryPoints.admin = {
-        address = ":8080";
-      };
+      # entryPoints.admin = {
+      #   address = ":8080";
+      # };
       
       entryPoints.web = {
         address = ":80";
@@ -43,34 +43,34 @@
       };
     };
 
-    dynamicConfigOptions = {
-      http.routers = {
-        dashapi = {
-          service = "api@internal";
-          rule = "Host(`192.168.50.99`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))";
-        };
-        gitea = {
-          entryPoints = ["websecure"];
-          rule = "Host(`git.robot-disco.net`)";
-          service = "gitea@file";
-          tls.certResolver = "letsencrypt";
-        };
-      };
+    # dynamicConfigOptions = {
+    #   http.routers = {
+    #     dashapi = {
+    #       service = "api@internal";
+    #       rule = "Host(`192.168.50.99`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))";
+    #     };
+    #     gitea = {
+    #      entryPoints = ["websecure"];
+    #      rule = "Host(`git.robot-disco.net`)";
+    #      service = "gitea@file";
+    #      tls.certResolver = "letsencrypt";
+    #     };
+    #   };
 
-      http.services = {
-        gitea = {
-          loadBalancer = {
-            servers = [{
-              url = "http://localhost:3000";
-            }];
-          };
-        };
-      };
-    };
+    #   http.services = {
+    #    gitea = {
+    #      loadBalancer = {
+    #        servers = [{
+    #          url = "http://localhost:3000";
+    #        }];
+    #      };
+    #    };
+    #   };
+    # };
 
     group = "docker";
   };
 
   networking.firewall.checkReversePath = "loose";
-  networking.firewall.allowedTCPPorts = [ 8080 80 443 ];
+  networking.firewall.allowedTCPPorts = [ 443 ];
 }

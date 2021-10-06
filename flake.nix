@@ -47,13 +47,30 @@
 
       {
         nixosConfigurations = {
+          # The old manual way I ran dockerized services, which I want to replace
+          # with either NixOS or Nomad
           salusaold = nixpkgs.lib.nixosSystem
             {
               system = "x86_64-linux";
               modules = common-nixos-modules ++ [
                 ./nixos/profiles/kvm-guest.nix
+                ./profiles-nixops/traefik.nix
                 {
                   networking.hostName = "salusa-old";
+
+                  networking.interfaces.enp1s0.useDHCP = true;
+                  # For some reason a second NIC comes up as this
+                  networking.interfaces.enp7s0.useDHCP = false;
+                  # I only use this for cloud services, so specify the vlan
+                  networking.vlans = {
+                    vlan50 = { id = 50; interface="enp7s0"; };
+                  };
+                  # I currently do port forwarding which requires a static IP
+                  # TODO is there a way with nomad I can leverage haproxy or something?
+                  networking.interfaces.vlan50.ipv4.addresses = [{
+                    address = "192.168.50.99";
+                    prefixLength = 24;
+                  }];
                 }
                 {
                   users.users.gaelan = {
@@ -66,8 +83,19 @@
                   #  nixpkgs.docker-compose
                   #];
                 }
+                {
+                  fileSystems."/srv/bitwarden" =
+                    { device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/data/bitwarden";
+                      fsType = "nfs";
+                    };
+                  fileSystems."/srv/webdav" =
+                  { device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/data/webdav";
+                      fsType = "nfs";
+                  };
+                }
               ];
             };
+          # My laptop
           arrakis = nixpkgs.lib.nixosSystem
             {
               system = "x86_64-linux";
@@ -86,6 +114,7 @@
                 }
               ];
             };
+          # My hypervisor
           darktower = nixpkgs.lib.nixosSystem
             {
               system = "x86_64-linux";
@@ -97,9 +126,18 @@
                 ./nixos/profiles/hardware/ups.nix
                 ./nixos/profiles/sendmail.nix
                 {
-                  networking.macvlans.admin = {
-                    interface = "eno1";
-                    mode  ="bridge";
+                  # Since I don't use my pfSense router to set policy for my VMs
+                  # it makes more sense to use bridge mode for better performance
+                  # especially since a lot of this traffic will be storage traffic
+                  networking.macvlans = {
+                    admin = {
+                      interface = "eno1";
+                      mode  = "bridge";
+                    };
+                    cloud = {
+                      interface = "enp6s0f0";
+                      mode = "bridge";
+                    };
                   };
                 }
               ];
@@ -116,12 +154,17 @@
               }
               {
                 networking.hostName = "chapterhouse";
+                # Required by ZFS
                 networking.hostId = "bff65b11";
+                # Slot isn't 1 because of PCI passthru
+                #networking.interfaces.enp1s0.useDHCP = false;
+                networking.interfaces.enp2s0.useDHCP = true;
               }
               {
                 # Storage configuration for our fileserver
                 boot.supportedFilesystems = [ "zfs" ];
 
+                # I don't care about specific mountpoints, so just mount the pools
                 boot.zfs.extraPools = [ "storagepool" "backuppool" ];
               }
               {
@@ -231,6 +274,15 @@
             hostname = "chapterhouse.admin.robot-disco.net";
             profiles.system = {
               path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.chapterhouse;
+            };
+          };
+          salusaold = {
+            fastConnection = true;
+            user = "root";
+            sshUser = "gaelan";
+            hostname = "salusa-old.admin.robot-disco.net";
+            profiles.system = {
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.salusaold;
             };
           };
         };
