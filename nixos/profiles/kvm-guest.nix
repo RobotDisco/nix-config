@@ -4,7 +4,6 @@
   imports =
     [
       (modulesPath + "/profiles/qemu-guest.nix")
-      (modulesPath + "/virtualisation/qemu-guest-agent.nix")
       (modulesPath + "/profiles/headless.nix")
     ];
 
@@ -22,5 +21,8 @@
     [ { device = "/dev/disk/by-label/swappart0"; }
     ];
 
+  services.qemuGuest.enable = true;
+
   services.openssh.enable = true;
+  services.sshguard.enable = true;
 }
