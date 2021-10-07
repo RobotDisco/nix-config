@@ -27,6 +27,9 @@
         LISTEN 127.0.0.1
         LISTEN 192.168.10.3
       '';
+      user = "nut";
+      group = "nut";
+      mode = "0600";
     };
     # So you'd think these should be secret, and you'd be right, but I'm forced
     # to use the values from synology so these are effectively public anyway.
@@ -41,12 +44,18 @@
             password = secret
             usbmon master
       '';
+      user = "nut";
+      group = "nut";
+      mode = "0600";
     };
     "nut/upsmon.conf" = {
       text = ''
         MONITOR ups@127.0.0.1 1 monmaster secret master
         SHUTDOWNCMD /run/current-system/sw/bin/poweroff
       '';
+      user = "nut";
+      group = "nut";
+      mode = "0600";
     };
   };
 
