@@ -8,6 +8,7 @@
     home-manager.url = github:nix-community/home-manager/release-21.05;
     darwin.url = github:lnl7/nix-darwin/master;
     deploy-rs.url = github:serokell/deploy-rs;
+    sops-nix.url = github:Mic92/sops-nix;
 
     # Hook up our chosen dependencies to be the ones our other dependencies use
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -16,10 +17,12 @@
 
   # This is where we define our own stuff
   outputs = { self, nixpkgs, darwin, deploy-rs, emacs-overlay, home-manager,
-              ... }:
+              sops-nix, ... }:
     let
       common-nixos-modules = [
         ./nixos/profiles/common.nix
+        sops-nix.nixosModules.sops
+        { sops.gnupg.sshKeyPaths = [ "/etc/ssh/ssh_host_rsa_key"]; }
         ({ users.mutableUsers = false; })
         ./nixos/users/gaelan.nix
         {

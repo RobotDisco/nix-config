@@ -4,6 +4,11 @@
 { pkgs, ... }:
 
 {
+  sops.secrets.users_gaelan_password = {
+    sopsFile = ../../secrets/common.json;
+    format = "json";
+  };
+
   users.users.gaelan = {
     shell = pkgs.zsh;
     isNormalUser = true;
@@ -13,6 +18,7 @@
     openssh.authorizedKeys.keyFiles = [
      ./gaelan-yubikey.pub
     ];
+    passwordFile = "/run/secrets/users_gaelan_password";
   };
 
   security.sudo.extraRules = [
