@@ -2,6 +2,7 @@ keys:
   - &gaelan BE3878AD5D9790E8240DE128A815AC9D526EE85A
   - &arrakis 62378c2ba0acbec37f762be08bd4cb68d3656599
   - &darktower 8e9d6bdac66dc0a406fa54a30f53dcc257407e7f
+  - &kaitain 5c14aa0830919d5e812e10ccda7a0d6fb68893a9
 creation_rules:
   - path: secrets/common.json
     key_groups:
@@ -9,3 +10,4 @@ creation_rules:
           - *gaelan
           - *arrakis
           - *darktower
+          - *kaitain
