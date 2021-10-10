@@ -55,6 +55,7 @@
               system = "x86_64-linux";
               modules = common-nixos-modules ++ [
                 ./nixos/profiles/kvm-guest.nix
+                ./nixos/profiles/sendmail.nix
                 {
                   networking.hostName = "kaitain";
 
@@ -69,6 +70,7 @@
               system = "x86_64-linux";
               modules = common-nixos-modules ++ [
                 ./nixos/profiles/kvm-guest.nix
+                ./nixos/profiles/sendmail.nix
                 ./profiles-nixops/traefik.nix
                 {
                   networking.hostName = "salusa-old";
@@ -267,18 +269,6 @@
                     };
                   };
                 };
-              }
-            ];
-          };
-          kaitain = nixpkgs.lib.nixosSystem {
-            system = "x86_64-linux";
-
-            modules = common-nixos-modules ++ [
-              ./nixos/profiles/kvm-guest.nix
-              ./nixos/profiles/sendmail.nix
-              {
-                networking.hostName = "kaitain";
-                networking.interfaces.enp1s0.useDHCP = true;
               }
             ];
           };
