@@ -50,6 +50,18 @@
 
       {
         nixosConfigurations = {
+          kaitain = nixpkgs.lib.nixosSystem
+            {
+              system = "x86_64-linux";
+              modules = common-nixos-modules ++ [
+                ./nixos/profiles/kvm-guest.nix
+                {
+                  networking.hostName = "kaitain";
+
+                  networking.interfaces.enp1s0.useDHCP = true;
+                }
+              ];
+            };
           # The old manual way I ran dockerized services, which I want to replace
           # with either NixOS or Nomad
           salusaold = nixpkgs.lib.nixosSystem
@@ -296,6 +308,15 @@
             user = "root";
             sshUser = "gaelan";
             hostname = "salusa-old.admin.robot-disco.net";
+            profiles.system = {
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.salusaold;
+            };
+          };
+          kaitain = {
+            fastConnection = true;
+            user = "root";
+            sshUser = "gaelan";
+            hostname = "kaitain.admin.robot-disco.net";
             profiles.system = {
               path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.salusaold;
             };
