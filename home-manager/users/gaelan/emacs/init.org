@@ -1376,14 +1376,6 @@ Here are a bunch of functions and hooks we use to set up our desktop environment
 ** Move certain apps to purpose-specific workspaces
 There are certain workspaces that are assigned to specific purposes. This hook automatically assigns apps to these workspaces when launched.
 
-#+begin_src emacs-lisp :tangle no
-  (defun gaelan/configure-window-by-class-hook ()
-    (pcase exwm-class-name
-      ("Firefox" (exwm-workspace-move-window 2))
-      ("Chromium-browser" (exwm-workspace-move-window 2))
-      ("Slack" (exwm-workspace-move-window 3))
-      ("Mattermost" (exwm-workspace-move-window 3))))
-#+end_src
 ** Monitor change hook
    This hook invokes autorandr when we detect a monitor change. We assume autorandr has been previously configured.
    #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1513,9 +1505,10 @@ There are certain workspaces that are assigned to specific purposes. This hook a
      
        ;; Pin certain applications to specific workspaces
        (setq exwm-manage-configurations
-             '(((string= exwm-class-name "Firefox") workspace 2)
+             '(((string= exwm-class-name "Firefox") workspace 3)
                ((string= exwm-class-name "Chromium-browser") workspace 3)
-               ((string= exwm-class-name ".obs-wrapped") workspace 2)))
+               ((string= exwm-class-name "Slack") workspace 4)
+               ((string= exwm-class-name "Mattermost") workspace 4)))
      
        ;; Enable EXWM
        (exwm-enable))
