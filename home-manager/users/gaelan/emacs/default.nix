@@ -46,8 +46,11 @@ in
   # Install additional packages like system tray + status bar
   home.packages =
     if pkgs.stdenv.isDarwin
-    then []
+    then with pkgs; [
+      imagemagick
+    ]
     else with pkgs; [
+      imagemagick
       stalonetray
       xmobar
     ];

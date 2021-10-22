@@ -582,8 +582,7 @@ A nice thing about Perspective in particular is that it integrates with Projecti
      (use-package company
        :ensure t
        :config
-       (global-company-mode))
-;       :bind (("M-TAB" . 'company-complete)))
+       (add-hook 'after-init-hook 'global-company-mode))
    #+end_src
 
    My autocompletion moder also has helm integration
@@ -1294,6 +1293,15 @@ Racket is a language evolved from Scheme. It is language often used for designin
   (use-package racket-mode
     :hook (racket-mode-hook . gaelan/generic-lisp-mode-hook)
     :ensure t)
+#+end_src
+** Ruby
+#+begin_src emacs-lisp :tangle yes
+  (use-package robe
+	       :ensure t
+	       :after company
+	       :hook (ruby-mode-hook . robe-mode)
+	       :init
+	       (push 'company-robe company-backends))
 #+end_src
 ** Rust
    #+begin_src emacs-lisp :tangle yes
