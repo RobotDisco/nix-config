@@ -61,6 +61,48 @@
 
                   networking.interfaces.enp1s0.useDHCP = true;
                 }
+                {
+                  services.prometheus = {
+                    enable = true;
+
+                    scrapeConfigs = [
+                      {
+                        job_name = "node";
+                        static_configs = [
+                          {
+                            targets = [ "darktower.admin.robot-disco.net:9100" ];
+                          }
+                          {
+                            targets = [ "chapterhouse.admin.robot-disco.net:9100" ];
+                          }
+                          {                                                    
+                            targets = [ "kaitain.admin.robot-disco.net:9100" ];
+                          }
+                          {
+                            targets = [ "salusa-old.admin.robot-disco.net:9100" ];
+                          }
+                        ];
+                      }
+                    ];
+                  };
+
+                  services.grafana = {
+                    enable = true;
+                    addr = "0.0.0.0";
+                    domain = "kaitain.admin.robot-disco.net";
+
+                    provision.enable = true;
+                    provision.datasources = [
+                      {
+                        name = "Prometheus";
+                        url = "http://localhost:9090";
+                        type = "prometheus";
+                      }
+                    ];
+                  };
+
+                  networking.firewall.allowedTCPPorts = [ 3000 ];
+                }
               ];
             };
           # The old manual way I ran dockerized services, which I want to replace
