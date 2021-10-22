@@ -147,6 +147,13 @@ in
         hostname="104.236.145.40";
         user = "forge";
       };
+
+      chef = {
+        user = "ubuntu";
+        identityFile = "~/.ssh/tulipio.pem";
+        proxyJump = "ubuntu@52.205.132.54";
+        hostname = "10.200.0.35";
+      };
     };
   };
 }
