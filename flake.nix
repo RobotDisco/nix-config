@@ -118,11 +118,12 @@
 
                   networking.interfaces.enp1s0.useDHCP = true;
                   # For some reason a second NIC comes up as this
-                  networking.interfaces.enp2s0.useDHCP = true;
+                  networking.interfaces.enp2s0.useDHCP = false;
                   # I only use this for cloud services, so specify the vlan
                   networking.vlans = {
                     vlan50 = { id = 50; interface="enp2s0"; };
                   };
+                  networking.interfaces.vlan50.useDHCP = true;
                   # I currently do port forwarding which requires a static IP
                   # TODO is there a way with nomad I can leverage haproxy or something?
                   # networking.interfaces.vlan50.ipv4.addresses = [{
@@ -130,7 +131,7 @@
                   #   prefixLength = 24;
                   # }];
                 }
-                {
+#                {
                   # containers = {
                   #   postgresql = {
                   #     config = {
@@ -147,13 +148,23 @@
                   #     };
                   #   }
                   # }
-                }
-                {
-                  # fileSystems."/srv/db_dumps" =
-                  #   { device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/data/db_dumps/postgres";
-                  #     fsType = "nfs";
-                  #   };
-                }
+#                }
+                # {
+                #   fileSystems = {
+                    # "/srv/postgresql_backup" = {
+                    #   device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/backups/postgresql";
+                    #   fsType = "nfs";
+                    # };
+                    # "/srv/mariadb_backup" = {
+                    #   device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/backups/mariadb";
+                    #   fsType = "nfs";
+                    # };
+                    # "/srv/vaultwarden_backup" = {
+                    #   device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/backups/vaultwarden";
+                    #   fsType = "nfs";
+                    # };
+                #   };
+                # }
               ];
             };
           # The old manual way I ran dockerized services, which I want to replace
@@ -333,7 +344,8 @@
                   enable = true;
 
                   datasets = {
-                    "storagepool" = {
+                    "storagepool/backups" = {
+                      recursive = true;
                       daily = 90;
                       hourly = 72;
                       monthly = 36;
@@ -358,6 +370,10 @@
                   commands = {
                     "storagepool/data" = {
                       target = "backuppool/storagepool/data";
+                      recursive = true;
+                    };
+                    "storagepool/backups" = {
+                      target = "backuppool/storagepool/backups";
                       recursive = true;
                     };
                   };
