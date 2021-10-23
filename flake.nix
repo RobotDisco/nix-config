@@ -386,6 +386,15 @@
               path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.chapterhouse;
             };
           };
+          salusa = {
+            fastConnection = true;
+            user = "root";
+            sshUser = "gaelan";
+            hostname = "salusa.admin.robot-disco.net";
+            profiles.system = {
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.salusa;
+            };
+          };
           salusaold = {
             fastConnection = true;
             user = "root";

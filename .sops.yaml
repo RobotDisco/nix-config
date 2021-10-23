@@ -4,6 +4,7 @@ keys:
   - &chapterhouse df8dc97ad3fa47479d26009341fcff767ce6cdf4
   - &darktower 8e9d6bdac66dc0a406fa54a30f53dcc257407e7f
   - &kaitain e906898e53902a3505b74448df2bbade6e3de700
+  - &salusa 4e86896c4c437c633c0111f6219badddfb4669c6
   - &salusa-old 230e31f798a23f94c4ea51b322fdeaaeec058fef
 creation_rules:
   - path: secrets/common.json
@@ -14,4 +15,5 @@ creation_rules:
           - *darktower
           - *kaitain
           - *chapterhouse
+          - *salusa
           - *salusa-old
