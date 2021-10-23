@@ -107,6 +107,57 @@
             };
           # The old manual way I ran dockerized services, which I want to replace
           # with either NixOS or Nomad
+          salusa = nixpkgs.lib.nixosSystem
+            {
+              system = "x86_64-linux";
+              modules = common-nixos-modules ++ [
+                ./nixos/profiles/kvm-guest.nix
+                ./nixos/profiles/sendmail.nix
+                {
+                  networking.hostName = "salusa";
+
+                  networking.interfaces.enp1s0.useDHCP = true;
+                  # For some reason a second NIC comes up as this
+                  networking.interfaces.enp2s0.useDHCP = true;
+                  # I only use this for cloud services, so specify the vlan
+                  networking.vlans = {
+                    vlan50 = { id = 50; interface="enp2s0"; };
+                  };
+                  # I currently do port forwarding which requires a static IP
+                  # TODO is there a way with nomad I can leverage haproxy or something?
+                  # networking.interfaces.vlan50.ipv4.addresses = [{
+                  #   address = "192.168.50.99";
+                  #   prefixLength = 24;
+                  # }];
+                }
+                {
+                  # containers = {
+                  #   postgresql = {
+                  #     config = {
+                  #       services.postgres = {
+                  #         enable = true;
+                  #       };
+                  #     };
+                  #   };
+
+                  #   mariadb = {
+                  #     services.mysql = {
+                  #       enable = true;
+                  #       package = ???;
+                  #     };
+                  #   }
+                  # }
+                }
+                {
+                  # fileSystems."/srv/db_dumps" =
+                  #   { device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/data/db_dumps/postgres";
+                  #     fsType = "nfs";
+                  #   };
+                }
+              ];
+            };
+          # The old manual way I ran dockerized services, which I want to replace
+          # with either NixOS or Nomad
           salusaold = nixpkgs.lib.nixosSystem
             {
               system = "x86_64-linux";
