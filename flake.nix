@@ -75,7 +75,7 @@
                           {
                             targets = [ "chapterhouse.admin.robot-disco.net:9100" ];
                           }
-                          {                                                    
+                          {
                             targets = [ "kaitain.admin.robot-disco.net:9100" ];
                           }
                           {
@@ -138,7 +138,7 @@
                     sopsFile = ./secrets/vaultwarden.yaml;
                     format = "yaml";
                   };
-                  
+
                   containers = {
                     reverseproxy = {
                       autoStart = true;
@@ -185,7 +185,7 @@
                           config = {
                             signups_allowed = false;
                             signups_verify = true;
-                            
+
                             domain = "https://vaultwarden.robot-disco.net";
 
                             invitation_org_name = "Robot Disco";
@@ -261,11 +261,11 @@
                 home-manager.nixosModules.home-manager
                 # My anonymous module that has some (probably oughta be common
                 # settings and my user's customized home-manager config
-	              {
-	                home-manager.useUserPackages = true;
-		              home-manager.useGlobalPkgs = true;
-		              home-manager.users.gaelan =
-      		          import ./home-manager/users/gaelan/default.nix;
+                {
+                  home-manager.useUserPackages = true;
+                  home-manager.useGlobalPkgs = true;
+                  home-manager.users.gaelan =
+                    import ./home-manager/users/gaelan/default.nix;
                 }
               ];
             };
@@ -489,9 +489,9 @@
               # My anonymous module that has some (probably oughta be common
               # settings and my user's customized home-manager config
               home-manager.useUserPackages = true;
-		          home-manager.useGlobalPkgs = true;
-		          home-manager.users."gaelan.dcosta" =
-      		      import ./home-manager/users/gaelan/default.nix;
+              home-manager.useGlobalPkgs = true;
+              home-manager.users."gaelan.dcosta" =
+                import ./home-manager/users/gaelan/default.nix;
             }
           ];
         };
