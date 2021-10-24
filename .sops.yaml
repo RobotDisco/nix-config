@@ -17,3 +17,18 @@ creation_rules:
           - *chapterhouse
           - *salusa
           - *salusa-old
+  - path: secrets/databases.json
+    key_groups:
+      - pgp:
+          - *gaelan
+          - *salusa
+  - path: secrets/borg-chapterhouse.json
+    key_groups:
+      - pgp:
+          - *gaelan
+          - *chapterhouse
+  - path: secrets/vaultwarden.yaml
+    key_groups:
+      - pgp:
+          - *gaelan
+          - *salusa

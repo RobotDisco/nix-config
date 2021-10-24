@@ -79,7 +79,7 @@
                             targets = [ "kaitain.admin.robot-disco.net:9100" ];
                           }
                           {
-                            targets = [ "salusa-old.admin.robot-disco.net:9100" ];
+                            targets = [ "salusa.admin.robot-disco.net:9100" ];
                           }
                         ];
                       }
@@ -123,95 +123,129 @@
                   networking.vlans = {
                     vlan50 = { id = 50; interface="enp2s0"; };
                   };
-                  networking.interfaces.vlan50.useDHCP = true;
                   # I currently do port forwarding which requires a static IP
-                  # TODO is there a way with nomad I can leverage haproxy or something?
-                  # networking.interfaces.vlan50.ipv4.addresses = [{
-                  #   address = "192.168.50.99";
-                  #   prefixLength = 24;
-                  # }];
-                }
-#                {
-                  # containers = {
-                  #   postgresql = {
-                  #     config = {
-                  #       services.postgres = {
-                  #         enable = true;
-                  #       };
-                  #     };
-                  #   };
-
-                  #   mariadb = {
-                  #     services.mysql = {
-                  #       enable = true;
-                  #       package = ???;
-                  #     };
-                  #   }
-                  # }
-#                }
-                # {
-                #   fileSystems = {
-                    # "/srv/postgresql_backup" = {
-                    #   device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/backups/postgresql";
-                    #   fsType = "nfs";
-                    # };
-                    # "/srv/mariadb_backup" = {
-                    #   device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/backups/mariadb";
-                    #   fsType = "nfs";
-                    # };
-                    # "/srv/vaultwarden_backup" = {
-                    #   device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/backups/vaultwarden";
-                    #   fsType = "nfs";
-                    # };
-                #   };
-                # }
-              ];
-            };
-          # The old manual way I ran dockerized services, which I want to replace
-          # with either NixOS or Nomad
-          salusaold = nixpkgs.lib.nixosSystem
-            {
-              system = "x86_64-linux";
-              modules = common-nixos-modules ++ [
-                ./nixos/profiles/kvm-guest.nix
-                ./nixos/profiles/sendmail.nix
-                ./profiles-nixops/traefik.nix
-                {
-                  networking.hostName = "salusa-old";
-
-                  networking.interfaces.enp1s0.useDHCP = true;
-                  # For some reason a second NIC comes up as this
-                  networking.interfaces.enp7s0.useDHCP = false;
-                  # I only use this for cloud services, so specify the vlan
-                  networking.vlans = {
-                    vlan50 = { id = 50; interface="enp7s0"; };
-                  };
-                  # I currently do port forwarding which requires a static IP
-                  # TODO is there a way with nomad I can leverage haproxy or something?
                   networking.interfaces.vlan50.ipv4.addresses = [{
                     address = "192.168.50.99";
                     prefixLength = 24;
                   }];
                 }
                 {
-                  users.users.gaelan = {
-                    extraGroups = [ "docker" ];
+                  networking.firewall.checkReversePath = "loose";
+                  networking.firewall.interfaces.enp1s0.allowedTCPPorts = [ 5432 ];
+                  networking.firewall.interfaces.vlan50.allowedTCPPorts = [ 80 443 ];
+
+                  sops.secrets.vaultwarden_secrets = {
+                    sopsFile = ./secrets/vaultwarden.yaml;
+                    format = "yaml";
                   };
+                  
+                  containers = {
+                    reverseproxy = {
+                      autoStart = true;
+                      config = {
+                        security.acme = {
+                          acceptTerms = true;
+                          email = "gdcosta+letsencrypt@gmail.com";
+                        };
+                        services.nginx = {
+                          enable = true;
+                          recommendedOptimisation = true;
+                          recommendedTlsSettings = true;
+                          recommendedGzipSettings = true;
+                          recommendedProxySettings = true;
 
-                  virtualisation.docker.enable = true;
+                          virtualHosts = {
+                            "vaultwarden.robot-disco.net" = {
+                              locations."/" = {
+                                proxyPass = "http://localhost:8000";
+                              };
 
-                  #environment.systemPackages = [
-                  #  nixpkgs.docker-compose
-                  #];
+                              forceSSL = true;
+                              enableACME = true;
+                            };
+                          };
+                        };
+                      };
+                    };
+                    vaultwarden = {
+                      autoStart = true;
+                      bindMounts."/var/lib/bitwarden_rs" = {
+                        hostPath = "/srv/data/vaultwarden";
+                        isReadOnly = false;
+                      };
+                      bindMounts."/run/secrets" = {
+                        hostPath = "/run/secrets";
+                        isReadOnly = true;
+                      };
+                      config = {
+                        services.bitwarden_rs = {
+                          enable = true;
+                          dbBackend = "postgresql";
+                          environmentFile = "/run/secrets/vaultwarden_secrets";
+                          config = {
+                            signups_allowed = false;
+                            signups_verify = true;
+                            
+                            domain = "https://vaultwarden.robot-disco.net";
+
+                            invitation_org_name = "Robot Disco";
+
+                            smtp_host = "out.teksavvy.com";
+                            smtp_from = "gdcosta@gmail.com";
+                            smtp_from_name = "Vaultwarden";
+
+                            require_device_email=true;
+                          };
+                        };
+                      };
+                    };
+                    databases = {
+                      autoStart = true;
+                      bindMounts = {
+                        "/var/backup/postgresql" = {
+                          hostPath = "/srv/backups/postgresql";
+                          isReadOnly = false;
+                        };
+                        "/var/lib/postgresql" = {
+                          hostPath = "/srv/data/postgresql";
+                          isReadOnly = false;
+                        };
+                      };
+                      config = {
+                        services.postgresql = {
+                          package = nixpkgs.legacyPackages."x86_64-linux".postgresql_13;
+                          enable = true;
+                          enableTCPIP = true;
+                          authentication = ''
+                            host vaultwarden vaultwarden samehost scram-sha-256
+                          '';
+                          settings.password_encryption = "scram-sha-256";
+                        };
+                        services.postgresqlBackup = {
+                          enable = true;
+                          location = "/var/backup/postgresql";
+                          startAt = "*-*-* *:00,15,30,45:00";
+                        };
+                      };
+                    };
+                    #   mariadb = {
+                    #     services.mysql = {
+                    #       enable = true;
+                    #       package = ???;
+                    #     };
+                    #   }
+                  };
                 }
                 {
-                  fileSystems."/srv/bitwarden" =
-                    { device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/data/bitwarden";
+                  fileSystems = {
+                    "/srv/backups" = {
+                      device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/backups";
                       fsType = "nfs";
                     };
-                  fileSystems."/srv/webdav" =
-                  { device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/data/webdav";
+                    "/srv/data" = {
+                      device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/data";
                       fsType = "nfs";
+                    };
                   };
                 }
               ];
@@ -294,8 +328,20 @@
                 # found at https://www.truenas.com/community/threads/scrub-and-smart-testing-schedules.20108/      
                 # Scrub ZFS pools every bimonthly
                 services.zfs.autoScrub = {
-                  interval = "*-*-01,15 02:00";
+                  interval = "*-*-01,15 03:00";
                   enable = true;
+                };
+
+                nixpkgs.config.packageOverrides = pkgs: {
+                  zfs = nixpkgs.legacyPackages."x86_64-linux".pkgs.zfs.override {
+                    enableMail = true;
+                  };
+                };
+                services.zfs.zed = {
+                  enableMail = true;
+                  settings = {
+                    ZED_EMAIL_ADDR = [ "gdcosta@gmail.com" ];
+                  };
                 };
 
                 # I very much care about the health of my fileserver data
@@ -326,7 +372,7 @@
                     }
                     {
                       device = "/dev/sdh";
-                    }                      
+                    }
                   ];
                   autodetect = false;
                   notifications = {
@@ -335,7 +381,7 @@
                     mail.recipient = "gdcosta@gmail.com";
                   };
                   # Enable offline tests, schedule long/sort SMART tests as above
-                  defaults.monitored = "-a -o on -s (S/../(05|12|19|26)/./02|L/../(08|22)/./02)";
+                  defaults.monitored = "-a -o on -s (S/../(05|12|19|26)/./03|L/../(08|22)/./03)";
                 };
               }
               {
@@ -345,7 +391,7 @@
 
                   datasets = {
                     "storagepool/backups" = {
-                      recursive = true;
+                      recursive = false;
                       daily = 90;
                       hourly = 72;
                       monthly = 36;
@@ -374,11 +420,12 @@
                     };
                     "storagepool/backups" = {
                       target = "backuppool/storagepool/backups";
-                      recursive = true;
+                      recursive = false;
                     };
                   };
                 };
               }
+              ./nixos/services/borg.nix
             ];
           };
         };
@@ -409,15 +456,6 @@
             hostname = "salusa.admin.robot-disco.net";
             profiles.system = {
               path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.salusa;
-            };
-          };
-          salusaold = {
-            fastConnection = true;
-            user = "root";
-            sshUser = "gaelan";
-            hostname = "salusa-old.admin.robot-disco.net";
-            profiles.system = {
-              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.salusaold;
             };
           };
           kaitain = {
