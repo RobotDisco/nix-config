@@ -12,7 +12,7 @@
       "/srv/storagepool/data/vaultwarden"
       "/srv/storagepool/backups"
     ];
-    repo = "y32f5tyi@y32f5tyi.repo.borgbase.com:repo";
+    repo = "mwhkrvt4@mwhkrvt4.repo.borgbase.com:repo";
     encryption = {
       mode = "keyfile-blake2";
       passCommand = "cat ${config.sops.secrets.borg_encryption_passphrase.path}";
