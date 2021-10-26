@@ -206,11 +206,12 @@
                           hostPath = "/srv/backups/postgresql";
                           isReadOnly = false;
                         };
-                        "/var/lib/postgresql" = {
-                          hostPath = "/srv/data/postgresql";
+                        "/var/backup/mysql" = {
+                          hostPath = "/srv/backups/mysql";
                           isReadOnly = false;
                         };
                       };
+
                       config = {
                         services.postgresql = {
                           package = nixpkgs.legacyPackages."x86_64-linux".postgresql_13;
@@ -226,12 +227,18 @@
                           location = "/var/backup/postgresql";
                           startAt = "*-*-* *:00,15,30,45:00";
                         };
+
+                        services.mysql = {
+                          enable = true;
+                          package = nixpkgs.legacyPackagaes."x86_64-linux".mariadb;
+                        };
+                        services.mysqlBackup = {
+                          enable = true;
+                          calendar = "*-*-* *:05,15,35,45:00";
+                          location = "/var/backup/mysql";
+                        };
                       };
                     };
-                    #   mariadb = {
-                    #     services.mysql = {
-                    #       enable = true;
-                    #       package = ???;
                     #     };
                     #   }
                   };
