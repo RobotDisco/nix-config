@@ -902,9 +902,7 @@ There's also some shiny UI server that lets us look at our cards visually to for
     (org-roam-ui-sync-theme t)
     (org-roam-ui-follow t)
     (org-roam-ui-update-on-save t)
-    (org-roam-ui-open-on-start t)
-    :config
-    (org-roam-ui-mode))
+    (org-roam-ui-open-on-start t))
 #+end_src
 
 ** Org Journal mode
