@@ -131,7 +131,7 @@
                 }
                 {
                   networking.firewall.checkReversePath = "loose";
-                  networking.firewall.interfaces.enp1s0.allowedTCPPorts = [ 5432 ];
+                  networking.firewall.interfaces.enp1s0.allowedTCPPorts = [ 3306 5432 ];
                   networking.firewall.interfaces.vlan50.allowedTCPPorts = [ 80 443 ];
 
                   sops.secrets.vaultwarden_secrets = {
@@ -158,6 +158,14 @@
                             "vaultwarden.robot-disco.net" = {
                               locations."/" = {
                                 proxyPass = "http://localhost:8000";
+                              };
+
+                              forceSSL = true;
+                              enableACME = true;
+                            };
+                            "fallcube.robot-disco.net" = {
+                              locations."/" = {
+                                proxyPass = "http://localhost:8001";
                               };
 
                               forceSSL = true;
@@ -207,7 +215,7 @@
                           isReadOnly = false;
                         };
                         "/var/backup/mysql" = {
-                          hostPath = "/srv/backups/mysql";
+                          hostPath = "/srv/backups/mariadb";
                           isReadOnly = false;
                         };
                       };
@@ -230,27 +238,27 @@
 
                         services.mysql = {
                           enable = true;
-                          package = nixpkgs.legacyPackagaes."x86_64-linux".mariadb;
+                          package = nixpkgs.legacyPackages."x86_64-linux".mariadb;
                         };
                         services.mysqlBackup = {
                           enable = true;
+                          databases = [ "ccnet_db" "seafile_db"  "seahub_db" ];
                           calendar = "*-*-* *:05,15,35,45:00";
                           location = "/var/backup/mysql";
                         };
                       };
                     };
-                    #     };
-                    #   }
                   };
                 }
+                ./nixos/services/seafile.nix
                 {
                   fileSystems = {
                     "/srv/backups" = {
-                      device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/backups";
+                      device = "chapterhouse.admin.robot-disco.net:/backups";
                       fsType = "nfs";
                     };
                     "/srv/data" = {
-                      device = "chapterhouse.admin.robot-disco.net:/srv/storagepool/data";
+                      device = "chapterhouse.admin.robot-disco.net:/data";
                       fsType = "nfs";
                     };
                   };
@@ -398,7 +406,7 @@
 
                   datasets = {
                     "storagepool/backups" = {
-                      recursive = false;
+                      recursive = true;
                       daily = 90;
                       hourly = 72;
                       monthly = 36;
@@ -427,7 +435,7 @@
                     };
                     "storagepool/backups" = {
                       target = "backuppool/storagepool/backups";
-                      recursive = false;
+                      recursive = true;
                     };
                   };
                 };

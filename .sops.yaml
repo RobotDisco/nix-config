@@ -5,7 +5,6 @@ keys:
   - &darktower 8e9d6bdac66dc0a406fa54a30f53dcc257407e7f
   - &kaitain e906898e53902a3505b74448df2bbade6e3de700
   - &salusa 4e86896c4c437c633c0111f6219badddfb4669c6
-  - &salusa-old 230e31f798a23f94c4ea51b322fdeaaeec058fef
 creation_rules:
   - path: secrets/common.json
     key_groups:
@@ -16,7 +15,6 @@ creation_rules:
           - *kaitain
           - *chapterhouse
           - *salusa
-          - *salusa-old
   - path: secrets/databases.json
     key_groups:
       - pgp:
@@ -28,6 +26,11 @@ creation_rules:
           - *gaelan
           - *chapterhouse
   - path: secrets/vaultwarden.yaml
+    key_groups:
+      - pgp:
+          - *gaelan
+          - *salusa
+  - path: secrets/seafile.yaml
     key_groups:
       - pgp:
           - *gaelan
