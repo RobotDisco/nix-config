@@ -643,7 +643,8 @@ A nice thing about Perspective in particular is that it integrates with Projecti
 *** pdf-tools
     for viewing PDFs
     #+begin_src emacs-lisp :tangle yes
-      (use-package pdf-tools)
+      (use-package pdf-tools
+        :ensure t)
     #+end_src
 *** nov.el
     for viewing ePubs
