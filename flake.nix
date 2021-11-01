@@ -320,7 +320,7 @@
               ./nixos/profiles/sendmail.nix
               {
                 services.nfs.server.enable = true;
-                networking.firewall.allowedTCPPorts = [ 2049 ];
+                networking.firewall.interfaces.enp2s0.allowedTCPPorts = [ 2049 ];
               }
               {
                 networking.hostName = "chapterhouse";
@@ -329,6 +329,12 @@
                 # Slot isn't 1 because of PCI passthru
                 #networking.interfaces.enp1s0.useDHCP = false;
                 networking.interfaces.enp2s0.useDHCP = true;
+                networking.interfaces.enp1s0.useDHCP = false;
+                # I only use this for cloud services, so specify the vlan
+                networking.vlans = {
+                  vlan20 = { id = 20; interface="enp1s0"; };
+                };
+                networking.interfaces.vlan20.useDHCP = true;
               }
               {
                 # Storage configuration for our fileserver
@@ -336,6 +342,88 @@
 
                 # I don't care about specific mountpoints, so just mount the pools
                 boot.zfs.extraPools = [ "storagepool" "backuppool" ];
+              }
+              {
+                services.samba = {
+                  enable = true;
+
+                  extraConfig = ''
+                    workgroup=ROBOT-DISCO
+                    server string = gaelan archive
+                    netbios name = archive
+                    hosts allow = 192.168.20.0/24 127.0.0.1 localhost
+                    hosts deny = 0.0.0.0/0
+                    guest account = nobody
+                    bind interfaces only = yes
+                    interfaces = vlan20; 127.0.0.1
+                    encrypt passwords = yes
+                  '';
+
+                  shares = {
+                    archive = {
+                      path = "/srv/storagepool/archive/archive";
+                      browseable = "yes";
+                      comment = "temp";
+                      "read only" = "no";
+                      "create mask" = "0644";
+                      "directory mask" = "0755";
+                      "force user" = "gaelan";
+                      "force group" = "users";
+                    };
+                    Documents = {
+                      path = "/srv/storagepool/archive/Documents";
+                      browseable = "yes";
+                      comment = "Documents";
+                      "read only" = "no";
+                      "create mask" = "0644";
+                      "directory mask" = "0755";
+                      "force user" = "gaelan";
+                      "force group" = "users";
+                    };
+                    Media = {
+                      path = "/srv/storagepool/archive/Media";
+                      browseable = "yes";
+                      comment = "Media";
+                      "read only" = "no";
+                      "create mask" = "0644";
+                      "directory mask" = "0755";
+                      "force user" = "gaelan";
+                      "force group" = "users";
+                    };
+                    Music = {
+                      path = "/srv/storagepool/archive/Music";
+                      browseable = "yes";
+                      comment = "Music";
+                      "read only" = "no";
+                      "create mask" = "0644";
+                      "directory mask" = "0755";
+                      "force user" = "gaelan";
+                      "force group" = "users";
+                    };
+                    Software = {
+                      path = "/srv/storagepool/archive/Software";
+                      browseable = "yes";
+                      comment = "Software";
+                      "read only" = "no";
+                      "create mask" = "0644";
+                      "directory mask" = "0755";
+                      "force user" = "gaelan";
+                      "force group" = "users";
+                    };
+                    waterworld = {
+                      path = "/srv/storagepool/archive/waterworld";
+                      browseable = "yes";
+                      comment = "waterworld";
+                      "read only" = "no";
+                      "create mask" = "0644";
+                      "directory mask" = "0755";
+                      "force user" = "gaelan";
+                      "force group" = "users";
+                    };
+                  };
+                };
+                networking.firewall.interfaces.vlan20.allowedTCPPorts = [ 445 139 ];
+                networking.firewall.interfaces.vlan20.allowedUDPPorts = [ 137 138 ];
               }
               {
                 # Using interleaved schedule of bimonthly scrubs
