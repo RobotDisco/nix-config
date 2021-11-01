@@ -35,3 +35,13 @@ creation_rules:
       - pgp:
           - *gaelan
           - *salusa
+  - path: secrets/storagepool_archive_waterworld.key
+    key_groups:
+      - pgp:
+          - *gaelan
+          - *chapterhouse
+  - path: secrets/storagepool_archive_documents.key
+    key_groups:
+      - pgp:
+          - *gaelan
+          - *chapterhouse

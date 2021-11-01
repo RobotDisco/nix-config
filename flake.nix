@@ -441,6 +441,16 @@
                 };
               }
               ./nixos/services/borg.nix
+              {
+                sops.secrets."storagepool_archive_waterworld.key" = {
+                  sopsFile = ./secrets/storagepool_archive_waterworld.key;
+                  format = "binary";
+                };
+                sops.secrets."storagepool_archive_documents.key" = {
+                  sopsFile = ./secrets/storagepool_archive_documents.key;
+                  format = "binary";
+                };
+              }
             ];
           };
         };
