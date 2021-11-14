@@ -523,12 +523,14 @@ Make it easy (and fabulous) to quickly see how far down a file we are at a glanc
         :ensure t
         :after helm)
     #+end_src
-** Perspective mode
+** [Disabled] Perspective mode
+*This is breaking helm for me for some reason, so disabling for now*
+
 Perspective is a way of setting up "workspaces" in emacs, so you can focus on buffers that are relevant to your task at hand.
 
 A nice thing about Perspective in particular is that it integrates with Projectile.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
       (use-package perspective
         :ensure t
         :config (persp-mode))
