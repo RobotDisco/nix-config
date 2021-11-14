@@ -898,7 +898,7 @@ There's also some shiny UI server that lets us look at our cards visually to for
   (use-package simple-httpd
     :ensure t)
   (use-package org-roam-ui
-    :init (add-to-list 'load-path "~/.emacs.d/private/org-roam-ui")
+    :ensure t
     :after org-roam
     :custom
     (org-roam-ui-sync-theme t)
