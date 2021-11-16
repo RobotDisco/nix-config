@@ -8,8 +8,7 @@
 
   services.borgbackup.jobs."borgbase" = {
     paths = [
-      "/srv/storagepool/data/postgresql"
-      "/srv/storagepool/data/vaultwarden"
+      "/srv/storagepool/data"
       "/srv/storagepool/backups"
     ];
     repo = "mwhkrvt4@mwhkrvt4.repo.borgbase.com:repo";
