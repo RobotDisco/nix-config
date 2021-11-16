@@ -41,6 +41,11 @@ in
     tpacpi-bat
   ];
 
+  boot.kernel.sysctl = {
+    "vm.swappiness" = 1;
+  };
+
+  services.fstrim.enable = true;
   
   hardware = {
     # Lenovos have their famous trackpoint nib; enable
