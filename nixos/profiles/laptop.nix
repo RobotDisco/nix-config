@@ -23,18 +23,8 @@
     enable = true;
     wifi.powersave = true;
   };
-
   
-  hardware = {
-    bluetooth.enable = true;
-    
-    pulseaudio = {
-      # Need full pulseaudio package for bluetooth audio
-      package = pkgs.pulseaudioFull;
-      # Want good audio codecs (APTX, LDAC) not garbage SBC
-      extraModules = [ pkgs.pulseaudio-modules-bt ];
-    };
-  };
+  hardware.bluetooth.enable = true;
 
   services = {
     # Monitor hotplugging
