@@ -4,4 +4,8 @@
   networking.networkmanager.enableStrongSwan = true;
 
   virtualisation.docker.enable = true;
+
+  users.users.gaelan = {
+    extraGroups = [ "docker" ];
+  };
 }
