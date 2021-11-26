@@ -13,21 +13,11 @@
   boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
 
   fileSystems."/" =
-    { device = "arrakispool/root/nixos";
-      fsType = "zfs";
+    { device = "/dev/disk/by-label/rootpart";
+      fsType = "ext4";
     };
 
-  fileSystems."/home" =
-    { device = "arrakispool/home";
-      fsType = "zfs";
-    };
-
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/114E-2DCB";
-      fsType = "vfat";
-    };
-
-  swapDevices = [ { device = "/dev/nvme0n1p2"; } ];
+  swapDevices = [ { device = "/dev/disk/by-label/swappart"; } ];
 
   nix.maxJobs = lib.mkDefault 4;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";

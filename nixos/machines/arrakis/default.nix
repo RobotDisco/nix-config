@@ -23,17 +23,6 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  
-  ## ZFS-specific configuration
-  boot.supportedFilesystems = [ "zfs" ];
-  # ZFS requires us to generate a networking Host ID
-  networking.hostId = "140f9be5";
-  # Since this is an SSD, enable TRIM support
-  services.zfs.trim.enable = true;
-  # Do the equivalent of an fsck periodically
-  services.zfs.autoScrub.enable = true;
-
-
   ## Enable some thinkpad-specific kernel modules
   boot.kernelModules = [ "tp_smapi" ];
   boot.extraModulePackages = [ config.boot.kernelPackages.tp_smapi ];
