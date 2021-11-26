@@ -11,6 +11,7 @@ in
   environment.systemPackages = [
     cifs-utils
     nfs-utils
+    pkgs.jmtpfs
   ];
 
   # mount.cifs needs setuid perms if users are allowed
