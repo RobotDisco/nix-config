@@ -13,11 +13,16 @@
   boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-label/rootpart";
+    { device = "/dev/disk/by-label/rootpart0";
       fsType = "ext4";
     };
 
-  swapDevices = [ { device = "/dev/disk/by-label/swappart"; } ];
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-label/EFIBOOT0";
+      fsType = "vfat";
+    };
+
+  swapDevices = [ { device = "/dev/disk/by-label/swappart0"; } ];
 
   nix.maxJobs = lib.mkDefault 4;
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
