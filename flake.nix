@@ -23,8 +23,9 @@
         ./nixos/profiles/common.nix
         sops-nix.nixosModules.sops
         { sops.gnupg.sshKeyPaths = [ "/etc/ssh/ssh_host_rsa_key"]; }
-        ({ users.mutableUsers = false; })
+        { users.mutableUsers = false; }
         ./nixos/users/gaelan.nix
+        ./nixos/users/root.nix
         {
           # I guess the nix overlays form doesn't do anything
           # magic, so I'm overriding it to add overlays
