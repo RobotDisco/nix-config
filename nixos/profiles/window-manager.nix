@@ -27,6 +27,8 @@
     # like a web browser
     chromium
     firefox
+    nyxt
+    qutebrowser
   ];
 
   services.xserver = {
