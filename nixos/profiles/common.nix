@@ -55,9 +55,6 @@
     ];
   };
 
-  # Trust 'gaelan' account with nix packages
-  nix.trustedUsers = [ "gaelan"];
-
   nixpkgs = {
     # Enable nonfree software
     config.allowUnfree = true;

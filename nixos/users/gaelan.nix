@@ -21,6 +21,9 @@
     passwordFile = "/run/secrets/users_gaelan_password";
   };
 
+  # Trust 'gaelan' account with nix packages
+  nix.trustedUsers = [ "gaelan" ];
+
   security.sudo.extraRules = [
     {
       users = [ "gaelan" ];
