@@ -70,12 +70,7 @@
   };
 
   services = {
-    # Enable mDNS service discovery
-    # TODO Why did I need this again?
-    # This possibly isn't even a window manager thing honestly
-    # avahi.enable = true;
-    
-    # Enable X11 composite managemr for graphics card acceleration
+    # Enable X11 3D compositing managemr for graphics card acceleration
     picom.enable = true;
   };
 }
