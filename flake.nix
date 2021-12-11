@@ -4,19 +4,27 @@
   inputs = {
     # Flakes we're going to depend on
     nixpkgs.url = github:nixos/nixpkgs/nixos-21.05;
-    emacs-overlay.url = github:nix-community/emacs-overlay;
-    home-manager.url = github:nix-community/home-manager/release-21.05;
-    darwin.url = github:lnl7/nix-darwin/master;
+    home-manager= {
+      url = github:nix-community/home-manager/release-21.05;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    emacs-config = {
+      url = github:RobotDisco/emacs-config;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    darwin = {
+      url = github:lnl7/nix-darwin/master;
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     deploy-rs.url = github:serokell/deploy-rs;
     sops-nix.url = github:Mic92/sops-nix;
-
-    # Hook up our chosen dependencies to be the ones our other dependencies use
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    darwin.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   # This is where we define our own stuff
-  outputs = { self, nixpkgs, darwin, deploy-rs, emacs-overlay, home-manager,
+  outputs = { self, nixpkgs, darwin, deploy-rs, emacs-config, home-manager,
               sops-nix, ... }:
     let
       common-nixos-modules = [
@@ -31,7 +39,7 @@
           # magic, so I'm overriding it to add overlays
           # within the nixos module system itself?
           nixpkgs.overlays = [
-            emacs-overlay.overlay
+            emacs-config.overlay
           ];
         }
       ];
@@ -43,7 +51,7 @@
           # magic, so I'm overriding it to add overlays
           # within the nixos module system itself?
           nixpkgs.overlays = [
-            emacs-overlay.overlay
+            emacs-config.overlay
           ];
         }
       ];

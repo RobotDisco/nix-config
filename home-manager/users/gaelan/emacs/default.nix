@@ -2,44 +2,8 @@
 { lib, pkgs, ... }:
 
 let
-  emacsP = pkgs.emacsWithPackagesFromUsePackage {
-    config = ./init.org;
-  };
-  emacsConfig = pkgs.stdenv.mkDerivation {
-    ## I am indebted to
-    ## https://github.com/terlar/emacs-config/blob/main/default.nix
-    ## for insight into how to autogenerate a tangled org
-    ## as part of a nix derivation.
-    name = "gaelan-emacs-config";
-
-    src = lib.sourceByRegex ./. ["init.org"];
-
-    buildInputs = [ emacsP ];
-    buildPhase = ''
-      # Generate elisp from org file
-      # We need to load our org file in the load path
-      emacs --batch -Q \
-        -l org \
-        init.org \
-        -f org-babel-tangle
-
-      # Fake config directory in order to have file in load-path
-      mkdir -p .xdg-config
-      ln -s $PWD .xdg-config/emacs
-      export XDG_CONFIG_HOME="$PWD/.xdg-config"
-
-      # Refresh emacs-quickstart package deferral
-      emacs --batch -Q \
-        -l package \
-        -eval '(setq package-quickstart t)' \
-        -f package-quickstart-refresh
-    '';
-    installPhase = ''
-      # Export generated elisp files for home-manager to install
-      install -D -t $out $PWD/*.el
-    '';
-  };
-
+  emacs = pkgs.emacsEnv;
+  emacs-config = pkgs.emacsConfig;
 in
 
 {
@@ -58,17 +22,17 @@ in
   ## Install our emacs
   programs.emacs = {
     enable = true;
-    package = emacsP;
+    package = emacs;
   };
   
   ## Emacs config needs copying to my homedir
   home.file.emacsConfig = {
-    source = "${emacsConfig}/init.el";
+    source = "${emacs-config}/init.el";
     # source = ./init.el;
     target = ".emacs.d/init.el";
   };
   home.file.packageQuickstartElisp = {
-    source = "${emacsConfig}/package-quickstart.el";
+    source = "${emacs-config}/package-quickstart.el";
     target = ".emacs.d/package-quickstart.el";
   };
   
@@ -98,7 +62,7 @@ in
   # TODO this possibly should be a custom package
   # We're leveraging .xsession support to load our window manager
   xsession.enable = if pkgs.stdenv.isLinux then true else false;
-  xsession.windowManager.command = "emacs";
+  xsession.windowManager.command = "emacs -f exwm-enable";
     
   ## Put down configuration for my system tray + systembar
   home.file.stalonetrayConfig = {
