@@ -31,6 +31,11 @@ in
     # source = ./init.el;
     target = ".emacs.d/init.el";
   };
+  home.file.emacsEarlyInit = {
+    source = "${emacs-config}/early-init.el";
+    # source = ./init.el;
+    target = ".emacs.d/early-init.el";
+  };
   home.file.packageQuickstartElisp = {
     source = "${emacs-config}/package-quickstart.el";
     target = ".emacs.d/package-quickstart.el";
