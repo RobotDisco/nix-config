@@ -10,7 +10,7 @@
     };
 
     emacs-config = {
-      url = github:RobotDisco/emacs-config;
+      url = "/home/gaelan/code/emacs-config";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -54,6 +54,10 @@
             emacs-config.overlay
           ];
         }
+      ];
+
+      common-home-manager-modules = [
+        emacs-config.homeManagerModules.emacsConfig
       ];
     in
 
@@ -288,9 +292,19 @@
                 {
                   home-manager.useUserPackages = true;
                   home-manager.useGlobalPkgs = true;
-                  home-manager.users.gaelan =
-                    import ./home-manager/users/gaelan/default.nix;
+		  home-manager.sharedModules = common-home-manager-modules;
                 }
+		{
+	          home-manager.users.gaelan = {
+		    imports = [
+		      ./home-manager/users/gaelan
+		      ./home-manager/modules/user/gaelan/base.nix
+		    ];
+		    config = {
+                      robotdisco.user.gaelan.base.enable = true;
+		    };
+		  };
+		}
                 {
                   fileSystems."/home/gaelan/fileserver" = {
                     device = "chapterhouse.admin.robot-disco.net:/archive";

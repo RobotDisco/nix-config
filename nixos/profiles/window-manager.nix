@@ -18,10 +18,6 @@
     # same concerns as above TODO...
     pasystray
     pavucontrol
-    # Music player
-    playerctl
-    # Screenshot taker
-    scrot
     
     # Let's be nice and install some basic user applications
     # like a web browser
@@ -37,26 +33,8 @@
     # Enable touchpad support.
     libinput.enable = true;
   };
-
-  # EXWM is my window manager of choice, kludge in in via manual script
-  # because I don't know how to make this idiomatically work otherwise.
-
-  # TODO Play around with serviers.xserver.windowManager.exwm.loadScript
-  # What if I moved the exwm-specific stuff out here? Load desktop-environment
-  # and helm-exwm and configure them here? Assume use-package
-  # possibly do do so manually.
-  #
-  # The EXWM package _does_ load user scripts afterwards, so it's viable!
-  # I'd still have to worry about my emacs including local packages though...
-  # How does the emacs-overlay play with home-manager?
-  # services.xserver.windowManager.session = with pkgs; lib.singleton {
-  #   name = "exwm";
-  #   start = ''
-  #     # Start emacs server
-  #     exec ${dbus}/bin/dbus-launch --exit-with-session ${emacs}/bin/emacs
-  #   '';
-  # };
-  # We need _SOME_ window manager enabled because lightdm fails if none are defined.
+  # We need _some_ desktopmanager, otherwise lightdm doesn't pick up our
+  # .xsession file.
   services.xserver.desktopManager.xterm.enable = true;
 
   programs = {

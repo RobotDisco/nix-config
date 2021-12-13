@@ -67,7 +67,10 @@ in
   # TODO this possibly should be a custom package
   # We're leveraging .xsession support to load our window manager
   xsession.enable = if pkgs.stdenv.isLinux then true else false;
-  xsession.windowManager.command = "emacs -f exwm-enable";
+  xsession.windowManager.command = ''
+    emacs --daemon -f exwm-enable
+    exec emacsclient -c
+  '';
     
   ## Put down configuration for my system tray + systembar
   home.file.stalonetrayConfig = {

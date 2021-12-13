@@ -4,7 +4,6 @@
 {
   imports = [
     ./apps.nix
-    ./emacs
     ./tulip.nix
     ../../profiles/dev.nix
     ./games.nix
