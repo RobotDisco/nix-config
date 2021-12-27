@@ -87,7 +87,6 @@
     enable = true;
     enableExtraSocket = true;
     enableSshSupport = true;
-    pinentryFlavor = "emacs";
     extraConfig = ''
     allow-emacs-pinentry
     allow-loopback-pinentry

@@ -18,7 +18,15 @@ in
   # to mount SMB volmes themselves. Otherwise all monting
   # will have to be done as root.
   security.wrappers = {
-    "mount.cifs".source = "${cifs-utils}/bin/mount.cifs";
-    "mount.nfs".source = "${nfs-utils}/bin/mount.nfs";
+    "mount.cifs" = {
+      source = "${cifs-utils}/bin/mount.cifs";
+      owner = "root";
+      group = "root";
+    };
+    "mount.nfs" = {
+      source = "${nfs-utils}/bin/mount.nfs";
+      owner = "root";
+      group = "root";
+    };
   };
 }

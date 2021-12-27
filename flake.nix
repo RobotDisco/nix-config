@@ -3,14 +3,14 @@
 
   inputs = {
     # Flakes we're going to depend on
-    nixpkgs.url = github:nixos/nixpkgs/nixos-21.05;
+    nixpkgs.url = github:nixos/nixpkgs/nixos-21.11;
     home-manager= {
-      url = github:nix-community/home-manager/release-21.05;
+      url = "github:nix-community/home-manager/release-21.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     emacs-config = {
-      url = "/home/gaelan/code/emacs-config";
+      url = github:RobotDisco/emacs-config;
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
