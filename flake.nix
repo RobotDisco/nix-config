@@ -4,6 +4,8 @@
   inputs = {
     # Flakes we're going to depend on
     nixpkgs.url = github:nixos/nixpkgs/nixos-21.11;
+    nixos-hardware.url = github:NixOS/nixos-hardware/master;
+
     home-manager= {
       url = "github:nix-community/home-manager/release-21.11";
       inputs.nixpkgs.follows = "nixpkgs";
