@@ -65,6 +65,14 @@
 
       {
         nixosConfigurations = {
+          arrakis2022 = nixpkgs.lib.nixosSystem
+          {
+            system = "x86_64-linux";
+            modules = [
+              ./nixos/machines/arrakis2022
+            ];
+          };
+
           kaitain = nixpkgs.lib.nixosSystem
             {
               system = "x86_64-linux";
@@ -281,7 +289,7 @@
               ];
             };
           # My laptop
-          arrakis = nixpkgs.lib.nixosSystem
+          arrakis2017 = nixpkgs.lib.nixosSystem
             {
               system = "x86_64-linux";
               modules = common-nixos-modules ++ [
