@@ -27,7 +27,7 @@
 
   # This is where we define our own stuff
   outputs = { self, nixpkgs, darwin, deploy-rs, emacs-config, home-manager,
-              sops-nix, ... }:
+              sops-nix, nixos-hardware, ... }:
     let
       common-nixos-modules = [
         ./nixos/profiles/common.nix
@@ -69,6 +69,7 @@
           {
             system = "x86_64-linux";
             modules = [
+              nixos-hardware.nixosModules.framework
               ./nixos/machines/arrakis2022
             ];
           };

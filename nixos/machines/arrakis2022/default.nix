@@ -1,5 +1,5 @@
 # Framework module laptop
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   ## Use the systemd-boot EFI boot loader.
@@ -7,7 +7,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   imports = [
-      inputs.nix-hardware.framework
       ./hardware-configuration.nix
   ];
 
