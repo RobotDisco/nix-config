@@ -303,19 +303,19 @@
                 {
                   home-manager.useUserPackages = true;
                   home-manager.useGlobalPkgs = true;
-		  home-manager.sharedModules = common-home-manager-modules;
+		              home-manager.sharedModules = common-home-manager-modules;
                 }
-		{
-	          home-manager.users.gaelan = {
-		    imports = [
-		      ./home-manager/users/gaelan
-		      ./home-manager/modules/user/gaelan/base.nix
-		    ];
-		    config = {
+		            {
+	                home-manager.users.gaelan = {
+		                imports = [
+		                  ./home-manager/users/gaelan
+		                  ./home-manager/modules/user/gaelan/base.nix
+		                ];
+                    config = {
                       robotdisco.user.gaelan.base.enable = true;
-		    };
-		  };
-		}
+		                };
+                  };
+                }
                 {
                   fileSystems."/home/gaelan/fileserver" = {
                     device = "chapterhouse.admin.robot-disco.net:/archive";
