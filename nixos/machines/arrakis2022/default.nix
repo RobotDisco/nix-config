@@ -52,14 +52,30 @@
   };
 
   # boot.kernelPackages = pkgs.linuxPackages_latest;
-  # services.fprintd.enable = true;
+  services.fprintd.enable = true;
 
   # Disable laptop's touchpad tap-to-click functionality
-  xserver.libinput.touchpad.tapping = false;
+  services.xserver.libinput.touchpad.tapping = false;
 
   # Enable network manager for dynamic network configuration
   networking.networkmanager = {
     enable = true;
     wifi.powersave = true;
-  };  
+  };
+
+  nix = {
+    # Enable nix flakes
+    package = pkgs.nixFlakes;
+    extraOptions = ''
+        experimental-features = nix-command flakes
+    '';
+
+    # Enable binary cache downloads of standard nix packages
+    binaryCaches = [
+      "https://nix-community.cachix.org"
+    ];
+    binaryCachePublicKeys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+  };
 }
