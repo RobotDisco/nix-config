@@ -11,7 +11,11 @@
   ];
 
   networking.hostName = "arrakis";
-  networking.wireless.enable = true;
+  # Enable network manager for dynamic network configuration
+  networking.networkmanager = {
+    enable = true;
+    wifi.powersave = true;
+  };
 
   time.timeZone = "America/Toronto";
 
@@ -56,12 +60,6 @@
 
   # Disable laptop's touchpad tap-to-click functionality
   services.xserver.libinput.touchpad.tapping = false;
-
-  # Enable network manager for dynamic network configuration
-  networking.networkmanager = {
-    enable = true;
-    wifi.powersave = true;
-  };
 
   nix = {
     # Enable nix flakes
