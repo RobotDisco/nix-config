@@ -31,7 +31,7 @@
     let
       gcdUtil = import ./lib {
         inherit (nixpkgs) lib;
-        inherit nixpkgs
+        inherit nixpkgs;
       };
 
       common-nixos-modules = [
