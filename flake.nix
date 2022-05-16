@@ -30,7 +30,7 @@
               sops-nix, nixos-hardware, ... }:
     let
       gcdUtil = import ./lib {
-        inherit nixpkgs.lib;
+        inherit (nixpkgs) lib;
         inherit nixpkgs
       };
 
@@ -101,7 +101,7 @@
                   };
 
                 fileSystems."/var" =
-                  { device = "/dev/disk/by-label/nixpart0";
+                  { device = "/dev/disk/by-label/varpart0";
                     fsType = "ext4";
                     options = [ "relatime" ];
                   };
