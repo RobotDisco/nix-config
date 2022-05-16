@@ -114,8 +114,9 @@
                   swapDevices = [ { device = "/dev/disk/by-label/swappart0"; } ];
               }
               {
-                powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-                hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+                powerManagement.cpuFreqGovernor = "powersave";
+		hardware.enableRedistributableFirmware = true;
+                hardware.cpu.intel.updateMicrocode = true;
                 # high-resolution display
                 hardware.video.hidpi.enable = true;
               }
