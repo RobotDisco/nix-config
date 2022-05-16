@@ -23,7 +23,7 @@ chmod +x ./pbkdf2-sha512
 
 SLOT=2
 # Don't need to do this after the first time
-ykpersonalize -"$SLOT" -ochal-resp -ochal-hmac
+#ykpersonalize -"$SLOT" -ochal-resp -ochal-hmac
 
 SALT_LENGTH=16
 salt="$(dd if=/dev/random bs=1 count=$SALT_LENGTH 2>/dev/null | rbtohex)"
@@ -55,8 +55,7 @@ echo -ne "$salt\n$ITERATIONS" > $EFI_MNT$STORAGE
 
 CIPHER=aes-xts-plain64
 HASH=sha512
-echo -n "$k_luks" | hextorb | cryptsetup luksFormat --cipher="$CIPHER" \ 
-  --key-size="$KEY_LENGTH" --hash="$HASH" --key-file=- "$LUKS_PART"
+echo -n "$k_luks" | hextorb | cryptsetup luksFormat --cipher="$CIPHER" --key-size="$KEY_LENGTH" --hash="$HASH" --key-file=- "$LUKS_PART"
 
 
 LUKSROOT=nixos-enc
@@ -94,6 +93,6 @@ mount -o relatime "/dev/partitions/$FSVAR" /mnt/var
 mkdir /mnt/home
 mount -o noatime "/dev/partitions/$FSHOME" /mnt/home
 mkdir /mnt/boot
-mount "/dev/partitions/$EFI_PART" /mnt/boot
+mount "$EFI_PART" /mnt/boot
 
 swapon /dev/partitions/swap

@@ -11,7 +11,7 @@
   boot.kernelParams = [ "mem_sleep_default=deep" ];
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  nix.MaxJobs = lib.mkDefault "auto";
+  nix.maxJobs = lib.mkDefault "auto";
   system.stateVersion = "21.11";
 
   fileSystems."/" =
