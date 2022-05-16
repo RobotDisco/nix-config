@@ -1,10 +1,9 @@
 # My Framework laptop
-{ pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 { 
   networking.hostName = "arrakis";
   networking.interfaces.wlp170s0.useDHCP = true;
-  networking.networkmanager.enable = true;
   networking.useDHCP = false;
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "usbhid" "sd_mod" ];
@@ -47,7 +46,7 @@
   swapDevices = [ { device = "/dev/disk/by-label/swappart0"; } ];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-- hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   # high-resolution display
   hardware.video.hidpi.enable = true;
 

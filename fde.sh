@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # All instructions taken from https://nixos.wiki/wiki/Yubikey_based_Full_Disk_Encryption_(FDE)_on_NixOS
 
@@ -30,6 +30,7 @@ salt="$(dd if=/dev/random bs=1 count=$SALT_LENGTH 2>/dev/null | rbtohex)"
 
 echo "Enter a passphrase: "
 read -s k_user
+echo "Passphrase entered was \"$k_user\""
 
 challenge="$(echo -n $salt | openssl dgst -binary -sha512 | rbtohex)"
 response="$(ykchalresp -2 -x $challenge 2>/dev/null)"
@@ -39,8 +40,8 @@ ITERATIONS=1000000
 
 k_luks="$(echo -n $k_user | ./pbkdf2-sha512 $(($KEY_LENGTH / 8)) $ITERATIONS $response | rbtohex)"
 
-EFI_PART=/dev/nvmen0p1
-LUKS_PART=/dev/nvmen0p2
+EFI_PART=/dev/nvme0n1p1
+LUKS_PART=/dev/nvme0n1p2
 
 EFI_MNT=/root/boot
 mkdir "$EFI_MNT"
