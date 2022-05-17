@@ -114,12 +114,13 @@
 
   boot.kernel.sysctl = {
     "vm.swappiness" = 1;
+  };
 
   services.fstrim.enable = true;
 
-   nixpkgs.config.packageOverrides = pkgs: {
-    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  };
+  #nixpkgs.config.packageOverrides = pkgs: {
+  # vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+  #};
 
   hardware.opengl = {
     enable = true;
@@ -130,5 +131,32 @@
       libvdpau-va-gl
     ];
     extraPackages32 = with pkgs.pkgsi686Linux; [ vaapiIntel ];
-  }
+  };
+
+  console = {
+    # Honour the same settings as the linux console as in X11
+    useXkbConfig = true;
+  };
+  # Caps Lock must die; replace with Ctrl
+  services.xserver.xkbOptions = "ctrl:nocaps";
+
+  nixpkgs = {
+    # Enable nonfree software
+    config.allowUnfree = true;
+  };
+
+  # Don't allow anyone except those in the admin group to
+  # perform a sudo.
+  security.sudo.execWheelOnly = true;
+
+  users.users.gaelan = {
+    shell = pkgs.zsh;
+    isNormalUser = true;
+    home = "/home/gaelan";
+    description = "Gaelan D'costa"
+    extraGroups = [ "wheel" ];
+    openssh.authorizedKeys.keyFiles = [
+      ./gaelan-yubikey.pub
+    ];
+  };
 }
