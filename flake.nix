@@ -8,7 +8,7 @@
 
   outputs = { self, nixpkgs, nixos-hardware }: {
     nixosConfigurations = {
-      arrakis2022 = nixpkgs.lib.nixosSystem {
+      arrakis = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           nixpkgs.nixosModules.notDetected
