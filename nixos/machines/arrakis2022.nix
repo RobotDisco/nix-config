@@ -91,6 +91,11 @@
     GDK_DPI_SCALE = "0.5";
   };                
 
+  services.xserver = {
+    enable = true;
+    windowManager.exwm.enable = true;
+  };
+
   services.fprintd.enable = true;
 
   # Disable laptop's touchpad tap-to-click functionality
@@ -122,16 +127,16 @@
   # vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
   #};
 
-  hardware.opengl = {
-    enable = true;
-    extraPackages = with pkgs; [
-      intel-media-driver
-      vaapiIntel
-      vaapiVdpau
-      libvdpau-va-gl
-    ];
-    extraPackages32 = with pkgs.pkgsi686Linux; [ vaapiIntel ];
-  };
+  #hardware.opengl = {
+  #  enable = true;
+  #  extraPackages = with pkgs; [
+  #    intel-media-driver
+  #    vaapiIntel
+  #    vaapiVdpau
+  #    libvdpau-va-gl
+  #  ];
+  #  extraPackages32 = with pkgs.pkgsi686Linux; [ vaapiIntel ];
+  #}
 
   console = {
     # Honour the same settings as the linux console as in X11
@@ -153,7 +158,7 @@
     shell = pkgs.zsh;
     isNormalUser = true;
     home = "/home/gaelan";
-    description = "Gaelan D'costa"
+    description = "Gaelan D'costa";
     extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keyFiles = [
       ./gaelan-yubikey.pub
