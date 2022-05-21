@@ -82,6 +82,11 @@
                 defaultCacheTtl = 60;
                 maxCacheTtl = 120;
               };
+
+              # Document these
+              programs.zsh = {
+	        enable = true;
+              };
             };
           }
         ];
