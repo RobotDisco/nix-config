@@ -1,3 +1,4 @@
+# This file follows the callPackage pattern, whatever that means
 { version ? "dev", packageRequires, lib, stdenv, trivialBuild }:
 
 let
@@ -11,7 +12,7 @@ let
 
     buildPhase = ''
       emacs --batch --quick \
-        --load package
+        --load package \
         --eval '(setq package-quickstart-file "package-quickstart.el")' \
         --eval '(setq package-quickstart t)' \
         --funcall package-quickstart-refresh
@@ -35,10 +36,10 @@ let
       ln -s $PWD .xdg-config/emacs
       export XDG_CONFIG_HOME="$PWD/.xdg-config"
 
-      emacs -L . --batch --eval '(setq-byte-compile-error-on-warnt)' -f batch-byte-compile *.el
+      emacs -L . --batch --eval '(setq byte-compile-error-on-warn t)' -f batch-byte-compile *.el
     '';
   };
-  in
+in
 stdenv.mkDerivation {
   pname = "emacs-config";
   inherit version;
@@ -51,7 +52,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -D -t $out ${package-quickstart}/share/emacs/site-lisp/*
-    install -D -t $out ${init}/share/emacs-site-lisp/*
+    install -D -t $out ${init}/share/emacs/site-lisp/*
   '';
 }
   
