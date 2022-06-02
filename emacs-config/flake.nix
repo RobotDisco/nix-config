@@ -6,6 +6,11 @@
 
     emacs-overlay.url = "github:nix-community/emacs-overlay";
 
+    flake-compat = {
+      url = "github:edolstra/flake-compat";
+      flake = false;
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
