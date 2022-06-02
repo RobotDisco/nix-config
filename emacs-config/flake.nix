@@ -17,7 +17,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, emacs-overlay, home-manager }:
+  outputs = { self, nixpkgs, emacs-overlay, home-manager, ... }:
     let
       inherit (nixpkgs) lib;
 
