@@ -99,6 +99,13 @@
   #+END_SRC
 
 ** Variables
+   Private an easy way to toggle debug mode which will set certain variables to produce each informative output. It can be set either by providing the environment variable =DEBUG= or start Emacs with =--debug-init=.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (eval-and-compile
+       (when (getenv "DEBUG") (setq init-file-debug t))
+       (setq debug-on-error (and (not noninteractive) init-file-debug)))
+   #+END_SRC
+   
    Provide XDG-compliant locations for Emacs to store and cache data.
    #+BEGIN_SRC emacs-lisp :tangle yes
      (eval-and-compile
@@ -163,7 +170,7 @@
 	(setq use-package-hook-name-suffix nil))
 
       ;; If debug mode is on, be more chatty. Otherwise, don't
-      (if gaelan/init-file-debug
+      (if init-file-debug
 	  (setq use-package-verbose t
 		use-package-expand-minimally nil
 		use-package-compute-statistics t)

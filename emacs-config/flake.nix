@@ -5,9 +5,14 @@
     nixpkgs.url = "nixpkgs/nixos-unstable";
 
     emacs-overlay.url = "github:nix-community/emacs-overlay";
+
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, emacs-overlay }:
+  outputs = { self, nixpkgs, emacs-overlay, home-manager }:
     let
       inherit (nixpkgs) lib;
 
@@ -49,6 +54,28 @@
         # These are the packages this flake offers
         packages = forEachSystem (system: { inherit (nixpkgsForEachSystem.${system}) emacsConfig emacsEnv; });
         defaultPackage = forEachSystem (system: self.packages.${system}.emacsConfig);
+
+        # We use home-manager to place our config in the user's home directory
+        homeManagerModules = { emacsConfig = import ./home-manager.nix; };
+        homeConfigurations = forEachSystem (system: home-manager.lib.homeManagerConfiguration {
+          # This is a test configuration I guess?
+          inherit system;
+          pkgs = nixpkgsForEachSystem.${system};
+          username = "test";
+          homeDirectory = "/home/test";
+          extraModules = [ self.homeManagerModules.emacsConfig ];
+          configuration = {
+            gaelan.emacs.config = {
+              enable = true;
+            };
+          };
+        });
+
+        # Make sure home-manager component of this flake works?
+        checks = forEachSystem(system: {
+          build-home-configuration =
+            self.homeConfigurations.${system}.activationPackage;
+        });
 
         # Generate a development environment for developing emacs scripts
         devShell = forEachSystem
