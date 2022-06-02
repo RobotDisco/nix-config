@@ -13,7 +13,7 @@
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   nix.maxJobs = lib.mkDefault "auto";
-  system.stateVersion = "21.11";
+  system.stateVersion = "22.05";
 
   fileSystems."/" = {
     device = "/dev/disk/by-label/rootpart0";
