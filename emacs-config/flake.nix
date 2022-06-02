@@ -2,7 +2,7 @@
   description = "Gaelan's emacs packages and config";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-unstable";
+    nixpkgs.url = "nixpkgs/nixos-21.11";
 
     emacs-overlay.url = "github:nix-community/emacs-overlay";
 
