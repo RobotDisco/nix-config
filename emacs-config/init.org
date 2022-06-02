@@ -1,3 +1,193 @@
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; Hello
+# -*- mode: org; coding: utf-8; -*-
+#+TITLE: GNU Emacs Configuration
+#+AUTHOR: Gaelan D'costa
+
+* Welcome!
+  Gaelan D'costa's GNU emacs config; there are many like it, but this one is mine.
+
+  Eventually I will understand my own config enough to explain it in a cohesive way.
+
+  This configuration is built as a nix package; as such, it assumes that nix has pre-supplied all necessary packages (which ironically, are parsed out of this file.) As such, it is also paired with whatever version of emacs that this package includes. Currently, this is GNU Emacs 27.2
+
+** Inspirations
+   - [[https://github.com/daviwil/emacs-from-scratch/][Emacs from Scratch]] is a great series of youtube videos where the author clearly puts a lot of thoughts and well-principled thought into his configuration principles.
+
+   - I am super indebted to whoever [[http://github.com/terlar/emacs-config][Terlar]] is, their nix package and structure is one I found a lot of insight about how to write nix packages from. 
+
+* Early Initialization
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  ;;; early-init.el --- Early Initialization -*- lexical-binding: t; -*-
 #+END_SRC
+  
+** Version Sentinal
+   I am not sure if this config will work with older versions of emacs, so I'll abort if the running version of emacs is older than a known good version.
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (let ((minver "27.1"))
+    (when (version< emacs-version minver)
+      (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
+#+END_SRC
+
+** Startup
+   Let's time and display the amount of time it takes to bring up my Emacs configuration
+   #+BEGIN_SRC emacs-lisp :tangle early-init.el
+     (add-hook 'emacs-startup-hook
+	       (lambda ()
+		 (message "Loaded GNU Emacs in %0.03fs"
+			  (float-time (time-subtract after-init-time
+						      before-init-time)))))
+   #+END_SRC
+
+   I saw a config where the author temporarily set garbage collection thresholds for speed during initialization, presumably to minimize GC overhead at startup.
+   
+   When emacs has finished initalizing, it runs a hook we've set up to restore a more aggressive threshold.
+   
+   This is a pattern I have seen various people use, so it seems like a good idea.
+   #+BEGIN_SRC emacs-lisp :tangle early-init.el
+     (let ((normal-gc-cons-threshold gc-cons-threshold)
+	   (normal-gc-cons-percentage gc-cons-percentage)
+	   (normal-file-name-handler-alist file-name-handler-alist)
+	   (init-gc-cons-threshold most-positive-fixnum)
+	   (init-gc-cons-percentage 0.6))
+       (setq gc-cons-threshold init-gc-cons-threshold
+	     gc-cons-percentage init-gc-cons-percentage
+	     file-name-handler-alist nil)
+       (add-hook 'after-init-hook
+		 `(lambda ()
+		    (setq gc-cons-threshold ,normal-gc-cons-threshold
+			  gc-cons-threshold ,normal-gc-cons-percentage
+			  file-name-handler-alist ',normal-file-name-handler-alist))))
+   #+END_SRC
+
+   Inhibit startup screen and messages.
+   #+BEGIN_SRC emacs-lisp :tangle early-init.el
+     (setq inhibit-startup-screen t
+	   initial-scratch-message nil)
+   #+END_SRC
+
+   Performance tweak: Don't load default library, and use =fundamental-mode= to reduce hooks running on startup.
+   #+BEGIN_SRC emacs-lisp :tangle early-init.el
+     (setq inhibit-default-init t)
+     (setq initial-major-mode 'fundamental-mode)
+   #+END_SRC
+
+** UI speedups
+   Disable unnecessary GUI components.
+
+   We are not using builtin functions for these because we previously disabled loding those via setting  =inhibit-default-init=.
+   #+BEGIN_SRC emacs-lisp :tangle early-init.el
+     (setq use-dialog-box nil)
+     (push '(menu-bar-lines . 0) default-frame-alist)
+     (push '(tool-bar-lines . 0) default-frame-alist)
+     (push '(vertical-scroll-bars) default-frame-alist)
+   #+END_SRC
+
+   Don't implicitly resize frames when changing various settings. I don't know what the benefits of this are, so let's try it!
+
+   TODO Is this worth keeping?
+   #+BEGIN_SRC emacs-lisp :tangle early-init.el
+     (setq frame-inhibit-implied-resize t)
+   #+END_SRC
+
+   Ignore X resources. Don't allow config outside of emacs itself to set GUI chrome attributes.
+   #+BEGIN_SRC emacs-lisp :tangle early-init.el
+     (advice-add #'x-apply-session-resources :override #'ignore)
+   #+END_SRC
+
+* Base settings
+  #+BEGIN_SRC emacs-lisp :tangle yes
+  ;;; init.el --- Initialization -*- lexical-binding: t; -*-
+  #+END_SRC
+
+** Variables
+   Provide XDG-compliant locations for Emacs to store and cache data.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (eval-and-compile
+       (defvar gaelan/data-dir
+	 (if (getenv "XDG_DATA_HOME")
+	     (concat (getenv "XDG_DATA_HOME") "/emacs/")
+	   (expand-file-name "~/.local/share/emacs/"))
+	 "Directory for emacs data")
+
+       (defvar gaelan/cache-dir
+	 (if (getenv "XDG_CACHE_HOME")
+	     (concat (getenv "XDG_CACHE_HOME") "/emacs/")
+	   (expand-file-name "~/.cache/emacs/"))
+	 "Directory for emacs cached data."))
+   #+END_SRC
+
+** Package management
+   Use generated package autoloads via package-quickstart. The actual packages are provided via the nix package this file is contained in.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (defvar package-quickstart t)
+   #+END_SRC
+
+*** Load path
+    Add local and private libraries to ~load-path~.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (eval-and-compile
+	(setq load-path
+	      (append (delete-dups load-path)
+		      (list (expand-file-name "lisp" user-emacs-directory)
+			    (expand-file-name "private" user-emacs-directory)))))
+    #+END_SRC
+
+*** Set location of custom file
+   Emacs by default manages some forms for variables and faces and places them at the end of =init.el=. Since my =init.el= is generated, this would be difficult to manage.
+   I can tell Emacs to use a different location for these, which will not be checked into source control or regenerated and Emacs can manage it to its heart's content.
+
+   Why is it in a temporary file directory? This keeps my config immutable (or at least deliberate.)
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq custom-file (expand-file-name "custom.el" temporary-file-directory))
+   #+END_SRC
+
+*** use-package
+    [[https://github.com/jwiegley/use-package][use-package]] is a wonderful package from John Wiegley which makes downloading and loading and configuring emacs packaging a much more structured affair. It can optionally download missing packages and uses a single macro to load configuration and set up bindings, regular hooks, extension associations, etc... in a consistent way.
+
+    The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix package also leverages use-package to know what packages it needs to download when generating an emacs package from this file.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      ;; Since (use-package) is a macro, we don't actually need to load it except
+      ;; when we compile a new bytecode version of our emacs file.
+      (eval-when-compile
+	(require 'use-package))
+
+      (eval-and-compile
+	;; By default if :ensure is non-nil it will use package.el to download the
+	;; package. We use a custom function to ensure that never happens.
+	(defun gaelan/use-package-ensure-ignore (&rest _args) t)
+	(setq use-package-ensure-function #'gaelan/use-package-ensure-ignore)
+
+	;; Unless we explicitly want packages loaded eagerly, rely on setting hooks or
+	;; mod or bindings to generate autoloads to only load the package on demand.
+	(setq use-package-always-defer t)
+	;; Don't assume hooks have the substring "-hook" at the end.
+	(setq use-package-hook-name-suffix nil))
+
+      ;; If debug mode is on, be more chatty. Otherwise, don't
+      (if gaelan/init-file-debug
+	  (setq use-package-verbose t
+		use-package-expand-minimally nil
+		use-package-compute-statistics t)
+	(setq use-package-verbose nil
+	      use-package-expand-minimally t))
+    #+END_SRC
+
+*** Keep ~user-emacs-directory~ clean.
+    #+BEGIN_SRC emacs-lisp :tangle yes
+      (use-package no-littering
+	:demand t
+        :ensure t
+	:init
+	(setq no-littering-etc-directory gaelan/data-dir
+	      no-littering-var-directory gaelan/cache-dir))
+    #+END_SRC
+
+** UX
+   Always request confirmation before quitting emacs
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq confirm-kill-emacs #'y-or-n-p)
+   #+END_SRC
+
+   Use =y= and =n= for prompts instead of =yes= and =no=
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (fset #'yes-or-no-p #'y-or-n-p)
+   #+END_SRC
