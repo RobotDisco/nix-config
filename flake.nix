@@ -14,12 +14,9 @@
       # library just in this block, but not expose it myself.
       inherit (nixpkgs) lib;
 
-      myLib = import ./lib {
-        inherit lib nixpkgs;
-      };
-    in
+      myLib = import ./lib { inherit lib nixpkgs; };
 
-    {
+    in {
       nixosConfigurations = {
         arrakis = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
@@ -59,7 +56,8 @@
                   settings = {
                     personal-cipher-preferences = "AES256 AES192 AES";
                     personal-digest-preferences = "SHA512 SHA384 SHA256";
-                    personal-compress-preferences = "ZLIB BZIP2 ZIP Uncompressed";
+                    personal-compress-preferences =
+                      "ZLIB BZIP2 ZIP Uncompressed";
                     default-preference-list =
                       "SHA512 SHA384 SHA256 AES256 AES192 AES ZLIB BZIP2 ZIP Uncompressed";
                     cert-digest-algo = "SHA512";
@@ -94,44 +92,36 @@
                 };
 
                 # Document these
-                programs.zsh = {
-	          enable = true;
-                };
+                programs.zsh = { enable = true; };
               };
             }
           ];
         };
       };
 
-      apps =
-        myLib.forAllSystems (pkgs:
-          lib.mapAttrs
-	    # First function arg is key, second is value 
-	    (binary: derivation: {
-	      type = "app";
-	      program = "${derivation}/bin/${binary}";
-	    })
-	    {
-	      use-caches = pkgs.writers.writeBashBin "use-caches" ''
-	        ${pkgs.cachix}/bin/cachix use -O . nix-community
-              '';
+      apps = myLib.forAllSystems (pkgs:
+        lib.mapAttrs
+        # First function arg is key, second is value 
+        (binary: derivation: {
+          type = "app";
+          program = "${derivation}/bin/${binary}";
+        }) {
+          use-caches = pkgs.writers.writeBashBin "use-caches" ''
+            ${pkgs.cachix}/bin/cachix use -O . nix-community
+          '';
 
-              nixos-switch = pkgs.writers.writeBashBin "nixos-switch" ''
-	        PATH=${lib.makeBinPath [ pkgs.gitMinimal pkgs.nix pkgs.nixos-rebuild ]}:$PATH nixos-rebuild switch --flake . "$@"
-              '';
-            });
-	    
+          nixos-switch = pkgs.writers.writeBashBin "nixos-switch" ''
+            PATH=${
+              lib.makeBinPath [ pkgs.gitMinimal pkgs.nix pkgs.nixos-rebuild ]
+            }:$PATH nixos-rebuild switch --flake . "$@"
+          '';
+        });
+
       devShell = myLib.forAllSystems (pkgs:
         pkgs.mkShell {
-	  nativeBuildInputs = [
-	    pkgs.git
-	    pkgs.nix
-	    pkgs.nixfmt
-	  ];
+          nativeBuildInputs = [ pkgs.git pkgs.nix pkgs.nixfmt ];
 
-          shellHook = ''
-	    export NIX_USER_CONF_FILES=${toString ./.}/nix.conf
-	  '';
-	});
-      };
-    }
+          shellHook = "  export NIX_USER_CONF_FILES=${toString ./.}/nix.conf\n";
+        });
+    };
+}
