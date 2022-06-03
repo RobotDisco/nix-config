@@ -8,13 +8,16 @@
     home-manager.url = "github:nix-community/home-manager/release-22.05";
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware }:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware }@attrs:
     let
       # I am doing something tricky here. I want to refer to the standard let
       # library just in this block, but not expose it myself.
       inherit (nixpkgs) lib;
 
-      myLib = import ./lib { inherit lib nixpkgs; };
+      myLib = import ./lib {
+        inherit lib nixpkgs;
+        inputs = attrs;
+      };
 
     in {
       nixosConfigurations = {

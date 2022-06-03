@@ -171,4 +171,15 @@ nix flake lock --override-input <input> path:../<input-path>
    If you want to wrap a part of your nix configuration in a new file, just put it in a new file, inside a funcion that returns whatever value you want it to return, passing whatever input parameters you need to.
 
    Don't think you are beholden to magical standards. There are best practices you will see, but chances are nix pills will explain it to you in some section. If it doesn't you can probably reverse engineer the implied pattern by looking at the next code in question. But nothing is special, it's just code.
+** Nix is ultimately about package management
+   I am constantly frustrated at how random configuration management choices are embedded with generating data structures. It makes it harder to figure out the /configuration choices/ people have made in the source I am reading.
 
+   But there's probably a reason for this, given that ultimately every object I pass around *is* a configuration object. Might as well change it while you are visiting it, rather than building things to pass inert data objects around and change them all in one go, possibly requiring unnecessary data mangling in the process.
+
+   TODO Is there a pattern to make this more visible?
+** People attach things to =self= to remove the need for as many bindings
+   A common pattern I see is people referencing attributes on =final= and =self=.
+
+   The reason I think they do this is because if they are things you want to re-use all over the place, you can leverage lazy evaluation to get at them even if you are still in the module that defines these things.
+
+   The alternative are things like recursive data structures, which have worse implications, or a lot of =let=/=in= bindings, which produces boilerplate. 
