@@ -1,0 +1,174 @@
+#+TITLE: Gaelan's Nix config
+#+AUTHOR: Gaelan D'costa <gdcosta@gmail.com>
+
+This is the configuration for my NixOS installations and also my user dot files, as laid down by nix. It is structured as a Nix flake.
+
+This repo is heavily indebted to [[https://github.com/terlar/nix-config][terlar]] whose nix-config repo has heavily influenced this latest iteration of my confic.
+
+This flake includes the following components:
+
+- apps :: commands which this flake provides, and commands for development workflow. Use with =nix run .#<command>=
+  - ~nixos-switch~ :: run =nixos-rebuild --switch= for this flake.
+  - ~use-caches~ :: add caches to the project's =nix.conf=. This is only needed when modifying cache sources.
+- devShell :: a shell environment with tools used for development. Run using =nix develop=
+- lib :: library functions used within this flake
+  - pkgsForSystem :: provide, for all supported systems, an imported =nixpkgs= with additional overlays I wish to include.
+  - forAllSystem~ :: given a function that takes in a system, produced an attribute set containing nix evaluations for every supported system. It contains a local binding called =supportedSystems= which lists the targets I expect this flake to build for.
+
+* Usage
+Show what this flake provides
+#+BEGIN_SRC sh
+nix flake show
+#+END_SRC
+
+Switch to flake's NixOS configuration (and through embedding, home-manager configuration)
+#+BEGIN_SRC sh
+nix run .#nixos-switch
+#+END_SRC
+
+Update all flake inputs and generate a commit
+#+BEGIN_SRC sh
+nix flake update --commit-lock-file
+#+END_SRC
+
+Update a particular input and generate a commit
+#+BEGIN_SRC sh
+nix flake lock --update-input <input> --commit-lock-file
+#+END_SRC
+
+* Development flow
+Use a local input during development, instead of a remote one.
+#+BEGIN_SRC sh
+nix flake lock --override-input <input> path:../<input-path>
+#+END_SRC
+
+* Nix Notes and primers
+** Read the Nix Pills. Over and over and over.
+   https://nixos.org/guides/nix-pills/ is the best resource I have found for learning the Nix language.
+
+   I still find it difficult to comprehend because it's not always clear to me what the point of certain concepts are.
+
+   For example, the override pattern, the call pattern, etc... are patterns that seem to have been developed /organically/. There's nothing special in in the language about them, they're simply a best practice in defining and calling functions in a way other people can assume, or a field in an attribute that is idiomatic.
+
+   I like to browse over the documents every so often as my gradual exposure to these concepts become more clear as I finally digest the earlier bits.
+** Nix is a pure functional language
+   The system is often written in a weird way, but ultimately, Nix is a pure functional language in the style of Haskell.
+
+   What this means is that everything is evaluated top-down, and that everything returned is a data structure. If something looks like it does something imperative (contains shell script text, for example, it is likely a data structure that describes something that will actually get performed later, in a layer way above what I likely will ever be exposed to.
+** Nix attribute sets are dictionaries
+   A lot of what I write are basically dictionaries or hashes, but the way Nix writes them they look like assignment statements.
+
+   For example:
+   #+BEGIN_SRC
+   {
+     attr1 = value1;
+     attr2 = value2;
+   }
+   #+END_SRC
+   This is just a record / dictionary / etc... And of course, it is immutable, since Nix is a pure functional language.
+** Nix really leverages curried functions
+     I don't know how to explain this succinctly.
+
+     All functions in Nix take one argument.
+
+     A nix argument can be a function itself
+
+     Nix functions are often written to take a function do something intermediate, and then return a derivation of that work and its one argument which is another function.
+
+     Arguably, this is how _all_ nix functions work.
+
+     When you call a function that looks like ~myThreeArgumentFunction a b c~, is actually understood by the compiler as:
+     #+BEGIN_SRC
+       myThreeArgumentFunction a: b: c:
+         a + b + c
+     #+END_SRC
+
+     =(myThreeArgumentFunction a:= itself is a function that takes in some value =a= returns some magical intermediate function which takes in a value =b=, which returns a function that takes in some value =c= and returns the sum of all of these values.
+
+     Since nix is a strongly typed language, if =a=, =b= and =c= were numbers, they will be numbers to all these respective intermediate functions.
+
+     There's something funky involved here called a closure, where I know in haskell you can do something to take a function like this and break off one of the intermediate functions, which will inherently remember the parameter pass to it and do the right thing with that real value, but you still have to eventually call the intermediate function with the rest of the arguments, even piecemeal by piecemeal. It's like each of these is a partially concrete version of the general function?
+
+     This is done transparently as far as you, a user of that function are concerned. So when just _using_ functions you don't have to think about it, or just go "hey, I guess I need to supply my own function here which maybe takes a function and I just have to invoke it in the right place."
+
+     But when writing the function in this style, you have to be aware of that. You have to think about that potential composition.
+
+     I assume this is powerful, but honestly I don't know why. Maybe if I think of it as function composition?
+** No, those function signatures you made are really just one value.
+     A lot of times you will see something like
+
+     #+BEGIN_SRC
+     myFunction = { argument1, argument2, argument3, ... }:
+       lib.doSomethingWith argument1 argument2 argument3
+     #+END_SRC
+
+     You would think that is a three argument function, right?
+
+     No. In fact that function takes a single argument. Which contains /at least/ the three named arguments.
+
+     There are ways to make those arguments optional via default values, and the "..." consumes any extra fields passed in. If you didn't have ..., passing "argument4" would cause an error because the function did not expect it.
+
+     I feel like is is the easier and more readable code than explicitly curried functions, but I assume there is a limitation. Maybe functions can't be passed as arguments in a set/dictionary?
+** A derivation isn't magical. It is a convention
+     I don't really understand what a derivation is. I think it ultimately is what boils down to a "nix package."
+
+     But since this is a pure language, I bet this means that it's just an inert attribute set (i.e. dictionary) with some conventional field names and values. Which some part of the nix package manager uses to do stuff based on assuming what is in the data structure it is given.
+
+     All those places where I error out because nix is expecting a derivation, I possibly could just start by handing it something like:
+
+     #+BEGIN_SRC
+     {
+       name = "dummy";
+       builder = "dummy";
+       system = "dummy";
+     }
+     #+END_SRC
+
+     And it would work ... somehow. Possibly because the default values of the functions that handle that structure do nothing by default?
+** Overlays are an interesting concept
+   You often see places where you'll see these curried functions that look like the following:
+
+   #+BEGIN_SRC
+     final: prev:
+       <function body>
+
+     self: super:
+       <function body>
+   #+END_SRC
+   
+   These are called "overlays" a lot of the time, and they seem to be used for some math reason.
+
+   My understanding is that your function body here effectively adds a bit value (say some extra field values?) to the original function/value passed in as =prev= or =super=.
+
+   Because nix is a lazy language, you can do weird things with this. You may want to reference =prev= or =super= to access a value because it's going to be made real before =final= or =self= is. So that's faster.
+
+   But you might want to access something off =final= or =self= because, even though it isn't computed yet for you, you don't want an intermediate value. So you're willing to defer. But you have to make sure you aren't going to wind up producing some kind of dependency loop, so generally use the =prev= and =super= values unless you have to, so you don't have to worry about dependency issues?
+
+   I suspect where this becomes an issue in Nix is in derivations. So you might have these overlay chains constantly changing around a derivation, i.e. a description of what you're actually changing on your NixOS or other system. But you don't have access to the actual changes until they finally happen. This allows you to safely access either an intermediate product if you don't care about the concrete aspect, or easily access the final product with some care?
+
+   The alternative in an eager programming language would be some indirect concept like a promise or a thunk, which requires you to write it out more explictly (and in some ways, that makes it harder to reason about since you have to juggle it explicitly each and every time.) But the cost here is that you have to understand, indirectly, implicitly, what's going on.
+** with and inherit
+
+   ~{ inherit blah }~ is just a fancy way of saying ~{ blah = blah }~, where blah is some pre-existing binding you have previously defined.
+
+   ~with someDictionary;~ pulls all fields from that dictionary (one layer deep) into your current context, so you don't have to type it qualified all the time. This really pollutes the current data structure you are defining.
+
+   An alternative is ~with (someDictionary) oneField anotherField;~ which only pulls specific fields into your current context.
+*** Implications
+   Hmm, I wonder if doing this inside a dictionary you return means you are exposing those fields as well in your return value. Maybe this is why you use a ~let~ to produce local bindings that won't be exported (so that's where your inherit or with statements might go) because they don't carry over into your returned object.
+** There is no magic, nothing is special.
+   I spent too much time thinking that keywords like "nixpkgs", "import", etc... are special and that I had to understand them. In many ways, I didn't.
+
+   I came to Nix (like a lot of people do) as a system configuration tool but it is key to understand that it is first and foremost a programming language.
+
+   When you "import" something, that just means that something is a function (which maybe some expectations of what fields are inside that object.)
+
+   You also have to supply a dictionary containing named parameters.
+
+   The only magic might be that ~import bob {}~ assumes a directory called bob with a file called =default.nix= inside it.
+   You can also do ~import ./somedir/bob.nix {}~ if you want.
+   
+   If you want to wrap a part of your nix configuration in a new file, just put it in a new file, inside a funcion that returns whatever value you want it to return, passing whatever input parameters you need to.
+
+   Don't think you are beholden to magical standards. There are best practices you will see, but chances are nix pills will explain it to you in some section. If it doesn't you can probably reverse engineer the implied pattern by looking at the next code in question. But nothing is special, it's just code.
+
