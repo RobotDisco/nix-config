@@ -183,3 +183,9 @@ nix flake lock --override-input <input> path:../<input-path>
    The reason I think they do this is because if they are things you want to re-use all over the place, you can leverage lazy evaluation to get at them even if you are still in the module that defines these things.
 
    The alternative are things like recursive data structures, which have worse implications, or a lot of =let=/=in= bindings, which produces boilerplate. 
+** A lot of terlar's magic is for DRY
+   A thing I notice, and possibly find compelling, is how much of the less obvious nix code terlar has written is to avoid route additions like adding filenames to a list for importing. For example, [[https://github.com/terlar/nix-config/blob/39b24dc8ead4b74660c7631e86665532bcd2f983/flake.nix#L56][importDirToAttrs]] exists so that every file in a subdirectory will be imported in as a module.
+
+   There can be costs to this; one of the reasons all of terlar's =lib= members hasn't been moved into a separate nix module is so that imports don't have to be passed in (and thus referenced explicitly?)
+
+   The aforementioned =importDirToAttrs= function means means that nix modules aren't loaded in via a =default.nix= that loads them in explicitly. Each file becomes its own module, effectively. That doesn't feel idiomatic. But do I care?
