@@ -1,19 +1,12 @@
-{ lib, inputs, ... }:
+{ nixpkgs, home-manager }:
 
 let
+  lib = nixpkgs.lib;
+
   pkgsForSystem = { system }:
-    let
-      home-manager = inputs.home-manager;
-
-      homeManagerOverlay = final: prev: {
-        home-manager = home-manager.defaultPackage.${system};
-      };
-
-      inputOverlays = [ homeManagerOverlay ];
-    in import inputs.nixpkgs {
+    import inputs.nixpkgs {
       inherit system;
 
-      overlays = inputOverlays;
       # Allow non-free/open source projects to be installed
       config.allowUnfree = true;
     };
@@ -55,28 +48,16 @@ in {
     let
       pkgs = pkgsForSystem { inherit system; };
 
-      baseNixosModule = {
-        # This makes it easier to know what version of a module I am running?
-        system.configurationRevision =
-          lib.mkIf (inputs.self ? rev) inputs.self.rev;
-        # This is a nix store, which is an important concept in nix. 
-        nixpkgs = { inherit pkgs; };
-        # Add my generated nix store to the search path
-        nix.nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
-        # Since my nix store is a flake, add it to the registry
-        nix.registry.nixpkgs.flake = inputs.nixpkgs;
-      };
-
-      homeManagerNixosModule = { config, ... }: {
+      # my guess is this module is for my personal standard configuration for
+      # home-manager in standard NixOS module style, vs what is in extraModules
+      # which is the actual home-manager nixos module itself
+      homeManagerModule = { config, ... }: {
         config.home-manager = {
+          # Don't use a different nixpkgs derivation for each user; use the
+          # global one I provide
           useGlobalPkgs = true;
+          # install packages in /etc/profiles, not $HOME/.nix-profile
           useUserPackages = true;
-
-          # This is how we pass arguments into the module.
-          extraSpecialArgs = specialArgs;
-          # TODO Terlar had this in his base nix flake file. I've split mine
-          # out so how do I get these in?
-          sharedModules = [ ];
         };
       };
     in lib.nixosSystem {
@@ -85,13 +66,13 @@ in {
 
       # My best guess is that modules are the modules _we_ generate, which
       # are effectively inline in a lot of configs
-      myModules = [ baseNixosModule homeManagerNixosModule configuration ]
-        ++ myModules;
+      modules = [ configuration ] ++ myModules;
       # My best guess is that these are external modules, i.e. those that
       # live in a standard place with a path
-      contribModules = [
-        inputs.nixpkgs.nixosModules.notDetected
-        inputs.home-manager.nixosModules.home-manager
-      ] ++ (lib.attrValues inputs.self.nixosModules) ++ contribModules;
+      extraModules = [
+        # Always include these third-party modules as standard
+        nixpkgs.nixosModules.notDetected
+        home-manager.nixosModules.home-manager
+      ] ++ contribModules;
     };
 }
