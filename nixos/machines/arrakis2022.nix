@@ -1,7 +1,10 @@
 # My Framework laptop
 { config, pkgs, lib, ... }:
 
-{
+let
+  name = "Gaelan D'costa";
+  username = "gaelan";
+in {
   networking.hostName = "arrakis";
   networking.interfaces.wlp170s0.useDHCP = true;
   networking.useDHCP = false;
@@ -119,21 +122,6 @@
 
   services.fstrim.enable = true;
 
-  #nixpkgs.config.packageOverrides = pkgs: {
-  # vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
-  #};
-
-  #hardware.opengl = {
-  #  enable = true;
-  #  extraPackages = with pkgs; [
-  #    intel-media-driver
-  #    vaapiIntel
-  #    vaapiVdpau
-  #    libvdpau-va-gl
-  #  ];
-  #  extraPackages32 = with pkgs.pkgsi686Linux; [ vaapiIntel ];
-  #}
-
   console = {
     # Honour the same settings as the linux console as in X11
     useXkbConfig = true;
@@ -150,13 +138,25 @@
   # perform a sudo.
   security.sudo.execWheelOnly = true;
 
-  users.users.gaelan = {
-    shell = pkgs.zsh;
+  users.users."${username}" = {
+    description = name;
     isNormalUser = true;
     home = "/home/gaelan";
-    description = "Gaelan D'costa";
-    extraGroups = [ "wheel" ];
+    group = "users";
+    createHome = true;
+    extraGroups = [ "networkmanager" "wheel" ];
     openssh.authorizedKeys.keyFiles = [ ./gaelan-yubikey.pub ];
+  };
+
+  # Managed home directories
+  home-manager.users."${username}" = { robot-disco.user.gaelan.enable = true; };
+
+  nix.settings.trusted-users = [ "root" username ];
+
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
   };
 
   services = {
@@ -173,71 +173,5 @@
     # Use a local challenge-response, not yubico's cloud service
     mode = "challenge-response";
     # TODO should I define user "gaelan"'s yubikey here?
-  };
-
-  home-manager.users.gaelan = {
-    # Set up some reasonble and secure ssh configuration
-    programs.ssh = {
-      enable = true;
-      compression = true;
-      # Don't forward by default, it is insecure
-      # Prefer proxyjumping if you can
-      forwardAgent = false;
-    };
-
-    # install and configure git
-    programs.git = {
-      enable = true;
-      extraConfig = {
-        core = { autocrlf = "input"; };
-        hub = { protocol = "https"; };
-      };
-
-      # TODO write a tulip nix-shell that sets these to tulip email addresses.
-      userEmail = "gdcosta@gmail.com";
-      userName = "Gaelan D'costa";
-    };
-
-    programs.gpg = {
-      enable = true;
-      settings = {
-        personal-cipher-preferences = "AES256 AES192 AES";
-        personal-digest-preferences = "SHA512 SHA384 SHA256";
-        personal-compress-preferences = "ZLIB BZIP2 ZIP Uncompressed";
-        default-preference-list =
-          "SHA512 SHA384 SHA256 AES256 AES192 AES ZLIB BZIP2 ZIP Uncompressed";
-        cert-digest-algo = "SHA512";
-        s2k-digest-algo = "SHA512";
-        s2k-cipher-algo = "AES256";
-        charset = "utf-8";
-        fixed-list-mode = true;
-        no-comments = true;
-        no-emit-version = true;
-        no-greeting = true;
-        keyid-format = "0xlong";
-        list-options = "show-uid-validity";
-        verify-options = "show-uid-validity";
-        with-fingerprint = true;
-        require-cross-certification = true;
-        no-symkey-cache = true;
-        use-agent = true;
-        throw-keyids = true;
-      };
-    };
-
-    services.gpg-agent = {
-      enable = true;
-      enableExtraSocket = true;
-      enableSshSupport = true;
-      extraConfig = ''
-        allow-emacs-pinentry
-        allow-loopback-pinentry
-      '';
-      defaultCacheTtl = 60;
-      maxCacheTtl = 120;
-    };
-
-    # Document these
-    programs.zsh = { enable = true; };
   };
 }
