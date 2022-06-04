@@ -4,7 +4,7 @@ let
   lib = nixpkgs.lib;
 
   pkgsForSystem = { system }:
-    import inputs.nixpkgs {
+    import nixpkgs {
       inherit system;
 
       # Allow non-free/open source projects to be installed
@@ -48,6 +48,15 @@ in {
     let
       pkgs = pkgsForSystem { inherit system; };
 
+      # There are some baseline settings we need to set up for this function
+      # to work. Why does it work when lib.nixosSystem is directly called in
+      # flake.nix? I do not know :)
+
+      baseNixosModule = {
+        nixpkgs = { inherit pkgs; };
+        # Add <nixpkgs> location to our nix search path
+      };
+
       # my guess is this module is for my personal standard configuration for
       # home-manager in standard NixOS module style, vs what is in extraModules
       # which is the actual home-manager nixos module itself
@@ -66,7 +75,8 @@ in {
 
       # My best guess is that modules are the modules _we_ generate, which
       # are effectively inline in a lot of configs
-      modules = [ configuration ] ++ myModules;
+      modules = [ baseNixosModule homeManagerModule configuration ]
+        ++ myModules;
       # My best guess is that these are external modules, i.e. those that
       # live in a standard place with a path
       extraModules = [
