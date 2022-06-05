@@ -74,7 +74,7 @@
           username = "test";
           homeDirectory = "/home/test";
           extraModules = [ self.homeManagerModules.emacsConfig ];
-          configuration = { robot-disco.emacs.config = { enable = true; }; };
+          configuration = { robot-disco.emacs = { enable = true; }; };
         });
 
       # Make sure home-manager component of this flake works?

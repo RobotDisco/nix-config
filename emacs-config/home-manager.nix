@@ -3,7 +3,7 @@
 let
   inherit (lib) mkOption types;
   
-  cfg = config.robot-disco.emacs.config;
+  cfg = config.robot-disco.emacs;
 
   # Do we use the server or non-server emacs for editin?
   emacsBin = if cfg.enableServer then "emacsclient" else "emacs";
@@ -15,7 +15,7 @@ let
     (lib.attrNames (builtins.readDir path));
 
 in {
-  options.robot-disco.emacs.config = {
+  options.robot-disco.emacs = {
     enable = lib.mkEnableOption "enable gaelan's custom emacs configuration";
 
     package = mkOption {
