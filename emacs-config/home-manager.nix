@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 let
+  inherit (lib) mkOption types;
+  
   cfg = config.robot-disco.emacs.config;
 
   # Do we use the server or non-server emacs for editin?
@@ -8,27 +10,25 @@ let
 
   # Populate configuration for files we need home-manager to lay down.
   mkEmacsConfigFiles = path:
-    lib.fold' (acc: file: acc // { "emacs/${file}".source = "{path}/${file}"; })
-      { }
-      (lib.attrNames (readDir path));
+    lib.foldl'
+    (acc: file: acc // { "emacs/${file}".source = "${path}/${file}"; }) { }
+    (lib.attrNames (builtins.readDir path));
 
-in
-
-{
+in {
   options.robot-disco.emacs.config = {
-    enable = mkEnableOption "enable gaelan's custom emacs configuration";
+    enable = lib.mkEnableOption "enable gaelan's custom emacs configuration";
 
     package = mkOption {
       type = types.package;
       default = pkgs.emacsEnv;
-      defaultText = literalExample "pkgs.emacsEnv";
+      defaultText = lib.literalExample "pkgs.emacsEnv";
       description = "The Emacs derivation to use.";
     };
 
-    configPackage = mkOption {
+    configPackage = lib.mkOption {
       type = types.package;
       default = pkgs.emacsConfig;
-      defaultText = literalExample "pkgs.emacsConfig";
+      defaultText = lib.literalExample "pkgs.emacsConfig";
       description = "The Emacs configuration derivation to use.";
     };
 
@@ -49,9 +49,15 @@ in
       default = pkgs.stdenv.isLinux;
       description = "Whether to enable user Emacs server.";
     };
+
+    defaultEditor = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Whether to use Emacs as default editor.";
+    };
   };
 
-  config = mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       services.emacs = {
         enable = cfg.enableServer;
@@ -71,13 +77,15 @@ in
 
       # Install any additional package specified by the emacs-config derivation, as well as our specified emacs package
       home.packages = [ cfg.package ]
-                      ++ lib.optionals cfg.enableUserDirectory cfg.configPackage.buildInputs;
+        ++ lib.optionals cfg.enableUserDirectory cfg.configPackage.buildInputs;
 
     }
-    (mkIf cfg.enableUserDirectory {
+    (lib.mkIf cfg.enableUserDirectory {
       xdg.configFile = mkEmacsConfigFiles cfg.configPackage;
     })
-    (mkIf cfg.defaultEditor { home.sessionVariables.EDITOR = emacsEdit; })
-    (mkIf cfg.enableGitDiff { programs.git.extraConfig.diff.tool = "ediff"; })
+    (lib.mkIf cfg.defaultEditor { home.sessionVariables.EDITOR = emacsBin; })
+    (lib.mkIf cfg.enableGitDiff {
+      programs.git.extraConfig.diff.tool = "ediff";
+    })
   ]);
 }
