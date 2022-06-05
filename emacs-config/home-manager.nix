@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.gaelan.emacs.config;
+  cfg = config.robot-disco.emacs.config;
 
   # Do we use the server or non-server emacs for editin?
   emacsBin = if cfg.enableServer then "emacsclient" else "emacs";
@@ -15,7 +15,7 @@ let
 in
 
 {
-  options.gaelan.emacs.config = {
+  options.robot-disco.emacs.config = {
     enable = mkEnableOption "enable gaelan's custom emacs configuration";
 
     package = mkOption {
