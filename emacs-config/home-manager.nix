@@ -29,13 +29,13 @@ in
       type = types.package;
       default = pkgs.emacsConfig;
       defaultText = literalExample "pkgs.emacsConfig";
-      description = "The Emacs configuration derivation to use."
+      description = "The Emacs configuration derivation to use.";
     };
 
     enableUserDirectory = mkOption {
       type = types.bool;
       default = true;
-      description = "Install user's Emacs directory files."
+      description = "Install user's Emacs directory files.";
     };
 
     enableGitDiff = mkOption {
