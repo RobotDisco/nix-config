@@ -54,7 +54,7 @@
        (add-hook 'after-init-hook
 		 `(lambda ()
 		    (setq gc-cons-threshold ,normal-gc-cons-threshold
-			  gc-cons-threshold ,normal-gc-cons-percentage
+			  gc-cons-percentage ,normal-gc-cons-percentage
 			  file-name-handler-alist ',normal-file-name-handler-alist))))
    #+END_SRC
 
