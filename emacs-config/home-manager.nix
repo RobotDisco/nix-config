@@ -1,22 +1,21 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkOption types;
+  inherit (lib) mkEnableOption mkOption types;
   
   cfg = config.robot-disco.emacs;
 
-  # Do we use the server or non-server emacs for editin?
-  emacsBin = if cfg.enableServer then "emacsclient" else "emacs";
+  # Do we use the server or non-server emacs for editing?
+  emacsBin = if cfg.enableServer then "${cfg.package}/bin/emacsclient" else "${cfg.package}/bin/emacs";
 
   # Populate configuration for files we need home-manager to lay down.
   mkEmacsConfigFiles = path:
     lib.foldl'
     (acc: file: acc // { "emacs/${file}".source = "${path}/${file}"; }) { }
     (lib.attrNames (builtins.readDir path));
-
 in {
   options.robot-disco.emacs = {
-    enable = lib.mkEnableOption "enable gaelan's custom emacs configuration";
+    enable = mkEnableOption "enable gaelan's custom emacs configuration.";
 
     package = mkOption {
       type = types.package;
@@ -55,6 +54,12 @@ in {
       default = true;
       description = "Whether to use Emacs as default editor.";
     };
+
+    enableExwm = mkEnableOption {
+      type = types.bool;
+      default = false;
+      description = "Whether to enable EXWM as a window manager. Make sure your emacs package includes EXWM.";
+    };
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
@@ -81,11 +86,26 @@ in {
 
     }
     (lib.mkIf cfg.enableUserDirectory {
-      xdg.configFile = mkEmacsConfigFiles cfg.configPackage;
+      xdg = {
+        enable = true;
+        configFile = mkEmacsConfigFiles cfg.configPackage;
+      };
     })
     (lib.mkIf cfg.defaultEditor { home.sessionVariables.EDITOR = emacsBin; })
     (lib.mkIf cfg.enableGitDiff {
       programs.git.extraConfig.diff.tool = "ediff";
+    })
+    (lib.mkIf cfg.enableExwm {
+      # Enable exwm when launching the emacs server
+      services.emacs.extraOptions = [ "-f" "exwm-enable" ];
+
+      # We're leveraging .xsession support to load our window manager, as
+      # services.xserver.windowManager.exwm doesn't suffice for my needs.
+      xsession.enable = if pkgs.stdenv.isLinux then true else false;
+      xsession.windowManager.command = if cfg.enableServer then
+        "${emacsBin} -c"
+      else
+        "${emacsBin} -f exwm-enable";
     })
   ]);
 }

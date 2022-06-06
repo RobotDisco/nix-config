@@ -47,6 +47,9 @@
 
             config = ./init.org;
             alwaysEnsure = false;
+
+            # We may enable exwm without having a config stanza in init.org 
+            extraEmacsPackages = (epkgs: with epkgs; [ exwm ]);
           };
 
           emacsConfig = (prev.emacsPackagesFor emacsEnv.emacs).callPackage
