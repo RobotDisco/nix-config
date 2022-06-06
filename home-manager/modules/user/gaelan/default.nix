@@ -81,5 +81,10 @@ in {
       defaultCacheTtl = 60;
       maxCacheTtl = 120;
     };
+
+    services.screen-locker = {
+      enable = true;
+      lockCmd = "${pkgs.i3lock}/bin/i3lock -n 4A412A";
+    };
   };
 }

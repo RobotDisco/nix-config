@@ -189,4 +189,13 @@ in {
     enable = true;
     user = "gaelan";
   };
+
+  services.logind = {
+    lidSwitch = "hybrid-sleep";
+    extraConfig = ''
+      HandleSuspendKey=hybrid-sleep
+      IdleAction=hybrid-sleep
+      IdleActionSec=20
+    '';
+  };
 }
