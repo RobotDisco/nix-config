@@ -3,16 +3,16 @@
 #+AUTHOR: Gaelan D'costa
 
 * Welcome!
-  Gaelan D'costa's GNU emacs config; there are many like it, but this one is mine.
+Gaelan D'costa's GNU emacs config; there are many like it, but this one is mine.
 
-  Eventually I will understand my own config enough to explain it in a cohesive way.
+Eventually I will understand my own config enough to explain it in a cohesive way.
 
-  This configuration is built as a nix package; as such, it assumes that nix has pre-supplied all necessary packages (which ironically, are parsed out of this file.) As such, it is also paired with whatever version of emacs that this package includes. Currently, this is GNU Emacs 27.2
+This configuration is built as a nix package; as such, it assumes that nix has pre-supplied all necessary packages (which ironically, are parsed out of this file.) As such, it is also paired with whatever version of emacs that this package includes. Currently, this is GNU Emacs 27.2
 
 ** Inspirations
-   - [[https://github.com/daviwil/emacs-from-scratch/][Emacs from Scratch]] is a great series of youtube videos where the author clearly puts a lot of thoughts and well-principled thought into his configuration principles.
+- [[https://github.com/daviwil/emacs-from-scratch/][Emacs from Scratch]] is a great series of youtube videos where the author clearly puts a lot of thoughts and well-principled thought into his configuration principles.
 
-   - I am super indebted to whoever [[http://github.com/terlar/emacs-config][Terlar]] is, their nix package and structure is one I found a lot of insight about how to write nix packages from. 
+- I am super indebted to whoever [[http://github.com/terlar/emacs-config][Terlar]] is, their nix package and structure is one I found a lot of insight about how to write nix packages from. 
 
 * Early Initialization
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
@@ -20,7 +20,7 @@
 #+END_SRC
   
 ** Version Sentinal
-   I am not sure if this config will work with older versions of emacs, so I'll abort if the running version of emacs is older than a known good version.
+I am not sure if this config will work with older versions of emacs, so I'll abort if the running version of emacs is older than a known good version.
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
   (let ((minver "27.1"))
     (when (version< emacs-version minver)
@@ -28,173 +28,257 @@
 #+END_SRC
 
 ** Startup
-   Let's time and display the amount of time it takes to bring up my Emacs configuration
-   #+BEGIN_SRC emacs-lisp :tangle early-init.el
-     (add-hook 'emacs-startup-hook
-	       (lambda ()
-		 (message "Loaded GNU Emacs in %0.03fs"
-			  (float-time (time-subtract after-init-time
-						      before-init-time)))))
-   #+END_SRC
+Let's time and display the amount of time it takes to bring up my Emacs configuration
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (add-hook 'emacs-startup-hook
+	    (lambda ()
+	      (message "Loaded GNU Emacs in %0.03fs"
+		       (float-time (time-subtract after-init-time
+						  before-init-time)))))
+#+END_SRC
 
-   I saw a config where the author temporarily set garbage collection thresholds for speed during initialization, presumably to minimize GC overhead at startup.
+I saw a config where the author temporarily set garbage collection thresholds for speed during initialization, presumably to minimize GC overhead at startup.
    
-   When emacs has finished initalizing, it runs a hook we've set up to restore a more aggressive threshold.
+When emacs has finished initalizing, it runs a hook we've set up to restore a more aggressive threshold.
    
-   This is a pattern I have seen various people use, so it seems like a good idea.
-   #+BEGIN_SRC emacs-lisp :tangle early-init.el
-     (let ((normal-gc-cons-threshold gc-cons-threshold)
-	   (normal-gc-cons-percentage gc-cons-percentage)
-	   (normal-file-name-handler-alist file-name-handler-alist)
-	   (init-gc-cons-threshold most-positive-fixnum)
-	   (init-gc-cons-percentage 0.6))
-       (setq gc-cons-threshold init-gc-cons-threshold
-	     gc-cons-percentage init-gc-cons-percentage
-	     file-name-handler-alist nil)
-       (add-hook 'after-init-hook
-		 `(lambda ()
-		    (setq gc-cons-threshold ,normal-gc-cons-threshold
-			  gc-cons-percentage ,normal-gc-cons-percentage
-			  file-name-handler-alist ',normal-file-name-handler-alist))))
-   #+END_SRC
+This is a pattern I have seen various people use, so it seems like a good idea.
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (let ((normal-gc-cons-threshold gc-cons-threshold)
+	(normal-gc-cons-percentage gc-cons-percentage)
+	(normal-file-name-handler-alist file-name-handler-alist)
+	(init-gc-cons-threshold most-positive-fixnum)
+	(init-gc-cons-percentage 0.6))
+    (setq gc-cons-threshold init-gc-cons-threshold
+	  gc-cons-percentage init-gc-cons-percentage
+	  file-name-handler-alist nil)
+    (add-hook 'after-init-hook
+	      `(lambda ()
+		 (setq gc-cons-threshold ,normal-gc-cons-threshold
+		       gc-cons-percentage ,normal-gc-cons-percentage
+		       file-name-handler-alist ',normal-file-name-handler-alist))))
+#+END_SRC
 
-   Inhibit startup screen and messages.
-   #+BEGIN_SRC emacs-lisp :tangle early-init.el
-     (setq inhibit-startup-screen t
-	   initial-scratch-message nil)
-   #+END_SRC
+Inhibit startup screen and messages.
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (setq inhibit-startup-screen t
+	initial-scratch-message nil)
+#+END_SRC
 
-   Performance tweak: Don't load default library, and use =fundamental-mode= to reduce hooks running on startup.
-   #+BEGIN_SRC emacs-lisp :tangle early-init.el
-     (setq inhibit-default-init t)
-     (setq initial-major-mode 'fundamental-mode)
-   #+END_SRC
+Performance tweak: Don't load default library, and use =fundamental-mode= to reduce hooks running on startup.
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (setq inhibit-default-init t)
+  (setq initial-major-mode 'fundamental-mode)
+#+END_SRC
 
 ** UI speedups
-   Disable unnecessary GUI components.
+Disable unnecessary GUI components.
 
-   We are not using builtin functions for these because we previously disabled loding those via setting  =inhibit-default-init=.
-   #+BEGIN_SRC emacs-lisp :tangle early-init.el
-     (setq use-dialog-box nil)
-     (push '(menu-bar-lines . 0) default-frame-alist)
-     (push '(tool-bar-lines . 0) default-frame-alist)
-     (push '(vertical-scroll-bars) default-frame-alist)
-   #+END_SRC
+We are not using builtin functions for these because we previously disabled loding those via setting  =inhibit-default-init=.
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (setq use-dialog-box nil)
+  (push '(menu-bar-lines . 0) default-frame-alist)
+  (push '(tool-bar-lines . 0) default-frame-alist)
+  (push '(vertical-scroll-bars) default-frame-alist)
+#+END_SRC
 
-   Don't implicitly resize frames when changing various settings. I don't know what the benefits of this are, so let's try it!
+Don't implicitly resize frames when changing various settings. I don't know what the benefits of this are, so let's try it!
 
-   TODO Is this worth keeping?
-   #+BEGIN_SRC emacs-lisp :tangle early-init.el
-     (setq frame-inhibit-implied-resize t)
-   #+END_SRC
+TODO Is this worth keeping?
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (setq frame-inhibit-implied-resize t)
+#+END_SRC
 
-   Ignore X resources. Don't allow config outside of emacs itself to set GUI chrome attributes.
-   #+BEGIN_SRC emacs-lisp :tangle early-init.el
-     (advice-add #'x-apply-session-resources :override #'ignore)
-   #+END_SRC
+Ignore X resources. Don't allow config outside of emacs itself to set GUI chrome attributes.
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (advice-add #'x-apply-session-resources :override #'ignore)
+#+END_SRC
 
 * Base settings
-  #+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;;; init.el --- Initialization -*- lexical-binding: t; -*-
-  #+END_SRC
+#+END_SRC
 
 ** Variables
-   Private an easy way to toggle debug mode which will set certain variables to produce each informative output. It can be set either by providing the environment variable =DEBUG= or start Emacs with =--debug-init=.
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (eval-and-compile
-       (when (getenv "DEBUG") (setq init-file-debug t))
-       (setq debug-on-error (and (not noninteractive) init-file-debug)))
-   #+END_SRC
+Private an easy way to toggle debug mode which will set certain variables to produce each informative output. It can be set either by providing the environment variable =DEBUG= or start Emacs with =--debug-init=.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (eval-and-compile
+    (when (getenv "DEBUG") (setq init-file-debug t))
+    (setq debug-on-error (and (not noninteractive) init-file-debug)))
+#+END_SRC
    
-   Provide XDG-compliant locations for Emacs to store and cache data.
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (eval-and-compile
-       (defvar gaelan/data-dir
-	 (if (getenv "XDG_DATA_HOME")
-	     (concat (getenv "XDG_DATA_HOME") "/emacs/")
-	   (expand-file-name "~/.local/share/emacs/"))
-	 "Directory for emacs data")
+Provide XDG-compliant locations for Emacs to store and cache data.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (eval-and-compile
+    (defvar gaelan/data-dir
+      (if (getenv "XDG_DATA_HOME")
+	  (concat (getenv "XDG_DATA_HOME") "/emacs/")
+	(expand-file-name "~/.local/share/emacs/"))
+      "Directory for emacs data")
 
-       (defvar gaelan/cache-dir
-	 (if (getenv "XDG_CACHE_HOME")
-	     (concat (getenv "XDG_CACHE_HOME") "/emacs/")
-	   (expand-file-name "~/.cache/emacs/"))
-	 "Directory for emacs cached data."))
-   #+END_SRC
+    (defvar gaelan/cache-dir
+      (if (getenv "XDG_CACHE_HOME")
+	  (concat (getenv "XDG_CACHE_HOME") "/emacs/")
+	(expand-file-name "~/.cache/emacs/"))
+      "Directory for emacs cached data."))
+#+END_SRC
 
 ** Package management
-   Use generated package autoloads via package-quickstart. The actual packages are provided via the nix package this file is contained in.
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (defvar package-quickstart t)
-   #+END_SRC
+Use generated package autoloads via package-quickstart. The actual packages are provided via the nix package this file is contained in.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defvar package-quickstart t)
+#+END_SRC
 
 *** Load path
-    Add local and private libraries to ~load-path~.
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (eval-and-compile
-	(setq load-path
-	      (append (delete-dups load-path)
-		      (list (expand-file-name "lisp" user-emacs-directory)
-			    (expand-file-name "private" user-emacs-directory)))))
-    #+END_SRC
+Add local and private libraries to ~load-path~.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (eval-and-compile
+    (setq load-path
+	  (append (delete-dups load-path)
+		  (list (expand-file-name "lisp" user-emacs-directory)
+			(expand-file-name "private" user-emacs-directory)))))
+#+END_SRC
 
 *** Set location of custom file
-   Emacs by default manages some forms for variables and faces and places them at the end of =init.el=. Since my =init.el= is generated, this would be difficult to manage.
-   I can tell Emacs to use a different location for these, which will not be checked into source control or regenerated and Emacs can manage it to its heart's content.
+Emacs by default manages some forms for variables and faces and places them at the end of =init.el=. Since my =init.el= is generated, this would be difficult to manage.
+I can tell Emacs to use a different location for these, which will not be checked into source control or regenerated and Emacs can manage it to its heart's content.
 
-   Why is it in a temporary file directory? This keeps my config immutable (or at least deliberate.)
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (setq custom-file (expand-file-name "custom.el" temporary-file-directory))
-   #+END_SRC
+Why is it in a temporary file directory? This keeps my config immutable (or at least deliberate.)
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq custom-file (expand-file-name "custom.el" temporary-file-directory))
+#+END_SRC
 
 *** use-package
-    [[https://github.com/jwiegley/use-package][use-package]] is a wonderful package from John Wiegley which makes downloading and loading and configuring emacs packaging a much more structured affair. It can optionally download missing packages and uses a single macro to load configuration and set up bindings, regular hooks, extension associations, etc... in a consistent way.
+[[https://github.com/jwiegley/use-package][use-package]] is a wonderful package from John Wiegley which makes downloading and loading and configuring emacs packaging a much more structured affair. It can optionally download missing packages and uses a single macro to load configuration and set up bindings, regular hooks, extension associations, etc... in a consistent way.
 
-    The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix package also leverages use-package to know what packages it needs to download when generating an emacs package from this file.
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      ;; Since (use-package) is a macro, we don't actually need to load it except
-      ;; when we compile a new bytecode version of our emacs file.
-      (eval-when-compile
-	(require 'use-package))
+The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix package also leverages use-package to know what packages it needs to download when generating an emacs package from this file.
+#+BEGIN_SRC emacs-lisp :tangle yes
+     ;; Since (use-package) is a macro, we don't actually need to load it except
+     ;; when we compile a new bytecode version of our emacs file.
+     (eval-when-compile
+       (require 'use-package))
 
-      (eval-and-compile
-	;; By default if :ensure is non-nil it will use package.el to download the
-	;; package. We use a custom function to ensure that never happens.
-	(defun gaelan/use-package-ensure-ignore (&rest _args) t)
-	(setq use-package-ensure-function #'gaelan/use-package-ensure-ignore)
+     (eval-and-compile
+       ;; By default if :ensure is non-nil it will use package.el to download the
+       ;; package. We use a custom function to ensure that never happens.
+       (defun gaelan/use-package-ensure-ignore (&rest _args) t)
+       (setq use-package-ensure-function #'gaelan/use-package-ensure-ignore)
 
-	;; Unless we explicitly want packages loaded eagerly, rely on setting hooks or
-	;; mod or bindings to generate autoloads to only load the package on demand.
-	(setq use-package-always-defer t)
-	;; Don't assume hooks have the substring "-hook" at the end.
-	(setq use-package-hook-name-suffix nil))
+       ;; Unless we explicitly want packages loaded eagerly, rely on setting hooks
+       ;; or mod or bindings to generate autoloads to only load the package on
+       ;; demand.
+       (setq use-package-always-defer t)
+       ;; Don't assume hooks have the substring "-hook" at the end.
+       (setq use-package-hook-name-suffix nil))
 
-      ;; If debug mode is on, be more chatty. Otherwise, don't
-      (if init-file-debug
-	  (setq use-package-verbose t
-		use-package-expand-minimally nil
-		use-package-compute-statistics t)
-	(setq use-package-verbose nil
-	      use-package-expand-minimally t))
-    #+END_SRC
+     ;; If debug mode is on, be more chatty. Otherwise, don't
+     (if init-file-debug
+	 (setq use-package-verbose t
+	       use-package-expand-minimally nil
+	       use-package-compute-statistics t)
+       (setq use-package-verbose nil
+	     use-package-expand-minimally t))
+#+END_SRC
 
 *** Keep ~user-emacs-directory~ clean.
-    #+BEGIN_SRC emacs-lisp :tangle yes
-      (use-package no-littering
-	:demand t
-        :ensure t
-	:init
-	(setq no-littering-etc-directory gaelan/data-dir
-	      no-littering-var-directory gaelan/cache-dir))
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package no-littering
+    :demand t
+    :ensure t
+    :init
+    (setq no-littering-etc-directory gaelan/data-dir
+	  no-littering-var-directory gaelan/cache-dir))
+#+END_SRC
 
-** UX
-   Always request confirmation before quitting emacs
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (setq confirm-kill-emacs #'y-or-n-p)
-   #+END_SRC
-
-   Use =y= and =n= for prompts instead of =yes= and =no=
-   #+BEGIN_SRC emacs-lisp :tangle yes
-     (fset #'yes-or-no-p #'y-or-n-p)
-   #+END_SRC
+* Tools
+** Window Management
+I love Emacs so much, I use it as my window manager :)
+*** Window title hooks
+Instead of having buffer titles of =*EXWM*=, make this have the application's
+title instead
+#+BEGIN_SRC emacs-lisp :tangle yes
+#+END_SRC
+*** exwm
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package exwm
+    :demand t
+    :ensure t
+    :preface
+    (declare-function exwm-workspace-rename-buffer nil)
+    :if (eq system-type 'gnu/linux)
+    :init
+    ;; Set window management key bindings
+    (setq exwm-input-global-keys
+	  `(
+	    ;; Reset to line-mode
+	    ([?\s-r] . exwm-reset)
+	    ;; Move between windows
+	    ([?\s-h] . windmove-left)
+	    ([?\s-l] . windmove-right)
+	    ([?\s-k] . windmove-up)
+	    ([?\s-j] . windmove-down)
+	    ;; Switch workspaces
+	    ([?\s-w] . exwm-workspace-switch)
+	    ;; s-0 is inconvenient, map to s-` and s-esc as well
+	    ([?\s-`] . (lambda () (exwm-workspace-switch-create 0)))
+	    ([s-escape] . (lambda () (exwm-workspace-switch-create 0)))
+	    ;; Launch application a la dmenu
+	    ([?\s-p] . (lambda (command)
+			 (interactive (list (read-shell-command "$ ")))
+			 (start-process-shell-command command nil command)))
+	    ;; Switch to numbered workspace.
+	    ,@(mapcar (lambda (i)
+			`(,(kbd (format "s-%d" i)) .
+			  (lambda ()
+			    (interactive)
+			    (exwm-workspace-switch-create ,i))))
+		      (number-sequence 0 9))))
+    ;; translate emacs keybindings into CUA ones for X applications. This allows
+    ;; some uniformity between emacs and most X apps.
+    (setq exwm-input-simulation-keys
+	  '(;; movement
+	    ([?\C-b] . [left])
+	    ([?\M-b] . [C-left])
+	    ([?\C-f] . [right])
+	    ([?\M-f] . [C-right])
+	    ([?\C-p] . [up])
+	    ([?\C-n] . [down])
+	    ([?\C-a] . [home])
+	    ([?\C-e] . [end])
+	    ([?\M-v] . [prior])
+	    ([?\C-v] . [next])
+	    ([?\C-d] . [delete])
+	    ([?\C-k] . [S-end delete])
+	    ;; cut/paste
+	    ([?\C-w] . [?\C-x])
+	    ([?\M-w] . [?\C-c])
+	    ([?\C-y] / [?\C-v])))
+    :config
+    (add-hook 'exwm-update-class-hook
+	      (lambda ()
+		"rename buffer names to their associated X class name."
+		(exwm-workspace-rename-buffer exwm-class-name)))
+    ;; Enable multi-monitor support
+    (require 'exwm-randr))
+#+END_SRC
+**** ediff workaround
+ediff doesn't render correctly in exwm; fix by creating "Ediff Control Panel"
+in a floating frame rather than an Emacs window.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (with-eval-after-load 'ediff-wind
+    (eval-when-compile
+      (require 'ediff-wind))
+    (setq ediff-control-frame-parameters
+	  (cons '(unsplittable . t) ediff-control-frame-parameters)))
+#+END_SRC
+*** Multimedia keys
+Emacs should handle keyboard media shortcuts
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package desktop-environment
+    :preface
+    (declare-function desktop-environment-mode nil)
+    :ensure t
+    :demand t
+    :after (exwm)
+    :config
+    (desktop-environment-mode))
+#+END_SRC
