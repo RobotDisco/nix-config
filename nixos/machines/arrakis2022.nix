@@ -96,7 +96,6 @@ in {
 
   services.xserver = {
     enable = true;
-    windowManager.exwm.enable = true;
   };
 
   services.fprintd.enable = true;
@@ -146,6 +145,7 @@ in {
     createHome = true;
     extraGroups = [ "networkmanager" "wheel" ];
     openssh.authorizedKeys.keyFiles = [ ./gaelan-yubikey.pub ];
+    shell = pkgs.zsh;
   };
 
   # Managed home directories
@@ -173,5 +173,18 @@ in {
     # Use a local challenge-response, not yubico's cloud service
     mode = "challenge-response";
     # TODO should I define user "gaelan"'s yubikey here?
+  };
+
+  # Since this server is full-disk-encrypted, just automatically log in
+  services.xserver.desktopManager.session = [{
+    name = "home-manager";
+    start = ''
+      ${pkgs.runtimeShell} $HOME/.xsession &
+      waitPID = $!
+    '';
+  }];
+  services.xserver.displayManager.autoLogin = {
+    enable = true;
+    user = "gaelan";
   };
 }

@@ -6,7 +6,15 @@ in {
     enable = lib.mkEnableOption "Enable gaelan user config";
   };
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [{
+  config = lib.mkIf cfg.enable {
+    xdg.enable = true;
+
+    robot-disco.emacs = {
+      enable = true;
+      enableServer = true;
+      enableExwm = true;
+    };
+
     programs.home-manager.enable = true;
 
     programs.ssh = {
@@ -73,5 +81,5 @@ in {
       defaultCacheTtl = 60;
       maxCacheTtl = 120;
     };
-  }]);
+  };
 }

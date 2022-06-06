@@ -1,12 +1,18 @@
-{ nixpkgs, home-manager }:
+{ inputs, homeManagerSharedModules }:
 
 let
+  inherit (inputs) self home-manager nixpkgs;
+
   lib = nixpkgs.lib;
 
   pkgsForSystem = { system }:
     import nixpkgs {
       inherit system;
 
+      overlays = [
+        inputs.gaelan-emacs.overlays.default
+      ];
+      
       # Allow non-free/open source projects to be installed
       config.allowUnfree = true;
     };
@@ -54,7 +60,6 @@ in {
 
       baseNixosModule = {
         nixpkgs = { inherit pkgs; };
-        # Add <nixpkgs> location to our nix search path
       };
 
       # my guess is this module is for my personal standard configuration for
@@ -68,7 +73,7 @@ in {
           # install packages in /etc/profiles, not $HOME/.nix-profile
           useUserPackages = true;
           # This is where we provide our home-made home-amanger modules
-          sharedModules = [ ../home-manager/modules/user/gaelan ];
+          sharedModules = homeManagerSharedModules; # ++ self.homeManagerModules;
         };
       };
     in lib.nixosSystem {
