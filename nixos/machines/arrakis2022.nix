@@ -175,6 +175,8 @@ in {
     # TODO should I define user "gaelan"'s yubikey here?
   };
 
+  services.fwupd.enable = true;
+
   # Since this server is full-disk-encrypted, just automatically log in
   services.xserver.desktopManager.session = [{
     name = "home-manager";
