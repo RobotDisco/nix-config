@@ -198,4 +198,15 @@ in {
       IdleActionSec=20
     '';
   };
+
+  # rtkit is optional for sound but recommended for some reason
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    # ALSA is the low-level audio layer of Linux.
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    # Enable PulseAudio compatibility
+    pulse.enable = true;
+ };
 }
