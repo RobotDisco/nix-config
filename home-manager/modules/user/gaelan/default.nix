@@ -86,5 +86,10 @@ in {
       enable = true;
       lockCmd = "${pkgs.i3lock}/bin/i3lock -n 4A412A";
     };
+
+    home.keyboard = {
+      layout = "us";
+      options = [ "ctrl:nocaps" ];
+    };
   };
 }
