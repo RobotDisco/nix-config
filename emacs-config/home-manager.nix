@@ -106,6 +106,18 @@ in {
         "${emacsBin} -c"
       else
         "${emacsBin} -f exwm-enable";
+
+      # Install external commands used by emacs when in desktop environment mode
+      home.packages = with pkgs; [
+        # desktop-environment-mode
+	alsa-utils
+	brightnessctl
+	scrot
+	i3lock
+	upower
+	tlp
+	playerctl
+      ];
     })
   ]);
 }

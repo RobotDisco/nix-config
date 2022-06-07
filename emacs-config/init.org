@@ -196,14 +196,21 @@ I love Emacs so much, I use it as my window manager :)
 Instead of having buffer titles of =*EXWM*=, make this have the application's
 title instead
 #+BEGIN_SRC emacs-lisp :tangle yes
+  (defun gaelan/exwm-update-class-hook ()
+    "rename buffer names to their associated X class name."
+    (eval-when-compile
+      (defvar exwm-class-name)
+      (declare-function exwm-workspace-rename-buffer "exwm"))
+    (exwm-workspace-rename-buffer exwm-class-name))
 #+END_SRC
+
 *** exwm
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package exwm
     :demand t
     :ensure t
     :preface
-    (declare-function exwm-workspace-rename-buffer nil)
+    (declare-function gaelan/exwm-update-class-hook "init/el")
     :if (eq system-type 'gnu/linux)
     :init
     ;; Set window management key bindings
@@ -237,7 +244,7 @@ title instead
     (setq exwm-input-simulation-keys
 	  '(;; movement
 	    ([?\C-b] . [left])
-	    ([?\M-b] . [C-left])
+ 	    ([?\M-b] . [C-left])
 	    ([?\C-f] . [right])
 	    ([?\M-f] . [C-right])
 	    ([?\C-p] . [up])
@@ -254,9 +261,7 @@ title instead
 	    ([?\C-y] / [?\C-v])))
     :config
     (add-hook 'exwm-update-class-hook
-	      (lambda ()
-		"rename buffer names to their associated X class name."
-		(exwm-workspace-rename-buffer exwm-class-name)))
+	      #'gaelan/exwm-update-class-hook)
     ;; Enable multi-monitor support
     (require 'exwm-randr))
 #+END_SRC
@@ -275,10 +280,12 @@ Emacs should handle keyboard media shortcuts
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package desktop-environment
     :preface
-    (declare-function desktop-environment-mode nil)
+    (declare-function desktop-environment-mode "desktop-environment")
     :ensure t
     :demand t
     :after (exwm)
+    :init
+    (setq desktop-environment-screenlock-command "i3lock --color 746542")
     :config
     (desktop-environment-mode))
 #+END_SRC
