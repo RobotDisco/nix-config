@@ -209,4 +209,8 @@ in {
     # Enable PulseAudio compatibility
     pulse.enable = true;
  };
+
+ services.upower.enable = true;
+ services.tlp.enable = true;
+ 
 }
