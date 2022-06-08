@@ -208,11 +208,15 @@ in {
     alsa.support32Bit = true;
     # Enable PulseAudio compatibility
     pulse.enable = true;
- };
+  };
 
- services.upower.enable = true;
- services.tlp.enable = true;
+  services.upower.enable = true;
+  services.tlp.enable = true;
 
- # Use two/three finger clicks for right/middle clicks.
- services.xserver.libinput.touchpad.clickMethod = "clickfinger";
+  # Use two/three finger clicks for right/middle clicks.
+  services.xserver.libinput.touchpad.clickMethod = "clickfinger";
+
+  programs.steam = {
+    enable = true;
+  };
 }
