@@ -212,5 +212,7 @@ in {
 
  services.upower.enable = true;
  services.tlp.enable = true;
- 
+
+ # Use two/three finger clicks for right/middle clicks.
+ services.xserver.libinput.touchpad.clickMethod = "clickfinger";
 }
