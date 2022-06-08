@@ -5,7 +5,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.05";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    gaelan-emacs.url = "/home/gaelan/code/emacs-config";
+    gaelan-emacs.url = "github:RobotDisco/emacs-config";
     gaelan-emacs.inputs.nixpkgs.follows = "nixpkgs";
 
     home-manager.url = "github:nix-community/home-manager/release-22.05";

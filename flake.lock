@@ -60,14 +60,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1654550024,
-        "narHash": "sha256-sMpAMEbLJd3dDXfRD5ZLlPtZlcY+E+c/F1qt0LTGu5Y=",
-        "type": "git",
-        "url": "file:///home/gaelan/code/emacs-config"
+        "lastModified": 1654646867,
+        "narHash": "sha256-LnlYHrc3vvLbjzBCZmI6nnJuGz6BYf4lU8d0QhMicWg=",
+        "owner": "RobotDisco",
+        "repo": "emacs-config",
+        "rev": "dea4a560e56969b8695400b5713542b8206052fe",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///home/gaelan/code/emacs-config"
+        "owner": "RobotDisco",
+        "repo": "emacs-config",
+        "type": "github"
       }
     },
     "home-manager": {
