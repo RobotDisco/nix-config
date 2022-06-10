@@ -172,7 +172,6 @@ in {
     enable = true;
     # Use a local challenge-response, not yubico's cloud service
     mode = "challenge-response";
-    # TODO should I define user "gaelan"'s yubikey here?
   };
 
   services.fwupd.enable = true;
@@ -218,11 +217,5 @@ in {
 
   programs.steam = {
     enable = true;
-  };
-
-  security.pam.yubico = {
-    enable = true;
-    mode = "challenge-response";
-    control = "required";
   };
 }
