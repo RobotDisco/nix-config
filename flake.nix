@@ -43,10 +43,15 @@
         ./home-manager/modules/user/gaelan
       ];
 
+      nixosModules = {
+        default = (import ./nixos/modules {});
+      };
+
       nixosConfigurations = {
         arrakis = myLib.nixosSystem {
           system = "x86_64-linux";
-          configuration = ./nixos/machines/arrakis2022.nix;
+          configuration = { networking.hostName = "arrakis"; };
+	  myModules = lib.attrValues self.nixosModules;
           contribModules = [ nixos-hardware.nixosModules.framework ];
         };
       };
