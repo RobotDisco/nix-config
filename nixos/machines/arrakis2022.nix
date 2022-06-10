@@ -219,4 +219,10 @@ in {
   programs.steam = {
     enable = true;
   };
+
+  security.pam.yubico = {
+    enable = true;
+    mode = "challenge-response";
+    control = "required";
+  };
 }
