@@ -289,7 +289,7 @@ Emacs should handle keyboard media shortcuts
     :demand t
     :after (exwm)
     :init
-    (setq desktop-environment-screenlock-command "i3lock --color 746542")
+    (setq desktop-environment-screenlock-command "i3lock -n -c 746542")
     :config
     (desktop-environment-mode))
 #+END_SRC
