@@ -454,6 +454,22 @@ An implementation of Zettelkasten for org, inspired by org-roam
     (org-roam-db-autosync-mode))
 #+END_SRC
 
+Also enable a UI that makes overseeing my knowledge base easier.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package websocket
+    :after org-roam)
+
+  (use-package org-roam-ui
+    :ensure t
+    :commands org-roam-ui-mode
+    :after org-roam
+    :init
+    (setq org-roam-ui-sync-theme t
+	  org-roam-ui-follow t
+	  org-roam-ui-update-on-save t
+	  org-roam-ui-open-on-start t))
+#+END_SRC
+
 Use deft for full-text search
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package deft
