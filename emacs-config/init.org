@@ -354,9 +354,44 @@ Combine indentation and completion with =TAB= key
 		("C-c p" . projectile-command-map)))
 #+END_SRC
 * Software Development
+** Appearance
+*** Highlight parentheses
+Visually separate nested delimiter pairs
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rainbow-delimiters
+    :ensure t
+    :hook
+    ((clojure-mode-hook
+      emacs-lisp-mode-hook
+      ielm-mode-hook
+      lisp-mode-hook
+      racket-mode-hook) . rainbow-delimiters-mode))
+#+END_SRC
 ** Packages
-*** Language Server Protocol (eglot)
-Language Server Project support
+*** envrc
+Project-specific environment variables via =direnv=
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package envrc
+    :ensure t
+    :if (executable-find "direnv")
+    :defer 1
+    :commands (envrc-global-mode)
+    :config
+    (envrc-global-mode 1))
+#+END_SRC
+*** editconfig
+A editor-agnostic way to maintain project coding styles
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package editorconfig
+    :ensure t
+    :defer 1
+    :commands
+    (editorconfig-mode)
+    :config
+    (editorconfig-mode 1))
+#+END_SRC
+*** eglot
+Language Server Project enables IDE-like functionality in an editor-agnostic way.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package eglot
     :ensure t
@@ -370,6 +405,13 @@ Language Server Project support
     :defer 2)
 #+END_SRC
 ** Major Modes
+*** Elm
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package elm-mode
+    :ensure t
+    :mode "\\.elm\\'")
+#+END_SRC
+
 *** Nix
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package nix-mode
