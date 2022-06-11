@@ -7,7 +7,7 @@ Gaelan D'costa's GNU emacs config; there are many like it, but this one is mine.
 
 Eventually I will understand my own config enough to explain it in a cohesive way.
 
-This configuration is built as a nix package; as such, it assumes that nix has pre-supplied all necessary packages (which ironically, are parsed out of this file.) As such, it is also paired with whatever version of emacs that this package includes. Currently, this is GNU Emacs 27.2
+This configuration is built as a nix package; as such, it assumes that nix has pre-supplied all necessary packages (which ironically, are parsed out of this file.) As such, it is also paired with whatever version of emacs that this package includes. Currently, this is GNU Emacs 28.1
 
 ** Inspirations
 - [[https://github.com/daviwil/emacs-from-scratch/][Emacs from Scratch]] is a great series of youtube videos where the author clearly puts a lot of thoughts and well-principled thought into his configuration principles.
@@ -22,7 +22,7 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 ** Version Sentinal
 I am not sure if this config will work with older versions of emacs, so I'll abort if the running version of emacs is older than a known good version.
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
-  (let ((minver "27.1"))
+  (let ((minver "28.1"))
     (when (version< emacs-version minver)
       (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
 #+END_SRC
@@ -94,7 +94,7 @@ Ignore X resources. Don't allow config outside of emacs itself to set GUI chrome
 #+END_SRC
 
 * Base settings
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-ilsp :tangle yes
   ;;; init.el --- Initialization -*- lexical-binding: t; -*-
 #+END_SRC
 
@@ -292,4 +292,12 @@ Emacs should handle keyboard media shortcuts
     (setq desktop-environment-screenlock-command "i3lock -n -c 746542")
     :config
     (desktop-environment-mode))
+#+END_SRC
+
+* Software Development
+** Nix
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package nix-mode
+    :ensure t
+    :mode "\\.nix\\'")
 #+END_SRC
