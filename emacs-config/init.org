@@ -210,7 +210,7 @@ title instead
     :demand t
     :ensure t
     :preface
-    (declare-function gaelan/exwm-update-class-hook "init/el")
+    (declare-function gaelan/exwm-update-class-hook "init.el")
     :if (eq system-type 'gnu/linux)
     :init
     ;; Set window management key bindings
@@ -226,8 +226,12 @@ title instead
 	    ;; Switch workspaces
 	    ([?\s-w] . exwm-workspace-switch)
 	    ;; s-0 is inconvenient, map to s-` and s-esc as well
-	    ([?\s-`] . (lambda () (exwm-workspace-switch-create 0)))
-	    ([s-escape] . (lambda () (exwm-workspace-switch-create 0)))
+	    ([?\s-`] . (lambda ()
+			 (interactive)
+			 (exwm-workspace-switch-create 0)))
+	    ([s-escape] . (lambda ()
+			    (interactive)
+			    (exwm-workspace-switch-create 0)))
 	    ;; Launch application a la dmenu
 	    ([?\s-p] . (lambda (command)
 			 (interactive (list (read-shell-command "$ ")))
@@ -244,7 +248,7 @@ title instead
     (setq exwm-input-simulation-keys
 	  '(;; movement
 	    ([?\C-b] . [left])
- 	    ([?\M-b] . [C-left])
+	    ([?\M-b] . [C-left])
 	    ([?\C-f] . [right])
 	    ([?\M-f] . [C-right])
 	    ([?\C-p] . [up])
