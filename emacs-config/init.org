@@ -304,7 +304,11 @@ Emacs should handle keyboard media shortcuts
     (desktop-environment-mode))
 #+END_SRC
 
-
+* Completion
+Combine indentation and completion with =TAB= key
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq tab-always-indent 'complete)
+#+END_SRC
 ** In-buffer completion
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package corfu
