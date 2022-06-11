@@ -84,7 +84,7 @@ in {
 
     services.screen-locker = {
       enable = true;
-      lockCmd = "${pkgs.i3lock}/bin/i3lock -n 4A412A";
+      lockCmd = "${pkgs.i3lock}/bin/i3lock -c 746542";
     };
 
     home.keyboard = {
