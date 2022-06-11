@@ -304,6 +304,25 @@ Emacs should handle keyboard media shortcuts
     (desktop-environment-mode))
 #+END_SRC
 
+
+** In-buffer completion
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package corfu
+    :preface
+    (declare-function global-corfu-mode "corfu")
+    :ensure t
+    :init
+    (global-corfu-mode))
+#+END_SRC
+** Minibuffer Completion
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package vertico
+    :preface
+    (declare-function vertico-mode "vertico")
+    :ensure t
+    :init
+    (vertico-mode))
+#+END_SRC
 * Software Development
 ** Nix
 #+BEGIN_SRC emacs-lisp :tangle yes
