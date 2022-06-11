@@ -366,3 +366,10 @@ Language Server Project support
     :ensure t
     :mode "\\.nix\\'")
 #+END_SRC
+*** Elm
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package elm-mode
+    :ensure t
+    :mode "\\.elm\\'")
+#+END_SRC
+
