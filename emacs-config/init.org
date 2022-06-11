@@ -14,6 +14,14 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 
 - I am super indebted to whoever [[http://github.com/terlar/emacs-config][Terlar]] is, their nix package and structure is one I found a lot of insight about how to write nix packages from. 
 
+** Overview
+- buffer completion :: [[https://github.com/minad/corfu][corfu]]
+- minibuffer completion :: [[https://github.com/minad/vertico][vertico]]
+- IDE functionality :: [[https://github.com/joaotavora/eglot][eglot]]
+- package management :: [[https://github.com/jwiegley/use-package][use-package]]
+- window management :: [[https://github.com/ch11ng/exwm][exwm]]
+- version control (git) :: [[https://magit.vc/][magit]]
+
 * Early Initialization
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
   ;;; early-init.el --- Early Initialization -*- lexical-binding: t; -*-
