@@ -199,6 +199,12 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
    #+BEGIN_SRC emacs-lisp :tangle yes
      (fset #'yes-or-no-p #'y-or-n-p)
    #+END_SRC
+* Appearance
+** Typography
+*** Line length
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq-default fill-column 80)
+#+END_SRC
 * Operating System
 I love Emacs so much, I use it as my primary computing environment :)
 ** Window Manager
