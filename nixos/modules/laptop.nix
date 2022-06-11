@@ -32,4 +32,7 @@
 
   # Disable laptop's touchpad tap-to-click functionality
   services.xserver.libinput.touchpad.tapping = false;
+
+  # Automatically mount dynamically removable media
+  services.udisks2.enable = true;
 }
