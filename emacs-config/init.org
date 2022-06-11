@@ -182,7 +182,7 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
 *** Keep ~user-emacs-directory~ clean.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package no-littering
-    :demand t
+    :defer 1
     :ensure t
     :init
     (setq no-littering-etc-directory gaelan/data-dir
@@ -199,9 +199,9 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
    #+BEGIN_SRC emacs-lisp :tangle yes
      (fset #'yes-or-no-p #'y-or-n-p)
    #+END_SRC
-* Tools
-** Window Management
-I love Emacs so much, I use it as my window manager :)
+* Operating System
+I love Emacs so much, I use it as my primary computing environment :)
+** Window Manager
 *** Window title hooks
 Instead of having buffer titles of =*EXWM*=, make this have the application's
 title instead
@@ -217,7 +217,7 @@ title instead
 *** exwm
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package exwm
-    :demand t
+    :defer 0
     :ensure t
     :preface
     (declare-function gaelan/exwm-update-class-hook "init.el")
@@ -279,7 +279,7 @@ title instead
     ;; Enable multi-monitor support
     (require 'exwm-randr))
 #+END_SRC
-**** ediff workaround
+*** ediff workaround
 ediff doesn't render correctly in exwm; fix by creating "Ediff Control Panel"
 in a floating frame rather than an Emacs window.
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -289,14 +289,14 @@ in a floating frame rather than an Emacs window.
     (setq ediff-control-frame-parameters
 	  (cons '(unsplittable . t) ediff-control-frame-parameters)))
 #+END_SRC
-*** Multimedia keys
+** Multimedia keys
 Emacs should handle keyboard media shortcuts
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package desktop-environment
     :preface
     (declare-function desktop-environment-mode "desktop-environment")
     :ensure t
-    :demand t
+    :defer 1
     :after (exwm)
     :init
     (setq desktop-environment-screenlock-command "i3lock -n -c 746542")
