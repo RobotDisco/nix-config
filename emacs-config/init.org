@@ -94,7 +94,7 @@ Ignore X resources. Don't allow config outside of emacs itself to set GUI chrome
 #+END_SRC
 
 * Base settings
-#+BEGIN_SRC emacs-ilsp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;;; init.el --- Initialization -*- lexical-binding: t; -*-
 #+END_SRC
 
@@ -189,6 +189,16 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
 	  no-littering-var-directory gaelan/cache-dir))
 #+END_SRC
 
+** UX
+   Always request confirmation before quitting emacs
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq confirm-kill-emacs #'y-or-n-p)
+   #+END_SRC
+
+   Use =y= and =n= for prompts instead of =yes= and =no=
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (fset #'yes-or-no-p #'y-or-n-p)
+   #+END_SRC
 * Tools
 ** Window Management
 I love Emacs so much, I use it as my window manager :)
