@@ -418,10 +418,58 @@ Language Server Project enables IDE-like functionality in an editor-agnostic way
     :ensure t
     :mode "\\.nix\\'")
 #+END_SRC
-*** Elm
+
+* Productivity
+** Org
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package elm-mode
+  (use-package org
     :ensure t
-    :mode "\\.elm\\'")
+    :mode ((org-mode . "\\.org\\'")))
+#+END_SRC
+*** org-journal
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-journal
+    :ensure t
+    :after (org)
+    :bind (("C-c n j" . org-journal-new-entry))
+    :init
+    (setq org-journal-date-format "%A, %F"
+	  org-journal-file-format "%Y.org"
+	  org-journal-file-type 'yearly
+	  org-journal-dir (file-name-as-directory "~/Documents/journal")))
+#+END_SRC
+*** org-roam
+An implementation of Zettelkasten for org, inspired by org-roam
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-roam
+    :ensure t
+    :commands (org-roam-buffer-toggle
+	       org-roam-buffer-display-dedicated
+	       org-roam-db-autosync-mode)
+    :after (org)
+    :init
+    ;; (setq org-roam-v2-ack t)
+    (setq org-roam-directory "~/Documents/brain")
+    :config
+    (org-roam-db-autosync-mode))
 #+END_SRC
 
+Use deft for full-text search
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package deft
+    :ensure t
+    :after (org-roam)
+    :bind ("C-c n d" . deft)
+    :init
+    (setq deft-recursive t
+	  deft-use-filter-string-for-filename t
+	  deft-default-extension "org"
+	  deft-directory org-roam-directory))
+#+END_SRC
+*** org-noter
+A way to annotate PDF/ePubs using org mode
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-noter
+    :ensure t
+    :commands org-noter)
+#+END_SRC
