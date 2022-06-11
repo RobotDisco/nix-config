@@ -333,8 +333,34 @@ Combine indentation and completion with =TAB= key
     :init
     (vertico-mode))
 #+END_SRC
+* Navigation
+** Project Management (projectile)
+#+BEGIN_SRC emacs-lisp :tangle no
+  (use-package projectile
+    :ensure nil
+    :init
+    (projectile-mode +1)
+    :bind (:map projectile-mode-map
+		("C-c p" . projectile-command-map)))
+#+END_SRC
 * Software Development
-** Nix
+** Packages
+*** Language Server Protocol (eglot)
+Language Server Project support
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package eglot
+    :ensure t
+    :commands eglot)
+#+END_SRC
+** Version Control
+*** magit
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package magit
+    :ensure t
+    :defer 2)
+#+END_SRC
+** Major Modes
+*** Nix
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package nix-mode
     :ensure t
