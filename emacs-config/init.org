@@ -164,6 +164,8 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
      ;; when we compile a new bytecode version of our emacs file.
      (eval-when-compile
        (require 'use-package))
+     (require 'diminish)                ;; if you use :diminish
+     (require 'bind-key)                ;; if you use :bind
 
      (eval-and-compile
        ;; By default if :ensure is non-nil it will use package.el to download the
