@@ -50,7 +50,11 @@
       nixosConfigurations = {
         arrakis = myLib.nixosSystem {
           system = "x86_64-linux";
-          configuration = { networking.hostName = "arrakis"; };
+          configuration = {
+	    networking.hostName = "arrakis";
+
+            robot-disco.hardware.framework.enable = true;
+	  };
 	  myModules = lib.attrValues self.nixosModules;
           contribModules = [ nixos-hardware.nixosModules.framework ];
         };
