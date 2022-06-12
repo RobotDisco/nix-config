@@ -5,6 +5,8 @@
   services.upower.enable = true;
   # System-level laptop power management
   services.tlp.enable = true;
+  # Temperature management
+  services.thermald.enable = true;
 
   # Set up hybrid sleep on idle and lid close
   # suspend, then hibernate eventually
