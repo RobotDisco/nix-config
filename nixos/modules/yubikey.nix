@@ -14,5 +14,7 @@
     enable = true;
     # Use a local challenge-response, not yubico's cloud service
     mode = "challenge-response";
+    # Require password AND yubikey
+    control = "required";
   };
 }
