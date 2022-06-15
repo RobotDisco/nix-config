@@ -37,4 +37,8 @@
 
   # Automatically mount dynamically removable media
   services.udisks2.enable = true;
+
+  services.autorandr = {
+    enable = true;
+  };
 }
