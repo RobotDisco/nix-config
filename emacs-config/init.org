@@ -293,7 +293,8 @@ title instead
     (add-hook 'exwm-update-class-hook
 	      #'gaelan/exwm-update-class-hook)
     ;; Enable multi-monitor support
-    (require 'exwm-randr))
+    (require 'exwm-randr)
+    (exwm-randr-enable))
 #+END_SRC
 *** ediff workaround
 ediff doesn't render correctly in exwm; fix by creating "Ediff Control Panel"
