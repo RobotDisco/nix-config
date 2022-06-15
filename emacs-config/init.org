@@ -228,6 +228,10 @@ title instead
       (defvar exwm-class-name)
       (declare-function exwm-workspace-rename-buffer "exwm"))
     (exwm-workspace-rename-buffer exwm-class-name))
+
+  (defun gaelan/exwm-randr-screen-change-hook ()
+    (start-process-shell-command
+     "autorandr" nil "autorandr --change"))
 #+END_SRC
 
 *** exwm
@@ -235,6 +239,7 @@ title instead
   (use-package exwm
     :defer 0
     :ensure t
+    :functions exwm-randr-enable
     :preface
     (declare-function gaelan/exwm-update-class-hook "init.el")
     :if (eq system-type 'gnu/linux)
@@ -292,6 +297,8 @@ title instead
     :config
     (add-hook 'exwm-update-class-hook
 	      #'gaelan/exwm-update-class-hook)
+    (add-hook 'exwm-randr-screen-change-hook
+	      #'gaelan/exwm-randr-screen-change-hook)
     ;; Enable multi-monitor support
     (require 'exwm-randr)
     (exwm-randr-enable))
