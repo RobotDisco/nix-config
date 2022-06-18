@@ -209,6 +209,12 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
    #+BEGIN_SRC emacs-lisp :tangle yes
      (fset #'yes-or-no-p #'y-or-n-p)
    #+END_SRC
+
+   Set the default Mac modifier bindings to mirror Linux bindings
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq mac-option-modifier 'super
+	   mac-command-modifier 'meta)
+   #+END_SRC
 * Appearance
 ** Typography
 *** Line length
