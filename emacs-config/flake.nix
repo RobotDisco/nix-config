@@ -94,14 +94,24 @@
         let
           pkgs = nixpkgsForEachSystem.${system};
 
-          # Handy dandy shell script
+          # Run the current emacs derivation without displacing your config.
+          devEmacsConfig = pkgs.writeShellScriptBin "dev-emacs-config" ''
+            set -euo pipefail
+            export XDG_CONFIG_HOME=$(mktemp -td xdg-config.XXXXXXXXXX)
+            mkdir -p $XDG_CONFIG_HOME/emacs
+            ${pkgs.xorg.lndir}/bin/lndir -silent $PWD $XDG_CONFIG_HOME/emacs
+            ln -s $HOME/.config/fontconfig $XDG_CONFIG_HOME/.
+            ${pkgs.emacsEnv}/bin/emacs "$@"
+          '';
+
+          # Noninteractively Test whether the derived emacs config loads
           testEmacsConfig = pkgs.writeShellScriptBin "test-emacs-config" ''
             set -euo pipefail
             export XDG_CONFIG_HOME=$(mktemp -td xdg-config.XXXXXXXXXX)
             mkdir -p $XDG_CONFIG_HOME/emacs
             ${pkgs.xorg.lndir}/bin/lndir -silent ${pkgs.emacsConfig} $XDG_CONFIG_HOME/emacs
             ln -s $HOME/.config/fontconfig $XDG_CONFIG_HOME/.
-            ${pkgs.emacsEnv}/bin/emacs "$@"
+            ${pkgs.emacsEnv}/bin/emacs --batch
           '';
 
           # It's more convenient to pull pre-built packages from cachix than regenerate it ourselves.
@@ -115,6 +125,7 @@
               git
               nixfmt
 
+              devEmacsConfig
               testEmacsConfig
               updateCaches
             ];
