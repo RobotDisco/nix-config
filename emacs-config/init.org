@@ -250,9 +250,12 @@ I love Emacs so much, I use it as my primary computing environment :)
     :ensure t
     :preface
     (declare-function exwm-workspace-rename-buffer "exwm")
+    (declare-function exwm-input-set-local-simulation-keys "exwm")
     :functions (exwm-randr-enable
 		gaelan/exwm-update-class-hook
-		gaelan/exwm-randr-screen-change-hook)
+		gaelan/exwm-randr-screen-change-hook
+		gaelan/exwm-manage-finish-hook
+		org-crypt-use-before-save-magic)
     :if (eq system-type 'gnu/linux)
     :init
     ;; Define custom exwm hooks for various events
@@ -263,6 +266,14 @@ I love Emacs so much, I use it as my primary computing environment :)
       "Run autorandr whenever exwm detects a screen change"
       (start-process-shell-command
        "autorandr" nil "autorandr --change"))
+    (defun gaelan/exwm-manage-finish-hook ()
+	(when (and exwm-class-name
+		   (string= exwm-class-name "Brave-browser"))
+	  (exwm-input-set-local-simulation-keys
+	   '(;; cut/paste
+	     ([?\C-w] . [?\C-x])
+	     ([?\M-w] . [?\C-c])
+	     ([?\C-y] / [?\C-v])))))
     ;; Set window management key bindings
     (setq exwm-input-global-keys
 	  `(
@@ -313,11 +324,23 @@ I love Emacs so much, I use it as my primary computing environment :)
 	    ([?\C-w] . [?\C-x])
 	    ([?\M-w] . [?\C-c])
 	    ([?\C-y] / [?\C-v])))
+    ;; Use minibuffer for gnupg input instead of external pinentry
+    (setenv "GPG_AGENT_INFO" nil) ;; use emacs pinentry
+    (require 'epa-file)
+    (epa-file-enable)
+    (setq epa-pinentry-mode 'loopback
+	  epg-pinentry-mode 'loopback)
+    (pinentry-start)
+
+    (require 'org-crypt)
+    (org-crypt-use-before-save-magic)
     :config
     (add-hook 'exwm-update-class-hook
 	      #'gaelan/exwm-update-class-hook)
     (add-hook 'exwm-randr-screen-change-hook
 	      #'gaelan/exwm-randr-screen-change-hook)
+    (add-hook 'exwm-manage-finish-hook
+	      #'gaelan/exwm-manage-finish-hook)
     ;; Enable multi-monitor support
     (require 'exwm-randr)
     (exwm-randr-enable))
