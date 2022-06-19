@@ -437,7 +437,13 @@ Language Server Project enables IDE-like functionality in an editor-agnostic way
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org
     :ensure t
-    :mode ((org-mode . "\\.org\\'")))
+    :defines org-capture-templates
+    :mode "\\.org\\'"
+    :bind (("C-c l" . org-store-link)
+	   ("C-c a" . org-agenda)
+	   ("C-c c" . org-capture))
+    :init
+    (setq org-capture-templates '()))
 #+END_SRC
 *** org-journal
 #+BEGIN_SRC emacs-lisp :tangle yes
