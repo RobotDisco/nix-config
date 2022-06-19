@@ -76,12 +76,10 @@
         ]
       },
       "locked": {
-        "lastModified": 1655604244,
-        "narHash": "sha256-9EDzGgyPOHq+jEJ+8jecQnMus+XpkfsJsR9tnYzee9A=",
-        "owner": "RobotDisco",
-        "repo": "emacs-config",
-        "rev": "88dd6234feab041cdc4f27b8b053f9138c1d0023",
-        "type": "github"
+        "lastModified": 1655643239,
+        "narHash": "sha256-GicpOELFS2+gmssXLF5S6Nf1qxymvf5ntrpv5qqqYJo=",
+        "type": "git",
+        "url": "file:///home/gaelan/code/emacs-config"
       },
       "original": {
         "owner": "RobotDisco",
