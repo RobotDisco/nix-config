@@ -76,11 +76,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1655654411,
-        "narHash": "sha256-GpwVQeJUMNC/cU00NvKDbmOYYr3vddBUr/8CcLd5auI=",
+        "lastModified": 1655657930,
+        "narHash": "sha256-mLYHi8SDk9fBj+697hOXqYclu2kQMrzYCLVkkpulLlI=",
         "owner": "RobotDisco",
         "repo": "emacs-config",
-        "rev": "59718856ee78a37872520887c20977e15463376b",
+        "rev": "914f22fac437dbdd85147b0c15d9a66d692a5b45",
         "type": "github"
       },
       "original": {
