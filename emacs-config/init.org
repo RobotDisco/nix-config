@@ -226,6 +226,20 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq-default fill-column 80)
 #+END_SRC
+** Mode line
+*** Position
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (column-number-mode 1)
+  (line-number-mode 1)
+#+END_SRC
+*** Time
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (display-time)
+#+END_SRC
+*** Battery
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (display-battery)
+#+END_SRC
 * Operating System
 I love Emacs so much, I use it as my primary computing environment :)
 ** Window Manager
