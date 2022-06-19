@@ -238,7 +238,7 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
 #+END_SRC
 *** Battery
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (display-battery)
+  (display-battery-mode)
 #+END_SRC
 * Operating System
 I love Emacs so much, I use it as my primary computing environment :)
