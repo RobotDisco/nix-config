@@ -479,7 +479,7 @@ Language Server Project enables IDE-like functionality in an editor-agnostic way
   (use-package org
     :ensure t
     :defines org-capture-templates
-    :mode "\\.org\\'"
+    :mode ("\\.org\\'" . org-mode)
     :bind (("C-c l" . org-store-link)
 	   ("C-c a" . org-agenda)
 	   ("C-c c" . org-capture))
