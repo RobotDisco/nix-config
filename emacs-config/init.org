@@ -1,3 +1,4 @@
+
 # -*- mode: org; coding: utf-8; -*-
 #+TITLE: GNU Emacs Configuration
 #+AUTHOR: Gaelan D'costa
@@ -251,10 +252,13 @@ I love Emacs so much, I use it as my primary computing environment :)
     :preface
     (declare-function exwm-workspace-rename-buffer "exwm")
     (declare-function exwm-input-set-local-simulation-keys "exwm")
+    :defines (epa-pinentry-mode epg-pinentry-mode)
     :functions (exwm-randr-enable
 		gaelan/exwm-update-class-hook
 		gaelan/exwm-randr-screen-change-hook
 		gaelan/exwm-manage-finish-hook
+		epa-file-enable
+		pinentry-start
 		org-crypt-use-before-save-magic)
     :if (eq system-type 'gnu/linux)
     :init
