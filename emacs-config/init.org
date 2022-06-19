@@ -224,32 +224,26 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
 * Operating System
 I love Emacs so much, I use it as my primary computing environment :)
 ** Window Manager
-*** Window title hooks
-Instead of having buffer titles of =*EXWM*=, make this have the application's
-title instead
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (defun gaelan/exwm-update-class-hook ()
-    "rename buffer names to their associated X class name."
-    (eval-when-compile
-      (defvar exwm-class-name)
-      (declare-function exwm-workspace-rename-buffer "exwm"))
-    (exwm-workspace-rename-buffer exwm-class-name))
-
-  (defun gaelan/exwm-randr-screen-change-hook ()
-    (start-process-shell-command
-     "autorandr" nil "autorandr --change"))
-#+END_SRC
-
 *** exwm
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package exwm
     :defer 0
     :ensure t
-    :functions exwm-randr-enable
     :preface
-    (declare-function gaelan/exwm-update-class-hook "init.el")
+    (declare-function exwm-workspace-rename-buffer "exwm")
+    :functions (exwm-randr-enable
+		gaelan/exwm-update-class-hook
+		gaelan/exwm-randr-screen-change-hook)
     :if (eq system-type 'gnu/linux)
     :init
+    ;; Define custom exwm hooks for various events
+    (defun gaelan/exwm-update-class-hook ()
+      "rename buffer names to their associated X class name."
+      (exwm-workspace-rename-buffer exwm-class-name))
+    (defun gaelan/exwm-randr-screen-change-hook ()
+      "Run autorandr whenever exwm detects a screen change"
+      (start-process-shell-command
+       "autorandr" nil "autorandr --change"))
     ;; Set window management key bindings
     (setq exwm-input-global-keys
 	  `(
@@ -445,12 +439,38 @@ Language Server Project enables IDE-like functionality in an editor-agnostic way
   (use-package org-journal
     :ensure t
     :after (org)
+    :defines org-capture-templates
+    :preface
+    (declare-function org-narrow-to-subtree "org")
     :bind (("C-c n j" . org-journal-new-entry))
     :init
     (setq org-journal-date-format "%A, %F"
 	  org-journal-file-format "%Y.org"
 	  org-journal-file-type 'yearly
-	  org-journal-dir (file-name-as-directory "~/Documents/journal")))
+	  org-journal-dir (file-name-as-directory "~/Documents/journal"))
+    ;; org-mode needs some help to know where to place new org-journal entries
+    ;; via org-capture-templates
+    (defun gaelan/org-journal-find-location ()
+      "Find the latest entry in an org-journal file."
+      ;; Open today's journal, but specify a non-nil prefix argument in order to
+      ;; inhibit inserting the heading; org-capture will insert the heading.
+      (org-journal-new-entry t)
+      (unless (eq org-journal-file-type 'daily)
+	(org-narrow-to-subtree))
+      (goto-char (point-max)))
+    :config
+    ;; Push journal template entries to capture templates
+    (add-to-list 'org-capture-templates
+		 '("d" "Daily Morning Reflection" plain (function gaelan/org-journal-find-location)
+		   "** %(format-time-string org-journal-time-format)%^{Title}\n*** What are my most important tasks today?\n- %?\n*** What am I grateful for today?" :jump-to-captured t :immediate-finish t))
+    (add-to-list 'org-capture-templates
+		 '("e" "Daily Evening Reflection" plain (function gaelan/org-journal-find-location) "** %(format-time-string org-journal-time-format)%^{Title}\n*** What were my wins today?\n- %?\n*** What did I learn today?\n*** What did not go according to plan today?\n*** What did I do to improve my future?\n*** What did I do to help others?" :jump-to-captured t :immediate-finish t))
+    (add-to-list 'org-capture-templates
+		 '("w" "Weekly Reflection" plain (function gaelan/org-journal-find-location) "** %(format-time-string org-journal-time-format)%^{Title}\n*** What was I most grateful for this week? (Pick one thing and go deep.)\n%?\n*** What were my biggest wins this week?\n*** What unresolved tensions am I feeling this week? What is causing these tensions?\n*** What should I prioritize this upcoming week?\n*** What can be deferred this upcoming week?\n*** What did I learn this week?\n*** What should I learn this upcoming week?" :jump-to-captured t :immediate-finish t))
+    (add-to-list 'org-capture-templates
+		 '("m" "Monthly Reflection" plain (function gaelan/org-journal-find-location) "** %(format-time-string org-journal-time-format)%^{Title}\n*** What were my biggest wins this month?\n- %?\n*** What was I most grateful for this month?\n*** What tensions did I remove this month?\n*** What did I learn this month?\n*** How have I grown this month?" :jump-to-captured t :immediate-finish t))
+    (add-to-list 'org-capture-templates
+		 '("y" "Yearly Reflection" plain (function gaelan/org-journal-find-location) "** %(format-time-string org-journal-time-format)%^{Title}\n*** What were my biggest wins this year?\n- %?\n*** What was I most grateful for this year?\n*** What tensions did I remove this year?\n*** What did I learn this year?\n*** How have I grown this year?" :jump-to-captured t :immediate-finish t)))
 #+END_SRC
 *** org-roam
 An implementation of Zettelkasten for org, inspired by org-roam
