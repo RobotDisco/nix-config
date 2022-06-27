@@ -22,7 +22,7 @@ in {
   # easy solution is to use =let= bindings and then also include the function in the output
   inherit pkgsForSystem;
 
-  forAllSystems = let supportedSystems = [ "x86_64-linux" ];
+  forAllSystems = let supportedSystems = [ "x86_64-linux" "x86_64-darwin" ];
   in func:
   # genAttrs takes each item in supportedSystems, uses them as names
   # in a set, and passes it as an argument to a function (named func)
@@ -92,4 +92,24 @@ in {
         home-manager.nixosModules.home-manager
       ] ++ contribModules;
     };
+
+  homeManagerConfiguration =
+    let
+      homeDirectoryPrefix = pkgs:
+        if pkgs.stdenv.hostPlatform.isDarwin then
+          "/Users"
+        else
+          "/home";
+    in
+      { username
+      , configuration
+      , system
+      , pkgs ? (pkgsForSystem { inherit system; })
+      , homeDirectory ? "${homeDirectoryPrefix pkgs}/${username}"
+      }:
+      home-manager.lib.homeManagerConfiguration {
+        inherit configuration username homeDirectory system pkgs;
+
+        extraModules = homeManagerSharedModules;
+      };   
 }

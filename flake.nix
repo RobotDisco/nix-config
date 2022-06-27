@@ -39,6 +39,16 @@
       # by some other imported module in a way we don't like.
         ++ self.homeManagerModules;
     in {
+      homeConfigurations = {
+        gaelan = myLib.homeManagerConfiguration {
+          username = "gaelan.dcosta";
+          system = "x86_64-darwin";
+          configuration = {
+            robot-disco.emacs.enable = true;
+          };
+        };
+      };
+      
       homeManagerModules = [
         ./home-manager/modules/user/gaelan
       ];
@@ -66,6 +76,10 @@
           type = "app";
           program = "${derivation}/bin/${binary}";
         }) {
+          home-switch = pkgs.writers.writeBashBin "home-switch" ''
+            ${pkgs.home-manager}/bin/home-manager switch --flake .#"$@"
+          '';
+
           use-caches = pkgs.writers.writeBashBin "use-caches" ''
             ${pkgs.cachix}/bin/cachix use -O . nix-community
           '';
