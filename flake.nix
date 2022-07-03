@@ -127,7 +127,7 @@
           nixos-switch = pkgs.writers.writeBashBin "nixos-switch" ''
             PATH=${
               lib.makeBinPath [ pkgs.gitMinimal pkgs.nix pkgs.nixos-rebuild ]
-            }:$PATH nixos-rebuild switch --flake . "$@"
+            }:$PATH sudo nixos-rebuild switch --flake . "$@"
           '';
         });
 
