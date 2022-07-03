@@ -76,14 +76,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1655848986,
+        "lastModified": 1656297160,
         "narHash": "sha256-zc2iTmCzlqpV6q2oPPmr6LXU/p6UQgWv6+9x9WaqmOY=",
-        "type": "git",
-        "url": "file:///Users/gaelan.dcosta/code/emacs-config"
+        "owner": "RobotDisco",
+        "repo": "emacs-config",
+        "rev": "9e8e0ad639eb9850a88361a1749352559415dfb8",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///Users/gaelan.dcosta/code/emacs-config"
+        "owner": "RobotDisco",
+        "repo": "emacs-config",
+        "type": "github"
       }
     },
     "home-manager": {
@@ -134,11 +137,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1656241064,
-        "narHash": "sha256-+jWwBt515aFGukeX8WSafg9CM3Ju3FD0XrF+X4ph0mU=",
+        "lastModified": 1656702262,
+        "narHash": "sha256-BdVdx6LoGgAeIYrHnzk+AgbtkaVlV3JNcC6+vltLuh0=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "99e33a57149916ebede78ec13edd9ba310c10f2f",
+        "rev": "c5308381432cdbf14d5b1128747a2845f5c6871e",
         "type": "github"
       },
       "original": {
