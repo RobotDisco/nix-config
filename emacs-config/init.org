@@ -255,7 +255,6 @@ I love Emacs so much, I use it as my primary computing environment :)
     :defines (epa-pinentry-mode epg-pinentry-mode)
     :functions (exwm-randr-enable
 		gaelan/exwm-update-class-hook
-		gaelan/exwm-randr-screen-change-hook
 		gaelan/exwm-manage-finish-hook
 		epa-file-enable
 		pinentry-start
@@ -266,18 +265,14 @@ I love Emacs so much, I use it as my primary computing environment :)
     (defun gaelan/exwm-update-class-hook ()
       "rename buffer names to their associated X class name."
       (exwm-workspace-rename-buffer exwm-class-name))
-    (defun gaelan/exwm-randr-screen-change-hook ()
-      "Run autorandr whenever exwm detects a screen change"
-      (start-process-shell-command
-       "autorandr" nil "autorandr --change"))
     (defun gaelan/exwm-manage-finish-hook ()
-	(when (and exwm-class-name
-		   (string= exwm-class-name "Brave-browser"))
-	  (exwm-input-set-local-simulation-keys
-	   '(;; cut/paste
-	     ([?\C-w] . [?\C-x])
-	     ([?\M-w] . [?\C-c])
-	     ([?\C-y] / [?\C-v])))))
+      (when (and exwm-class-name
+		 (string= exwm-class-name "Brave-browser"))
+	(exwm-input-set-local-simulation-keys
+	 '(;; cut/paste
+	   ([?\C-w] . [?\C-x])
+	   ([?\M-w] . [?\C-c])
+	   ([?\C-y] / [?\C-v])))))
     ;; Set window management key bindings
     (setq exwm-input-global-keys
 	  `(
@@ -341,12 +336,27 @@ I love Emacs so much, I use it as my primary computing environment :)
     :config
     (add-hook 'exwm-update-class-hook
 	      #'gaelan/exwm-update-class-hook)
+    (add-hook 'exwm-manage-finish-hook
+	      #'gaelan/exwm-manage-finish-hook))
+
+  (use-package exwm-randr
+    :ensure nil
+    :defer 0
+    :after (exwm)
+    :preface
+    (declare-function exwm-randr-enable "exwm-randr")
+    :functions (gaelan/exwm-randr-screen-change-hook)
+    :init
+    (defun gaelan/exwm-randr-screen-change-hook ()
+      "Run autorandr whenever exwm detects a screen change"
+      (start-process-shell-command
+       "autorandr" nil "autorandr --change"))
+    ;; Assign particular workspaces to particular monitors by default
+    (setq exwm-randr-workspace-monitor-plist
+	  '(0 "DP-1-1" 1 "DP-1-1" 2 "DP-1-2" 3 "DP-1-2"))
+    :config
     (add-hook 'exwm-randr-screen-change-hook
 	      #'gaelan/exwm-randr-screen-change-hook)
-    (add-hook 'exwm-manage-finish-hook
-	      #'gaelan/exwm-manage-finish-hook)
-    ;; Enable multi-monitor support
-    (require 'exwm-randr)
     (exwm-randr-enable))
 #+END_SRC
 *** ediff workaround
