@@ -494,6 +494,12 @@ Language Server Project enables IDE-like functionality in an editor-agnostic way
     :mode "\\.nix\\'")
 #+END_SRC
 
+* SRE / Devops
+#+BEGIN_SRC emacs-lisp
+  (use-package kubernetes
+    :ensure t
+    :commands kubernetes-overview)
+#+END_SRC
 * Productivity
 Read epub ebooks on Emacs
 #+BEGIN_SRC emacs-lisp :tangle yes
