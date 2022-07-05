@@ -504,43 +504,57 @@ Read epub ebooks on Emacs
 
 ** Org
 #+BEGIN_SRC emacs-lisp :tangle yes
-      (use-package org
-	:ensure t
-	:defines (org-capture-templates
-		  org-refile-targets
-		  org-agenda-custom-commands
-		  org-stuck-projects)
-	:mode ("\\.org\\'" . org-mode)
-	:bind (("C-c l" . org-store-link)
-	       ("C-c a" . org-agenda)
-	       ("C-c c" . org-capture))
-	:init
-	(setq org-ellipsis " ▾"
-	      org-agenda-files '("~/Documents/gtd/gtd.org"
-				 "~/Documents/gtd/tickler.org"
-				 "~/Documents/gtd/gcal/personal.org"
-				 "~/Documents/gtd/gcal/work.org")
-	      org-capture-templates
-	      '(("t" "Todo" entry (file "~/Documents/gtd/inbox.org")
-		 "* TODO %?"))
-	      org-refile-targets
-	      '(("~/Documents/gtd/gtd.org" . (:maxlevel . 2))
-		("~/Documents/gtd/someday.org" . (:level . 1))
-		("~/Documents/gtd/tickler.org" . (:level . 1)))
-	      ;; Handy search views for agenda mode
-	      org-agenda-custom-commands
-	      '(("n" "Current Actions"
-		 ((todo "NEXT")
-		  (todo "STARTED")
-		  (todo "WAITING")))
-		("u" "Unplanned Projects"
-		 ((tags-todo "PROJECT/PLAN"))))
-	      org-stuck-projects
-	      '("+PROJECT+LEVEL=2/-COMPLETED-ABANDONED-PAUSED"
-		("TODO" "NEXT" "STARTED") nil ""))
-	:config
-	;; Save Org buffers after refiling!
-	(advice-add 'org-refile :after 'org-save-all-org-buffers))
+  (defvar gaelan/documents-dir
+    (expand-file-name "~/Documents")
+    "Directory that contains all of my documents")
+
+  (defvar gaelan/brain-dir
+    (expand-file-name "brain" gaelan/documents-dir)
+    "Directory containing my Zettelkasten")
+
+  (defvar gaelan/gtd-dir
+    (expand-file-name "gtd" gaelan/documents-dir)
+    "Directory containing my tasks")
+#+END_SRC
+
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+    (use-package org
+      :ensure t
+      :defines (org-capture-templates
+		org-refile-targets
+		org-agenda-custom-commands
+		org-stuck-projects)
+      :mode ("\\.org\\'" . org-mode)
+      :bind (("C-c l" . org-store-link)
+	     ("C-c a" . org-agenda)
+	     ("C-c c" . org-capture))
+      :init
+      (setq org-ellipsis " ▾"
+	    org-agenda-files (list
+			      (expand-file-name "gtd.org" gaelan/gtd-dir)
+			      (expand-file-name "tickler.org" gaelan/gtd-dir))
+	    org-capture-templates
+	    '(("t" "Todo" entry (file "~/Documents/gtd/inbox.org")
+	       "* TODO %?"))
+	    org-refile-targets
+	    '(("~/Documents/gtd/gtd.org" . (:maxlevel . 2))
+	      ("~/Documents/gtd/someday.org" . (:level . 1))
+	      ("~/Documents/gtd/tickler.org" . (:level . 1)))
+	    ;; Handy search views for agenda mode
+	    org-agenda-custom-commands
+	    '(("n" "Current Actions"
+	       ((todo "NEXT")
+		(todo "STARTED")
+		(todo "WAITING")))
+	      ("u" "Unplanned Projects"
+	       ((tags-todo "PROJECT/PLAN"))))
+	    org-stuck-projects
+	    '("+PROJECT+LEVEL=2/-COMPLETED-ABANDONED-PAUSED"
+	      ("TODO" "NEXT" "STARTED") nil ""))
+      :config
+      ;; Save Org buffers after refiling!
+      (advice-add 'org-refile :after 'org-save-all-org-buffers))
 #+END_SRC
 *** org-journal
 #+BEGIN_SRC emacs-lisp :tangle yes
