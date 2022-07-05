@@ -420,13 +420,43 @@ Combine indentation and completion with =TAB= key
 #+END_SRC
 * Navigation
 ** Project Management (projectile)
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package projectile
-    :ensure nil
-    :init
+    :ensure t
+    :preface
+    (declare-function projectile-mode "projectile")
+    :config
     (projectile-mode +1)
     :bind (:map projectile-mode-map
 		("C-c p" . projectile-command-map)))
+#+END_SRC
+** Tree viewer
+Sometimes I want to view and browse all the files in my project
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package treemacs
+    :ensure t
+    :preface
+    (declare-function treemacs-resize-icons "treemacs")
+    :config
+    ;; Resize icons for HiDPI
+    (treemacs-resize-icons 44))
+#+END_SRC
+
+Integrate treemacs with projectile
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package treemacs-projectile
+    :after (treemacs projectile)
+    :ensure t)
+#+END_SRC
+
+Integrate treemacs with magit
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package treemacs-magit
+    :after (treemacs magit)
+    :ensure t)
 #+END_SRC
 * Software Development
 ** Appearance
