@@ -495,7 +495,7 @@ Language Server Project enables IDE-like functionality in an editor-agnostic way
 #+END_SRC
 
 * SRE / Devops
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package kubernetes
     :ensure t
     :commands kubernetes-overview)
