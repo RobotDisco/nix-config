@@ -607,6 +607,8 @@ An implementation of Zettelkasten for org, inspired by org-roam
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-roam
     :ensure t
+    :bind (("C-c n b" . org-roam-buffer-toggle)
+	   ("C-c n f" . org-roam-node-find))
     :commands (org-roam-buffer-toggle
 	       org-roam-buffer-display-dedicated
 	       org-roam-db-autosync-mode)
