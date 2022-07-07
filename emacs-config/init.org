@@ -18,7 +18,7 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 ** Overview
 - buffer completion :: [[https://github.com/minad/corfu][corfu]]
 - minibuffer completion :: [[https://github.com/minad/vertico][vertico]]
-- IDE functionality :: [[https://github.com/joaotavora/eglot][eglot]]
+- IDE functionality :: [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode]]
 - package management :: [[https://github.com/jwiegley/use-package][use-package]]
 - window management :: [[https://github.com/ch11ng/exwm][exwm]]
 - version control (git) :: [[https://magit.vc/][magit]]
@@ -435,19 +435,14 @@ Sometimes I want to view and browse all the files in my project
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package treemacs
-    :ensure t
-    :preface
-    (declare-function treemacs-resize-icons "treemacs")
-    :config
-    ;; Resize icons for HiDPI
-    (treemacs-resize-icons 44))
+    :ensure t)
 #+END_SRC
 
-Integrate treemacs with projectile
+Integrate with emacs' (software) project management tooling
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package treemacs-projectile
-    :after (treemacs projectile)
+    :after (treemacs)
     :ensure t)
 #+END_SRC
 
@@ -495,12 +490,31 @@ A editor-agnostic way to maintain project coding styles
     :config
     (editorconfig-mode 1))
 #+END_SRC
-*** eglot
+*** lsp-mode
 Language Server Project enables IDE-like functionality in an editor-agnostic way.
+
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package eglot
+  (use-package lsp-mode
     :ensure t
-    :commands eglot)
+    :commands (lsp lsp-deferred))
+
+  (use-package lsp-ui
+    :ensure t
+    :after (lsp-mode)
+    :commands lsp-ui-mode)
+
+  (use-package lsp-treemacs
+    :ensure t
+    :after (lsp-mode treemacs)
+    :commands lsp-treemacs)
+#+END_SRC
+*** flycheck
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package flycheck
+    :ensure t
+    :functions global-flycheck-mode
+    :config
+    (global-flycheck-mode))
 #+END_SRC
 ** Version Control
 *** magit
