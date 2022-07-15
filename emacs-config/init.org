@@ -665,8 +665,26 @@ An implementation of Zettelkasten for org, inspired by org-roam
     :after (org)
     :init
     ;; (setq org-roam-v2-ack t)
-    (setq org-roam-directory "~/Documents/brain")
+    (setq org-roam-directory "~/Documents/brain"
+	  org-roam-capture-templates '(("l" "literature" plain "%?"
+					:if-new (file+head "literature/${title}.org"
+							   "#+title: ${title}\n")
+					:unnarrowed t)
+				       ("p" "permanent" plain "%?"
+					:if-new (file+head "permanent/${slug}.org"
+							   "#+title: ${title}\n")
+					:unnarrowed t))
+	  org-roam-node-display-template
+	  (concat "${type:15} ${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
     :config
+    (cl-defmethod org-roam-node-type ((node org-roam-node))
+      "Return the TYPE of NODE."
+      (condition-case nil
+	  (file-name-nondirectory
+	   (directory-file-name
+	    (file-name-directory
+	     (file-relative-name (org-roam-node-file node) org-roam-directory))))
+	(error "")))
     (org-roam-db-autosync-mode))
 #+END_SRC
 
