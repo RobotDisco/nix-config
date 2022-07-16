@@ -16,7 +16,7 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 - I am super indebted to whoever [[http://github.com/terlar/emacs-config][Terlar]] is, their nix package and structure is one I found a lot of insight about how to write nix packages from. 
 
 ** Overview
-- buffer completion :: [[https://company-mode.github.io/][company]]
+- buffer completion :: [[https://github.com/minad/corfu][corfu]]
 - minibuffer completion :: [[https://github.com/minad/vertico][vertico]]
 - IDE functionality :: [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode]]
 - package management :: [[https://github.com/jwiegley/use-package][use-package]]
@@ -403,21 +403,32 @@ Combine indentation and completion with =TAB= key
 #+END_SRC
 ** In-buffer completion
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package company
+  (use-package corfu
     :ensure t
     :defer 2
-    :commands global-company-mode
+    :commands global-corfu-mode
     :config
-    (global-company-mode))
+    (global-corfu-mode))
 #+END_SRC
-** Minibuffer Completion
+
+Use a light-weight completion framework on the minibuffer as well.
+
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package vertico
-    :preface
-    (declare-function vertico-mode "vertico")
+    :commands (vertico-mode)
     :ensure t
     :init
     (vertico-mode))
+#+END_SRC
+
+Allow fuzzy completion that doesn't depend on word order
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package orderless
+    :ensure t
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '((file (styles basic partial-completion)))))
 #+END_SRC
 * Navigation
 ** Project Management
@@ -531,8 +542,15 @@ Language Server Project enables IDE-like functionality in an editor-agnostic way
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lsp-mode
+    :after (orderless)
     :ensure t
-    :commands (lsp lsp-deferred))
+    :commands (lsp)
+    :custom (lsp-completion-provider :none)
+    :init
+    (defun corfu-lsp-setup ()
+      (setq-local completion-styles '(orderless)
+		  completion-category-defaults nil))
+    :hook (lsp-mode-hook . corfu-lsp-setup))
 
   (use-package lsp-ui
     :ensure t
