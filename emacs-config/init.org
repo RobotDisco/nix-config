@@ -16,7 +16,7 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 - I am super indebted to whoever [[http://github.com/terlar/emacs-config][Terlar]] is, their nix package and structure is one I found a lot of insight about how to write nix packages from. 
 
 ** Overview
-- buffer completion :: [[https://github.com/minad/corfu][corfu]]
+- buffer completion :: [[https://company-mode.github.io/][company]]
 - minibuffer completion :: [[https://github.com/minad/vertico][vertico]]
 - IDE functionality :: [[https://emacs-lsp.github.io/lsp-mode/][lsp-mode]]
 - package management :: [[https://github.com/jwiegley/use-package][use-package]]
@@ -402,12 +402,12 @@ Combine indentation and completion with =TAB= key
 #+END_SRC
 ** In-buffer completion
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package corfu
-    :preface
-    (declare-function global-corfu-mode "corfu")
+  (use-package company
     :ensure t
-    :init
-    (global-corfu-mode))
+    :defer 2
+    :commands global-company-mode
+    :config
+    (global-company-mode))
 #+END_SRC
 ** Minibuffer Completion
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -419,17 +419,43 @@ Combine indentation and completion with =TAB= key
     (vertico-mode))
 #+END_SRC
 * Navigation
-** Project Management (projectile)
+** Project Management
+
+Projectile is a framework for managing (usually) software development projects in a standard way, so that the same keybindings can be used to test projects, compile them, etc...
+
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package projectile
     :ensure t
-    :preface
-    (declare-function projectile-mode "projectile")
+    :defer 2
+    :commands projectile-mode
     :config
     (projectile-mode +1)
     :bind (:map projectile-mode-map
 		("C-c p" . projectile-command-map)))
 #+END_SRC
+
+Perspective is a way to group files together in a "workspace" so that you can lump related files/buffers together
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package perspective
+    :ensure t
+    :bind ("C-x C-b" . persp-list-buffers)
+    :function (persp-mode)
+    :custom
+    (persp-mode-prefix-key (kbd "C-c M-p"))
+    :config
+    (persp-mode))
+#+END_SRC
+
+Integrate perspective and projectile together
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package persp-projectile
+    :after (perspective projectile)
+    :bind ("s-s" . projectile-persp-switch-project)
+    :ensure t)
+#+END_SRC
+
 ** Tree viewer
 Sometimes I want to view and browse all the files in my project
 
