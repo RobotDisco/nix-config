@@ -22,6 +22,7 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 - package management :: [[https://github.com/jwiegley/use-package][use-package]]
 - window management :: [[https://github.com/ch11ng/exwm][exwm]]
 - version control (git) :: [[https://magit.vc/][magit]]
+- structured editing :: [[https://github.com/Fuco1/smartparens][smartparens]]
 
 * Early Initialization
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
@@ -478,6 +479,16 @@ Integrate treemacs with magit
   (use-package treemacs-magit
     :after (treemacs magit)
     :ensure t)
+#+END_SRC
+** Structured Editing
+We use smartparens for structured editing like Ruby blocks or lisp s-expressions
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package smartparens
+    :ensure t
+    :defer 2
+    :config
+    (require 'smartparens-config))
 #+END_SRC
 * Software Development
 ** Appearance
