@@ -451,6 +451,7 @@ Perspective is a way to group files together in a "workspace" so that you can lu
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package perspective
     :ensure t
+    :defer 2
     :bind ("C-x C-b" . persp-list-buffers)
     :commands (persp-mode)
     :custom
@@ -464,7 +465,7 @@ Integrate perspective and projectile together
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package persp-projectile
     :after (perspective projectile)
-    :bind ("s-s" . projectile-persp-switch-project)
+    :defer 2
     :ensure t)
 #+END_SRC
 
@@ -566,7 +567,8 @@ Language Server Project enables IDE-like functionality in an editor-agnostic way
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package flycheck
     :ensure t
-    :functions global-flycheck-mode
+    :defer 2
+    :commands global-flycheck-mode
     :config
     (global-flycheck-mode))
 #+END_SRC
