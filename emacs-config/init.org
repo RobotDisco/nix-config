@@ -508,13 +508,12 @@ Visually separate nested delimiter pairs
 *** envrc
 Project-specific environment variables via =direnv=
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package envrc
+  (use-package direnv
     :ensure t
-    :if (executable-find "direnv")
     :defer 1
-    :commands (envrc-global-mode)
+    :commands (direnv-mode)
     :config
-    (envrc-global-mode 1))
+    (direnv-mode))
 #+END_SRC
 *** editconfig
 A editor-agnostic way to maintain project coding styles
