@@ -559,7 +559,7 @@ Language Server Project enables IDE-like functionality in an editor-agnostic way
     :ensure t
     :defer 2)
 #+END_SRC
-** Major Modes
+** Programming Language support / environments
 *** Elm
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package elm-mode
@@ -574,6 +574,38 @@ Language Server Project enables IDE-like functionality in an editor-agnostic way
     :mode "\\.nix\\'")
 #+END_SRC
 
+*** Clojure
+
+Support flycheck syntax checking
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package flycheck-clj-kondo
+    :after (clojure-mode)
+    :hook (clojure-mode-hook . (lambda ()
+				 (require 'flycheck-clj-kondo)))
+    :ensure t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package clojure-mode
+    :ensure t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package cider
+    :after (clojure-mode)
+    :commands cider-jack-in
+    :ensure t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package clj-refactor
+    :commands clj-refactor-mode
+    :after (clojure-mode)
+    :hook (clojure-mode . (lambda ()
+			    (clj-refactor-mode 1)))
+    :ensure t)
+#+END_SRC
 * SRE / Devops
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package kubernetes
