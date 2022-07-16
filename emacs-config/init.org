@@ -441,7 +441,7 @@ Perspective is a way to group files together in a "workspace" so that you can lu
   (use-package perspective
     :ensure t
     :bind ("C-x C-b" . persp-list-buffers)
-    :function (persp-mode)
+    :commands (persp-mode)
     :custom
     (persp-mode-prefix-key (kbd "C-c M-p"))
     :config
@@ -580,7 +580,7 @@ Support flycheck syntax checking
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package flycheck-clj-kondo
-    :after (clojure-mode)
+    :after (clojure-mode flycheck)
     :hook (clojure-mode-hook . (lambda ()
 				 (require 'flycheck-clj-kondo)))
     :ensure t)
@@ -588,6 +588,10 @@ Support flycheck syntax checking
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package clojure-mode
+    :after (smartparens)
+    :commands smartparens-strict-mode
+    :hook (clojure-mode-hook . (lambda ()
+				  (smartparens-strict-mode)))
     :ensure t)
 #+END_SRC
 
