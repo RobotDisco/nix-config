@@ -820,7 +820,7 @@ An implementation of Zettelkasten for org, inspired by org-roam
 							   "#+title: ${title}\n")
 					:unnarrowed t)
 				       ("p" "permanent" plain "%?"
-					:if-new (file+head "permanent/${slug}.org"
+					:if-new (file+head "permanent/%<%Y%m%d%H%M%S>-${slug}.org"
 							   "#+title: ${title}\n")
 					:unnarrowed t))
 	  org-roam-node-display-template
