@@ -550,9 +550,15 @@ We use smartparens for structured editing like Ruby blocks or lisp s-expressions
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package smartparens
     :ensure t
+    :commands (smartparens-global-mode
+	       sp-use-paredit-binding
+	       sp-use-smartparens-binding)
     :defer 2
     :config
-    (require 'smartparens-config))
+    (require 'smartparens-config)
+    (sp-use-paredit-binding)
+    (sp-use-smartparens-binding)
+    (smartparens-global-mode))
 #+END_SRC
 * Software Development
 ** Appearance
@@ -629,7 +635,7 @@ Language Server Project enables IDE-like functionality in an editor-agnostic way
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package magit
     :ensure t
-    :defer 2)
+    :defer 3)
 #+END_SRC
 ** Programming Language support / environments
 *** Elm
@@ -669,16 +675,15 @@ Support flycheck syntax checking
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package cider
-    :after (clojure-mode)
-    :commands cider-jack-in
-    :ensure t)
+    :ensure t
+    :bind ("C-c C-x C-j C-j" . cider-jack-in))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package clj-refactor
     :commands clj-refactor-mode
-    :after (clojure-mode)
-    :hook (clojure-mode . (lambda ()
+    :after (cider)
+    :hook (cider-mode . (lambda ()
 			    (clj-refactor-mode 1)))
     :ensure t)
 #+END_SRC
