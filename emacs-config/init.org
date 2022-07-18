@@ -551,13 +551,13 @@ We use smartparens for structured editing like Ruby blocks or lisp s-expressions
   (use-package smartparens
     :ensure t
     :commands (smartparens-global-mode
-	       sp-use-paredit-binding
-	       sp-use-smartparens-binding)
+	       sp-use-paredit-bindings
+	       sp-use-smartparens-bindings)
     :defer 2
     :config
     (require 'smartparens-config)
-    (sp-use-paredit-binding)
-    (sp-use-smartparens-binding)
+    (sp-use-paredit-bindings)
+    (sp-use-smartparens-bindings)
     (smartparens-global-mode))
 #+END_SRC
 * Software Development
@@ -816,7 +816,7 @@ An implementation of Zettelkasten for org, inspired by org-roam
     ;; (setq org-roam-v2-ack t)
     (setq org-roam-directory "~/Documents/brain"
 	  org-roam-capture-templates '(("l" "literature" plain "%?"
-					:if-new (file+head "literature/${title}.org"
+					:if-new (file+head "literature/${slug}.org"
 							   "#+title: ${title}\n")
 					:unnarrowed t)
 				       ("p" "permanent" plain "%?"
