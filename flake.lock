@@ -76,11 +76,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1658002796,
-        "narHash": "sha256-0Y6sTBSrJdbO5gcY6sHHnmSEnp5X1U8qjh15qGxH+lY=",
+        "lastModified": 1658147969,
+        "narHash": "sha256-rScIxyG4nedFTV24hdA3DjHJeM7WimRi2Iv9LLRNoKI=",
         "owner": "RobotDisco",
         "repo": "emacs-config",
-        "rev": "a09ec766906fee517d21094dddf6340edb8f5a82",
+        "rev": "8597a0f2b9b3f5c1441d9f72a49ddb4ef13ed9dd",
         "type": "github"
       },
       "original": {
@@ -167,11 +167,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1657815135,
-        "narHash": "sha256-+5Jby1ayRjtSgsM5IpRNeUgdcIutCKQWR6sypRtd1RE=",
+        "lastModified": 1657972522,
+        "narHash": "sha256-JTiKsBT1BwMbtSUsvtSl8ffkiirby8FaujJVGV766Q8=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "c06d5fa9c605d143b15cafdbbb61c7c95388d76e",
+        "rev": "07a2e6a4e31ea48408861607198972d60adaf4ad",
         "type": "github"
       },
       "original": {
