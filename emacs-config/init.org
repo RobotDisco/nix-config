@@ -761,14 +761,13 @@ Read epub ebooks on Emacs
     :ensure t
     :after (org)
     :defines org-capture-templates
-    :preface
-    (declare-function org-narrow-to-subtree "org")
-    :bind (("C-c n j" . org-journal-new-entry))
+    :functions org-narrow-to-subtree
     :init
     (setq org-journal-date-format "%A, %F"
 	  org-journal-file-format "%Y.org"
 	  org-journal-file-type 'yearly
-	  org-journal-dir (file-name-as-directory "~/Documents/journal"))
+	  org-journal-dir (file-name-as-directory "~/Documents/journal")
+	  org-journal-prefix-key "C-c j")
     ;; org-mode needs some help to know where to place new org-journal entries
     ;; via org-capture-templates
     (defun gaelan/org-journal-find-location ()
@@ -807,7 +806,8 @@ An implementation of Zettelkasten for org, inspired by org-roam
   (use-package org-roam
     :ensure t
     :bind (("C-c n b" . org-roam-buffer-toggle)
-	   ("C-c n f" . org-roam-node-find))
+	   ("C-c n f" . org-roam-node-find)
+	   ("C-c n i" . org-roam-node-insert))
     :commands (org-roam-buffer-toggle
 	       org-roam-buffer-display-dedicated
 	       org-roam-db-autosync-mode)
