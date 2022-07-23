@@ -761,7 +761,9 @@ Read epub ebooks on Emacs
     :ensure t
     :after (org)
     :defines org-capture-templates
-    :functions org-narrow-to-subtree
+    :functions (org-narrow-to-subtree)
+    :preface
+    (declare-function org-journal-new-entry "org-journal")
     :init
     (setq org-journal-date-format "%A, %F"
 	  org-journal-file-format "%Y.org"
