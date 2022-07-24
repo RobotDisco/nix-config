@@ -242,6 +242,16 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
 #+BEGIN_SRC emacs-lisp :tangle yes
   (display-battery-mode)
 #+END_SRC
+** Margins
+Set the line length to 80 characters
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq fill-column 80)
+#+END_SRC
+
+Show a line indicating the end of the page, as it were
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (global-display-fill-column-indicator-mode +1)
+#+END_SRC
 * Operating System
 I love Emacs so much, I use it as my primary computing environment :)
 ** Window Manager
@@ -725,6 +735,8 @@ Read epub ebooks on Emacs
 	      org-agenda-custom-commands
 	      org-stuck-projects)
     :commands (org-narrow-to-subtree)
+    :hook ((org-mode . (lambda ()
+			 (visual-line-mode +1))))
     :mode ("\\.org\\'" . org-mode)
     :bind (("C-c l" . org-store-link)
 	   ("C-c a" . org-agenda)
