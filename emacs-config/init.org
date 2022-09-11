@@ -735,8 +735,8 @@ Read epub ebooks on Emacs
 	      org-agenda-custom-commands
 	      org-stuck-projects)
     :commands (org-narrow-to-subtree)
-    :hook ((org-mode . (lambda ()
-			 (visual-line-mode +1))))
+    :hook (org-mode-hook . (lambda ()
+			     (visual-line-mode +1)))
     :mode ("\\.org\\'" . org-mode)
     :bind (("C-c l" . org-store-link)
 	   ("C-c a" . org-agenda)
