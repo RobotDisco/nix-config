@@ -5,7 +5,6 @@
     ./audio.nix
     ./boot.nix
     ./common.nix
-    ./fde.nix
     ./framework.nix
     ./laptop.nix
     ./ssd.nix
