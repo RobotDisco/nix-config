@@ -4,10 +4,11 @@
 { pkgs, ... }:
 
 {
-  sops.secrets.users_gaelan_password = {
-    sopsFile = ../../secrets/common.json;
-    format = "json";
-  };
+  # Don't worry about sops for now
+  # sops.secrets.users_gaelan_password = {
+  #   sopsFile = ../../secrets/common.json;
+  #   format = "json";
+  # };
 
   users.users.gaelan = {
     shell = pkgs.zsh;
@@ -18,7 +19,7 @@
     openssh.authorizedKeys.keyFiles = [
      ./gaelan-yubikey.pub
     ];
-    passwordFile = "/run/secrets/users_gaelan_password";
+    # passwordFile = "/run/secrets/users_gaelan_password";
   };
 
   # Trust 'gaelan' account with nix packages
