@@ -5,8 +5,9 @@ let
 in
 
 {
-  options.robot-disco.hardware.framework.enable =
-    lib.mkEnableOption "Enable support for Framework Laptops";
+  options.robot-disco.hardware.framework = {
+    enable = lib.mkEnableOption "Enable support for Framework Laptops";
+  };
 
   config = lib.mkIf cfg.enable {
     # Boot level config for Framework laptops
