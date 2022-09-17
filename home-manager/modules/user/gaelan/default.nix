@@ -11,8 +11,10 @@ in {
 
     robot-disco.emacs = {
       enable = true;
-      enableServer = true;
-      enableExwm = true;
+
+      # Temporarily turn off needs to be configurable anyway
+      # enableServer = true;
+      # enableExwm = true;
     };
 
     programs.home-manager.enable = true;
@@ -82,10 +84,11 @@ in {
       maxCacheTtl = 120;
     };
 
-    services.screen-locker = {
-      enable = true;
-      lockCmd = "${pkgs.i3lock}/bin/i3lock -c 746542";
-    };
+    # Temporarily turn off but should only be on for laptop anyway 
+    #services.screen-locker = {
+    #  enable = true;
+    #  lockCmd = "${pkgs.i3lock}/bin/i3lock -c 746542";
+    #};
 
     home.keyboard = {
       layout = "us";
