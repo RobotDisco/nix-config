@@ -127,7 +127,7 @@
   };
 
   nixpkgs.config.packageOverrides = pkgs: {
-    zfsStable = pkgs.zfs.override {
+    zfs = pkgs.zfs.override {
       enableMail = true;
     };
   };
