@@ -24,18 +24,19 @@
   boot.loader.grub.devices = [
     {
       devices = [ "nodev" ];
-      path = "/boot/efis/efiboot0";
-      efiSysMountPoint = "/boot/efis/efiboot0";
+      path = "/boot/efis/EFIBOOT0";
+      efiSysMountPoint = "/boot/efis/EFIBOOT0";
     }
     {
       devices = [ "nodev" ];
-      path = "/boot/efis/efiboot1";
-      efiSysMountPoint = "/boot/efis/efiboot1";
+      path = "/boot/efis/EFIBOOT1";
+      efiSysMountPoint = "/boot/efis/EFIBOOT1";
     }
   ];
 
   # Don't force import of root ZFS pools
   boot.zfs.forceImportRoot = false;
+  boot.zfs.forceImportAll = false;
 
   users.users.root.initialHashedPassword = "$6$rounds=2500000$J3xTIRDh1NBHNJS/$gsXMT1hWNEHseQBGdYKADCNvPOl5xAP/Bb5v0fy8zwsieIS6jPfe9.HvoEKu3Wf8DkVY8/ZHOHRIPxK9unuso1";
   time.timeZone = "America/Toronto";
@@ -83,18 +84,18 @@
   };
 
   fileSystems."/boot" = {
-    device = "bootpool/nixos/boot";
+    device = "bootpool/nixos/root";
     fsType = "zfs";
     options = [ "zfsutil" "X-mount.mkdir" ];
   };
 
-  fileSystems."/boot/efis/efiboot0" = {
-    device = "/dev/disk/by-uuid/3ECE-8042";
+  fileSystems."/boot/efis/EFIBOOT0" = {
+    device = "/dev/disk/by-label/EFIBOOT0";
     fsType = "vfat";
   };
 
-  fileSystems."/boot/efis/efiboot1" = {
-    device = "/dev/disk/by-uuid/3ED1-B594";
+  fileSystems."/boot/efis/EFIBOOT1" = {
+    device = "/dev/disk/by-label/EFIBOOT1";
     fsType= "vfat";
   };
 
@@ -114,4 +115,25 @@
   networking.interfaces.enp6s0f1.useDHCP = lib.mkDefault false;
 
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+  services.fstrim.enable = true;
+  services.zfs.trim.enable = true;
+
+  # Scrub ZFS pools every bimonthly
+  services.zfs.autoScrub = {
+    interval = "*-*-01,15 03:00";
+    enable = true;
+  };
+
+  nixpkgs.config.packageOverrides = pkgs: {
+    zfsStable = pkgs.zfs.override {
+      enableMail = true;
+    };
+  };
+  services.zfs.zed = {
+    enableMail = true;
+    settings = {
+      ZED_EMAIL_ADDR = [ "gdcosta@gmail.com" ];
+    };
+  };
 }
