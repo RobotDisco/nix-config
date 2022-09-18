@@ -21,7 +21,7 @@
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.zfsSupport = true;
   # Since we mirror our system drives, mirror boot partitions.
-  boot.loader.grub.devices = [
+  boot.loader.grub.mirroredBoots = [
     {
       devices = [ "nodev" ];
       path = "/boot/efis/EFIBOOT0";
