@@ -1,6 +1,7 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
+  networking.hostName = "darktower";
   # Let's lean into ZFS unless I ever need non-ZFS
   boot.supportedFilesystems = [ "zfs" ];
   # This should be parameterized, an eight-character hex string

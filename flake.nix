@@ -58,6 +58,12 @@
       };
 
       nixosConfigurations = {
+        darktower = lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./nixos/machines/darktower.nix
+          ];
+        };
         arrakis = myLib.nixosSystem {
           system = "x86_64-linux";
           configuration = {
