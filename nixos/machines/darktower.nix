@@ -152,4 +152,14 @@
   nix.trustedUsers = [ "gaelan "];
 
   services.sshguard.enable = true;
+
+  networking.defaultGateway = {
+    address = "192.168.10.1";
+    interface = "eno1";
+  };
+
+  networking.nameservers = [
+    "8.8.8.8"
+    "8.8.4.4"
+  ];
 }
