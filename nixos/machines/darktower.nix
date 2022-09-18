@@ -37,6 +37,7 @@
   # Don't force import of root ZFS pools
   boot.zfs.forceImportRoot = false;
 
+  users.users.root.initialHashedPassword = "$6$rounds=2500000$J3xTIRDh1NBHNJS/$gsXMT1hWNEHseQBGdYKADCNvPOl5xAP/Bb5v0fy8zwsieIS6jPfe9.HvoEKu3Wf8DkVY8/ZHOHRIPxK9unuso1";
   time.timeZone = "America/Toronto";
 
   services.openssh.enable = true;
