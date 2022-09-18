@@ -107,10 +107,10 @@
 
   networking.useDHCP = lib.mkDefault true;
   networking.interfaces.eno1 = {
-    ipv4.addresses = {
+    ipv4.addresses = [{
       address = "192.168.10.3";
       prefixLength = 24;
-    };
+    }];
   };
   networking.interfaces.enp6s0f0.useDHCP = lib.mkDefault false;
   networking.interfaces.enp6s0f1.useDHCP = lib.mkDefault false;
