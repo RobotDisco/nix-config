@@ -107,8 +107,9 @@
     { label = "swappart1"; }
   ];
 
-  networking.useDHCP = lib.mkDefault true;
+  networking.useDHCP = lib.mkDefault false;
   networking.interfaces.eno1 = {
+    useDHCP = lib.mkDefault false;
     ipv4.addresses = [{
       address = "192.168.10.3";
       prefixLength = 24;
@@ -234,6 +235,7 @@
   networking.vlans = {
     vlan50 = { id = 50; interface="enp6s0f1"; };
   };
+  networking.interfaces.vlan50.useDHCP = lib.mkDefault false;
   # I currently do port forwarding which requires a static IP
   networking.interfaces.vlan50.ipv4.addresses = [{
     address = "192.168.50.99";
