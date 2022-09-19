@@ -217,7 +217,7 @@
     encryption = {
       mode = "keyfile-blake2";
       # TODO encode this securely to not manual file placement
-      passCommand = "cat /etc/keys/borg_encryption_passphrase";
+      passCommand = "cat /root/keys/borg_encryption_passphrase";
     };
     compression = "zstd";
     startAt = "*-*-* *:05,35:00";
