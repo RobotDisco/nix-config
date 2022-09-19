@@ -57,6 +57,8 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
+  # My AMT/VNC-enabled server requires this or remote reboots get sad.
+  boot.kernelParams = [ "nomodeset"];
 
   fileSystems."/" = {
     device = "rootpool/nixos/root";
