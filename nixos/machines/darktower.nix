@@ -306,5 +306,17 @@
 #        };
       };
     };
+    vaultwarden = {
+      autoStart = true;
+      bindMounts = {
+        "/var/lib/bitwarden_rs" = {
+          hostPath = "/srv/storagepool/data/vaultwarden";
+          isReadOnly = false;
+        };
+      };
+      config = {
+        system.stateVersion = "21.05";
+      };
+    };
   };
 }
