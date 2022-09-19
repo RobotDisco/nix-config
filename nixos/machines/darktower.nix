@@ -280,5 +280,31 @@
         };
       };
     };
+    postgresql = {
+      autoStart = true;
+      bindMounts = {
+        "/var/backup/postgresql" = {
+          hostPath = "/srv/storagepool/backups/postgresql";
+          isReadOnly = false;
+        };
+      };
+      config = {
+        system.stateVersion = "21.05";
+        services.postgresql = {
+          package = pkgs.postgresql_13;
+          enable = true;
+          enableTCPIP = false;
+          authentication = ''
+            host vaultwarden vaultwarden samehost scram-sha-256
+          '';
+          settings.password_encryption = "scram-sha-256";
+        };
+#        services.postgresqlBackup = {
+#          enable = false;
+#          location = "/var/backup/postgresql";
+#          startAt = "*-*-* *:00,15,30,45:00";
+#        };
+      };
+    };
   };
 }
