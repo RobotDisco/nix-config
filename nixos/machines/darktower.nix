@@ -262,7 +262,7 @@
           proxyPass = "http://localhost:8000";
         };
 
-        forceSSL = true;
+        #forceSSL = true;
         #enableACME = true;
       };
       # "fallcube.robot-disco.net" = {
