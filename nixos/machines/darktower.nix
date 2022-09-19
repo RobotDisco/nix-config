@@ -244,56 +244,39 @@
 
   networking.firewall.interfaces.vlan50.allowedTCPPorts = [ 80 443 ];
 
-  containers = {
-    reverseproxy = {
-      autoStart = true;
-      forwardPorts = [
-        {
-          containerPort = "443";
-          hostPort = "443";
-          protocol = "tcp";
-        }
-        {
-          containerPort = "80";
-          hostPort = "80";
-          protocol = "tcp";
-        }
-      ];
-      config = {
-        system.stateVersion = "21.05";
-        security.acme = {
-          acceptTerms = true;
-          email = "gdcosta+letsencrypt@gmail.com";
+  security.acme = {
+    acceptTerms = true;
+    email = "gdcosta+letsencrypt@gmail.com";
+  };
+  services.nginx = {
+    enable = true;
+    defaultListenAddresses = [ "192.168.50.99" ];
+    recommendedOptimisation = true;
+    recommendedTlsSettings = true;
+    recommendedGzipSettings = true;
+    recommendedProxySettings = true;
+
+    virtualHosts = {
+      "vaultwarden.robot-disco.net" = {
+        locations."/" = {
+          proxyPass = "http://localhost:8000";
         };
-        services.nginx = {
-          enable = true;
-          defaultListenAddresses = [ "192.168.50.99" ];
-          recommendedOptimisation = true;
-          recommendedTlsSettings = true;
-          recommendedGzipSettings = true;
-          recommendedProxySettings = true;
 
-          virtualHosts = {
-            "vaultwarden.robot-disco.net" = {
-              locations."/" = {
-                proxyPass = "http://localhost:8000";
-              };
-
-              forceSSL = true;
-              enableACME = true;
-            };
-            # "fallcube.robot-disco.net" = {
-            #   locations."/" = {
-            #     proxyPass = "http://localhost:8001";
-            #   };
-
-            #   forceSSL = true;
-            #   enableACME = true;
-            # };
-          };
-        };
+        forceSSL = true;
+        enableACME = true;
       };
+      # "fallcube.robot-disco.net" = {
+      #   locations."/" = {
+      #     proxyPass = "http://localhost:8001";
+      #   };
+
+      #   forceSSL = true;
+      #   enableACME = true;
+      # };
     };
+  };
+
+  containers = {
     postgresql = {
       autoStart = true;
       bindMounts = {
