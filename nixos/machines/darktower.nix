@@ -242,6 +242,8 @@
     prefixLength = 24;
   }];
 
+  networking.firewall.interfaces.vlan50.allowedTCPPorts = [ 80 443 ];
+
   containers = {
     reverseproxy = {
       autoStart = true;

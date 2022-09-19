@@ -136,7 +136,6 @@
                 {
                   networking.firewall.checkReversePath = "loose";
                   networking.firewall.interfaces.enp1s0.allowedTCPPorts = [ 3306 5432 ];
-                  networking.firewall.interfaces.vlan50.allowedTCPPorts = [ 80 443 ];
 
                   sops.secrets.vaultwarden_secrets = {
                     sopsFile = ./secrets/vaultwarden.yaml;
