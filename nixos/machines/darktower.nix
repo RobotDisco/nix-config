@@ -250,7 +250,6 @@
   };
   services.nginx = {
     enable = true;
-    defaultListenAddresses = [ "192.168.50.99" ];
     recommendedOptimisation = true;
     recommendedTlsSettings = true;
     recommendedGzipSettings = true;
