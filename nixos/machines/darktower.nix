@@ -227,4 +227,14 @@
       monthly = 36;
     };
   };
+
+  # I only use this for cloud services, so specify the vlan
+  networking.vlans = {
+    vlan50 = { id = 50; interface="enp6s0f1"; };
+  };
+  # I currently do port forwarding which requires a static IP
+  networking.interfaces.vlan50.ipv4.addresses = [{
+    address = "192.168.50.99";
+    prefixLength = 24;
+  }];
 }
