@@ -316,6 +316,24 @@
       };
       config = {
         system.stateVersion = "21.05";
+        services.bitwarden_rs = {
+          enable = true;
+          dbBackend = "postgresql";
+          environmentFile = "/var/lib/bitwarden_rs/vaultwarden_secrets";
+          config = {
+            signups_allowed = false;
+            signups_verify = true;
+
+            domain = "https://vaultwarden.robot-disco.net";
+            invitation_org_name = "Robot Disco";
+
+            smtp_host = "out.teksavvy.com";
+            smtp_from = "gdcosta@gmail.com";
+            smtp_from_name = "Vaultwarden";
+
+            require_device_email=true;
+          };
+        };        
       };
     };
   };
