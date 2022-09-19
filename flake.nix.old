@@ -365,42 +365,6 @@
                 networking.firewall.interfaces.enp2s0.allowedTCPPorts = [ 2049 ];
               }
               {
-                networking.hostName = "chapterhouse";
-                # Required by ZFS
-                networking.hostId = "bff65b11";
-                # Slot isn't 1 because of PCI passthru
-                # Admin VLAN - 192.168.10.0/24
-                networking.interfaces.enp2s0.useDHCP = true;
-              }
-              {
-                # Storage configuration for our fileserver
-                boot.supportedFilesystems = [ "zfs" ];
-
-                # I don't care about specific mountpoints, so just mount the pools
-                boot.zfs.extraPools = [ "storagepool" "backuppool" ];
-              }
-              {
-                # Using interleaved schedule of bimonthly scrubs
-                # and long SMART tests (and weekly short SMART tests)
-                # found at https://www.truenas.com/community/threads/scrub-and-smart-testing-schedules.20108/      
-                # Scrub ZFS pools every bimonthly
-                services.zfs.autoScrub = {
-                  interval = "*-*-01,15 03:00";
-                  enable = true;
-                };
-
-                nixpkgs.config.packageOverrides = pkgs: {
-                  zfs = nixpkgs.legacyPackages."x86_64-linux".pkgs.zfs.override {
-                    enableMail = true;
-                  };
-                };
-                services.zfs.zed = {
-                  enableMail = true;
-                  settings = {
-                    ZED_EMAIL_ADDR = [ "gdcosta@gmail.com" ];
-                  };
-                };
-
                 # I very much care about the health of my fileserver data
                 services.smartd = {
                   enable = true;
@@ -441,48 +405,6 @@
                   defaults.monitored = "-a -o on -s (S/../(05|12|19|26)/./03|L/../(08|22)/./03)";
                 };
               }
-              {
-                # Automatically snapshot ZFS volumes
-                services.sanoid = {
-                  enable = true;
-
-                  datasets = {
-                    "storagepool/backups" = {
-                      recursive = true;
-                      daily = 90;
-                      hourly = 72;
-                      monthly = 36;
-                      autosnap = true;
-                      autoprune = true;
-                    };
-                    "storagepool/data" = {
-                      recursive = true;
-                      daily = 90;
-                      hourly = 72;
-                      monthly = 36;
-                      autosnap = true;
-                      autoprune = true;
-                    };
-                  };
-                };
-
-                # Automatically replicate data pool to onsite backup
-                services.syncoid = {
-                  enable = true;
-
-                  commands = {
-                    "storagepool/data" = {
-                      target = "backuppool/storagepool/data";
-                      recursive = true;
-                    };
-                    "storagepool/backups" = {
-                      target = "backuppool/storagepool/backups";
-                      recursive = true;
-                    };
-                  };
-                };
-              }
-              ./nixos/services/borg.nix
               {
                 sops.secrets."storagepool_archive_waterworld.key" = {
                   sopsFile = ./secrets/storagepool_archive_waterworld.key;

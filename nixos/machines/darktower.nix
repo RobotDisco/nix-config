@@ -120,6 +120,9 @@
   services.fstrim.enable = true;
   services.zfs.trim.enable = true;
 
+  # Using interleaved schedule of bimonthly scrubs
+  # and long SMART tests (and weekly short SMART tests)
+  # found at https://www.truenas.com/community/threads/scrub-and-smart-testing-schedules.20108/      
   # Scrub ZFS pools every bimonthly
   services.zfs.autoScrub = {
     interval = "*-*-01,15 03:00";
@@ -163,6 +166,7 @@
     "8.8.4.4"
   ];
 
+  # I don't care about specific mountpoints, so just mount the pools
   boot.zfs.extraPools = [ "storagepool" "backuppool"];
 
   # Automatically snapshot ZFS volumes
