@@ -259,24 +259,24 @@
           recommendedGzipSettings = true;
           recommendedProxySettings = true;
 
-          # virtualHosts = {
-          #   "vaultwarden.robot-disco.net" = {
-          #     locations."/" = {
-          #       proxyPass = "http://localhost:8000";
-          #     };
+          virtualHosts = {
+            "vaultwarden.robot-disco.net" = {
+              locations."/" = {
+                proxyPass = "http://localhost:8000";
+              };
 
-          #     forceSSL = true;
-          #     enableACME = true;
-          #   };
-          #   "fallcube.robot-disco.net" = {
-          #     locations."/" = {
-          #       proxyPass = "http://localhost:8001";
-          #     };
+              forceSSL = true;
+              enableACME = true;
+            };
+            # "fallcube.robot-disco.net" = {
+            #   locations."/" = {
+            #     proxyPass = "http://localhost:8001";
+            #   };
 
-          #     forceSSL = true;
-          #     enableACME = true;
-          #   };
-          #};
+            #   forceSSL = true;
+            #   enableACME = true;
+            # };
+          };
         };
       };
     };
