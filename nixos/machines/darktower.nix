@@ -162,4 +162,45 @@
     "8.8.8.8"
     "8.8.4.4"
   ];
+
+  boot.zfs.extraPools = [ "storagepool" "backuppool"];
+
+  # Automatically snapshot ZFS volumes
+  services.sanoid = {
+    enable = true;
+
+    datasets = {
+      "storagepool/backups" = {
+        recursive = true;
+        daily = 90;
+        hourly = 72;
+        monthly = 36;
+        autosnap = true;
+        autoprune = true;
+      };
+      "storagepool/data" = {
+        recursive = true;
+        daily = 90;
+        hourly = 72;
+        monthly = 36;
+        autosnap = true;
+        autoprune = true;
+      };
+    };
+  };
+  # Automatically replicate data pool to onsite backup
+  services.syncoid = {
+    enable = true;
+
+    commands = {
+      "storagepool/data" = {
+        target = "backuppool/storagepool/data";
+        recursive = true;
+      };
+      "storagepool/backups" = {
+        target = "backuppool/storagepool/backups";
+        recursive = true;
+      };
+    };
+  };
 }
