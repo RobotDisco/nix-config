@@ -247,6 +247,18 @@
   containers = {
     reverseproxy = {
       autoStart = true;
+      forwardPorts = [
+        {
+          containerPort = "443";
+          hostPort = "443";
+          protocol = "tcp";
+        }
+        {
+          containerPort = "80";
+          hostPort = "80";
+          protocol = "tcp";
+        }
+      ];
       config = {
         system.stateVersion = "21.05";
         security.acme = {
