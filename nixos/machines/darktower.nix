@@ -286,6 +286,23 @@
       };
     };
 
+    mysql = {
+      autoStart = true;
+      bindMounts = {
+        "/var/backup/mysql" = {
+          hostPath = "/srv/backups/mariadb";
+          isReadOnly = false;
+        };
+      };
+      config = {
+        system.stateVersion = "21.05";
+        services.mysql = {
+          enable = true;
+          package = pkgs.mariadb;
+        };
+      };
+    };
+    
     postgresql = {
       autoStart = true;
       bindMounts = {
