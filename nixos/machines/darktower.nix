@@ -372,19 +372,18 @@
         "--network=host"
       ];
     };
-    # "seafile" = {
-    #   autoStart = true;
-    #   image = "seafileltd/seafile-mc:8.0.7";
-    #   ports = [ "8001:80" ];
-    #   dependsOn = [ "seafile-memcached"];
-    #   environmentFiles = [ "/srv/storagepool/data/webdav/seafile_env_vars" ];
-    #   volumes = [
-    #     "/srv/storagepool/data/webdav/shared:/shared"
-    #   ];
-    #   extraOptions = [
-    #     "--network=seafile"
-    #     "--add-host=host.docker.internal:host-gateway"
-    #   ];
-    # };
+    "seafile" = {
+      autoStart = true;
+      image = "seafileltd/seafile-mc:8.0.7";
+      ports = [ "8001:80" ];
+      dependsOn = [ "seafile-memcached"];
+      environmentFiles = [ "/srv/storagepool/data/webdav/seafile_env_vars" ];
+      volumes = [
+        "/srv/storagepool/data/webdav/shared:/shared"
+      ];
+      extraOptions = [
+        "--network=host"
+      ];
+    };
   };
 }
