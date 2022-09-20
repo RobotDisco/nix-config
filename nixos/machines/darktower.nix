@@ -290,7 +290,7 @@
       autoStart = true;
       bindMounts = {
         "/var/backup/mysql" = {
-          hostPath = "/srv/backups/mariadb";
+          hostPath = "/srv/storagepool/backups/mariadb";
           isReadOnly = false;
         };
       };
