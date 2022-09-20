@@ -249,11 +249,11 @@
     reverseproxy = {
       autoStart = true;
       config = {
-        system.stateVersion = "21.05";
+        system.stateVersion = "22.05";
 
         security.acme = {
           acceptTerms = true;
-          email = "gdcosta+letsencrypt@gmail.com";
+          defaults.email = "gdcosta+letsencrypt@gmail.com";
         };
 
         services.nginx = {
@@ -321,8 +321,8 @@
         };
       };
       config = {
-        system.stateVersion = "21.05";
-        services.bitwarden_rs = {
+        system.stateVersion = "22.05";
+        services.vaultwarden = {
           enable = true;
           dbBackend = "postgresql";
           environmentFile = "/var/lib/bitwarden_rs/vaultwarden_secrets";
