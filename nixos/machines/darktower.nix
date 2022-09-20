@@ -245,39 +245,47 @@
   networking.firewall.interfaces.vlan50.allowedTCPPorts = [ 80 443 ];
   networking.firewall.checkReversePath = "loose";
 
-  security.acme = {
-    acceptTerms = true;
-    email = "gdcosta+letsencrypt@gmail.com";
-  };
-  services.nginx = {
-    enable = true;
-    defaultListenAddresses = [ "192.168.50.99" ];
-    recommendedOptimisation = true;
-    recommendedTlsSettings = true;
-    recommendedGzipSettings = true;
-    recommendedProxySettings = true;
+  containers = {
+    reverseproxy = {
+      autoStart = true;
+      config = {
+        system.stateVersion = "21.05";
 
-    virtualHosts = {
-      "vaultwarden.robot-disco.net" = {
-        locations."/" = {
-          proxyPass = "http://localhost:8000";
+        security.acme = {
+          acceptTerms = true;
+          email = "gdcosta+letsencrypt@gmail.com";
         };
 
-        forceSSL = true;
-        enableACME = true;
+        services.nginx = {
+          enable = true;
+          defaultListenAddresses = [ "192.168.50.99" ];
+          recommendedOptimisation = true;
+          recommendedTlsSettings = true;
+          recommendedGzipSettings = true;
+          recommendedProxySettings = true;
+
+          virtualHosts = {
+            "vaultwarden.robot-disco.net" = {
+              locations."/" = {
+                proxyPass = "http://localhost:8000";
+              };
+
+              forceSSL = true;
+              enableACME = true;
+            };
+            # "fallcube.robot-disco.net" = {
+            #   locations."/" = {
+            #     proxyPass = "http://localhost:8001";
+            #   };
+
+            #   forceSSL = true;
+            #   enableACME = true;
+            # };
+          };
+        };
       };
-      # "fallcube.robot-disco.net" = {
-      #   locations."/" = {
-      #     proxyPass = "http://localhost:8001";
-      #   };
-
-      #   forceSSL = true;
-      #   enableACME = true;
-      # };
     };
-  };
 
-  containers = {
     postgresql = {
       autoStart = true;
       bindMounts = {
