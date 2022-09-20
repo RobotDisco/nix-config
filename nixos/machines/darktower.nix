@@ -297,11 +297,11 @@
           '';
           settings.password_encryption = "scram-sha-256";
         };
-#        services.postgresqlBackup = {
-#          enable = false;
-#          location = "/var/backup/postgresql";
-#          startAt = "*-*-* *:00,15,30,45:00";
-#        };
+       services.postgresqlBackup = {
+         enable = false;
+         location = "/var/backup/postgresql";
+         startAt = "*-*-* *:00,15,30,45:00";
+       };
       };
     };
     vaultwarden = {
