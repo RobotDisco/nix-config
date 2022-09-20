@@ -243,7 +243,6 @@
   }];
 
   networking.firewall.interfaces.vlan50.allowedTCPPorts = [ 80 443 ];
-  networking.firewall.checkReversePath = "loose";
 
   security.acme = {
     acceptTerms = true;
