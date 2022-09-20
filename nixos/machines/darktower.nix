@@ -362,6 +362,7 @@
     };
   };
 
+  virtualisation.oci-containers.backend = "docker";
   virtualisation.oci-containers.containers = {
     "seafile-memcached" = {
       autoStart = true;
