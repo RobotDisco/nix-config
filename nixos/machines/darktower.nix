@@ -197,6 +197,16 @@
   };
   # Automatically replicate data pool to onsite backup
   services.syncoid = {
+    localTargetAllow = [
+      "change-key"
+      "compression"
+      "create"
+      "destroy"
+      "mount"
+      "mountpoint"
+      "receive"
+      "rollback"
+    ];
     enable = true;
 
     commands = {
