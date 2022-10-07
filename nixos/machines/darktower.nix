@@ -372,6 +372,14 @@
     };
   };
 
+  systemd.services.podman-create-seafile-pod = {
+    serviceConfig.Type = "oneshot";
+    wantedBy = [ "podman-seafile-memcached.service" ];
+    script = ''
+      podman pod exists seafile || podman pod create --name seafile
+    '';
+  };
+
   virtualisation.oci-containers.containers = {
     "seafile-memcached" = {
       autoStart = true;
@@ -379,7 +387,7 @@
       entrypoint = "memcached";
       cmd = ["-m" "256"];
       extraOptions = [
-        "--pod new:seafile"
+        "--pod=seafile"
       ];
     };
     # "seafile" = {
