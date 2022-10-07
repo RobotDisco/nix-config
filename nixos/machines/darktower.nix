@@ -379,7 +379,7 @@
       entrypoint = "memcached";
       cmd = ["-m" "256"];
       extraOptions = [
-        "--pod seafile"
+        "--pod new:seafile"
       ];
     };
     # "seafile" = {
