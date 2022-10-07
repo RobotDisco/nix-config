@@ -378,7 +378,7 @@
       image = "memcached:1.5.6";
       entrypoint = "memcached";
       cmd = ["-m" "256"];
-      ports = [ "127.0.0.1::11211" ];
+      ports = [ "11211" ];
     };
     # "seafile" = {
     #   autoStart = true;
