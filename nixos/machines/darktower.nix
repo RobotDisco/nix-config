@@ -390,19 +390,19 @@
         "--pod=seafile"
       ];
     };
-    # "seafile" = {
-    #   autoStart = true;
-    #   image = "seafileltd/seafile-mc:8.0.7";
-    #   ports = [ "8001:80" ];
-    #   dependsOn = [ "seafile-memcached"];
-    #   environmentFiles = [ "/srv/storagepool/data/webdav/seafile_env_vars" ];
-    #   volumes = [
-    #     "/srv/storagepool/data/webdav/shared:/shared"
-    #   ];
-    #   extraOptions = [
-    #     "--network=host"
-    #   ];
-    # };
+    "seafile" = {
+      autoStart = true;
+      image = "seafileltd/seafile-mc:8.0.7";
+      ports = [ "8001:80" ];
+      dependsOn = [ "seafile-memcached"];
+      environmentFiles = [ "/srv/storagepool/data/webdav/seafile_env_vars" ];
+      volumes = [
+        "/srv/storagepool/data/webdav/shared:/shared"
+      ];
+      extraOptions = [
+        "--pod=seafile"
+      ];
+    };
   };
 
   users.users.nut = {
