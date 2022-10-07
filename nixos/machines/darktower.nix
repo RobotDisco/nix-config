@@ -333,7 +333,7 @@
           settings.password_encryption = "scram-sha-256";
         };
        services.postgresqlBackup = {
-         enable = false;
+         enable = true;
          location = "/var/backup/postgresql";
          startAt = "*-*-* *:00,15,30,45:00";
        };
