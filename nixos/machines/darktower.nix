@@ -379,6 +379,8 @@
       ${pkgs.podman}/bin/podman pod exists seafile || ${pkgs.podman}/bin/podman pod create --name seafile -p 127.0.0.1:8001:8000
     '';
   };
+  
+  virtualisation.podman.extraPackages = [ pkgs.zfs ];
 
   virtualisation.oci-containers.containers = {
     "seafile-memcached" = {
