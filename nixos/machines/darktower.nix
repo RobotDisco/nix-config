@@ -376,7 +376,7 @@
     serviceConfig.Type = "oneshot";
     wantedBy = [ "podman-seafile-memcached.service" ];
     script = ''
-      ${pkgs.podman}/bin/podman pod exists seafile || ${pkgs.podman}/bin/podman pod create --name seafile
+      ${pkgs.podman}/bin/podman pod exists seafile || ${pkgs.podman}/bin/podman pod create --name seafile -p 127.0.0.1:8001:8000
     '';
   };
 
@@ -393,7 +393,6 @@
     "seafile" = {
       autoStart = true;
       image = "seafileltd/seafile-mc:8.0.7";
-      ports = [ "8001:8000" ];
       dependsOn = [ "seafile-memcached"];
       environmentFiles = [ "/srv/storagepool/data/webdav/seafile_env_vars" ];
       volumes = [
