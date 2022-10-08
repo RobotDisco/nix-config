@@ -393,7 +393,7 @@
     "seafile" = {
       autoStart = true;
       image = "seafileltd/seafile-mc:8.0.7";
-      ports = [ "8001:80" ];
+      ports = [ "8001:8000" ];
       dependsOn = [ "seafile-memcached"];
       environmentFiles = [ "/srv/storagepool/data/webdav/seafile_env_vars" ];
       volumes = [
