@@ -382,6 +382,8 @@
   
   virtualisation.podman.extraPackages = [ pkgs.zfs ];
 
+  virtualisation.storage.driver = "zfs";
+
   virtualisation.oci-containers.containers = {
     "seafile-memcached" = {
       autoStart = true;
