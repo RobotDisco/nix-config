@@ -382,7 +382,11 @@
   
   virtualisation.podman.extraPackages = [ pkgs.zfs ];
 
-  virtualisation.containers.storage.settings.storage.driver = "zfs";
+  virtualisation.containers.storage.settings.storage = {
+    driver = "zfs";
+    graphroot = "/var/lib/containers/storage";
+    runroot = "/run/containers/storage";
+  };
 
   virtualisation.oci-containers.containers = {
     "seafile-memcached" = {
