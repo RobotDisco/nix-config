@@ -283,14 +283,14 @@
               forceSSL = true;
               enableACME = true;
             };
-            # "fallcube.robot-disco.net" = {
-            #   locations."/" = {
-            #     proxyPass = "http://localhost:8001";
-            #   };
+            "fallcube.robot-disco.net" = {
+              locations."/" = {
+                proxyPass = "http://localhost:8001";
+              };
 
-            #   forceSSL = true;
-            #   enableACME = true;
-            # };
+              forceSSL = true;
+              enableACME = true;
+            };
           };
         };
       };
@@ -398,7 +398,7 @@
         "--pod=seafile"
       ];
     };
-    "seafile" = {
+    "seafile-mc" = {
       autoStart = true;
       image = "seafileltd/seafile-mc:8.0.7";
       dependsOn = [ "seafile-memcached"];
