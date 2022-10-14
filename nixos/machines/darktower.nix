@@ -311,6 +311,12 @@
           enable = true;
           package = pkgs.mariadb;
         };
+        services.mysqlBackup = {
+          enable = true;
+          databases = [ "ccnet_db" "seafile_db"  "seahub_db" ];
+          calendar = "*-*-* *:05,15,35,45:00";
+          location = "/var/backup/mysql";
+        };
       };
     };
     
