@@ -257,6 +257,24 @@
   networking.firewall.checkReversePath = "loose";
 
   containers = {
+    fileserver = {
+      autoStart = true;
+      bindMounts = {
+        "/srv/archive" = {
+          hostPath = "/srv/storagepool/archive";
+          isReadOnly = false;
+        };
+      };
+
+      config = {
+        system.stateVersion = "22.05";
+
+        services.samba = {
+          enable = false;
+        };
+      };
+    };
+
     reverseproxy = {
       autoStart = true;
       config = {
