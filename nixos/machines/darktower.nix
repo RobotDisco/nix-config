@@ -269,6 +269,16 @@
       config = {
         system.stateVersion = "22.05";
 
+        users.users.gaelan = {
+          shell = pkgs.zsh;
+          isNormalUser = true;
+          home = "/home/gaelan";
+          description = "Gaelan D'costa";
+          # passwordFile = "/run/secrets/users_gaelan_password";
+          # temp password just to get me by
+          initialHashedPassword = "$6$rounds=2500000$PFL/U0wWeXAEL2j$Xf5r7J6quFZYeHtUlNQwjJIPmlZDwS7bRg5u8yWYq2NGF8WLdyiMbK.n1ymvmR3gbT7nDZ4Pdp/MvbOsyOi0E/";
+        };
+
         services.samba = {
           enable = false;
         };
