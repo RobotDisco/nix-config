@@ -290,7 +290,7 @@
             server string = smbunix
             netbios name = smbunix
             security = user
-            host allow = 192.168.20. 127.0.0.1 localhost
+            hosts allow = 192.168.20. 127.0.0.1
             hosts deny 0.0.0.0/0
             guest account = nobody
             map to guest = bad user
