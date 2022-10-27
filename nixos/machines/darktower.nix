@@ -287,6 +287,7 @@
             archive = {
               path = "/srv/archive";
             };
+          };
         };
       };
     };
