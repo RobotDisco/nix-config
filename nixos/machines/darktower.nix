@@ -244,6 +244,7 @@
   # I only use this for cloud services, so specify the vlan
   networking.vlans = {
     vlan50 = { id = 50; interface="enp6s0f1"; };
+    vlan20 = { id = 20; interface="enp6s0f1"; };
   };
   networking.interfaces.vlan50.useDHCP = lib.mkDefault false;
   # I currently do port forwarding which requires a static IP
@@ -251,9 +252,12 @@
     address = "192.168.50.99";
     prefixLength = 24;
   }];
+  # Let's see if using dynamic home vlan IPs works for my purposes
+  networking.interfaces.vlan20.useDHCP = lib.mkDefault true;
 
   networking.firewall.interfaces.cni-podman0.allowedTCPPorts = [ 3306 ];
   networking.firewall.interfaces.vlan50.allowedTCPPorts = [ 80 443 ];
+  networking.firewall.interfaces.vlan20.allowedTCPPorts = [ 139 445 ];
   networking.firewall.checkReversePath = "loose";
 
   containers = {
@@ -287,8 +291,8 @@
 
           extraConfig = ''
             workgroup = ROBOT-DISCO
-            server string = smbunix
-            netbios name = smbunix
+            server string = chapterhouse
+            netbios name = chapterhouse
             security = user
             hosts allow = 192.168.20. 127.0.0.1
             hosts deny 0.0.0.0/0
@@ -533,5 +537,5 @@
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 3493 139 445 ];
+  networking.firewall.allowedTCPPorts = [ 3493 ];
 }
