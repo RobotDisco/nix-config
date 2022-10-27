@@ -280,7 +280,13 @@
         };
 
         services.samba = {
-          enable = false;
+          enable = true;
+          securityType = "user";
+
+          shares = {
+            archive = {
+              path = "/srv/archive";
+            };
         };
       };
     };
