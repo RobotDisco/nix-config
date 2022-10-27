@@ -281,11 +281,30 @@
 
         services.samba = {
           enable = true;
+          # Remember to run `smbpasswd -a <user>` to get samba to pick up
+          # necessary user passwords
           securityType = "user";
+
+          extraConfig = ''
+            workgroup = ROBOT-DISCO
+            server string = smbunix
+            netbios name = smbunix
+            security = user
+            host allow = 192.168.20. 127.0.0.1 localhost
+            hosts deny 0.0.0.0/0
+            guest account = nobody
+            map to guest = bad user
+          '';
 
           shares = {
             archive = {
               path = "/srv/archive";
+              "read only" = "no";
+              "guest ok" = "no";
+              "create mask" = "0644";
+              "directory mask" = "0755";
+              "force user" = "gaelan";
+              "force group" = "users";
             };
           };
         };
