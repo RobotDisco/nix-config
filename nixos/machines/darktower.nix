@@ -116,7 +116,8 @@
     }];
   };
   networking.interfaces.enp6s0f0.useDHCP = lib.mkDefault false;
-  networking.interfaces.enp6s0f1.useDHCP = lib.mkDefault false;
+  # Let's see if using dynamic home vlan IPs works for my purposes
+  networking.interfaces.enp6s0f1.useDHCP = lib.mkDefault true;
 
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
@@ -251,8 +252,6 @@
     address = "192.168.50.99";
     prefixLength = 24;
   }];
-  # Let's see if using dynamic home vlan IPs works for my purposes
-  networking.interfaces.enp6s0f1.useDHCP = lib.mkDefault true;
 
   networking.firewall.interfaces.cni-podman0.allowedTCPPorts = [ 3306 ];
   networking.firewall.interfaces.vlan50.allowedTCPPorts = [ 80 443 ];
