@@ -39,7 +39,7 @@
   boot.zfs.forceImportRoot = false;
   boot.zfs.forceImportAll = false;
 
-  users.users.root.initialHashedPassword = "$6$rounds=2500000$J3xTIRDh1NBHNJS/$gsXMT1hWNEHseQBGdYKADCNvPOl5xAP/Bb5v0fy8zwsieIS6jPfe9.HvoEKu3Wf8DkVY8/ZHOHRIPxK9unuso1";
+  users.users.root.initialHashedPassword = "$6$rounds=2500000$NC9QlbTMMOJ8$h.coBkWCDI/epZApjonqHPvOjZ4ys8O44OERo2mK5ehB8TUgK8.FWW4tknxXYrlFKa/9t5tGWALBDoUNbCMjx1";
   time.timeZone = "America/Toronto";
 
   services.openssh.enable = true;
@@ -153,7 +153,7 @@
     extraGroups = [ "wheel" ];
     # passwordFile = "/run/secrets/users_gaelan_password";
     # temp password just to get me by
-    initialHashedPassword = "$6$rounds=2500000$PFL/U0wWeXAEL2j$Xf5r7J6quFZYeHtUlNQwjJIPmlZDwS7bRg5u8yWYq2NGF8WLdyiMbK.n1ymvmR3gbT7nDZ4Pdp/MvbOsyOi0E/";
+    initialHashedPassword = "$6$rounds=2500000$cB5yavkAPQdBU$ATYQgQQHsMRQP9kLIIG12MNX62Gb04V.8Pl2.1hMPAN78CpR0qzLYvEuy3sjLw1/eJ90mAKqeSk9eJV.N/e9P0";
   };
 
   nix.trustedUsers = [ "gaelan "];
@@ -278,7 +278,7 @@
           description = "Gaelan D'costa";
           # passwordFile = "/run/secrets/users_gaelan_password";
           # temp password just to get me by
-          initialHashedPassword = "$6$rounds=2500000$PFL/U0wWeXAEL2j$Xf5r7J6quFZYeHtUlNQwjJIPmlZDwS7bRg5u8yWYq2NGF8WLdyiMbK.n1ymvmR3gbT7nDZ4Pdp/MvbOsyOi0E/";
+          initialHashedPassword = "$6$rounds=2500000$cB5yavkAPQdBU$ATYQgQQHsMRQP9kLIIG12MNX62Gb04V.8Pl2.1hMPAN78CpR0qzLYvEuy3sjLw1/eJ90mAKqeSk9eJV.N/e9P0";
         };
 
         services.samba = {
