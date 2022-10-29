@@ -1,36 +1,67 @@
+{ config, ...}:
+
 {
-  ## Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # Let's lean into ZFS unless I ever need non-ZFS
+  boot.supportedFilesystems = [ "zfs" ];
+  # This should be parameterized, an eight-character hex string
+  networking.hostId = "aa3d3177";
+  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+
+  # Don't allow system to change EFI variables
+  boot.loader.efi.canTouchEfiVariables = false;
+  # Copy kernel files into /boot so /nix/store isn't needed
+  boot.loader.generationsDir.copyKernels = true;
+  # TL;DR Don't depend on NVRAM state
+  boot.loader.grub.efiInstallAsRemovable = true;
+  # OpenZFS recommends grub; sure, why not
+  boot.loader.grub.enable = true;
+  boot.loader.grub.version = 2;
+  # Copy kernels to /boot
+  boot.loader.grub.copyKernels = true;
+  boot.loader.grub.efiSupport = true;
+  boot.loader.grub.zfsSupport = true;
+  # Since we mirror our system drives, mirror boot partitions.
+  boot.loader.grub.mirroredBoots = [
+    {
+      devices = [ "nodev" ];
+      path = "/boot/efis/EFIBOOT0";
+      efiSysMountPoint = "/boot/efis/EFIBOOT0";
+    }
+  ];
+
+  # Don't force import of root ZFS pools
+  boot.zfs.forceImportRoot = false;
+  boot.zfs.forceImportAll = false;
 
   # To make my life easier I've come up with a partition naming scheme that's
   # common to all of my NixOS devices.
  
   fileSystems."/" = {
-    device = "/dev/disk/by-label/rootpart0";
-    fsType = "ext4";
-    options = [ "noatime" ];
+    device = "rootpool/nixos/root";
+    fsType = "zfs";
+    options = [ "zfsutil" "X-mount.mkdir" ];
   };
 
   fileSystems."/home" = {
-    device = "/dev/disk/by-label/homepart0";
-    fsType = "ext4";
-    options = [ "noatime" ];
+    device = "rootpool/nixos/home";
+    fsType = "zfs";
+    options = [ "zfsutil" "X-mount.mkdir" ];
   };
 
-  fileSystems."/nix" = {
-    device = "/dev/disk/by-label/nixpart0";
-    fsType = "ext4";
-    options = [ "noatime" ];
-  };
-
-  fileSystems."/var" = {
-    device = "/dev/disk/by-label/varpart0";
-    fsType = "ext4";
-    options = [ "relatime" ];
+  # Where logs live
+  fileSystems."/var/log" = {
+    device = "rootpool/nixos/var/log";
+    fsType = "zfs";
+    options = [ "zfsutil" "X-mount.mkdir" ];
   };
 
   fileSystems."/boot" = {
+    device = "/bootpool/nixos/root";
+    fsType = "zfs";
+    options = [ "zfsutil" "X-mount.mkdir" ];
+  };
+
+  fileSystems."/boot/efis/EFIBOOT0" = {
     device = "/dev/disk/by-label/EFIBOOT0";
     fsType = "vfat";
   };
