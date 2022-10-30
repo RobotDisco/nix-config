@@ -1,4 +1,5 @@
 {
+  robot-disco.hardware.framework.enable = true;
   robot-disco.audio.enable = true;
   robot-disco.boot.hostId = "887ab783";
   robot-disco.window-manager.enable = true;
@@ -51,13 +52,4 @@
       };
     };
   };
-
-  # HiDPI
-  # Leaving here for documentation
-  hardware.video.hidpi.enable = true;
-
-  # Fix font sizes in X
-  services.xserver.dpi = 200;
-
-  networking.interfaces.wlp170s0.useDHCP = true;
 }
