@@ -62,7 +62,7 @@
   };
 
   fileSystems."/boot" = {
-    device = "/bootpool/nixos/root";
+    device = "bootpool/nixos/root";
     fsType = "zfs";
     options = [ "zfsutil" "X-mount.mkdir" ];
   };
