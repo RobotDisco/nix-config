@@ -4,7 +4,7 @@
   # Let's lean into ZFS unless I ever need non-ZFS
   boot.supportedFilesystems = [ "zfs" ];
   # This should be parameterized, an eight-character hex string
-  networking.hostId = "aa3d3177";
+  networking.hostId = "887ab783";
   boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
   # Don't allow system to change EFI variables
@@ -51,6 +51,12 @@
   # Where logs live
   fileSystems."/var/log" = {
     device = "rootpool/nixos/var/log";
+    fsType = "zfs";
+    options = [ "zfsutil" "X-mount.mkdir" ];
+  };
+
+  fileSystems."/var/lib" = {
+    device = "rootpool/nixos/var/lib";
     fsType = "zfs";
     options = [ "zfsutil" "X-mount.mkdir" ];
   };
