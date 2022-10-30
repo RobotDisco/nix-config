@@ -1,5 +1,3 @@
-{ lib, ... }:
-
 {
   robot-disco.audio.enable = true;
   robot-disco.boot.hostId = "887ab783";
@@ -56,7 +54,7 @@
 
   # HiDPI
   # Leaving here for documentation
-  hardware.video.hidpi.enable = lib.mkDefault true;
+  hardware.video.hidpi.enable = true;
 
   # Fix font sizes in X
   services.xserver.dpi = 200;
