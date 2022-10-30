@@ -17,7 +17,7 @@ in
       [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "usbhid" "sd_mod" ];
     boot.kernelModules = [ "dm-snapshot" ];
     boot.kernelParams = [ "mem_sleep_default=deep" ];
-    boot.kernelPackages = pkgs.linuxPackages_latest;
+    boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 
     # Enable the Framework networking device
     networking.interfaces.wlp170s0.useDHCP = true;
