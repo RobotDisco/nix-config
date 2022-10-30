@@ -54,7 +54,7 @@
       ];
 
       nixosModules = {
-        default = (import ./nixos/modules {});
+        default = (import ./nixos/profiles {});
       };
 
       nixosConfigurations = {
