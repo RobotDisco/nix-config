@@ -11,7 +11,7 @@ in
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
-    lib.mkIf cfg.enableExwm {
+    (lib.mkIf cfg.enableExwm {
       # For whatever reason I have to configure lightdm to run sessions
       # defined by home-manager's xsession support.
       services.xserver.desktopManager.session = [{
@@ -26,7 +26,7 @@ in
         enable = true;
         user = "gaelan";
       };
-    }
+    })
     {
       # Managed home directories + Gaelan's HM customizations.
       home-manager.users.gaelan = {
