@@ -66,7 +66,7 @@
         };
         arrakis = myLib.nixosSystem {
           system = "x86_64-linux";
-          configuration = import ./nixos/machines/arrakis2022.nix {};
+          configuration = (import ./nixos/machines/arrakis2022.nix {});
 	        myModules = lib.attrValues self.nixosModules;
           contribModules = [ nixos-hardware.nixosModules.framework ];
         };
