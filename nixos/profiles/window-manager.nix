@@ -1,10 +1,10 @@
 { config, lib, ... }:
 
 let
-  cfg = config.robot-disco.software.window-manager;
+  cfg = config.robot-disco.window-manager;
 in
 {
-  options.robot-disco.software.window-manager = {
+  options.robot-disco.window-manager = {
     enable = lib.mkEnableOption "Enable Graphical Environment";
   };
 

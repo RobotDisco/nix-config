@@ -1,10 +1,10 @@
 { config, lib, ... }:
 
 let
-  cfg = config.robot-disco.software.steam;
+  cfg = config.robot-disco.steam;
 in
 {
-  options.robot-disco.software.steam = {
+  options.robot-disco.steam = {
     enable = lib.mkEnableOption "Install the Steam videogame store.";
   };
 

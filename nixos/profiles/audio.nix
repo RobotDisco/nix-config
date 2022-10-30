@@ -1,11 +1,11 @@
 { config, lib, ... }:
 
 let
-  cfg = config.robot-disco.hardware.audio;
+  cfg = config.robot-disco.audio;
 in
 
 {
-  options.robot-disco.hardware.audio = {
+  options.robot-disco.audio = {
     enable = lib.mkEnableOption "Enable hardware sound output";
   };
 
@@ -19,8 +19,6 @@ in
       alsa.enable = true;
       # Enable PulseAudio compatibility
       pulse.enable = true;
-      # Only needed for steam, honestly
-      alsa.support32Bit = lib.mkDefault false;
     };
   };
 }

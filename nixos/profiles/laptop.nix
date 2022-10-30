@@ -1,11 +1,11 @@
 { config, lib, ... }:
 
 let
-  cfg = config.robot-disco.hardware.laptop;
+  cfg = config.robot-disco.laptop;
 in
 
 {
-  options.robot-disco.hardware.laptop = {
+  options.robot-disco.laptop = {
     enable = lib.mkEnableOption "Enable laptop functionality";
   };
 
