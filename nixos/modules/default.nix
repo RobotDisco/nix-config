@@ -8,7 +8,7 @@
     ./framework.nix
     ./laptop.nix
     ./steam.nix
-    ./user-gaelan.nix
+    # ./user-gaelan.nix
     ./window-manager.nix
     ./yubikey.nix
   ];
