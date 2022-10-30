@@ -19,6 +19,8 @@ in
       alsa.enable = true;
       # Enable PulseAudio compatibility
       pulse.enable = true;
+      # Only needed for steam, honestly
+      alsa.support32Bit = lib.mkDefault false;
     };
   };
 }

@@ -536,4 +536,23 @@
   };
 
   networking.firewall.allowedTCPPorts = [ 3493 ];
+
+  # Get emails for any hard drive failures
+  services.smartd = {
+    enable = true;
+    notifications = {
+      mail.sender = "root@robot-disco.net";
+      mail.enable = true;
+      mail.recipient = "gdcosta@gmail.com";
+    };
+    # weekly short tests, monthly long tests
+    defaults.autodetected = "-a -o on -s (S/../../3/12|L/../01/./17)";
+  };
+
+  services.postfix = {
+    enable = true;
+    rootAlias = "gdcosta@gmail.com";
+    relayHost = "out.teksavvy.com";
+    relayPort = 587;
+  };
 }
