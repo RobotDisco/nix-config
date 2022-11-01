@@ -242,6 +242,19 @@ Show a line indicating the end of the page, as it were
 #+BEGIN_SRC emacs-lisp :tangle yes
   (global-display-fill-column-indicator-mode +1)
 #+END_SRC
+** Colour Theme
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rebecca-theme
+    :ensure t
+    :demand t
+    :config
+    (if (daemonp)
+	(add-hook 'after-make-frame-functions
+		  (lambda (frame)
+		    (with-selected-frame frame
+		      (load-theme 'rebecca t))))
+      (load-theme 'rebecca t)))
+#+END_SRC
 * Operating System
 I love Emacs so much, I use it as my primary computing environment :)
 ** Window Manager
