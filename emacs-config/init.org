@@ -233,14 +233,6 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
   (column-number-mode 1)
   (line-number-mode 1)
 #+END_SRC
-*** Time
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (display-time)
-#+END_SRC
-*** Battery
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (display-battery-mode)
-#+END_SRC
 ** Margins
 Set the line length to 80 characters
 #+BEGIN_SRC emacs-lisp :tangle yes
