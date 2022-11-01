@@ -383,6 +383,11 @@ We use smartparens for structured editing like Ruby blocks or lisp s-expressions
     :commands (smartparens-global-mode
 	       sp-use-paredit-bindings
 	       sp-use-smartparens-bindings)
+    :hook ((clojure-mode-hook
+	     emacs-lisp-mode-hook
+	     ielm-mode-hook
+	     lisp-mode-hook)
+	    . smartparens-strict-mode)
     :defer 2
     :config
     (require 'smartparens-config)
@@ -397,12 +402,12 @@ Visually separate nested delimiter pairs
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package rainbow-delimiters
     :ensure t
-    :hook
-    ((clojure-mode-hook
-      emacs-lisp-mode-hook
-      ielm-mode-hook
-      lisp-mode-hook)
-     . rainbow-delimiters-mode))
+      :hook
+      ((clojure-mode-hook
+	emacs-lisp-mode-hook
+	ielm-mode-hook
+	lisp-mode-hook)
+       . rainbow-delimiters-mode))
 #+END_SRC
 ** Packages
 *** envrc
@@ -415,6 +420,7 @@ Project-specific environment variables via =direnv=
     :config
     (direnv-mode))
 #+END_SRC
+
 *** editconfig
 A editor-agnostic way to maintain project coding styles
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -471,10 +477,9 @@ Support flycheck syntax checking
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package clojure-mode
-    :after (smartparens)
-    :commands smartparens-strict-mode
-    :hook (clojure-mode-hook . (lambda ()
-				  (smartparens-strict-mode)))
+    :mode (("\\.clj\\'" . clojure-mode)
+	   ("\\.cljs\\'" . clojurescript-mode)
+	   ("\\.cljc\\'" . clojurec-mode))
     :ensure t)
 #+END_SRC
 
