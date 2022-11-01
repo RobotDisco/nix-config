@@ -6,7 +6,7 @@
   robot-disco.laptop.enable = true;
   robot-disco.steam.enable = true;
   robot-disco.yubikey.enable = true;
-  robot-disco.users.gaelan = {
+  robot-disco.user.gaelan = {
     enable = true;
     enableExwm = true;
   };

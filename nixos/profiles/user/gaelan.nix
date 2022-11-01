@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.robot-disco.users.gaelan;
+  cfg = config.robot-disco.user.gaelan;
 in
 
 {
-  options.robot-disco.users.gaelan = {
+  options.robot-disco.user.gaelan = {
     enable = lib.mkEnableOption "Enable the gaelan user.";
     enableExwm = lib.mkEnableOption "Enable EXWM as a window manager.";
   };
