@@ -104,9 +104,24 @@ in {
       # This should probably be part of an exwm module
       pinentry-emacs
 
-      # This should probably be part of a dev module?
-      # or maybe standard since I heavily rely on it for dev flow
-      direnv
+      # These are part of my developer portfolio
+      jq
+      ripgrep
+
+      # Games worth playing
+      (dwarf-fortress-packages.dwarf-fortress-full.override {
+        theme = "cla";
+        enableFPS = false;
+      })
+      nethack
     ];
+
+    programs.direnv = {
+      enable = true;
+      enableZshIntegration = true;
+      nix-direnv = {
+        enable = true;
+      };
+    };
   };
 }
