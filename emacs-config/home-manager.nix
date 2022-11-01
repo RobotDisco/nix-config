@@ -99,6 +99,71 @@ in {
       # Enable exwm when launching the emacs server
       services.emacs.extraOptions = [ "-f" "exwm-enable" ];
 
+      # Enable polybar as my system tray / status bar
+      services.polybar = {
+        enable = true;
+        script = ''
+          #!/usr/bin/env bash
+
+          # Terminate already-existing polybar instances
+          # If IPC is enabled for all bars
+          ${config.services.polybar.package}/bin/polybar-msg cmd quit
+          # Otherwise use killall
+          # killall -q polybar
+
+          # Launch a bar
+          ${config.services.polybar.package}/bin/polybar & disown
+        '';
+        settings = {
+          "bar/gaelan" = {
+            enable.ipc = true;
+
+            modules-left = "date battery";
+            modules-center = "xworkspaces xwindow";
+            modules-right= "pulseaudio wlan";
+
+            tray.position = "right";
+          };
+          "module/battery" = {
+            type = "internal/battery";
+            time.format = "%H:%M";
+            battery = "BAT1";
+            adapter = "ACAD";
+          };
+          "module/date" = {
+            type = "internal/date";
+            date = "%H:%M";
+            date-alt ="%Y/%m/%d %H:%M:%S";
+
+            label = "%date%";
+          };
+          "module/wlan" = {
+            type = "internal/network";
+            interface-type = "wireless";
+            format-connected = "<label-connected>";
+            format-disconnected = "<label-disconnected>";
+            label-disconnected = "%ifname%";
+            label-connected = "%ifname% %essid%";
+          };
+          "module/pulseaudio" = {
+            type = "internal/pulseaudio";
+            lable-volume = "%percentage%%";
+            label-muted = "muted";
+          };
+          "module/xwindow" = {
+            type = "internal/xwindow";
+            label = "%title:0:60:...%";
+          };
+          "module/xworkspaces" = {
+            type = "internal/xworkspaces";
+          };
+        };
+      };
+      # Polybar isn't run graphically by default for some reason
+      systemd.user.services.polybar = {
+        Install.WantedBy = [ "graphical-session.target" ];
+      };
+
       # We're leveraging .xsession support to load our window manager, as
       # services.xserver.windowManager.exwm doesn't suffice for my needs.
       xsession.enable = if pkgs.stdenv.isLinux then true else false;
