@@ -110,13 +110,13 @@ in {
       # Install external commands used by emacs when in desktop environment mode
       home.packages = with pkgs; [
         # desktop-environment-mode
-	alsa-utils
-	brightnessctl
-	scrot
-	i3lock
-	upower
-	tlp
-	playerctl
+        alsa-utils
+        brightnessctl
+        scrot
+        i3lock
+        upower
+        tlp
+        playerctl
       ];
     })
   ]);
