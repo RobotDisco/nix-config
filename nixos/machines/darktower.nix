@@ -454,7 +454,7 @@
   virtualisation.oci-containers.containers = {
     "seafile-memcached" = {
       autoStart = true;
-      image = "memcached:1.5.6";
+      image = "memcached:1.6";
       entrypoint = "memcached";
       cmd = ["-m" "256"];
       extraOptions = [
@@ -463,7 +463,7 @@
     };
     "seafile-mc" = {
       autoStart = true;
-      image = "seafileltd/seafile-mc:8.0.7";
+      image = "seafileltd/seafile-mc:8.0.8";
       dependsOn = [ "seafile-memcached"];
       environmentFiles = [ "/srv/storagepool/data/webdav/seafile_env_vars" ];
       volumes = [
