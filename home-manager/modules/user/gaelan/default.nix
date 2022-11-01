@@ -95,8 +95,18 @@ in {
     };
 
     home.packages = with pkgs; [
-      seafile-client
+      brave
+      bitwarden
       networkmanagerapplet
+      seafile-client
+      slack
+
+      # This should probably be part of an exwm module
+      pinentry-emacs
+
+      # This should probably be part of a dev module?
+      # or maybe standard since I heavily rely on it for dev flow
+      direnv
     ];
   };
 }
