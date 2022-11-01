@@ -12,9 +12,8 @@ in {
     robot-disco.emacs = {
       enable = true;
 
-      # Temporarily turn off needs to be configurable anyway
-      # enableServer = true;
-      # enableExwm = true;
+      enableServer = true;
+      enableExwm = true;
     };
 
     programs.home-manager.enable = true;
@@ -85,14 +84,19 @@ in {
     };
 
     # Temporarily turn off but should only be on for laptop anyway 
-    #services.screen-locker = {
-    #  enable = true;
-    #  lockCmd = "${pkgs.i3lock}/bin/i3lock -c 746542";
-    #};
+    services.screen-locker = {
+      enable = true;
+      lockCmd = "${pkgs.i3lock}/bin/i3lock -c 746542";
+    };
 
     home.keyboard = {
       layout = "us";
       options = [ "ctrl:nocaps" ];
     };
+
+    home.packages = with pkgs; [
+      seafile-client
+      networkmanagerapplet
+    ];
   };
 }
