@@ -352,11 +352,6 @@
               locations."/" = {
                 proxyPass = "http://localhost:8002";
                 extraConfig = ''
-                  proxy_set_header Host $host;
-                  proxy_set_header X-Real-IP $remote_addr;
-                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                  proxy_set_header X-Forwarded-Host $server_name;
-
                   proxy_read_timeout 1200s;
 
                   # used for view/edit office via Office Online Server
@@ -373,8 +368,6 @@
 
                   client_max_body_size 0;
 
-                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
                   proxy_connect_timeout 36000s;
                   proxy_read_timeout 36000s;
                   proxy_send_timeout 36000s;
@@ -385,17 +378,10 @@
                   error_log /var/log/nginx/seafhttp.error.log;
                 '';
               };
-              locations."/media" = {
-                proxyPass = "http://localhost:8001";
-              };
+
               locations."/seafdav" = {
                 proxyPass = "http://localhost:8004";
                 extraConfig = ''
-                  proxy_set_header Host $host;
-                  proxy_set_header X-Real-IP $remote_addr;
-                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-                  proxy_set_header X-Forwarded-Host $server_name;
-                  proxy_set_header X-Forwaded-Proto $scheme;
                   proxy_read_timeout 1200s;
                   client_max_body_size 0;
 
