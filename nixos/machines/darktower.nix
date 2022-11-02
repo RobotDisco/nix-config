@@ -331,10 +331,6 @@
           recommendedGzipSettings = true;
           recommendedProxySettings = true;
 
-          commonHttpConfig = ''
-            log_format seafileformat '$http_x_forwarded_for $remote_addr [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" $upstream_response_time';
-          '';
-
           virtualHosts = {
             "vaultwarden.robot-disco.net" = {
               locations."/" = {
@@ -350,44 +346,7 @@
               '';
 
               locations."/" = {
-                proxyPass = "http://localhost:8002";
-                extraConfig = ''
-                  proxy_read_timeout 1200s;
-
-                  # used for view/edit office via Office Online Server
-                  client_max_body_size 0;
-
-                  access_log /var/log/nginx/seahub.access.log seafileformat;
-                  error_log /var/log/nginx/seahub.error.log;
-                '';
-              };
-              locations."/seafhttp" = {
-                proxyPass = "http://localhost:8003";
-                extraConfig = ''
-                  rewrite ^/seafhttp(.*)$ $1 break;
-
-                  client_max_body_size 0;
-
-                  proxy_connect_timeout 36000s;
-                  proxy_read_timeout 36000s;
-                  proxy_send_timeout 36000s;
-
-                  send_timeout 36000s;
-
-                  access_log /var/log/nginx/seafhttp.access.log seafileformat;
-                  error_log /var/log/nginx/seafhttp.error.log;
-                '';
-              };
-
-              locations."/seafdav" = {
-                proxyPass = "http://localhost:8004";
-                extraConfig = ''
-                  proxy_read_timeout 1200s;
-                  client_max_body_size 0;
-
-                  access_log /var/log/nginx/seafdav.access.log seafileformat;
-                  error_log /var/log/nginx/seafdav.error.log;
-                '';
+                proxyPass = "http://localhost:8001";
               };
 
               forceSSL = true;
@@ -506,9 +465,6 @@
       ];
       ports = [
         "127.0.0.1:8001:8000"
-        "127.0.0.1:8002:8001"
-        "127.0.0.1:8003:8002"
-        "127.0.0.1:8004:8003"
       ];
     };
   };
