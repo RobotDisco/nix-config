@@ -260,7 +260,7 @@
 
   containers = {
     fileserver = {
-      autoStart = true;
+      autoStart = false;
       bindMounts = {
         "/srv/archive" = {
           hostPath = "/srv/storagepool/archive";
@@ -282,7 +282,7 @@
         };
 
         services.samba = {
-          enable = false;
+          enable = true;
           # Remember to run `smbpasswd -a <user>` to get samba to pick up
           # necessary user passwords
           securityType = "user";
