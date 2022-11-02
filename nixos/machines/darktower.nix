@@ -388,7 +388,7 @@
               locations."/media" = {
                 proxyPass = "http://localhost:8001";
               };
-              location "/seafdav" = {
+              locations."/seafdav" = {
                 proxyPass = "http://localhost:8004";
                 extraConfig = ''
                   proxy_set_header Host $host;
