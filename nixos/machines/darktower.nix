@@ -498,7 +498,7 @@
     serviceConfig.Type = "oneshot";
     wantedBy = [ "podman-seafile-memcached.service" ];
     script = ''
-      ${pkgs.podman}/bin/podman pod exists seafile || ${pkgs.podman}/bin/podman pod create --name seafile -p 127.0.0.1:8001:8000 -p 127.0.0.1:8002:8001 -p 127.0.0.1:8003:8002 -p 127.0.0.1:8004:8003
+      podman pod exists seafile || podman pod create --name seafile -p 127.0.0.1:8001:8000 -p 127.0.0.1:8002:8001 -p 127.0.0.1:8003:8002 -p 127.0.0.1:8004:8003
     '';
   };
   
