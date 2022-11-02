@@ -117,7 +117,7 @@
   };
   networking.interfaces.enp6s0f0.useDHCP = lib.mkDefault false;
   # Let's see if using dynamic home vlan IPs works for my purposes
-  networking.interfaces.enp6s0f1.useDHCP = lib.mkDefault true;
+  networking.interfaces.enp6s0f1.useDHCP = lib.mkDefault false;
 
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
@@ -253,7 +253,7 @@
     prefixLength = 24;
   }];
 
-  networking.firewall.interfaces.cni-podman0.allowedTCPPorts = [ 3306 ];
+  networking.firewall.interfaces.cni-podman0.allowedTCPPorts = [ 3306 11211 ];
   networking.firewall.interfaces.vlan50.allowedTCPPorts = [ 80 443 ];
   networking.firewall.interfaces.enp6s0f1.allowedTCPPorts = [ 139 445 ];
   networking.firewall.checkReversePath = "loose";
@@ -282,7 +282,7 @@
         };
 
         services.samba = {
-          enable = true;
+          enable = false;
           # Remember to run `smbpasswd -a <user>` to get samba to pick up
           # necessary user passwords
           securityType = "user";
