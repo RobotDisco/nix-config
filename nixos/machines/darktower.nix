@@ -343,11 +343,13 @@
             "fallcube.robot-disco.net" = {
               locations."/" = {
                 proxyPass = "http://localhost:8001";
-                clientMaxBodySize = 0;
-                proxyConnectTimeout = "36000s";
-                proxyReadTimeout = "36000s";
-                proxySendTimeout = "36000s";
-                sendTimeout = "36000s";
+                extraConfig = ''
+                  client_max_body_size 0;
+                  proxy_connect_timeout 36000s;
+                  proxy_read_timeout 36000s;
+                  proxy_send_timeout 36000s;
+                  send_timeout 36000s;
+                '';
               };
 
               forceSSL = true;
