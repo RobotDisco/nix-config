@@ -378,6 +378,7 @@ Make it easy (and fabulous) to quickly see how far down a file we are at a glanc
    #+begin_src emacs-lisp :tangle yes
      (use-package pinentry
        :ensure t
+       :defer 3
        :custom
        (epa-pinentry-mode 'loopback)
        :config

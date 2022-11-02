@@ -79,6 +79,7 @@ in {
         allow-emacs-pinentry
         allow-loopback-pinentry
       '';
+      pinentryFlavor = "emacs";
       defaultCacheTtl = 60;
       maxCacheTtl = 120;
     };
