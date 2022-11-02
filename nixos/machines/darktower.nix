@@ -494,14 +494,6 @@
     };
   };
 
-  systemd.services.podman-create-seafile-pod = {
-    serviceConfig.Type = "oneshot";
-    wantedBy = [ "podman-seafile-memcached.service" "podman-seafile-mc.service" ];
-    script = ''
-      ${pkgs.podman}/bin/podman pod exists seafile || ${pkgs.podman}/bin/podman pod create --name seafile -p 127.0.0.1:8001:8000 -p 127.0.0.1:8002:8001 -p 127.0.0.1:8003:8002 -p 127.0.0.1:8004:8003
-    '';
-  };
-  
   virtualisation.podman.extraPackages = [ pkgs.zfs ];
 
   virtualisation.containers.storage.settings.storage = {
@@ -516,9 +508,7 @@
       image = "memcached:1.6";
       entrypoint = "memcached";
       cmd = ["-m" "256"];
-      extraOptions = [
-        "--pod=seafile"
-      ];
+      ports = [ "127.0.0.1:11211:11211" ];
     };
     "seafile-mc" = {
       autoStart = true;
@@ -528,8 +518,11 @@
       volumes = [
         "/srv/storagepool/data/webdav/shared:/shared"
       ];
-      extraOptions = [
-        "--pod=seafile"
+      ports = [
+        "127.0.0.1:8001:8000"
+        "127.0.0.1:8002:8001"
+        "127.0.0.1:8003:8002"
+        "127.0.0.1:8004:8003"
       ];
     };
   };
