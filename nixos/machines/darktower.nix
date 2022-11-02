@@ -331,6 +331,10 @@
           recommendedGzipSettings = true;
           recommendedProxySettings = true;
 
+          appendConfig = ''
+            log_format seafileformat '$http_x_forwarded_for $remote_addr [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" $upstream_response_time';
+          '';
+
           virtualHosts = {
             "vaultwarden.robot-disco.net" = {
               locations."/" = {
@@ -341,14 +345,62 @@
               enableACME = true;
             };
             "fallcube.robot-disco.net" = {
+              extraConfig = ''
+                proxy_set_header X-Forwarded-For $remote_addr;
+              '';
+
               locations."/" = {
-                proxyPass = "http://localhost:8001";
+                proxyPass = "http://localhost:8002";
                 extraConfig = ''
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_f-rwarded_for;
+                  proxy_set_header X-Forwarded-Host $server_name;
+
+                  proxy_read_timeout 1200s;
+
+                  # used for view/edit office via Office Online Server
                   client_max_body_size 0;
+
+                  access_log /var/log/nginx/seahub.access.log seafileformat;
+                  error_log /var/log/nginx/seahub.error.log;
+                '';
+              };
+              locations."/seafhttp" = {
+                proxyPass = "http://localhost:8003";
+                extraConfig = ''
+                  rewrite ^/seafhttp(.*)$ $1 break;
+
+                  client_max_body_size 0;
+
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
                   proxy_connect_timeout 36000s;
                   proxy_read_timeout 36000s;
                   proxy_send_timeout 36000s;
+
                   send_timeout 36000s;
+
+                  access_log /var/log/nginx/seafhttp.access.log seafileformat;
+                  error_log /var/log/nginx/seafhttp.error.log;
+                '';
+              };
+              locations."/media" = {
+                proxyPass = "http://localhost:8001";
+              };
+              location "/seafdav" = {
+                proxyPass = "http://localhost:8004";
+                extraConfig = ''
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real-IP $remote_addr;
+                  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded-for;
+                  proxy_set_header X-Forwarded-Host $server_name;
+                  proxy_set_header X-Forwaded-Proto $scheme;
+                  proxy_read_timeout 1200s;
+                  client_max_body_size 0;
+
+                  access_log /var/log/nginx/seafdav.access.log seafileformat;
+                  error_log /var/log/nginx/seafdav.error.log;
                 '';
               };
 
@@ -446,7 +498,7 @@
     serviceConfig.Type = "oneshot";
     wantedBy = [ "podman-seafile-memcached.service" ];
     script = ''
-      ${pkgs.podman}/bin/podman pod exists seafile || ${pkgs.podman}/bin/podman pod create --name seafile -p 127.0.0.1:8001:8000
+      ${pkgs.podman}/bin/podman pod exists seafile || ${pkgs.podman}/bin/podman pod create --name seafile -p 127.0.0.1:8001:8000 -p 127.0.0.1:8002:8001 -p 127.0.0.1:8003:8002 -p 127.0.0.1:8004:8003
     '';
   };
   
