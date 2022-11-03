@@ -23,13 +23,6 @@
     config.allowUnfree = true;
   };
 
-  console = {
-    # Honour the same settings as the linux console as in X11
-    useXkbConfig = true;
-  };
-  # Caps Lock must die; replace with Ctrl
-  services.xserver.xkbOptions = "ctrl:nocaps";
-
   nix = {
     # Enable nix flakes
     package = pkgs.nixFlakes;
