@@ -118,6 +118,7 @@ in {
 
       # Book reading
       calibre
+      unzip
     ];
 
     programs.direnv = {
