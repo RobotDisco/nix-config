@@ -115,6 +115,9 @@ in {
         enableFPS = false;
       })
       nethack
+
+      # Book reading
+      calibre
     ];
 
     programs.direnv = {
