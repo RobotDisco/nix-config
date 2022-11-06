@@ -116,23 +116,28 @@ in {
         '';
         settings = {
           "bar/gaelan" = {
+            dpi-x = 0;
+            dpi-y = 0;
+
             enable.ipc = true;
 
             modules-left = "date battery";
             modules-center = "xworkspaces xwindow";
             modules-right= "pulseaudio wlan";
 
+            separator = " ";
+
             tray.position = "right";
           };
           "module/battery" = {
             type = "internal/battery";
-            time.format = "%H:%M";
+            time.format = "B: %H:%M";
             battery = "BAT1";
             adapter = "ACAD";
           };
           "module/date" = {
             type = "internal/date";
-            date = "%H:%M";
+            date = "T: %H:%M";
             date-alt ="%Y/%m/%d %H:%M:%S";
 
             label = "%date%";
@@ -142,13 +147,13 @@ in {
             interface-type = "wireless";
             format-connected = "<label-connected>";
             format-disconnected = "<label-disconnected>";
-            label-disconnected = "%ifname%";
-            label-connected = "%ifname% %essid%";
+            label-disconnected = "W: %ifname%";
+            label-connected = "W: %ifname% %essid%";
           };
           "module/pulseaudio" = {
             type = "internal/pulseaudio";
-            lable-volume = "%percentage%%";
-            label-muted = "muted";
+            label-volume = "V: %percentage%%";
+            label-muted = "V: muted";
           };
           "module/xwindow" = {
             type = "internal/xwindow";
