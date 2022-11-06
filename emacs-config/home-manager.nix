@@ -121,17 +121,21 @@ in {
 
             enable.ipc = true;
 
-            modules-left = "date battery";
-            modules-center = "xworkspaces xwindow";
-            modules-right= "pulseaudio wlan";
+            font-0 = "Anonymous Pro:size=8:weight=bold;2";
 
-            separator = " ";
+            label-active-font=1;
+
+            modules-left = "date xworkspaces";
+            modules-center = "xwindow";
+            modules-right= "pulseaudio wlan battery";
+
+            separator = " | ";
 
             tray.position = "right";
           };
           "module/battery" = {
             type = "internal/battery";
-            time.format = "B: %H:%M";
+            time.format = "%H:%M";
             battery = "BAT1";
             adapter = "ACAD";
           };
@@ -161,6 +165,8 @@ in {
           };
           "module/xworkspaces" = {
             type = "internal/xworkspaces";
+
+            label-active = "[%name%]";
           };
         };
       };
@@ -187,6 +193,10 @@ in {
         upower
         tlp
         playerctl
+
+        # Fonts
+        anonymousPro
+        camingo-code
       ];
     })
   ]);
