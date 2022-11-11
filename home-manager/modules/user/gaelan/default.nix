@@ -39,6 +39,8 @@ in {
         hub = { protocol = "https"; };
       };
 
+      signing.signByDefault = true;
+
       # TODO How do I get work laptop pointing to work email?
       userEmail = "gdcosta@gmail.com";
       userName = "Gaelan D'costa";
