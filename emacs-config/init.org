@@ -17,6 +17,7 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 
 ** Overview
 - package management :: [[https://github.com/jwiegley/use-package][use-package]]
+- completion :: [[https://github.com/minad/vertico][vertico]]
 - window management :: [[https://github.com/ch11ng/exwm][exwm]]
 - version control (git) :: [[https://magit.vc/][magit]]
 - structured editing :: [[https://github.com/Fuco1/smartparens][smartparens]]
@@ -255,6 +256,19 @@ Show a line indicating the end of the page, as it were
 		      (load-theme 'rebecca t))))
       (load-theme 'rebecca t)))
 #+END_SRC
+** Highlight parentheses
+Visually separate nested delimiter pairs
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rainbow-delimiters
+    :ensure t
+      :hook
+      ((clojure-mode-hook
+	emacs-lisp-mode-hook
+	ielm-mode-hook
+	lisp-mode-hook
+	scheme-mode-hook)
+       . rainbow-delimiters-mode))
+#+END_SRC
 * Operating System
 I love Emacs so much, I use it as my primary computing environment :)
 ** Window Manager
@@ -381,7 +395,21 @@ Emacs should handle keyboard media shortcuts
     (desktop-environment-mode))
 #+END_SRC
 
-* Navigation
+* Completion
+Vertico adds a good UX to Emacs' default completion framework, as well as
+fuzzy matching.
+The defaults in Emacs 28 (~fido-mode~, ~vertical-fido-mode~) do not make it
+easy for me to see potential options in various contexts, I have found.
+
+#+BEGIN_SRC elisp :tangle yes
+  (use-package vertico
+    :commands vertico-mode
+    :defer 1
+    :ensure t
+    :config
+    (vertico-mode +1))
+#+END_SRC
+* Functionality
 ** Project Management
 
 Projectile is a framework for managing (usually) software development projects in a standard way, so that the same keybindings can be used to test projects, compile them, etc...
