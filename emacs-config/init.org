@@ -545,11 +545,15 @@ Support flycheck syntax checking
     :commands kubernetes-overview)
 #+END_SRC
 * Productivity
-Read epub ebooks on Emacs
+Read PDF files and epub ebooks on Emacs
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package nov
     :ensure t
     :mode ("\\.epub\\'" . nov-mode))
+
+  (use-package pdf-tools
+    :ensure t
+    :mode ("\\.pdf\\'" . pdf-view-mode))
 #+END_SRC
 
 ** Org
@@ -727,6 +731,6 @@ A way to annotate PDF/ePubs using org mode
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-noter
     :ensure t
-    :after (nov)
+    :after (nov pdf-tools)
     :commands org-noter)
 #+END_SRC
