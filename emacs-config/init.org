@@ -409,7 +409,8 @@ We use smartparens for structured editing like Ruby blocks or lisp s-expressions
     :hook ((clojure-mode-hook
 	     emacs-lisp-mode-hook
 	     ielm-mode-hook
-	     lisp-mode-hook)
+	     lisp-mode-hook
+	     scheme-mode-hook)
 	    . smartparens-strict-mode)
     :defer 2
     :config
@@ -419,19 +420,6 @@ We use smartparens for structured editing like Ruby blocks or lisp s-expressions
     (smartparens-global-mode))
 #+END_SRC
 * Software Development
-** Appearance
-*** Highlight parentheses
-Visually separate nested delimiter pairs
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package rainbow-delimiters
-    :ensure t
-      :hook
-      ((clojure-mode-hook
-	emacs-lisp-mode-hook
-	ielm-mode-hook
-	lisp-mode-hook)
-       . rainbow-delimiters-mode))
-#+END_SRC
 ** Packages
 *** envrc
 Project-specific environment variables via =direnv=
@@ -472,7 +460,7 @@ A editor-agnostic way to maintain project coding styles
     :ensure t
     :defer 3)
 #+END_SRC
-** Programming Language support / environments
+* Programming Language support / environments
 *** Elm
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package elm-mode
