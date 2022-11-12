@@ -31,25 +31,6 @@ in {
       enable = true;
     };
 
-    # install and configure git
-    programs.git = {
-      enable = true;
-      extraConfig = {
-        core = { autocrlf = "input"; };
-        hub = { protocol = "https"; };
-      };
-
-      signing = {
-        signByDefault = true;
-        # subkeys require a ! suffix
-        key = "814CF88EBD7287A1!";
-      };
-
-      # TODO How do I get work laptop pointing to work email?
-      userEmail = "gdcosta@gmail.com";
-      userName = "Gaelan D'costa";
-    };
-
     # Temporarily turn off but should only be on for laptop anyway 
     services.screen-locker = {
       enable = true;
@@ -68,21 +49,9 @@ in {
       seafile-client
       slack
 
-      # These are part of my developer portfolio
-      jq
-      ripgrep
-
       # Book reading
       calibre
       unzip
     ];
-
-    programs.direnv = {
-      enable = true;
-      enableZshIntegration = true;
-      nix-direnv = {
-        enable = true;
-      };
-    };
   };
 }
