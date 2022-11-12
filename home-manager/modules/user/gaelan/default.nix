@@ -81,7 +81,6 @@ in {
         allow-emacs-pinentry
         allow-loopback-pinentry
       '';
-      pinentryFlavor = "emacs";
       defaultCacheTtl = 60;
       maxCacheTtl = 120;
     };
@@ -103,9 +102,6 @@ in {
       networkmanagerapplet
       seafile-client
       slack
-
-      # This should probably be part of an exwm module
-      pinentry-emacs
 
       # These are part of my developer portfolio
       jq
