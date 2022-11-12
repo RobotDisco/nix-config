@@ -39,7 +39,11 @@ in {
         hub = { protocol = "https"; };
       };
 
-      signing.signByDefault = true;
+      signing = {
+        signByDefault = true;
+        # subkeys require a ! suffix
+        key = "814CF88EBD7287A1!";
+      };
 
       # TODO How do I get work laptop pointing to work email?
       userEmail = "gdcosta@gmail.com";
