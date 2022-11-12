@@ -17,7 +17,9 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 
 ** Overview
 - package management :: [[https://github.com/jwiegley/use-package][use-package]]
-- completion :: [[https://github.com/minad/vertico][vertico]]
+- completion
+  - UX :: [[https://github.com/minad/vertico][vertico]]
+  - regex / fuzzy / multi-segment searching :: [[https://github.com/oantolin/orderless][orderless]]
 - window management :: [[https://github.com/ch11ng/exwm][exwm]]
 - version control (git) :: [[https://magit.vc/][magit]]
 - structured editing :: [[https://github.com/Fuco1/smartparens][smartparens]]
@@ -408,6 +410,22 @@ easy for me to see potential options in various contexts, I have found.
     :ensure t
     :config
     (vertico-mode +1))
+#+END_SRC
+
+Enable helm-like searching via completion frameworks, where I can filter
+candidates by multiple regex patterns separated by a space.
+
+#+BEGIN_SRC elisp :tangle yes
+  (use-package orderless
+    :defer 1
+    :ensure t
+    :custom
+    ;; Fallback to basic for completions that depend on dynamic completion
+    ;; tables, whatever that is.
+    (completion-styles '(orderless basic))
+    ;; TRAMP can't use orderless at all, so override it to use basic and
+    ;; partial completion (like /u/s/l for /usr/share/local)
+    (completion-category-overrides '((file (styles basic partial-completion)))))
 #+END_SRC
 * Functionality
 ** Project Management
