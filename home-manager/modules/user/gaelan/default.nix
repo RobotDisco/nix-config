@@ -111,13 +111,6 @@ in {
       jq
       ripgrep
 
-      # Games worth playing
-      (dwarf-fortress-packages.dwarf-fortress-full.override {
-        theme = "cla";
-        enableFPS = false;
-      })
-      nethack
-
       # Book reading
       calibre
       unzip
