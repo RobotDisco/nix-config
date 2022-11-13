@@ -10,15 +10,15 @@ in {
 
     gpgKey = lib.mkOption {
       description = "Public key to sign all git commits with.";
-      type = lib.types.string;
+      type = lib.types.str;
     };
     fullname = lib.mkOption {
       description = "Full name to put in git commits.";
-      type = lib.types.string;
+      type = lib.types.str;
     };
     email = lib.mkOption {
       description = "Email address to put in git commits.";
-      type = lib.types.string;
+      type = lib.types.str;
     };
   };
 
