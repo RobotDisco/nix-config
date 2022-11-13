@@ -60,7 +60,7 @@ in
     services.fstrim.enable = true;
 
     # Enable screen locking in X
-    services.xss-lock = {
+    programs.xss-lock = {
       enable = true;
 
       lockerCommand = "${pkgs.i3lock}/bin/i3lock -c 746542";
