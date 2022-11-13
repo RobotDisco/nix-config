@@ -37,21 +37,19 @@
       # fields defined in the record) are an anti-pattern, this is a common
       # tactic. The only danger is when self.<field> winds up getting changed
       # by some other imported module in a way we don't like.
-        ++ self.homeManagerModules;
+        ++ lib.attrValues self.homeManagerModules;
     in {
       homeConfigurations = {
-        gaelan = myLib.homeManagerConfiguration {
-          username = "gaelan.dcosta";
-          system = "x86_64-darwin";
-          configuration = {
-            robot-disco.emacs.enable = true;
-          };
-        };
+        gaelan-personal = myLib.homeManagerConfiguration (import ./home-manager/profiles/gaelan-personal.nix);
+        gaelan-work = myLib.homeManagerConfiguration (import ./home-manager-profiles/gaelan-work.nix);
       };
       
-      homeManagerModules = [
-        ./home-manager/modules/user/gaelan
-      ];
+      homeManagerModules = {
+        common = import ./home-manager/modules/common.nix;
+        development-environment = import ./home-manager/modules/development-environment.nix;
+        games = import ./home-manager/modules/games.nix;
+        gnupg = import ./home-manager/modules/gnupg.nix;
+      };
 
       nixosModules = {
         default = (import ./nixos/profiles {});
