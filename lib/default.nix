@@ -72,7 +72,7 @@ in {
           useGlobalPkgs = true;
           # install packages in /etc/profiles, not $HOME/.nix-profile
           useUserPackages = true;
-          # This is where we provide our home-made home-amanger modules
+          # This is where we provide our home-made home-manager modules
           sharedModules = homeManagerSharedModules; # ++ self.homeManagerModules;
         };
       };
