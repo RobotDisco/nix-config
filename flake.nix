@@ -99,6 +99,9 @@
 
             shellHook = "  export NIX_USER_CONF_FILES=${toString ./.}/nix.conf\n";
          };
-      });
+        });
+
+      # Run ~nix fmt~ to use this package to format nix files
+      formatter = myLib.forAllSystems (pkgs: pkgs.nixfmt);
     };
 }
