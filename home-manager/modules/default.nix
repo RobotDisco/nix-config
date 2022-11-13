@@ -1,3 +1,5 @@
+{ pkgs, ... }:
+
 {
   xdg.enable = true;
 
@@ -20,4 +22,15 @@
   };
 
   programs.home-manager.enable = true;
+
+  home.packages = with pkgs; [
+    brave
+    bitwarden
+    seafile-client
+    slack
+
+    # Book reading
+    calibre
+    unzip
+  ];
 }
