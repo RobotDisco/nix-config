@@ -29,7 +29,7 @@ in
     })
     {
       # Managed home directories + Gaelan's HM customizations.
-      home-manager.users.gaelan = import ../../../home-manager/profiles/gaelan-personal.nix;
+      home-manager.users.gaelan = (import ../../../home-manager/profiles/gaelan-personal.nix).configuration;
 
       # Gaelan owns this machine, so let him do nix stuff.
       nix.settings.trusted-users = [ "gaelan" ];
