@@ -40,6 +40,10 @@
   time.timeZone = "America/Toronto";
   i18n.defaultLocale = "en_CA.UTF-8";
 
+  # Despite it requiring xserver, this is the only way I have found to set
+  # console keyboard layouts
+  console.useXkbConfig = true;
+
   # Enable microcode updates
   hardware.cpu.intel.updateMicrocode =
     lib.mkDefault config.hardware.enableRedistributableFirmware;
