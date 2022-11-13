@@ -47,15 +47,9 @@
           (import ./home-manager-profiles/gaelan-work.nix);
       };
 
-      homeManagerModules = {
-        common = import ./home-manager/modules/common.nix;
-        development-environment =
-          import ./home-manager/modules/development-environment.nix;
-        games = import ./home-manager/modules/games.nix;
-        gnupg = import ./home-manager/modules/gnupg.nix;
-      };
+      homeManagerModules = { default = import ./home-manager/modules; };
 
-      nixosModules = { default = (import ./nixos/modules { }); };
+      nixosModules = { default = import ./nixos/modules; };
 
       nixosConfigurations = {
         darktower = lib.nixosSystem {
