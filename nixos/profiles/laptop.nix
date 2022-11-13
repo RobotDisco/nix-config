@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.robot-disco.laptop;
@@ -39,6 +39,10 @@ in
       wifi.powersave = true;
     };
 
+    environment.systemPackages = with pkgs; [
+      networkmanagerapplet
+    ];
+
     powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
     # Disable laptop's touchpad tap-to-click functionality
@@ -54,5 +58,12 @@ in
 
     # Assume we're using a SSD and enable periodic SSD trim
     services.fstrim.enable = true;
+
+    # Enable screen locking in X
+    services.xss-lock = {
+      enable = true;
+
+      lockerCommand = "${pkgs.i3lock}/bin/i3lock -c 746542";
+    };
   };
 }
