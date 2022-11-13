@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, ... }:
 
 let cfg = config.robot-disco.development-environment;
 
@@ -6,12 +6,20 @@ in {
   options.robot-disco.development-environment = {
     enable = lib.mkEnableOption "Enable nix-centric developer environment";
 
-    signCommits = lib.EnableOption "Sign git commits with GPG key";
+    signCommits = lib.mkEnableOption "Sign git commits with GPG key";
 
-    gpgKey = lib.mkOption { };
-
-    fullname = lib.mkOption { };
-    email = lib.mkOption { };
+    gpgKey = lib.mkOption {
+      description = "Public key to sign all git commits with.";
+      type = lib.types.string;
+    };
+    fullname = lib.mkOption {
+      description = "Full name to put in git commits.";
+      type = lib.types.string;
+    };
+    email = lib.mkOption {
+      description = "Email address to put in git commits.";
+      type = lib.types.string;
+    };
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
