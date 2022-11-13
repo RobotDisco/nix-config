@@ -1,10 +1,8 @@
 { config, lib, ... }:
 
-let
-  cfg = config.robot-disco.audio;
-in
+let cfg = config.robot-disco.audio;
 
-{
+in {
   options.robot-disco.audio = {
     enable = lib.mkEnableOption "Enable hardware sound output";
   };

@@ -8,7 +8,7 @@
       email = "gaelan@tulip.com";
       gpgKey = "814CF88EBD7287A1!";
     };
-      
+
     robot-disco.emacs.enable = true;
     robot-disco.gnupg.enable = true;
   };

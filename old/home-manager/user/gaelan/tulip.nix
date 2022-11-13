@@ -2,30 +2,32 @@
 # flake.
 { pkgs, ... }:
 
-let
-  python = pkgs.python39Packages;
-in
+let python = pkgs.python39Packages;
 
-{
-  home.packages = with pkgs; [
-    # Cloud management
-    awscli
-    google-cloud-sdk
+in {
+  home.packages = with pkgs;
+    [
+      # Cloud management
+      awscli
+      google-cloud-sdk
 
-    # VM config
-    chefdk
+      # VM config
+      chefdk
 
-    # Docker orchestration
-    kubectl
+      # Docker orchestration
+      kubectl
 
-  ] ++ [
-    # We'll need virtualenvs for Cloudformation templates
-    python.virtualenv
-  ] ++ (if pkgs.stdenv.isDarwin then []
-        else with pkgs; [
-          # Work chat tool
-          mattermost-desktop
-        ]);
+    ] ++ [
+      # We'll need virtualenvs for Cloudformation templates
+      python.virtualenv
+    ] ++ (if pkgs.stdenv.isDarwin then
+      [ ]
+    else
+      with pkgs;
+      [
+        # Work chat tool
+        mattermost-desktop
+      ]);
 
   # Because we have a bajillion EC2 VMs, each customer in their own VPC,
   # We have to set up a million jump hosts for a million custom domains
@@ -57,7 +59,7 @@ in
         user = "welladmin";
         proxyJump = "bastion01-hbc-devstaging";
       };
-      
+
       "bastion01-hbc-prod" = {
         user = "welladmin";
         hostname = "34.194.98.35";
@@ -66,7 +68,7 @@ in
         user = "welladmin";
         proxyJump = "bastion01-hbc-prod";
       };
-      
+
       "bastion01-michaelkors-devstaging" = {
         user = "welladmin";
         hostname = "34.204.211.250";
@@ -129,22 +131,22 @@ in
       };
 
       db02-timekit-prod = {
-        hostname="143.110.224.127";
+        hostname = "143.110.224.127";
         user = "forge";
       };
 
       api01-timekit-prod = {
-        hostname="104.131.159.91";
+        hostname = "104.131.159.91";
         user = "forge";
       };
 
       api02-timekit-prod = {
-        hostname="164.90.247.44";
+        hostname = "164.90.247.44";
         user = "forge";
       };
 
       api01-timekit-staging = {
-        hostname="104.236.145.40";
+        hostname = "104.236.145.40";
         user = "forge";
       };
 

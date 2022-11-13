@@ -9,10 +9,8 @@ let
     import nixpkgs {
       inherit system;
 
-      overlays = [
-        inputs.gaelan-emacs.overlays.default
-      ];
-      
+      overlays = [ inputs.gaelan-emacs.overlays.default ];
+
       # Allow non-free/open source projects to be installed
       config.allowUnfree = true;
     };
@@ -58,9 +56,7 @@ in {
       # to work. Why does it work when lib.nixosSystem is directly called in
       # flake.nix? I do not know :)
 
-      baseNixosModule = {
-        nixpkgs = { inherit pkgs; };
-      };
+      baseNixosModule = { nixpkgs = { inherit pkgs; }; };
 
       # my guess is this module is for my personal standard configuration for
       # home-manager in standard NixOS module style, vs what is in extraModules
@@ -73,7 +69,8 @@ in {
           # install packages in /etc/profiles, not $HOME/.nix-profile
           useUserPackages = true;
           # This is where we provide our home-made home-manager modules
-          sharedModules = homeManagerSharedModules; # ++ self.homeManagerModules;
+          sharedModules =
+            homeManagerSharedModules; # ++ self.homeManagerModules;
         };
       };
     in lib.nixosSystem {
@@ -93,23 +90,15 @@ in {
       ] ++ contribModules;
     };
 
-  homeManagerConfiguration =
-    let
-      homeDirectoryPrefix = pkgs:
-        if pkgs.stdenv.hostPlatform.isDarwin then
-          "/Users"
-        else
-          "/home";
-    in
-      { username
-      , configuration
-      , system
-      , pkgs ? (pkgsForSystem { inherit system; })
-      , homeDirectory ? "${homeDirectoryPrefix pkgs}/${username}"
-      }:
-      home-manager.lib.homeManagerConfiguration {
-        inherit configuration username homeDirectory system pkgs;
+  homeManagerConfiguration = let
+    homeDirectoryPrefix = pkgs:
+      if pkgs.stdenv.hostPlatform.isDarwin then "/Users" else "/home";
+  in { username, configuration, system
+  , pkgs ? (pkgsForSystem { inherit system; })
+  , homeDirectory ? "${homeDirectoryPrefix pkgs}/${username}" }:
+  home-manager.lib.homeManagerConfiguration {
+    inherit configuration username homeDirectory system pkgs;
 
-        extraModules = homeManagerSharedModules;
-      };   
+    extraModules = homeManagerSharedModules;
+  };
 }

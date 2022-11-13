@@ -1,10 +1,8 @@
 { lib, config, pkgs, ... }:
 
-let
-  cfg = config.robot-disco.hardware.framework;
-in
+let cfg = config.robot-disco.hardware.framework;
 
-{
+in {
   options.robot-disco.hardware.framework = {
     enable = lib.mkEnableOption "Enable support for Framework Laptops";
   };

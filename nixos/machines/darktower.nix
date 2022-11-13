@@ -39,7 +39,8 @@
   boot.zfs.forceImportRoot = false;
   boot.zfs.forceImportAll = false;
 
-  users.users.root.initialHashedPassword = "$6$rounds=2500000$NC9QlbTMMOJ8$h.coBkWCDI/epZApjonqHPvOjZ4ys8O44OERo2mK5ehB8TUgK8.FWW4tknxXYrlFKa/9t5tGWALBDoUNbCMjx1";
+  users.users.root.initialHashedPassword =
+    "$6$rounds=2500000$NC9QlbTMMOJ8$h.coBkWCDI/epZApjonqHPvOjZ4ys8O44OERo2mK5ehB8TUgK8.FWW4tknxXYrlFKa/9t5tGWALBDoUNbCMjx1";
   time.timeZone = "America/Toronto";
 
   services.openssh.enable = true;
@@ -49,16 +50,15 @@
 
   system.stateVersion = "22.05";
 
-  imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
-  ];
-  
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+
+  boot.initrd.availableKernelModules =
+    [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
   # My AMT/VNC-enabled server requires this or remote reboots get sad.
-  boot.kernelParams = [ "nomodeset"];
+  boot.kernelParams = [ "nomodeset" ];
 
   fileSystems."/" = {
     device = "rootpool/nixos/root";
@@ -99,13 +99,10 @@
 
   fileSystems."/boot/efis/EFIBOOT1" = {
     device = "/dev/disk/by-label/EFIBOOT1";
-    fsType= "vfat";
+    fsType = "vfat";
   };
 
-  swapDevices = [
-    { label = "swappart0"; }
-    { label = "swappart1"; }
-  ];
+  swapDevices = [ { label = "swappart0"; } { label = "swappart1"; } ];
 
   networking.useDHCP = lib.mkDefault false;
   networking.interfaces.eno1 = {
@@ -119,7 +116,8 @@
   # Let's see if using dynamic home vlan IPs works for my purposes
   networking.interfaces.enp6s0f1.useDHCP = lib.mkDefault false;
 
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode =
+    lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   services.fstrim.enable = true;
   services.zfs.trim.enable = true;
@@ -134,15 +132,11 @@
   };
 
   nixpkgs.config.packageOverrides = pkgs: {
-    zfs = pkgs.zfs.override {
-      enableMail = true;
-    };
+    zfs = pkgs.zfs.override { enableMail = true; };
   };
   services.zfs.zed = {
     enableMail = true;
-    settings = {
-      ZED_EMAIL_ADDR = [ "gdcosta@gmail.com" ];
-    };
+    settings = { ZED_EMAIL_ADDR = [ "gdcosta@gmail.com" ]; };
   };
 
   users.users.gaelan = {
@@ -153,10 +147,11 @@
     extraGroups = [ "wheel" ];
     # passwordFile = "/run/secrets/users_gaelan_password";
     # temp password just to get me by
-    initialHashedPassword = "$6$rounds=2500000$cB5yavkAPQdBU$ATYQgQQHsMRQP9kLIIG12MNX62Gb04V.8Pl2.1hMPAN78CpR0qzLYvEuy3sjLw1/eJ90mAKqeSk9eJV.N/e9P0";
+    initialHashedPassword =
+      "$6$rounds=2500000$cB5yavkAPQdBU$ATYQgQQHsMRQP9kLIIG12MNX62Gb04V.8Pl2.1hMPAN78CpR0qzLYvEuy3sjLw1/eJ90mAKqeSk9eJV.N/e9P0";
   };
 
-  nix.trustedUsers = [ "gaelan "];
+  nix.trustedUsers = [ "gaelan " ];
 
   services.sshguard.enable = true;
 
@@ -165,13 +160,10 @@
     interface = "eno1";
   };
 
-  networking.nameservers = [
-    "8.8.8.8"
-    "8.8.4.4"
-  ];
+  networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
 
   # I don't care about specific mountpoints, so just mount the pools
-  boot.zfs.extraPools = [ "storagepool" "backuppool"];
+  boot.zfs.extraPools = [ "storagepool" "backuppool" ];
 
   # Automatically snapshot ZFS volumes
   services.sanoid = {
@@ -223,10 +215,7 @@
   };
 
   services.borgbackup.jobs."borgbase" = {
-    paths = [
-      "/srv/storagepool/data"
-      "/srv/storagepool/backups"
-    ];
+    paths = [ "/srv/storagepool/data" "/srv/storagepool/backups" ];
     repo = "mwhkrvt4@mwhkrvt4.repo.borgbase.com:repo";
     encryption = {
       mode = "keyfile-blake2";
@@ -244,7 +233,10 @@
 
   # I only use this for cloud services, so specify the vlan
   networking.vlans = {
-    vlan50 = { id = 50; interface="enp6s0f1"; };
+    vlan50 = {
+      id = 50;
+      interface = "enp6s0f1";
+    };
   };
   networking.interfaces.vlan50.useDHCP = lib.mkDefault false;
   # I currently do port forwarding which requires a static IP
@@ -278,7 +270,8 @@
           description = "Gaelan D'costa";
           # passwordFile = "/run/secrets/users_gaelan_password";
           # temp password just to get me by
-          initialHashedPassword = "$6$rounds=2500000$cB5yavkAPQdBU$ATYQgQQHsMRQP9kLIIG12MNX62Gb04V.8Pl2.1hMPAN78CpR0qzLYvEuy3sjLw1/eJ90mAKqeSk9eJV.N/e9P0";
+          initialHashedPassword =
+            "$6$rounds=2500000$cB5yavkAPQdBU$ATYQgQQHsMRQP9kLIIG12MNX62Gb04V.8Pl2.1hMPAN78CpR0qzLYvEuy3sjLw1/eJ90mAKqeSk9eJV.N/e9P0";
         };
 
         services.samba = {
@@ -333,9 +326,7 @@
 
           virtualHosts = {
             "vaultwarden.robot-disco.net" = {
-              locations."/" = {
-                proxyPass = "http://localhost:8000";
-              };
+              locations."/" = { proxyPass = "http://localhost:8000"; };
 
               forceSSL = true;
               enableACME = true;
@@ -345,9 +336,7 @@
                 proxy_set_header X-Forwarded-For $remote_addr;
               '';
 
-              locations."/" = {
-                proxyPass = "http://localhost:8001";
-              };
+              locations."/" = { proxyPass = "http://localhost:8001"; };
 
               forceSSL = true;
               enableACME = true;
@@ -373,13 +362,13 @@
         };
         services.mysqlBackup = {
           enable = true;
-          databases = [ "ccnet_db" "seafile_db"  "seahub_db" ];
+          databases = [ "ccnet_db" "seafile_db" "seahub_db" ];
           calendar = "*-*-* *:05,15,35,45:00";
           location = "/var/backup/mysql";
         };
       };
     };
-    
+
     postgresql = {
       autoStart = true;
       bindMounts = {
@@ -399,11 +388,11 @@
           '';
           settings.password_encryption = "scram-sha-256";
         };
-       services.postgresqlBackup = {
-         enable = true;
-         location = "/var/backup/postgresql";
-         startAt = "*-*-* *:00,15,30,45:00";
-       };
+        services.postgresqlBackup = {
+          enable = true;
+          location = "/var/backup/postgresql";
+          startAt = "*-*-* *:00,15,30,45:00";
+        };
       };
     };
 
@@ -432,9 +421,9 @@
             smtp_from = "gdcosta@gmail.com";
             smtp_from_name = "Vaultwarden";
 
-            require_device_email=true;
+            require_device_email = true;
           };
-        };        
+        };
       };
     };
   };
@@ -452,20 +441,16 @@
       autoStart = true;
       image = "memcached:1.6";
       entrypoint = "memcached";
-      cmd = ["-m" "256"];
+      cmd = [ "-m" "256" ];
       ports = [ "127.0.0.1:11211:11211" ];
     };
     "seafile-mc" = {
       autoStart = true;
       image = "seafileltd/seafile-mc:9.0.9";
-      dependsOn = [ "seafile-memcached"];
+      dependsOn = [ "seafile-memcached" ];
       environmentFiles = [ "/srv/storagepool/data/webdav/seafile_env_vars" ];
-      volumes = [
-        "/srv/storagepool/data/webdav/shared:/shared"
-      ];
-      ports = [
-        "127.0.0.1:8001:8000"
-      ];
+      volumes = [ "/srv/storagepool/data/webdav/shared:/shared" ];
+      ports = [ "127.0.0.1:8001:8000" ];
     };
   };
 
@@ -476,9 +461,7 @@
     group = "nut";
     description = "Network UPS Tools service account";
   };
-  users.groups."nut" = {
-    gid = 84;
-  };
+  users.groups."nut" = { gid = 84; };
 
   power.ups = {
     enable = true;

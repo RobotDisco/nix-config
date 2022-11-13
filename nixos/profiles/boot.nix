@@ -1,10 +1,8 @@
 { config, lib, ... }:
 
-let
-  cfg = config.robot-disco.boot;
-in
+let cfg = config.robot-disco.boot;
 
-{
+in {
   options.robot-disco.boot = {
     hostId = lib.mkOption {
       description = "eight-digit hex number, primarily used by ZFS.";
@@ -33,13 +31,11 @@ in
     boot.loader.grub.efiSupport = true;
     boot.loader.grub.zfsSupport = true;
     # Since we mirror our system drives, mirror boot partitions.
-    boot.loader.grub.mirroredBoots = [
-      {
-        devices = [ "nodev" ];
-        path = "/boot/efis/EFIBOOT0";
-        efiSysMountPoint = "/boot/efis/EFIBOOT0";
-      }
-    ];
+    boot.loader.grub.mirroredBoots = [{
+      devices = [ "nodev" ];
+      path = "/boot/efis/EFIBOOT0";
+      efiSysMountPoint = "/boot/efis/EFIBOOT0";
+    }];
 
     # Don't force import of root ZFS pools
     boot.zfs.forceImportRoot = false;
@@ -47,7 +43,7 @@ in
 
     # To make my life easier I've come up with a partition naming scheme that's
     # common to all of my NixOS devices.
- 
+
     fileSystems."/" = {
       device = "rootpool/nixos/root";
       fsType = "zfs";

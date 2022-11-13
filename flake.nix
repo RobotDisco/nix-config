@@ -12,7 +12,8 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nixpkgs, gaelan-emacs, home-manager, nixos-hardware }:
+  outputs =
+    inputs@{ self, nixpkgs, gaelan-emacs, home-manager, nixos-hardware }:
     let
       inherit (nixpkgs) lib;
 
@@ -40,32 +41,31 @@
         ++ lib.attrValues self.homeManagerModules;
     in {
       homeConfigurations = {
-        gaelan-personal = myLib.homeManagerConfiguration (import ./home-manager/profiles/gaelan-personal.nix);
-        gaelan-work = myLib.homeManagerConfiguration (import ./home-manager-profiles/gaelan-work.nix);
+        gaelan-personal = myLib.homeManagerConfiguration
+          (import ./home-manager/profiles/gaelan-personal.nix);
+        gaelan-work = myLib.homeManagerConfiguration
+          (import ./home-manager-profiles/gaelan-work.nix);
       };
-      
+
       homeManagerModules = {
         common = import ./home-manager/modules/common.nix;
-        development-environment = import ./home-manager/modules/development-environment.nix;
+        development-environment =
+          import ./home-manager/modules/development-environment.nix;
         games = import ./home-manager/modules/games.nix;
         gnupg = import ./home-manager/modules/gnupg.nix;
       };
 
-      nixosModules = {
-        default = (import ./nixos/profiles {});
-      };
+      nixosModules = { default = (import ./nixos/profiles { }); };
 
       nixosConfigurations = {
         darktower = lib.nixosSystem {
           system = "x86_64-linux";
-          modules = [
-            ./nixos/machines/darktower.nix
-          ];
+          modules = [ ./nixos/machines/darktower.nix ];
         };
         arrakis = myLib.nixosSystem {
           system = "x86_64-linux";
           configuration = ./nixos/machines/arrakis2022.nix;
-	        myModules = lib.attrValues self.nixosModules;
+          myModules = lib.attrValues self.nixosModules;
           contribModules = [ nixos-hardware.nixosModules.framework ];
         };
       };
@@ -92,14 +92,13 @@
           '';
         });
 
-      devShells = myLib.forAllSystems (pkgs:
-        {
-	        default = pkgs.mkShell {
-            nativeBuildInputs = [ pkgs.git pkgs.nix pkgs.nixfmt ];
+      devShells = myLib.forAllSystems (pkgs: {
+        default = pkgs.mkShell {
+          nativeBuildInputs = [ pkgs.git pkgs.nix pkgs.nixfmt ];
 
-            shellHook = "  export NIX_USER_CONF_FILES=${toString ./.}/nix.conf\n";
-         };
-        });
+          shellHook = "  export NIX_USER_CONF_FILES=${toString ./.}/nix.conf\n";
+        };
+      });
 
       # Run ~nix fmt~ to use this package to format nix files
       formatter = myLib.forAllSystems (pkgs: pkgs.nixfmt);

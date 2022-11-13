@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
 
-let
-  cfg = config.robot-disco.laptop;
-in
+let cfg = config.robot-disco.laptop;
 
-{
+in {
   options.robot-disco.laptop = {
     enable = lib.mkEnableOption "Enable laptop functionality";
   };
@@ -39,9 +37,7 @@ in
       wifi.powersave = true;
     };
 
-    environment.systemPackages = with pkgs; [
-      networkmanagerapplet
-    ];
+    environment.systemPackages = with pkgs; [ networkmanagerapplet ];
 
     powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
@@ -52,9 +48,7 @@ in
     services.udisks2.enable = true;
 
     # Assume we need monitor hotplug support
-    services.autorandr = {
-      enable = true;
-    };
+    services.autorandr = { enable = true; };
 
     # Assume we're using a SSD and enable periodic SSD trim
     services.fstrim.enable = true;

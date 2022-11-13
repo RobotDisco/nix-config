@@ -3,7 +3,7 @@
 {
   imports = [
     ./audio.nix
-    ./laptop.nix    
+    ./laptop.nix
     ./boot.nix
     ./common.nix
     ./steam.nix

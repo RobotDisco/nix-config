@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
 
-let
-  cfg = config.robot-disco.yubikey;
-in
+let cfg = config.robot-disco.yubikey;
 
-{
+in {
   options.robot-disco.yubikey = {
     enable = lib.mkEnableOption "Enable Yubikey functionality";
   };

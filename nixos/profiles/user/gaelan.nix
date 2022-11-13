@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
 
-let
-  cfg = config.robot-disco.user.gaelan;
-in
+let cfg = config.robot-disco.user.gaelan;
 
-{
+in {
   options.robot-disco.user.gaelan = {
     enable = lib.mkEnableOption "Enable the gaelan user.";
     enableExwm = lib.mkEnableOption "Enable EXWM as a window manager.";
@@ -29,7 +27,8 @@ in
     })
     {
       # Managed home directories + Gaelan's HM customizations.
-      home-manager.users.gaelan = (import ../../../home-manager/profiles/gaelan-personal.nix).configuration;
+      home-manager.users.gaelan = (import
+        ../../../home-manager/profiles/gaelan-personal.nix).configuration;
 
       # Gaelan owns this machine, so let him do nix stuff.
       nix.settings.trusted-users = [ "gaelan" ];
