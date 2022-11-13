@@ -45,7 +45,7 @@ in {
         };
       };
     })
-    { home.packages = with pkgs; [ jq ripgrep ]; }
+    { home.packages = with pkgs; [ git jq ripgrep ]; }
     {
       programs.direnv = {
         enable = true;
