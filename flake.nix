@@ -55,16 +55,16 @@
         gnupg = import ./home-manager/modules/gnupg.nix;
       };
 
-      nixosModules = { default = (import ./nixos/profiles { }); };
+      nixosModules = { default = (import ./nixos/modules { }); };
 
       nixosConfigurations = {
         darktower = lib.nixosSystem {
           system = "x86_64-linux";
-          modules = [ ./nixos/machines/darktower.nix ];
+          modules = [ ./nixos/profiles/darktower.nix ];
         };
         arrakis = myLib.nixosSystem {
           system = "x86_64-linux";
-          configuration = ./nixos/machines/arrakis2022.nix;
+          configuration = ./nixos/profiles/arrakis2022.nix;
           myModules = lib.attrValues self.nixosModules;
           contribModules = [ nixos-hardware.nixosModules.framework ];
         };
@@ -94,7 +94,7 @@
 
       devShells = myLib.forAllSystems (pkgs: {
         default = pkgs.mkShell {
-          nativeBuildInputs = [ pkgs.git pkgs.nix pkgs.nixfmt ];
+          nativeBuildInputs = with pkgs; [ git nix nixfmt ];
 
           shellHook = "  export NIX_USER_CONF_FILES=${toString ./.}/nix.conf\n";
         };
