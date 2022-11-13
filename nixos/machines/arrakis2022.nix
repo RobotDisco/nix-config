@@ -7,6 +7,8 @@
   robot-disco.steam.enable = true;
   robot-disco.yubikey.enable = true;
   robot-disco.user.gaelan = {
+    enable = true;
+    enableExwm = true;
   };
 
   networking.hostName = "arrakis";
