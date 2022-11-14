@@ -12,4 +12,8 @@ Things I should do eventually
 - Consider writing a framework that uses DRY and encapsuation to build server and laptop out of same NixOS building blocks
 - Add launchd support to GnuPG in MacOS home-manager
 - Re-evaluate nix-darwin for MacOS, see if it is worth it.
+- Add Makefile-like tasks for
+  - building home-manager and nixos configs without installing them
+  - figure out if there's a form of test? What does a test mean for my purposes?
+  - write a command to lint all nix files
   
