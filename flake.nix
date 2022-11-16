@@ -44,7 +44,7 @@
         gaelan-personal = myLib.homeManagerConfiguration
           (import ./home-manager/profiles/gaelan-personal.nix);
         gaelan-work = myLib.homeManagerConfiguration
-          (import ./home-manager-profiles/gaelan-work.nix);
+          (import ./home-manager/profiles/gaelan-work.nix);
       };
 
       homeManagerModules = { default = import ./home-manager/modules; };
