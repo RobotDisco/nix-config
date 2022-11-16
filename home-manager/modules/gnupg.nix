@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let cfg = config.robot-disco.gnupg;
 
@@ -34,7 +34,7 @@ in {
     };
 
     services.gpg-agent = {
-      enable = true;
+      enable = pkgs.stdenv.isLinux;
       enableExtraSocket = true;
       enableSshSupport = true;
       extraConfig = ''
