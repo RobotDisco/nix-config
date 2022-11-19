@@ -83,6 +83,9 @@
             PATH=${
               lib.makeBinPath [ pkgs.gitMinimal pkgs.nix pkgs.nixos-rebuild ]
             }:$PATH sudo nixos-rebuild switch --flake . "$@"
+
+          lint-project = pkgs.writers.writeBashBin "lint-project" ''
+            ${pkgs.findutils}/bin/find . -name '*.nix' -execdir ${pkgs.nixfmt}/bin/nixfmt {} \+;
           '';
         });
 

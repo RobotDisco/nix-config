@@ -39,21 +39,17 @@ let
       emacs -L . --batch --eval '(setq byte-compile-error-on-warn t)' -f batch-byte-compile *.el
     '';
   };
-in
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   pname = "emacs-config";
   inherit version;
 
   dontUnpack = true;
 
-  passthru.components = {
-    inherit package-quickstart init;
-  };
+  passthru.components = { inherit package-quickstart init; };
 
   installPhase = ''
     install -D -t $out ${package-quickstart}/share/emacs/site-lisp/*
     install -D -t $out ${init}/share/emacs/site-lisp/*
   '';
 }
-  
- 
+

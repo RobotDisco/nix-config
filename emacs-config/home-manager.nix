@@ -2,11 +2,14 @@
 
 let
   inherit (lib) mkEnableOption mkOption types;
-  
+
   cfg = config.robot-disco.emacs;
 
   # Do we use the server or non-server emacs for editing?
-  emacsBin = if cfg.enableServer then "${cfg.package}/bin/emacsclient" else "${cfg.package}/bin/emacs";
+  emacsBin = if cfg.enableServer then
+    "${cfg.package}/bin/emacsclient"
+  else
+    "${cfg.package}/bin/emacs";
 
   # Populate configuration for files we need home-manager to lay down.
   mkEmacsConfigFiles = path:
@@ -58,7 +61,8 @@ in {
     enableExwm = mkEnableOption {
       type = types.bool;
       default = false;
-      description = "Whether to enable EXWM as a window manager. Make sure your emacs package includes EXWM.";
+      description =
+        "Whether to enable EXWM as a window manager. Make sure your emacs package includes EXWM.";
     };
   };
 
@@ -123,11 +127,11 @@ in {
 
             font-0 = "Anonymous Pro:size=8:weight=bold;2";
 
-            label-active-font=1;
+            label-active-font = 1;
 
             modules-left = "date xworkspaces";
             modules-center = "xwindow";
-            modules-right= "pulseaudio wlan battery";
+            modules-right = "pulseaudio wlan battery";
 
             separator = " | ";
 
@@ -142,7 +146,7 @@ in {
           "module/date" = {
             type = "internal/date";
             date = "T: %H:%M";
-            date-alt ="%Y/%m/%d %H:%M:%S";
+            date-alt = "%Y/%m/%d %H:%M:%S";
 
             label = "%date%";
           };
