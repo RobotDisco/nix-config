@@ -16,4 +16,5 @@ Things I should do eventually
   - building home-manager and nixos configs without installing them
   - figure out if there's a form of test? What does a test mean for my purposes?
   - write a command to lint all nix files
+- Rewrite apps section to encapsulate app definitions from the transformation code I use to minimize boilerplate
   

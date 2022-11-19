@@ -65,34 +65,52 @@
       };
 
       apps = myLib.forAllSystems (pkgs:
-        lib.mapAttrs
-        # First function arg is key, second is value 
-        (binary: derivation: {
-          type = "app";
-          program = "${derivation}/bin/${binary}";
-        }) {
-          home-switch = pkgs.writers.writeBashBin "home-switch" ''
-            ${pkgs.home-manager}/bin/home-manager switch --flake .#"$@"
-          '';
-
-          use-caches = pkgs.writers.writeBashBin "use-caches" ''
-            ${pkgs.cachix}/bin/cachix use -O . nix-community
-          '';
-
-          nixos-switch = pkgs.writers.writeBashBin "nixos-switch" ''
-            PATH=${
-              lib.makeBinPath [ pkgs.gitMinimal pkgs.nix pkgs.nixos-rebuild ]
-            }:$PATH sudo nixos-rebuild switch --flake . "$@"
-
-          lint-project = pkgs.writers.writeBashBin "lint-project" ''
-            ${pkgs.findutils}/bin/find . -name '*.nix' -execdir ${pkgs.nixfmt}/bin/nixfmt {} \+;
-          '';
-        });
+        pkgs.lib.trivial.pipe [
+          # This list is honestly all I want to see here
+          # possibly, even hiding the fact that it is an
+          # application of writeShell Application.
+          #
+          # Everything else is transformation stuff that is
+          # used to minimize the amount of boilerplate written
+          # and should be encapsulated somewhere else, like in
+          # lib/
+          {
+            name = "home-switch";
+            runtimeInputs = [ pkgs.home-manager ];
+            text = "home-manager switch --flake ${./.}#$@";
+          }
+          {
+            name = "use-caches";
+            runtimeInputs = [ pkgs.cachix ];
+            text = ''
+              cachix use -O . nix-community
+            '';
+          }
+          {
+            name = "nixos-switch";
+            runtimeInputs = [ pkgs.sudo pkgs.nixos-rebuild ];
+            text = ''
+              sudo nixos-rebuild switch --flake ${./.}#$@";
+            '';
+          }
+        ] [
+          # Generate a derivation
+          (builtins.map pkgs.writeShellApplication)
+          # Transform derivation into flakes app item schema
+          (builtins.map (deriv: {
+            name = deriv.name;
+            value = {
+              type = "app";
+              program = "${deriv}/bin/${deriv.name}";
+            };
+          }))
+          # Convert list of app objects into attrset
+          builtins.listToAttrs
+        ]);
 
       devShells = myLib.forAllSystems (pkgs: {
         default = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [ gitMinimal nix nixfmt rnix-lsp ];
-
+          nativeBuildInputs = with pkgs; [ git nix rnix-lsp ];
           shellHook = "  export NIX_USER_CONF_FILES=${toString ./.}/nix.conf\n";
         };
       });
