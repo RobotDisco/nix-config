@@ -2,6 +2,8 @@
   description = "Gaelan's nix-based systems configuration";
 
   inputs = {
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
+
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.05";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
@@ -13,7 +15,7 @@
   };
 
   outputs =
-    inputs@{ self, nixpkgs, gaelan-emacs, home-manager, nixos-hardware }:
+    inputs@{ self, nixpkgs, emacs-overlay, gaelan-emacs, home-manager, nixos-hardware }:
     let
       inherit (nixpkgs) lib;
 
@@ -117,5 +119,9 @@
 
       # Run ~nix fmt~ to use this package to format nix files
       formatter = myLib.forAllSystems (pkgs: pkgs.nixfmt);
+
+      packages = myLib.forAllSystems (pkgs:
+        (import ./packages/emacs { inherit pkgs; })
+      );
     };
 }
