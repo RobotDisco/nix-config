@@ -1,0 +1,770 @@
+
+# -*- mode: org; coding: utf-8; -*-
+#+TITLE: GNU Emacs Configuration
+#+AUTHOR: Gaelan D'costa
+
+* Welcome!
+Gaelan D'costa's GNU emacs config; there are many like it, but this one is mine.
+
+Eventually I will understand my own config enough to explain it in a cohesive way.
+
+This configuration is built as a nix package; as such, it assumes that nix has pre-supplied all necessary packages (which ironically, are parsed out of this file.) As such, it is also paired with whatever version of emacs that this package includes. Currently, this is GNU Emacs 28.1
+
+** Inspirations
+- [[https://github.com/daviwil/emacs-from-scratch/][Emacs from Scratch]] is a great series of youtube videos where the author clearly puts a lot of thoughts and well-principled thought into his configuration principles.
+
+- I am super indebted to whoever [[http://github.com/terlar/emacs-config][Terlar]] is, their nix package and structure is one I found a lot of insight about how to write nix packages from. 
+
+** Overview
+- package management :: [[https://github.com/jwiegley/use-package][use-package]]
+- completion
+  - UX :: [[https://github.com/minad/vertico][vertico]]
+  - regex / fuzzy / multi-segment searching :: [[https://github.com/oantolin/orderless][orderless]]
+- window management :: [[https://github.com/ch11ng/exwm][exwm]]
+- version control (git) :: [[https://magit.vc/][magit]]
+- structured editing :: [[https://github.com/Fuco1/smartparens][smartparens]]
+- project management :: [[https://github.com/bbatsov/projectile][projectile]]
+
+* Early Initialization
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  ;;; early-init.el --- Early Initialization -*- lexical-binding: t; -*-
+#+END_SRC
+  
+** Version Sentinal
+I am not sure if this config will work with older versions of emacs, so I'll abort if the running version of emacs is older than a known good version.
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (let ((minver "28.1"))
+    (when (version< emacs-version minver)
+      (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
+#+END_SRC
+
+** Startup
+Let's time and display the amount of time it takes to bring up my Emacs configuration
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (add-hook 'emacs-startup-hook
+	    (lambda ()
+	      (message "Loaded GNU Emacs in %0.03fs"
+		       (float-time (time-subtract after-init-time
+						  before-init-time)))))
+#+END_SRC
+
+I saw a config where the author temporarily set garbage collection thresholds for speed during initialization, presumably to minimize GC overhead at startup.
+   
+When emacs has finished initalizing, it runs a hook we've set up to restore a more aggressive threshold.
+   
+This is a pattern I have seen various people use, so it seems like a good idea.
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (let ((normal-gc-cons-threshold gc-cons-threshold)
+	(normal-gc-cons-percentage gc-cons-percentage)
+	(normal-file-name-handler-alist file-name-handler-alist)
+	(init-gc-cons-threshold most-positive-fixnum)
+	(init-gc-cons-percentage 0.6))
+    (setq gc-cons-threshold init-gc-cons-threshold
+	  gc-cons-percentage init-gc-cons-percentage
+	  file-name-handler-alist nil)
+    (add-hook 'after-init-hook
+	      `(lambda ()
+		 (setq gc-cons-threshold ,normal-gc-cons-threshold
+		       gc-cons-percentage ,normal-gc-cons-percentage
+		       file-name-handler-alist ',normal-file-name-handler-alist))))
+#+END_SRC
+
+Inhibit startup screen and messages.
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (setq inhibit-startup-screen t
+	initial-scratch-message nil)
+#+END_SRC
+
+Performance tweak: Don't load default library, and use =fundamental-mode= to reduce hooks running on startup.
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (setq inhibit-default-init t)
+  (setq initial-major-mode 'fundamental-mode)
+#+END_SRC
+
+** UI speedups
+Disable unnecessary GUI components.
+
+We are not using builtin functions for these because we previously disabled loding those via setting  =inhibit-default-init=.
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (setq use-dialog-box nil)
+  (push '(menu-bar-lines . 0) default-frame-alist)
+  (push '(tool-bar-lines . 0) default-frame-alist)
+  (push '(vertical-scroll-bars) default-frame-alist)
+#+END_SRC
+
+Don't implicitly resize frames when changing various settings. I don't know what the benefits of this are, so let's try it!
+
+TODO Is this worth keeping?
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (setq frame-inhibit-implied-resize t)
+#+END_SRC
+
+Ignore X resources. Don't allow config outside of emacs itself to set GUI chrome attributes.
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (advice-add #'x-apply-session-resources :override #'ignore)
+#+END_SRC
+
+* Base settings
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;;; init.el --- Initialization -*- lexical-binding: t; -*-
+#+END_SRC
+
+** Variables
+Private an easy way to toggle debug mode which will set certain variables to produce each informative output. It can be set either by providing the environment variable =DEBUG= or start Emacs with =--debug-init=.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (eval-and-compile
+    (when (getenv "DEBUG") (setq init-file-debug t))
+    (setq debug-on-error (and (not noninteractive) init-file-debug)))
+#+END_SRC
+   
+Provide XDG-compliant locations for Emacs to store and cache data.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (eval-and-compile
+    (defvar gaelan/data-dir
+      (if (getenv "XDG_DATA_HOME")
+	  (concat (getenv "XDG_DATA_HOME") "/emacs/")
+	(expand-file-name "~/.local/share/emacs/"))
+      "Directory for emacs data")
+
+    (defvar gaelan/cache-dir
+      (if (getenv "XDG_CACHE_HOME")
+	  (concat (getenv "XDG_CACHE_HOME") "/emacs/")
+	(expand-file-name "~/.cache/emacs/"))
+      "Directory for emacs cached data."))
+#+END_SRC
+
+** Package management
+Use generated package autoloads via package-quickstart. The actual packages are provided via the nix package this file is contained in.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defvar package-quickstart t)
+#+END_SRC
+
+*** Load path
+Add local and private libraries to ~load-path~.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (eval-and-compile
+    (setq load-path
+	  (append (delete-dups load-path)
+		  (list (expand-file-name "lisp" user-emacs-directory)
+			(expand-file-name "private" user-emacs-directory)))))
+#+END_SRC
+
+*** Set location of custom file
+Emacs by default manages some forms for variables and faces and places them at the end of =init.el=. Since my =init.el= is generated, this would be difficult to manage.
+I can tell Emacs to use a different location for these, which will not be checked into source control or regenerated and Emacs can manage it to its heart's content.
+
+Why is it in a temporary file directory? This keeps my config immutable (or at least deliberate.)
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq custom-file (expand-file-name "custom.el" temporary-file-directory))
+#+END_SRC
+
+*** use-package
+[[https://github.com/jwiegley/use-package][use-package]] is a wonderful package from John Wiegley which makes downloading and loading and configuring emacs packaging a much more structured affair. It can optionally download missing packages and uses a single macro to load configuration and set up bindings, regular hooks, extension associations, etc... in a consistent way.
+
+The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix package also leverages use-package to know what packages it needs to download when generating an emacs package from this file.
+#+BEGIN_SRC emacs-lisp :tangle yes
+     ;; Since (use-package) is a macro, we don't actually need to load it except
+     ;; when we compile a new bytecode version of our emacs file.
+     (eval-when-compile
+       (require 'use-package))
+     (require 'diminish)                ;; if you use :diminish
+     (require 'bind-key)                ;; if you use :bind
+
+     (eval-and-compile
+       ;; By default if :ensure is non-nil it will use package.el to download the
+       ;; package. We use a custom function to ensure that never happens.
+       (defun gaelan/use-package-ensure-ignore (&rest _args) t)
+       (setq use-package-ensure-function #'gaelan/use-package-ensure-ignore)
+
+       ;; Unless we explicitly want packages loaded eagerly, rely on setting hooks
+       ;; or mod or bindings to generate autoloads to only load the package on
+       ;; demand.
+       (setq use-package-always-defer t)
+       ;; Don't assume hooks have the substring "-hook" at the end.
+       (setq use-package-hook-name-suffix nil))
+
+     ;; If debug mode is on, be more chatty. Otherwise, don't
+     (if init-file-debug
+	 (setq use-package-verbose t
+	       use-package-expand-minimally nil
+	       use-package-compute-statistics t)
+       (setq use-package-verbose nil
+	     use-package-expand-minimally t))
+#+END_SRC
+
+*** Keep ~user-emacs-directory~ clean.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package no-littering
+    :defer 1
+    :ensure t
+    :init
+    (setq no-littering-etc-directory gaelan/data-dir
+	  no-littering-var-directory gaelan/cache-dir))
+#+END_SRC
+
+** UX
+   Always request confirmation before quitting emacs
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq confirm-kill-emacs #'y-or-n-p)
+   #+END_SRC
+
+   Use =y= and =n= for prompts instead of =yes= and =no=
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (fset #'yes-or-no-p #'y-or-n-p)
+   #+END_SRC
+
+   Set the default Mac modifier bindings to mirror Linux bindings
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (when (eq system-type 'darwin)
+       ;; On linux these variables aren't defined, which causes byte-compilation
+       ;; to fail. So we define the variables.
+       (defvar mac-option-modifier)
+       (defvar mac-command-modifier)
+       (setq mac-option-modifier 'super
+	     mac-command-modifier 'meta))
+   #+END_SRC
+* Appearance
+** Typography
+*** Line length
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq-default fill-column 80)
+#+END_SRC
+** Mode line
+*** Position
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (column-number-mode 1)
+  (line-number-mode 1)
+#+END_SRC
+** Margins
+Set the line length to 80 characters
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq fill-column 80)
+#+END_SRC
+
+Show a line indicating the end of the page, as it were
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (global-display-fill-column-indicator-mode +1)
+#+END_SRC
+** Colour Theme
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rebecca-theme
+    :ensure t
+    :demand t
+    :config
+    (if (daemonp)
+	(add-hook 'after-make-frame-functions
+		  (lambda (frame)
+		    (with-selected-frame frame
+		      (load-theme 'rebecca t))))
+      (load-theme 'rebecca t)))
+#+END_SRC
+** Highlight parentheses
+Visually separate nested delimiter pairs
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rainbow-delimiters
+    :ensure t
+      :hook
+      ((clojure-mode-hook
+	emacs-lisp-mode-hook
+	ielm-mode-hook
+	lisp-mode-hook
+	scheme-mode-hook)
+       . rainbow-delimiters-mode))
+#+END_SRC
+* Operating System
+I love Emacs so much, I use it as my primary computing environment :)
+** Window Manager
+*** exwm
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Assume that if exwm is installed, then we want emacs to handle all
+  ;; pinentry input
+  (use-package pinentry
+    :after (exwm)
+    :ensure t
+    :preface
+    (declare-function pinentry-start "pinentry")
+    :config
+    (pinentry-start))
+
+  (use-package exwm
+      :defer 0
+      :ensure t
+      :preface
+      (declare-function exwm-workspace-rename-buffer "exwm")
+      (declare-function exwm-input-set-local-simulation-keys "exwm")
+      :defines (epg-pinentry-mode)
+      :functions (exwm-randr-enable
+		  gaelan/exwm-update-class-hook
+		  gaelan/exwm-manage-finish-hook)
+      :if (eq system-type 'gnu/linux)
+      :init
+      ;; Define custom exwm hooks for various events
+      (defun gaelan/exwm-update-class-hook ()
+	"rename buffer names to their associated X class name."
+	(exwm-workspace-rename-buffer exwm-class-name))
+      ;; Set window management key bindings
+      (setq exwm-input-global-keys
+	    `(
+	      ;; Reset to line-mode
+	      ([?\s-r] . exwm-reset)
+	      ;; Switch workspaces
+	      ([?\s-w] . exwm-workspace-switch)
+	      ;; s-0 is inconvenient, map to s-` and s-esc as well
+	      ([?\s-`] . (lambda ()
+			   (interactive)
+			   (exwm-workspace-switch-create 0)))
+	      ([s-escape] . (lambda ()
+			      (interactive)
+			      (exwm-workspace-switch-create 0)))
+	      ;; Launch application a la dmenu
+	      ([?\s-p] . (lambda (command)
+			   (interactive (list (read-shell-command "$ ")))
+			   (start-process-shell-command command nil command)))
+	      ;; Switch to numbered workspace.
+	      ,@(mapcar (lambda (i)
+			  `(,(kbd (format "s-%d" i)) .
+			    (lambda ()
+			      (interactive)
+			      (exwm-workspace-switch-create ,i))))
+			(number-sequence 0 9))))
+      ;; translate emacs keybindings into CUA ones for X applications. This allows
+      ;; some uniformity between emacs and most X apps.
+      (setq exwm-input-simulation-keys
+	    '(;; movement
+	      ([?\C-b] . [left])
+	      ([?\M-b] . [C-left])
+	      ([?\C-f] . [right])
+	      ([?\M-f] . [C-right])
+	      ([?\C-p] . [up])
+	      ([?\C-n] . [down])
+	      ([?\C-a] . [home])
+	      ([?\C-e] . [end])
+	      ([?\M-v] . [prior])
+	      ([?\C-v] . [next])
+	      ([?\C-d] . [delete])
+	      ([?\C-k] . [S-end delete])
+	      ;; cut/paste
+	      ([?\C-w] . [?\C-x])
+	      ([?\M-w] . [?\C-c])
+	      ([?\C-y] . [?\C-v])))
+      (setq epg-pinentry-mode 'loopback)
+      :config
+      (add-hook 'exwm-update-class-hook
+		#'gaelan/exwm-update-class-hook))
+
+    (use-package exwm-randr
+      :ensure nil
+      :defer 0
+      :after (exwm)
+      :preface
+      (declare-function exwm-randr-enable "exwm-randr")
+      :functions (gaelan/exwm-randr-screen-change-hook)
+      :init
+      (defun gaelan/exwm-randr-screen-change-hook ()
+	"Run autorandr whenever exwm detects a screen change"
+	(start-process-shell-command
+	 "autorandr" nil "autorandr --change"))
+      ;; Assign particular workspaces to particular monitors by default
+      (setq exwm-randr-workspace-monitor-plist
+	    '(0 "DP-1-1" 1 "DP-1-1" 2 "DP-1-2" 3 "DP-1-2"))
+      :config
+      (add-hook 'exwm-randr-screen-change-hook
+		#'gaelan/exwm-randr-screen-change-hook)
+      (exwm-randr-enable))
+#+END_SRC
+*** ediff workaround
+ediff doesn't render correctly in exwm; fix by creating "Ediff Control Panel"
+in a floating frame rather than an Emacs window.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (with-eval-after-load 'ediff-wind
+    (eval-when-compile
+      (require 'ediff-wind))
+    (setq ediff-control-frame-parameters
+	  (cons '(unsplittable . t) ediff-control-frame-parameters)))
+#+END_SRC
+** Multimedia keys
+Emacs should handle keyboard media shortcuts
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package desktop-environment
+    :preface
+    (declare-function desktop-environment-mode "desktop-environment")
+    :ensure t
+    :defer 1
+    :after (exwm)
+    :init
+    (setq desktop-environment-screenlock-command "i3lock -n -c 746542")
+    :config
+    (desktop-environment-mode))
+#+END_SRC
+
+* Completion
+Vertico adds a good UX to Emacs' default completion framework, as well as
+fuzzy matching.
+The defaults in Emacs 28 (~fido-mode~, ~vertical-fido-mode~) do not make it
+easy for me to see potential options in various contexts, I have found.
+
+#+BEGIN_SRC elisp :tangle yes
+  (use-package vertico
+    :commands vertico-mode
+    :defer 1
+    :ensure t
+    :config
+    (vertico-mode +1))
+#+END_SRC
+
+Enable helm-like searching via completion frameworks, where I can filter
+candidates by multiple regex patterns separated by a space.
+
+#+BEGIN_SRC elisp :tangle yes
+  (use-package orderless
+    :defer 1
+    :ensure t
+    :custom
+    ;; Fallback to basic for completions that depend on dynamic completion
+    ;; tables, whatever that is.
+    (completion-styles '(orderless basic))
+    ;; TRAMP can't use orderless at all, so override it to use basic and
+    ;; partial completion (like /u/s/l for /usr/share/local)
+    (completion-category-overrides '((file (styles basic partial-completion)))))
+#+END_SRC
+* Functionality
+** Project Management
+
+Projectile is a framework for managing (usually) software development projects in a standard way, so that the same keybindings can be used to test projects, compile them, etc...
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package projectile
+    :ensure t
+    :defer 2
+    :commands projectile-mode
+    :config
+    (projectile-mode +1)
+    :bind (:map projectile-mode-map
+		("C-c p" . projectile-command-map)))
+#+END_SRC
+
+** Structured Editing
+We use smartparens for structured editing like Ruby blocks or lisp s-expressions
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package smartparens
+    :ensure t
+    :commands (smartparens-global-mode
+	       sp-use-paredit-bindings
+	       sp-use-smartparens-bindings)
+    :hook ((clojure-mode-hook
+	     emacs-lisp-mode-hook
+	     ielm-mode-hook
+	     lisp-mode-hook
+	     scheme-mode-hook)
+	    . smartparens-strict-mode)
+    :defer 2
+    :config
+    (require 'smartparens-config)
+    (sp-use-paredit-bindings)
+    (sp-use-smartparens-bindings)
+    (smartparens-global-mode))
+#+END_SRC
+* Software Development
+** Packages
+*** envrc
+Project-specific environment variables via =direnv=
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package direnv
+    :ensure t
+    :defer 1
+    :commands (direnv-mode)
+    :config
+    (direnv-mode))
+#+END_SRC
+
+*** editconfig
+A editor-agnostic way to maintain project coding styles
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package editorconfig
+    :ensure t
+    :defer 1
+    :commands
+    (editorconfig-mode)
+    :config
+    (editorconfig-mode 1))
+#+END_SRC
+
+*** flycheck
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package flycheck
+    :ensure t
+    :defer 2
+    :commands global-flycheck-mode
+    :config
+    (global-flycheck-mode))
+#+END_SRC
+** Version Control
+*** magit
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package magit
+    :ensure t
+    :defer 3)
+#+END_SRC
+* Programming Language support / environments
+*** Elm
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package elm-mode
+    :ensure t
+    :mode "\\.elm\\'")
+#+END_SRC
+
+*** Nix
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package nix-mode
+    :ensure t
+    :mode "\\.nix\\'")
+#+END_SRC
+*** Clojure
+
+Support flycheck syntax checking
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package flycheck-clj-kondo
+    :after (clojure-mode flycheck)
+    :hook (clojure-mode-hook . (lambda ()
+				 (require 'flycheck-clj-kondo)))
+    :ensure t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package clojure-mode
+    :mode (("\\.clj\\'" . clojure-mode)
+	   ("\\.cljs\\'" . clojurescript-mode)
+	   ("\\.cljc\\'" . clojurec-mode))
+    :ensure t)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package cider
+    :ensure t
+    :bind ("C-c C-x C-j C-j" . cider-jack-in))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package clj-refactor
+    :commands clj-refactor-mode
+    :after (cider)
+    :hook (cider-mode . (lambda ()
+			    (clj-refactor-mode 1)))
+    :ensure t)
+#+END_SRC
+*** Racket / Scheme
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Core REPL environment
+  (use-package geiser
+    :commands (run-geiser)
+    :ensure t)
+
+  ;; Anticipated Scheme runtimes
+  (use-package geiser-racket
+    :after (geiser)
+    :ensure t)
+#+END_SRC
+*** Terraform
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package terraform-mode
+      :ensure t
+      :mode "\\.tf\\'")
+#+END_SRC
+* SRE / Devops
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package kubernetes
+    :ensure t
+    :commands kubernetes-overview)
+#+END_SRC
+* Productivity
+Read PDF files and epub ebooks on Emacs
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package nov
+    :ensure t
+    :mode ("\\.epub\\'" . nov-mode))
+
+  (use-package pdf-tools
+    :ensure t
+    :mode ("\\.pdf\\'" . pdf-view-mode))
+#+END_SRC
+
+** Org
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defvar gaelan/documents-dir
+    (expand-file-name "~/Documents")
+    "Directory that contains all of my documents")
+
+  (defvar gaelan/brain-dir
+    (expand-file-name "brain" gaelan/documents-dir)
+    "Directory containing my Zettelkasten")
+
+  (defvar gaelan/gtd-dir
+    (expand-file-name "gtd" gaelan/documents-dir)
+    "Directory containing my tasks")
+#+END_SRC
+
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org
+    :ensure t
+    :defines (org-capture-templates
+	      org-refile-targets
+	      org-agenda-custom-commands
+	      org-stuck-projects)
+    :commands (org-narrow-to-subtree)
+    :hook (org-mode-hook . (lambda ()
+			     (visual-line-mode +1)))
+    :mode ("\\.org\\'" . org-mode)
+    :bind (("C-c l" . org-store-link)
+	   ("C-c a" . org-agenda)
+	   ("C-c c" . org-capture))
+    :init
+    (setq org-ellipsis " ▾"
+	  org-agenda-files (list
+			    (expand-file-name "gtd.org" gaelan/gtd-dir)
+			    (expand-file-name "tickler.org" gaelan/gtd-dir))
+	  org-capture-templates
+	  '(("t" "Todo" entry (file "~/Documents/gtd/inbox.org")
+	     "* TODO %?"))
+	  org-refile-targets
+	  '(("~/Documents/gtd/gtd.org" . (:maxlevel . 2))
+	    ("~/Documents/gtd/someday.org" . (:level . 1))
+	    ("~/Documents/gtd/tickler.org" . (:level . 1)))
+	  ;; Handy search views for agenda mode
+	  org-agenda-custom-commands
+	  '(("n" "Current Actions"
+	     ((todo "NEXT")
+	      (todo "STARTED")
+	      (todo "WAITING")))
+	    ("u" "Unplanned Projects"
+	     ((tags-todo "PROJECT/PLAN"))))
+	  org-stuck-projects
+	  '("+PROJECT+LEVEL=2/-COMPLETED-ABANDONED-PAUSED"
+	    ("TODO" "NEXT" "STARTED") nil ""))
+    :config
+    ;; Save Org buffers after refiling!
+    (advice-add 'org-refile :after 'org-save-all-org-buffers))
+#+END_SRC
+*** org-journal
+#+BEGIN_SRC emacs-lisp :tangle yes
+    (use-package org-journal
+      :ensure t
+      :after (org)
+      :bind (("C-c j j" . org-journal-new-entry)
+	     ("C-c j s" . org-journal-search))
+      :defines org-capture-templates
+      :commands (org-journal-new-entry)
+      :preface
+      (declare-function org-journal-new-entry "org-journal")
+      :init
+      (setq org-journal-date-format "%A, %F"
+	    org-journal-file-format "%Y.org"
+	    org-journal-file-type 'yearly
+	    org-journal-dir (file-name-as-directory "~/Documents/journal")
+	    org-journal-prefix-key "C-c j")
+      ;; org-mode needs some help to know where to place new org-journal entries
+      ;; via org-capture-templates
+      (defun gaelan/org-journal-find-location ()
+	"Find the latest entry in an org-journal file."
+	;; Open today's journal, but specify a non-nil prefix argument in order to
+	;; inhibit inserting the heading; org-capture will insert the heading.
+	(org-journal-new-entry t)
+	(unless (eq org-journal-file-type 'daily)
+	  (org-narrow-to-subtree))
+	(goto-char (point-max)))
+      ;; Push journal template entries to capture templates
+      (add-to-list 'org-capture-templates
+		   '("d" "Daily Morning Reflection" plain (function gaelan/org-journal-find-location)
+		     "** %(format-time-string org-journal-time-format) Daily Morning Reflection\n*** What are my most important tasks today?\n- %?\n*** What am I grateful for today?"
+		     :jump-to-captured t))
+      (add-to-list 'org-capture-templates
+		   '("e" "Daily Evening Reflection" plain (function gaelan/org-journal-find-location)
+		     "** %(format-time-string org-journal-time-format) Daily Evening Reflection\n*** What were my wins today?\n- %?\n*** What did I learn today?\n*** What did not go according to plan today?\n*** What did I do to improve my future?\n*** What did I do to help others?"
+		     :jump-to-captured t))
+      (add-to-list 'org-capture-templates
+		   '("w" "Weekly Reflection" plain (function gaelan/org-journal-find-location)
+		     "** %(format-time-string org-journal-time-format) Weekly Reflection\n*** What was I most grateful for this week? (Pick one thing and go deep.)\n%?\n*** What were my biggest wins this week?\n*** What unresolved tensions am I feeling this week? What is causing these tensions?\n*** What should I prioritize this upcoming week?\n*** What can be deferred this upcoming week?\n*** What did I learn this week?\n*** What should I learn this upcoming week?"
+		     :jump-to-captured t))
+      (add-to-list 'org-capture-templates
+		   '("m" "Monthly Reflection" plain (function gaelan/org-journal-find-location)
+		     "** %(format-time-string org-journal-time-format) Monthly Reflection\n*** What were my biggest wins this month?\n- %?\n*** What was I most grateful for this month?\n*** What tensions did I remove this month?\n*** What did I learn this month?\n*** How have I grown this month?"
+		     :jump-to-captured t))
+      (add-to-list 'org-capture-templates
+		   '("y" "Yearly Reflection" plain (function gaelan/org-journal-find-location)
+		     "** %(format-time-string org-journal-time-format) Yearly Reflection\n*** What were my biggest wins this year?\n- %?\n*** What was I most grateful for this year?\n*** What tensions did I remove this year?\n*** What did I learn this year?\n*** How have I grown this year?"
+		     :jump-to-captured t)))
+#+END_SRC
+*** org-roam
+An implementation of Zettelkasten for org, inspired by org-roam
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-roam
+    :ensure t
+    :bind (("C-c n b" . org-roam-buffer-toggle)
+	   ("C-c n f" . org-roam-node-find)
+	   ("C-c n i" . org-roam-node-insert))
+    :commands (org-roam-buffer-toggle
+	       org-roam-buffer-display-dedicated
+	       org-roam-db-autosync-mode)
+    :init
+    ;; (setq org-roam-v2-ack t)
+    (setq org-roam-directory "~/Documents/brain"
+	  org-roam-capture-templates '(("l" "literature" plain "%?"
+					:if-new (file+head "literature/${slug}.org"
+							   "#+title: ${title}\n")
+					:unnarrowed t)
+				       ("p" "permanent" plain "%?"
+					:if-new (file+head "permanent/%<%Y%m%d%H%M%S>-${slug}.org"
+							   "#+title: ${title}\n")
+					:unnarrowed t))
+	  org-roam-node-display-template
+	  (concat "${type:15} ${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+    :config
+    (cl-defmethod org-roam-node-type ((node org-roam-node))
+      "Return the TYPE of NODE."
+      (condition-case nil
+	  (file-name-nondirectory
+	   (directory-file-name
+	    (file-name-directory
+	     (file-relative-name (org-roam-node-file node) org-roam-directory))))
+	(error "")))
+    (org-roam-db-autosync-mode))
+#+END_SRC
+
+Also enable a UI that makes overseeing my knowledge base easier.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package websocket
+    :after org-roam)
+
+  (use-package org-roam-ui
+    :ensure t
+    :commands org-roam-ui-mode
+    :after org-roam
+    :init
+    (setq org-roam-ui-sync-theme t
+	  org-roam-ui-follow t
+	  org-roam-ui-update-on-save t
+	  org-roam-ui-open-on-start t))
+#+END_SRC
+
+Use deft for full-text search
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package deft
+    :ensure t
+    :after (org-roam)
+    :bind ("C-c n d" . deft)
+    :init
+    (setq deft-recursive t
+	  deft-use-filter-string-for-filename t
+	  deft-default-extension "org"
+	  deft-directory org-roam-directory))
+#+END_SRC
+*** org-noter
+A way to annotate PDF/ePubs using org mode
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-noter
+    :ensure t
+    :after (nov pdf-tools)
+    :commands org-noter)
+#+END_SRC
