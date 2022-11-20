@@ -22,15 +22,15 @@ in {
 
     package = mkOption {
       type = types.package;
-      default = pkgs.emacsEnv;
-      defaultText = lib.literalExample "pkgs.emacsEnv";
+      default = pkgs.gaelan-emacs;
+      defaultText = lib.literalExample "pkgs.gaelan-emacs";
       description = "The Emacs derivation to use.";
     };
 
     configPackage = lib.mkOption {
       type = types.package;
-      default = pkgs.emacsConfig;
-      defaultText = lib.literalExample "pkgs.emacsConfig";
+      default = pkgs.gaelan-emacs-config;
+      defaultText = lib.literalExample "pkgs.gaelan-emacs-config";
       description = "The Emacs configuration derivation to use.";
     };
 
