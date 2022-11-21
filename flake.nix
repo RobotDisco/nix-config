@@ -75,7 +75,7 @@
           {
             name = "home-switch";
             runtimeInputs = [ pkgs.home-manager ];
-            text = "home-manager switch --flake ${./.}#$@";
+            text = "home-manager switch --flake ${toString ./.}#";
           }
           {
             name = "use-caches";
@@ -86,10 +86,8 @@
           }
           {
             name = "nixos-switch";
-            runtimeInputs = [ pkgs.sudo pkgs.nixos-rebuild ];
-            text = ''
-              sudo nixos-rebuild switch --flake ${./.}#$@";
-            '';
+            runtimeInputs = [ pkgs.nixos-rebuild ];
+            text = "sudo nixos-rebuild switch --flake ${toString ./.}#";
           }
         ] [
           # Generate a derivation
