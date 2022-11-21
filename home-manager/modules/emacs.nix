@@ -201,6 +201,9 @@ in {
         # Fonts
         anonymousPro
         camingo-code
+
+        # nov.el
+        unzip
       ];
     })
   ]);
