@@ -16,27 +16,7 @@
     let
       inherit (nixpkgs) lib;
 
-      myLib = import ./lib {
-        inherit inputs;
-
-        inherit homeManagerSharedModules;
-      };
-
-      # Are there home-manager modules we will want to include?
-      # home-manager calls these "sharedModules" for whatever reason.
-      homeManagerSharedModules = [
-      ]
-      # Here's an interesting thing we do, taking advantage of Nix/Haskell's
-      # laziness. We should include the modules we define ourselves. The flake
-      # schema has us export those as "homeManagerModules". Even though the
-      # field is likely defined after this line (we don't want to expose this
-      # variable to the outside world so it's defined early in a let binding)
-      # we can still refer to a field that is defined later.
-      # Given recursive records (records that have fields which refer to other
-      # fields defined in the record) are an anti-pattern, this is a common
-      # tactic. The only danger is when self.<field> winds up getting changed
-      # by some other imported module in a way we don't like.
-        ++ lib.attrValues self.homeManagerModules;
+      myLib = import ./lib inputs;
     in {
       homeConfigurations = {
         gaelan-personal = myLib.homeManagerConfiguration
@@ -56,9 +36,10 @@
         };
         arrakis = myLib.nixosSystem {
           system = "x86_64-linux";
-          configuration = ./nixos/profiles/arrakis2022.nix;
-          myModules = lib.attrValues self.nixosModules;
-          contribModules = [ nixos-hardware.nixosModules.framework ];
+          modules = [
+            nixos-hardware.nixosModules.framework
+            ./nixos/profiles/arrakis2022.nix
+          ] ++ lib.attrValues self.nixosModules;
         };
       };
 
