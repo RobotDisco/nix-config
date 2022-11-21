@@ -5,27 +5,26 @@ final: prev:
 let
   # Emacs package generated from use-package s-expressions in our emacs
   # configuration file.
-  runtime =
-    final.emacsWithPackagesFromUsePackage {
-      package = final.emacsNativeComp;
+  runtime = final.emacsWithPackagesFromUsePackage {
+    package = final.emacsNativeComp;
 
-      # Parse this org file for "use-package" s-expressions to implicitly
-      # import emacs-overlay nix elisp packages from.
-      config = ./init.org;
-      # Don't assume every "use-package" s-expression should be installed,
-      # respect :ensure keyword.
-      alwaysEnsure = false;
+    # Parse this org file for "use-package" s-expressions to implicitly
+    # import emacs-overlay nix elisp packages from.
+    config = ./init.org;
+    # Don't assume every "use-package" s-expression should be installed,
+    # respect :ensure keyword.
+    alwaysEnsure = false;
 
-      extraEmacsPackages = (epkgs: [
+    extraEmacsPackages = (epkgs:
+      [
         # use-package has some dependencies
         epkgs.diminish
       ]);
-    };
-in
-{
+  };
+in {
   gaelan-emacs = runtime;
-  gaelan-emacs-config = (final.emacsPackagesFor runtime.emacs).callPackage
-    ./config.nix {
+  gaelan-emacs-config =
+    (final.emacsPackagesFor runtime.emacs).callPackage ./config.nix {
       packageRequires = runtime.explicitRequires;
     };
 }

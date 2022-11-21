@@ -23,14 +23,5 @@
 
   programs.home-manager.enable = true;
 
-  home.packages = with pkgs; [
-    brave
-    bitwarden
-    seafile-client
-    slack
-
-    # Book reading
-    calibre
-    unzip
-  ];
+  home.packages = with pkgs; [ brave bitwarden calibre discord signal slack ];
 }

@@ -16,7 +16,16 @@
     let
       inherit (nixpkgs) lib;
 
-      myLib = import ./lib inputs;
+      ### HERE BEGINS WHAT IS EFFECTIVELY MY CONFIGURATION SECTION
+      # What platforms do I support?
+      supportedSystems = [ "x86_64-linux" "x86_64-darwin" ];
+
+      #### THIS ENDS WHAT IS EFFECTIVELY MY CONFIGURATION SECTION.
+      # My helper functions.
+      # The name is cringe but I want to make it clear what I have defined vs
+      # what is actually part of a standard library.
+      myLib = import ./lib { inherit inputs supportedSystems; };
+
     in {
       homeConfigurations = {
         gaelan-personal = myLib.homeManagerConfiguration
@@ -30,7 +39,7 @@
       nixosModules = { default = import ./nixos/modules; };
 
       nixosConfigurations = {
-        darktower = lib.nixosSystem {
+        darktower = myLib.nixosSystem {
           system = "x86_64-linux";
           modules = [ ./nixos/profiles/darktower.nix ];
         };
@@ -39,7 +48,7 @@
           modules = [
             nixos-hardware.nixosModules.framework
             ./nixos/profiles/arrakis2022.nix
-          ] ++ lib.attrValues self.nixosModules;
+          ] ++ nixpkgs.lib.attrValues self.nixosModules;
         };
       };
 
@@ -87,7 +96,7 @@
 
       devShells = myLib.forAllSystems (pkgs: {
         default = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [ git nix rnix-lsp ];
+          nativeBuildInputs = with pkgs; [ git nix nixfmt rnix-lsp ];
           shellHook = "  export NIX_USER_CONF_FILES=${toString ./.}/nix.conf\n";
         };
       });
@@ -101,12 +110,9 @@
       # derive my configs and need my packages in almost every flake item to have
       # my emacs packages introduced by overlay, it was easier to define it the
       # other way around.
-      overlays = {
-        emacs = final: prev: import ./overlays/emacs final prev;
-      };
+      overlays = { emacs = final: prev: import ./overlays/emacs final prev; };
 
-      packages = myLib.forAllSystems (pkgs: {
-        inherit (pkgs) gaelan-emacs gaelan-emacs-config;
-      });
+      packages = myLib.forAllSystems
+        (pkgs: { inherit (pkgs) gaelan-emacs gaelan-emacs-config; });
     };
 }

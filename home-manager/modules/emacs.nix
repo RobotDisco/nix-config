@@ -204,6 +204,9 @@ in {
 
         # nov.el
         unzip
+
+        # System widgets
+        pavucontrol
       ];
     })
   ]);
