@@ -84,7 +84,7 @@ in {
         '';
       };
 
-      # Install any additional package specified by the emacs-config derivation, as well as our specified emacs package
+      # Install our emacs package, as well as the emacs config package if XDG config mangement was enabled.
       home.packages = [ cfg.package ]
         ++ lib.optionals cfg.enableUserDirectory cfg.configPackage.buildInputs;
 

@@ -9,7 +9,7 @@ let
     import nixpkgs {
       inherit system;
 
-      overlays = [ inputs.gaelan-emacs.overlays.default ];
+      overlays = [ inputs.emacs-overlay.overlays.default ] ++ lib.attrValues inputs.self.overlays;
 
       # Allow non-free/open source projects to be installed
       config.allowUnfree = true;

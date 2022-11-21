@@ -7,15 +7,12 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.05";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    gaelan-emacs.url = "github:RobotDisco/emacs-config";
-    gaelan-emacs.inputs.nixpkgs.follows = "nixpkgs";
-
     home-manager.url = "github:nix-community/home-manager/release-22.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
-    inputs@{ self, nixpkgs, emacs-overlay, gaelan-emacs, home-manager, nixos-hardware }:
+    inputs@{ self, nixpkgs, emacs-overlay, home-manager, nixos-hardware }:
     let
       inherit (nixpkgs) lib;
 
@@ -28,7 +25,6 @@
       # Are there home-manager modules we will want to include?
       # home-manager calls these "sharedModules" for whatever reason.
       homeManagerSharedModules = [
-        gaelan-emacs.homeManagerModules.emacsConfig
       ]
       # Here's an interesting thing we do, taking advantage of Nix/Haskell's
       # laziness. We should include the modules we define ourselves. The flake
@@ -120,8 +116,18 @@
       # Run ~nix fmt~ to use this package to format nix files
       formatter = myLib.forAllSystems (pkgs: pkgs.nixfmt);
 
-      packages = myLib.forAllSystems (pkgs:
-        (import ./packages/emacs { inherit pkgs; })
-      );
+      # Conceptually it feels like I should be defining my packages
+      # in the packages settings and then defining overlays that reference
+      # my flake packages. However, since I'm using the emacs overlay to
+      # derive my configs and need my packages in almost every flake item to have
+      # my emacs packages introduced by overlay, it was easier to define it the
+      # other way around.
+      overlays = {
+        emacs = final: prev: import ./overlays/emacs final prev;
+      };
+
+      packages = myLib.forAllSystems (pkgs: {
+        inherit (pkgs) gaelan-emacs gaelan-emacs-config;
+      });
     };
 }
