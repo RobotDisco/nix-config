@@ -506,6 +506,15 @@ A editor-agnostic way to maintain project coding styles
     :ensure t
     :defer 3)
 #+END_SRC
+** Language Server Protocol
+IDE-like functionality such as intellisense, debugging
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package lsp-mode
+    :ensure t
+    :commands (lsp lsp-deferred)
+    :hooks (prog-mode-hook . lsp))
+#+END_SRC
 * Programming Language support / environments
 *** Elm
 #+BEGIN_SRC emacs-lisp :tangle yes
