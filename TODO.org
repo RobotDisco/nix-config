@@ -6,15 +6,21 @@ Things I should do eventually
 - Explain the difference between my concept of profiles and modules (as internalized from https://www.reddit.com/r/NixOS/comments/um1ohu/how_do_you_write_custom_nixos_modules/)
 - Make my home-manager config work on both MacOS and Linux
 - Figure out seamless way to run nix tasks from emacs and/or simple shell commands (devShell?)
-- Merge emacs nix flake back in here.
-- Rewrite README.org to explain current organization
-- Move current README notes to NOTES.org, reframe it as a shortcut guide for new nix users to not be as confused as I was/am.
-- Consider writing a framework that uses DRY and encapsuation to build server and laptop out of same NixOS building blocks
+- [X] Merge emacs nix flake back in here.
+- Rewrite README.org to:
+  - Recommend things to reduce the amount of time it takes to understand Nix.
+  - Explain the important thing in my nix flakes since a lot of it basically just how I wrote it.
+- Reconcile darktower and arrakis profiles so that I can use my nixos modules on both
 - Add launchd support to GnuPG in MacOS home-manager
 - Re-evaluate nix-darwin for MacOS, see if it is worth it.
-- Add Makefile-like tasks for
-  - building home-manager and nixos configs without installing them
-  - figure out if there's a form of test? What does a test mean for my purposes?
-  - write a command to lint all nix files
+- Add Makefile-like tasks (is this doable by the nix command itself?)
+  - testing nix configs
+  - testing home-manager configs
+  - testing emacs configs
+  - linting
 - Rewrite apps section to encapsulate app definitions from the transformation code I use to minimize boilerplate
+- Lean on github actions for now for:
+  - dependabot
+  - cachix (so I don't have to recompile across instances?)
+  
   
