@@ -187,6 +187,9 @@ in {
       else
         "${emacsBin} -f exwm-enable";
 
+      services.dunst.enable = true;
+      services.picom.enable = true;
+
       # Install external commands used by emacs when in desktop environment mode
       home.packages = with pkgs; [
         # desktop-environment-mode
