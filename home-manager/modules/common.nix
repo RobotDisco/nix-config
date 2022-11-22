@@ -23,5 +23,5 @@
 
   programs.home-manager.enable = true;
 
-  home.packages = with pkgs; [ brave bitwarden calibre discord signal slack ];
+  home.packages = with pkgs; [ brave bitwarden calibre discord signal-desktop slack ];
 }
