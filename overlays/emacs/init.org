@@ -768,3 +768,14 @@ A way to annotate PDF/ePubs using org mode
     :after (nov pdf-tools)
     :commands org-noter)
 #+END_SRC
+
+*** org-transclusion
+Block-level editing/embedding, approximating the way Roam/logseq do it
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-transclusion
+    :after org
+    :ensure t
+    :bind (("C-c n a" . org-transclusion-add)
+	   ("C-c n t" . org-transclusion-mode)))
+#+END_SRC
