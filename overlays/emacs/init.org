@@ -465,6 +465,14 @@ We use smartparens for structured editing like Ruby blocks or lisp s-expressions
     (sp-use-smartparens-bindings)
     (smartparens-global-mode))
 #+END_SRC
+** grepping
+[[https://blog.burntsushi.net/ripgrep/][ripgrep]] is a grep replacement written in Rust. It is more performant and more powertful than grep.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rg
+    :bind (("C-c s" . rg-menu))
+    :ensure t)
+#+END_SRC
 * Software Development
 ** Packages
 *** envrc
