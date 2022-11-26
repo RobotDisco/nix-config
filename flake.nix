@@ -2,9 +2,13 @@
   description = "Gaelan's nix-based systems configuration";
 
   inputs = {
+    darwin.url = "github:lnl7/nix-darwin/master";
+    darwin.inputs.nixpkgs.follows = "nixpkgs-mac";
+
     emacs-overlay.url = "github:nix-community/emacs-overlay";
 
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.05";
+    nixpkgs-mac.url = "github:nixos/nixpkgs/nixpkgs-22.05-darwin";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     home-manager.url = "github:nix-community/home-manager/release-22.05";
@@ -12,7 +16,7 @@
   };
 
   outputs =
-    inputs@{ self, nixpkgs, emacs-overlay, home-manager, nixos-hardware }:
+    inputs@{ self, nixpkgs, nixpkgs-mac, darwin, emacs-overlay, home-manager, nixos-hardware }:
     let
       inherit (nixpkgs) lib;
 
@@ -93,6 +97,47 @@
           # Convert list of app objects into attrset
           builtins.listToAttrs
         ]);
+
+      darwinConfigurations = {
+        "Fountain-of-Ahmed-III" = darwin.lib.darwinSystem {
+          system = "x86_64-darwin";
+          modules = [({ pkgs, ... }: {
+            # Use a custom configuration.nix location.
+            # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
+            # environment.darwinConfig = "$HOME/.config/nixpkgs/darwin/configuration.nix";
+
+            # Auto upgrade nix package and the daemon service.
+            services.nix-daemon.enable = true;
+            # nix.package = pkgs.nix;
+
+            # Create /etc/zshrc that loads the nix-darwin environment.
+            programs.zsh.enable = true;
+
+            # Used for backwards compatibility, please read the changelog before
+            # changing.
+            # $ darwin-rebuild changelog
+            system.stateVersion = 4;
+          })
+                     home-manager.darwinModules.home-manager
+                     {
+                       home-manager = {
+                         sharedModules = nixpkgs.lib.attrValues self.homeManagerModules;
+                         useGlobalPkgs = true;
+                         useUserPackages = false;
+                       };
+                     }
+                     {
+                       nixpkgs.overlays = [ inputs.emacs-overlay.overlays.default ] ++ lib.attrValues self.overlays;
+                     }
+                     {
+                       users.users."gaelan.dcosta" = {};
+
+                       home-manager.users."gaelan.dcosta" = (import
+                         ./home-manager/profiles/gaelan-work.nix).configuration;
+                     }
+                    ];
+        };
+      };
 
       devShells = myLib.forAllSystems (pkgs: {
         default = pkgs.mkShell {
