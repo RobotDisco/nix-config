@@ -664,89 +664,51 @@ Read PDF files and epub ebooks on Emacs
     ;; Save Org buffers after refiling!
     (advice-add 'org-refile :after 'org-save-all-org-buffers))
 #+END_SRC
-*** org-journal
-#+BEGIN_SRC emacs-lisp :tangle yes
-    (use-package org-journal
-      :ensure t
-      :after (org)
-      :bind (("C-c j j" . org-journal-new-entry)
-	     ("C-c j s" . org-journal-search))
-      :defines org-capture-templates
-      :commands (org-journal-new-entry)
-      :preface
-      (declare-function org-journal-new-entry "org-journal")
-      :init
-      (setq org-journal-date-format "%A, %F"
-	    org-journal-file-format "%Y.org"
-	    org-journal-file-type 'yearly
-	    org-journal-dir (file-name-as-directory "~/Documents/journal")
-	    org-journal-prefix-key "C-c j")
-      ;; org-mode needs some help to know where to place new org-journal entries
-      ;; via org-capture-templates
-      (defun gaelan/org-journal-find-location ()
-	"Find the latest entry in an org-journal file."
-	;; Open today's journal, but specify a non-nil prefix argument in order to
-	;; inhibit inserting the heading; org-capture will insert the heading.
-	(org-journal-new-entry t)
-	(unless (eq org-journal-file-type 'daily)
-	  (org-narrow-to-subtree))
-	(goto-char (point-max)))
-      ;; Push journal template entries to capture templates
-      (add-to-list 'org-capture-templates
-		   '("d" "Daily Morning Reflection" plain (function gaelan/org-journal-find-location)
-		     "** %(format-time-string org-journal-time-format) Daily Morning Reflection\n*** What are my most important tasks today?\n- %?\n*** What am I grateful for today?"
-		     :jump-to-captured t))
-      (add-to-list 'org-capture-templates
-		   '("e" "Daily Evening Reflection" plain (function gaelan/org-journal-find-location)
-		     "** %(format-time-string org-journal-time-format) Daily Evening Reflection\n*** What were my wins today?\n- %?\n*** What did I learn today?\n*** What did not go according to plan today?\n*** What did I do to improve my future?\n*** What did I do to help others?"
-		     :jump-to-captured t))
-      (add-to-list 'org-capture-templates
-		   '("w" "Weekly Reflection" plain (function gaelan/org-journal-find-location)
-		     "** %(format-time-string org-journal-time-format) Weekly Reflection\n*** What was I most grateful for this week? (Pick one thing and go deep.)\n%?\n*** What were my biggest wins this week?\n*** What unresolved tensions am I feeling this week? What is causing these tensions?\n*** What should I prioritize this upcoming week?\n*** What can be deferred this upcoming week?\n*** What did I learn this week?\n*** What should I learn this upcoming week?"
-		     :jump-to-captured t))
-      (add-to-list 'org-capture-templates
-		   '("m" "Monthly Reflection" plain (function gaelan/org-journal-find-location)
-		     "** %(format-time-string org-journal-time-format) Monthly Reflection\n*** What were my biggest wins this month?\n- %?\n*** What was I most grateful for this month?\n*** What tensions did I remove this month?\n*** What did I learn this month?\n*** How have I grown this month?"
-		     :jump-to-captured t))
-      (add-to-list 'org-capture-templates
-		   '("y" "Yearly Reflection" plain (function gaelan/org-journal-find-location)
-		     "** %(format-time-string org-journal-time-format) Yearly Reflection\n*** What were my biggest wins this year?\n- %?\n*** What was I most grateful for this year?\n*** What tensions did I remove this year?\n*** What did I learn this year?\n*** How have I grown this year?"
-		     :jump-to-captured t)))
-#+END_SRC
 *** org-roam
 An implementation of Zettelkasten for org, inspired by org-roam
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-roam
     :ensure t
-    :bind (("C-c n b" . org-roam-buffer-toggle)
+    :bind (("C-c j d" . org-roam-dailies-goto-date)
+	   ("C-c j j" . org-roam-dailies-capture-today)
+	   ("C-c j n" . org-roam-dailies-goto-next-note)
+	   ("C-c j p" . org-roam-dailies-goto-previous-note)
+	   ("C-c j t" . org-roam-dailies-goto-today)
+	   ("C-c j y" . org-roam-dailies-goto-yesterday)
+	   ("C-c n b" . org-roam-buffer-toggle)
 	   ("C-c n f" . org-roam-node-find)
 	   ("C-c n i" . org-roam-node-insert))
-    :commands (org-roam-buffer-toggle
-	       org-roam-buffer-display-dedicated
-	       org-roam-db-autosync-mode)
-    :init
-    ;; (setq org-roam-v2-ack t)
-    (setq org-roam-directory "~/Documents/brain"
-	  org-roam-capture-templates '(("l" "literature" plain "%?"
-					:if-new (file+head "literature/${slug}.org"
-							   "#+title: ${title}\n")
-					:unnarrowed t)
-				       ("p" "permanent" plain "%?"
-					:if-new (file+head "permanent/%<%Y%m%d%H%M%S>-${slug}.org"
-							   "#+title: ${title}\n")
-					:unnarrowed t))
-	  org-roam-node-display-template
-	  (concat "${type:15} ${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-    :config
-    (cl-defmethod org-roam-node-type ((node org-roam-node))
-      "Return the TYPE of NODE."
-      (condition-case nil
-	  (file-name-nondirectory
-	   (directory-file-name
-	    (file-name-directory
-	     (file-relative-name (org-roam-node-file node) org-roam-directory))))
-	(error "")))
-    (org-roam-db-autosync-mode))
+    :commands (org-roam-db-autosync-mode)
+    :custom
+    (org-roam-directory "~/Documents/brain")
+    (org-roam-dailies-directory "journal/")
+    (org-roam-dailies-capture-templates
+     '(("d" "default" entry
+	"* %<%0H:%M> %?"
+	:target (file+datetree "%<%Y>.org" day))
+       ("m" "Daily Morning Reflection" entry
+	"* Daily Morning Reflection\n** What are my most important tasks today?\n- [ ] %?"
+	:jump-to-captured t
+	:prepend t
+	:target (file+datetree "%<%Y>.org" day))
+       ("e" "Daily Evening Reflection" entry
+	"* Daily Evening Reflection\n** What were my wins today?\n- %?\n** What did I learn today?\n- \n** What did not go according to plan today?\n- \n** What am I grateful for today?\n** What did I do to improve my future?\n** What did I do to help others?"
+	:target (file+datetree "%<%Y>.org" day)
+	:unnarrowed t)
+       ("w" "Weekly Reflection" entry
+	"* Weekly Reflection\n** What was I most grateful for this week? (Pick one thing and go deep.)\n%?\n** What were my biggest wins this week?\n- \n** What unresolved tensions am I feeling this week? What is causing these tensions?\n- \n** What should I prioritize this upcoming week?\n- \n** What can be deferred this upcoming week?\n- \n** What did I learn this week?\n- \n** What should I learn this upcoming week?\n- "
+	:target (file+datetree "%<%Y>.org" day)
+	:unnarrowed t)
+       ("m" "Monthly Reflection" entry
+	"* Monthly Reflection\n** What were my biggest wins this month?\n- %?\n** What was I most grateful for this month?\n** What tensions did I remove this month?\n- \n** What did I learn this month?\n- \n** How have I grown this month?\n- "
+	:target (file+datetree "%<%Y>.org" day)
+	:unnarrowed t)
+       ("y" "Yearly Reflection" entry
+	"* Yearly Reflection\n** What were my biggest wins this year?\n- %?\n** What was I most grateful for this year?\n** What tensions did I remove this year?\n- \n** What did I learn this year?\n- \n** How have I grown this year?\n- "
+	:target (file+datetree "%<%Y>.org" day)
+	:unnarrowed t)))
+     :config
+     (org-roam-db-autosync-mode))
 #+END_SRC
 
 Also enable a UI that makes overseeing my knowledge base easier.
