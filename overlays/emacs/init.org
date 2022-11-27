@@ -521,7 +521,7 @@ IDE-like functionality such as intellisense, debugging
   (use-package lsp-mode
     :ensure t
     :commands (lsp lsp-deferred)
-    :hooks (prog-mode-hook . lsp))
+    :hook (prog-mode-hook . lsp))
 #+END_SRC
 * Programming Language support / environments
 *** Elm
