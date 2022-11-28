@@ -677,25 +677,6 @@ Read PDF files and epub ebooks on Emacs
 *** org-roam
 An implementation of Zettelkasten for org, inspired by org-roam
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; I use the first directory level in my org-roam directory to distinguish
-  ;; which slipbox a note is in.
-  ;; current slipboxes
-  ;; - journal :: my daily notes
-  ;; - literature :: notes on things I have read, watched, researched, etc...
-  ;; - permanent :: where my own ideas live
-  ;;
-  ;; This is inspired by Jethro Kuan's org-roam guide
-  ;; https://jethrokuan.github.io/org-roam-guide/
-  (cl-defmethod org-roam-node-slipbox ((node org-roam-node))
-    "Return the SLIPBOX of org-roam NODE."
-    ;; Remove free variable warnings
-    (declare-function org-roam-node-file "org-roam-node.el" (node))
-    (defvar org-roam-directory)
-    (file-name-nondirectory
-     (directory-file-name
-      (file-name-directory
-       (file-relative-name (org-roam-node-file node) org-roam-directory)))))
-
   (use-package org-roam
     :ensure t
     :bind (("C-c j d" . org-roam-dailies-goto-date)
@@ -747,6 +728,22 @@ An implementation of Zettelkasten for org, inspired by org-roam
     (org-roam-node-display-template
      "${slipbox:10} ${title:*} ${tags}")
     :config
+    ;; I use the first directory level in my org-roam directory to distinguish
+    ;; which slipbox a note is in.
+    ;; current slipboxes
+    ;; - journal :: my daily notes
+    ;; - literature :: notes on things I have read, watched, researched, etc...
+    ;; - permanent :: where my own ideas live
+    ;;
+    ;; This is inspired by Jethro Kuan's org-roam guide
+    ;; https://jethrokuan.github.io/org-roam-guide/
+    (cl-defmethod org-roam-node-slipbox ((node org-roam-node))
+      "Return the SLIPBOX of org-roam NODE."
+      (file-name-nondirectory
+       (directory-file-name
+	(file-name-directory
+	 (file-relative-name (org-roam-node-file node) org-roam-directory)))))
+    ;; Scan for org-roam changes and rebuild database opportunistically
     (org-roam-db-autosync-mode))
 #+END_SRC
 
