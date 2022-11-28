@@ -731,6 +731,9 @@ An implementation of Zettelkasten for org, inspired by org-roam
 	"* Yearly Reflection\n** What were my biggest wins this year?\n- %?\n** What was I most grateful for this year?\n** What tensions did I remove this year?\n- \n** What did I learn this year?\n- \n** How have I grown this year?\n- "
 	:target (file+datetree "%<%Y>.org" day)
 	:unnarrowed t)))
+    (org-roam-mode-sections '(org-roam-backlinks-section
+			      org-roam-reflinks-section
+			      org-roam-unlinked-references-section))
     (org-roam-node-display-template
      "${slipbox:10} ${title:*} ${tags}")
     :config
