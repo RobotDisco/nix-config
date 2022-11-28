@@ -693,8 +693,11 @@ An implementation of Zettelkasten for org, inspired by org-roam
     (org-roam-capture-templates
      '(("p" "permanent" plain "%?"
 	:target (file+head "permanent/%<%Y%m%d%H%M%S>-${slug}.org"
-			   "#+title: ${title}")
-	:unnarrowed t)))
+			   "#+TITLE: ${title}")
+	:unnarrowed t)
+       ("r" "rolodex" plain "%?"
+	:target (file+head "rolodex/%<%Y%m%d%H%M%S>-${slug}.org"
+			   "#+TITLE: ${title}"))))
     (org-roam-directory "~/Documents/brain")
     (org-roam-dailies-directory "journal/")
     (org-roam-dailies-capture-templates
