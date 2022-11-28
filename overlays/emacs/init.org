@@ -703,27 +703,27 @@ An implementation of Zettelkasten for org, inspired by org-roam
     (org-roam-dailies-capture-templates
      '(("d" "default" entry
 	"* %<%0H:%M> %?"
-	:target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>" ("Log")))
+	:target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+STARTUP: fold\n#+TITLE: %<%Y-%0m-%0d, %A>" ("Log")))
        ("m" "Daily Morning Reflection" entry
 	"* Daily Morning Reflection\n** What are my most important tasks today?\n- [ ] %?"
 	:jump-to-captured t
 	:prepend t
-	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>"))
+	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+STARTUP: fold\n#+TITLE: %<%Y-%0m-%0d, %A>"))
        ("e" "Daily Evening Reflection" entry
 	"* Daily Evening Reflection\n** What were my wins today?\n- %?\n** What did I learn today?\n- \n** What did not go according to plan today?\n- \n** What am I grateful for today?\n** What did I do to improve my future?\n** What did I do to help others?"
-	:target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>")
+	:target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+STARTUP: fold\n#+TITLE: %<%Y-%0m-%0d, %A>")
 	:unnarrowed t)
        ("w" "Weekly Reflection" entry
 	"* Weekly Reflection\n** What was I most grateful for this week? (Pick one thing and go deep.)\n%?\n** What were my biggest wins this week?\n- \n** What unresolved tensions am I feeling this week? What is causing these tensions?\n- \n** What should I prioritize this upcoming week?\n- \n** What can be deferred this upcoming week?\n- \n** What did I learn this week?\n- \n** What should I learn this upcoming week?\n- "
-	:target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>")
+	:target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+STARTUP: fold\n#+TITLE: %<%Y-%0m-%0d, %A>")
 	:unnarrowed t)
        ("m" "Monthly Reflection" entry
 	"* Monthly Reflection\n** What were my biggest wins this month?\n- %?\n** What was I most grateful for this month?\n** What tensions did I remove this month?\n- \n** What did I learn this month?\n- \n** How have I grown this month?\n- "
-	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>")
+	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+STARTUP: fold\n#+TITLE: %<%Y-%0m-%0d, %A>")
 	:unnarrowed t)
        ("y" "Yearly Reflection" entry
 	"* Yearly Reflection\n** What were my biggest wins this year?\n- %?\n** What was I most grateful for this year?\n** What tensions did I remove this year?\n- \n** What did I learn this year?\n- \n** How have I grown this year?\n- "
-	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>")
+	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+STARTUP: fold\n#+TITLE: %<%Y-%0m-%0d, %A>")
 	:unnarrowed t)))
     (org-roam-mode-sections '(org-roam-backlinks-section
 			      org-roam-reflinks-section
