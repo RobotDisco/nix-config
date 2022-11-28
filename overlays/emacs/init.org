@@ -428,6 +428,16 @@ candidates by multiple regex patterns separated by a space.
     (completion-category-overrides '((file (styles basic partial-completion)))))
 #+END_SRC
 * Functionality
+** Reverting
+Automatically revert when a file changes on disk; this happens a lot given my files are managed in Seafile
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package emacs
+    :bind (("s-u" . revert-buffer))
+    :ensure nil
+    :hook ((after-load-hook . (lambda ()
+				(global-auto-revert-mode +1)))))
+#+END_SRC
 ** Project Management
 
 Projectile is a framework for managing (usually) software development projects in a standard way, so that the same keybindings can be used to test projects, compile them, etc...
