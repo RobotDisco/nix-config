@@ -742,7 +742,8 @@ An implementation of Zettelkasten for org, inspired by org-roam
     ;; https://jethrokuan.github.io/org-roam-guide/
     (cl-defmethod org-roam-node-slipbox ((node org-roam-node))
       "Return the SLIPBOX of org-roam NODE.
-  The slipbox is defined as the top-level directory name relative to the value of org-roam-directory."
+      The slipbox is defined as the top-level directory name relative to the value
+  of org-roam-directory."
       (car (split-string (file-relative-name (org-roam-node-file node)
 					     org-roam-directory)
 			 "/")))
