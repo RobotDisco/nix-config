@@ -130,7 +130,9 @@
                        nixpkgs.overlays = [ inputs.emacs-overlay.overlays.default ] ++ lib.attrValues self.overlays;
                      }
                      {
-                       users.users."gaelan.dcosta" = {};
+                       users.users."gaelan.dcosta" = {
+                         home = "/Users/gaelan.dcosta";
+                       };
 
                        home-manager.users."gaelan.dcosta" = (import
                          ./home-manager/profiles/gaelan-work.nix).configuration;
