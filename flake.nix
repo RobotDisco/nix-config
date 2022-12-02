@@ -22,7 +22,7 @@
 
       ### HERE BEGINS WHAT IS EFFECTIVELY MY CONFIGURATION SECTION
       # What platforms do I support?
-      supportedSystems = [ "x86_64-linux" "x86_64-darwin" ];
+      supportedSystems = [ "x86_64-linux" "aarch64-darwin" ];
 
       #### THIS ENDS WHAT IS EFFECTIVELY MY CONFIGURATION SECTION.
       # My helper functions.
@@ -100,7 +100,7 @@
 
       darwinConfigurations = {
         "Fountain-of-Ahmed-III" = darwin.lib.darwinSystem {
-          system = "x86_64-darwin";
+          system = "aarch64-darwin";
           modules = [({ pkgs, ... }: {
             # Use a custom configuration.nix location.
             # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
