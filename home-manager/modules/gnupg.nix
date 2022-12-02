@@ -8,6 +8,11 @@ in {
   config = lib.mkIf cfg.enable {
     programs.gpg = {
       enable = true;
+      # Required on MacOS for GPG to recognise YubiKey.
+      # https://github.com/NixOS/nixpkgs/issues/155629
+      scdaemonSettings = lib.mkIf pkgs.stdenv.isDarwin {
+        disable-ccid = true;
+      };
       settings = {
         personal-cipher-preferences = "AES256 AES192 AES";
         personal-digest-preferences = "SHA512 SHA384 SHA256";
