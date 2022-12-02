@@ -137,6 +137,44 @@
                        home-manager.users."gaelan.dcosta" = (import
                          ./home-manager/profiles/gaelan-work.nix).configuration;
                      }
+                     {
+                       homebrew.enable = true;
+                       homebrew.taps = [
+                         "homebrew/cask-drivers"
+                       ];
+                       homebrew.casks = [
+                         "bitwarden"
+                         "brave-browser"
+                         "calibre"
+                         "chef-workstation"
+                         "kobo"
+                         # Work already installs/updates this
+                         #"mattermost";
+                         "seafile-client"
+                         "signal"
+                         "slack"
+                         "tidal"
+                         "zotero"
+                         # Stuff from drivers
+                         "fujitsu-scansnap-manager-s1300"
+                         "kensingtonworks"
+                         "uhk-agent"
+                         "yubico-authenticator"
+                         "yubico-yubikey-manager"
+                       ];
+                     }
+                     {
+                       system.keyboard = {
+                         enableKeyMapping = true;
+                         remapCapsLockToControl = true;
+                         # I want this to not affect internal keyboard
+                         # swapLeftCommandAndLeftAlt = true;
+                       };
+                     }
+                     {
+                       programs.gnupg.agent.enable = true;
+                       programs.gnupg.agent.enableSSHSupport = true;
+                     }
                     ];
         };
       };
