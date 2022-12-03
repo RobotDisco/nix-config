@@ -154,6 +154,7 @@
                          "signal"
                          "slack"
                          "tidal"
+                         "whatsapp"
                          "zotero"
                          # Stuff from drivers
                          "fujitsu-scansnap-manager-s1300"
