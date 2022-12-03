@@ -31,13 +31,6 @@
       myLib = import ./lib { inherit inputs supportedSystems; };
 
     in {
-      homeConfigurations = {
-        gaelan-personal = myLib.homeManagerConfiguration
-          (import ./home-manager/profiles/gaelan-personal.nix);
-        gaelan-work = myLib.homeManagerConfiguration
-          (import ./home-manager/profiles/gaelan-work.nix);
-      };
-
       homeManagerModules = { default = import ./home-manager/modules; };
 
       nixosModules = { default = import ./nixos/modules; };
@@ -67,9 +60,14 @@
           # and should be encapsulated somewhere else, like in
           # lib/
           {
-            name = "home-switch";
-            runtimeInputs = [ pkgs.home-manager ];
-            text = "home-manager switch --flake ${toString ./.}#";
+            name = "darwin-switch";
+            runtimeInputs = [ pkgs.darwin-rebuild ];
+            text = "darwin-rebuild switch --flake ${toString ./.}#";
+          }
+          {
+            name = "nixos-switch";
+            runtimeInputs = [ pkgs.nixos-rebuild ];
+            text = "sudo nixos-rebuild switch --flake ${toString ./.}#";
           }
           {
             name = "use-caches";
@@ -77,11 +75,6 @@
             text = ''
               cachix use -O . nix-community
             '';
-          }
-          {
-            name = "nixos-switch";
-            runtimeInputs = [ pkgs.nixos-rebuild ];
-            text = "sudo nixos-rebuild switch --flake ${toString ./.}#";
           }
         ] [
           # Generate a derivation
