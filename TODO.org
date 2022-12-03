@@ -27,6 +27,5 @@ Things I should do eventually
   - Nix
   - Homebrew
   - Nix-darwin
-    
-  
-  
+- Attempt to modify nix-darwin to work with hardware-specific keyboard mappings
+- okta-awscli should be a publicly accessible package I feel

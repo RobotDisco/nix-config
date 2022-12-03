@@ -196,9 +196,19 @@
       # derive my configs and need my packages in almost every flake item to have
       # my emacs packages introduced by overlay, it was easier to define it the
       # other way around.
-      overlays = { emacs = final: prev: import ./overlays/emacs final prev; };
+      overlays = {
+        emacs = final: prev: import ./overlays/emacs final prev;
+        default = final: prev: {
+          # Would have been simpler to just derive this from pkgs/final, but
+          # if this package ever gets into nixpkgs it likely should follow
+          # the callPackage nix paradigm for flexibility
+          okta-awscli = final.python3Packages.callPackage ./packages/okta-awscli.nix {};
+        };
+      };
 
       packages = myLib.forAllSystems
-        (pkgs: { inherit (pkgs) gaelan-emacs gaelan-emacs-config; });
+        (pkgs: {
+          inherit (pkgs) gaelan-emacs gaelan-emacs-config okta-awscli;
+        });
     };
 }

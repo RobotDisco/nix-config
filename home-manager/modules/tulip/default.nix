@@ -16,11 +16,15 @@ in {
 
     home.packages = with pkgs; [
       awscli2
+      okta-awscli
       # Docker VM for macs
       colima
       docker
 
       google-cloud-sdk
     ];
+
+    #okta-awscli config
+    home.file.".okta-aws".source = ./okta-aws.toml;
   };
 }
