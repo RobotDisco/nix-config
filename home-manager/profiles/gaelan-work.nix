@@ -11,5 +11,7 @@
 
     robot-disco.emacs.enable = true;
     robot-disco.gnupg.enable = true;
+
+    robot-disco.tulip.enable = true;
   };
 }

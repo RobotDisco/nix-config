@@ -5,5 +5,6 @@
     ./emacs.nix
     ./games.nix
     ./gnupg.nix
+    ./tulip
   ];
 }
