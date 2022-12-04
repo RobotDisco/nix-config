@@ -21,15 +21,28 @@ let
   # either make a recursive attrSet (which is an anti-pattern) or define it in
   # a let block and inherit it in the output.
 
-  # For a given system, generate a pkg attrset that allows
-  # non-free software and includes globally defined overlays
-  pkgsForSystem = system:
-    import nixpkgs {
-      inherit system;
+  # For a given system, return the appropate legacyPackages for the given
+  # operating system.
+  # Note 1: This is done because every "import" of nixpkgs creates a new thunk,
+  # which can cause multiple evaluations of nixpkgs
+  # see https://discourse.nixos.org/t/using-nixpkgs-legacypackages-system-vs-import/17462 for why.
 
-      config.allowUnfree = true;
-      overlays = baseOverlays;
-    };
+  # Note 2: This would be simplified if darwin didn't have a completely different
+  # nixpkgs branch, necessitating a different input.
+  # Reason: https://discourse.nixos.org/t/on-niv-running-on-mac-which-branch-should-i-use-to-update-to-21-11-i-cant-find-release-21-11-darwin-branch-on-nixpkgs/16446
+  # Unfortunately, the nix expression we use to determine the platform is
+  # in nixpkgs itself, so we assume that the "standard" nixpkgs can be used in
+  # MacOS to make this decision.
+  pkgsForSystem = system:
+    let
+      correctNixpkgs = if nixpkgs.legacyPackages."${system}".stdenv.isDarwin
+                       then
+                         inputs.nixpkgs-mac
+                       else
+                         nixpkgs;
+    in
+      correctNixpkgs.legacyPackages."${system}";
+
 in {
   # For all supported systems
   # given a function that takes a system string as its only input
@@ -64,23 +77,16 @@ in {
         # Standard hardware detection module I've seen in NiOS configurations
         nixpkgs.nixosModules.notDetected
         {
-          # search.nixos.org claims that overriding nixpkgs.pkgs
-          # is risky, although useful to re-use nix compilations
-          # across remote deployments. My guess is that leaving
-          # the default causes each host to download/build their
-          # own pkgs? Leaving it off to be safe.
-          #nixpkgs.pkgs = pkgsForSystem { inherit system; };
-
-          # Since I'm not using pkgsForSystem here for the above reasons, set
-          # default overlays to include here.
+          # Inherit flake overlays
           nixpkgs.overlays = baseOverlays;
+          # Enable non-free software
+          nixpkgs.config.allowUnfree = true;
+
         }
         # In an ideal world we'd be also including my flake's NixOS modules here
         # but I haven't gotten all my hosts to leverage those moduels yet
         # (so they have duplicate content)
-
-        # (lib.attrValues self.nixosModules)
-      ];
+      ]; # ++ (lib.attrValues self.nixosModules);
 
       # If we're loading Home Manager config via NixOS modules, we have to load
       # Home Manager's nix module. While we're at it, set some global defaults.
