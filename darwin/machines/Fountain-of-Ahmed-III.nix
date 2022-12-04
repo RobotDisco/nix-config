@@ -15,12 +15,10 @@
   nixpkgs.config.allowUnfree = true;
 
   # Set up user and home-manager configuration.
-  users.users."gaelan.dcosta" = {
-    home = "/Users/gaelan.dcosta";
-  };
+  users.users."gaelan.dcosta" = { home = "/Users/gaelan.dcosta"; };
 
-  home-manager.users."gaelan.dcosta" = import
-    ./home-manager/profiles/gaelan-work.nix;
+  home-manager.users."gaelan.dcosta" =
+    import ./home-manager/profiles/gaelan-work.nix;
 
   # Allow Gaelan to set up caches.
   nix.settings.trusted-users = [ "gaelan.dcosta" ];
@@ -41,9 +39,7 @@
   homebrew = {
     enable = true;
 
-    taps = [
-      "homebrew/cask-drivers"
-    ];
+    taps = [ "homebrew/cask-drivers" ];
 
     homebrew.casks = [
       "bitwarden"

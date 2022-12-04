@@ -23,5 +23,13 @@
 
   programs.home-manager.enable = true;
 
-  home.packages = lib.mkIf pkgs.stdenv.isLinux (with pkgs; [ brave bitwarden calibre discord seafile-client signal-desktop slack ]);
+  home.packages = lib.mkIf pkgs.stdenv.isLinux (with pkgs; [
+    brave
+    bitwarden
+    calibre
+    discord
+    seafile-client
+    signal-desktop
+    slack
+  ]);
 }

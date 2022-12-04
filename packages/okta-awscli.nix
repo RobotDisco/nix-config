@@ -1,5 +1,5 @@
-{ lib, buildPythonApplication, fetchPypi, beautifulsoup4, boto3, click, configparser
-, requests, validators }:
+{ lib, buildPythonApplication, fetchPypi, beautifulsoup4, boto3, click
+, configparser, requests, validators }:
 
 buildPythonApplication rec {
   pname = "okta-awscli";
@@ -16,7 +16,8 @@ buildPythonApplication rec {
     substituteInPlace setup.py --replace "bs4" "beautifulsoup4"
   '';
 
-  propagatedBuildInputs = [ beautifulsoup4 boto3 click configparser requests validators ];
+  propagatedBuildInputs =
+    [ beautifulsoup4 boto3 click configparser requests validators ];
 
   meta = {
     description = "Provides a wrapper for Okta authentication to awscli";

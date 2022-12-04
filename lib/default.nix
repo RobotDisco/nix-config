@@ -12,7 +12,7 @@ let
 
   # What overlays do I expect all my machines to use?
   baseOverlays = [ inputs.emacs-overlay.overlays.default ]
-                 ++ lib.attrValues self.overlays;
+    ++ lib.attrValues self.overlays;
 
   # What home manager modules do I expect all my configurations to use?
   baseHomeManagerModules = lib.attrValues self.homeManagerModules;
@@ -44,7 +44,6 @@ let
     }
   ];
 
-
   ## Could pkgsForSystem be used externally? Possibly. If so I'll want to
   ## include it in my output attrSet. Since other functions use it, I'll have to
   # either make a recursive attrSet (which is an anti-pattern) or define it in
@@ -64,13 +63,12 @@ let
   # MacOS to make this decision.
   pkgsForSystem = system:
     let
-      correctNixpkgs = if nixpkgs.legacyPackages."${system}".stdenv.isDarwin
-                       then
-                         inputs.nixpkgs-mac
-                       else
-                         nixpkgs;
-    in
-      correctNixpkgs.legacyPackages."${system}";
+      correctNixpkgs =
+        if nixpkgs.legacyPackages."${system}".stdenv.isDarwin then
+          inputs.nixpkgs-mac
+        else
+          nixpkgs;
+    in correctNixpkgs.legacyPackages."${system}";
 
 in {
   # For all supported systems
@@ -116,9 +114,7 @@ in {
       # NOTE: These are nix modules, not home-manager modules
       homeManagerNixosModules = [
         home-manager.nixosModules.home-manager
-        {
-          home-manager.sharedModules = homeManagerModules;
-        }
+        { home-manager.sharedModules = homeManagerModules; }
       ];
     in lib.nixosSystem {
       inherit system specialArgs;
@@ -126,35 +122,31 @@ in {
       modules = baseNixosModules ++ homeManagerNixosModules ++ modules;
     };
 
-
   # Our wrapper for nix-darwin configurations.
   darwinConfiguration =
     # The CPU architecture of the host being generated
     { system
     # NixOS modules or inline configuration
     , modules ? [ ]
-    # Are there additional homeManager Modules specific to this system?
+      # Are there additional homeManager Modules specific to this system?
     , homeManagerModules ? [ ]
-    # parameters to inject into every module
-    # This is probably an anti-pattern honestly, since in theory all of my nix
-    # modules shouldn't depend on the existence of non-standard params in the
-    # module function definition.
+      # parameters to inject into every module
+      # This is probably an anti-pattern honestly, since in theory all of my nix
+      # modules shouldn't depend on the existence of non-standard params in the
+      # module function definition.
     , extraSpecialArgs ? { } }:
     let
       baseDarwinModules = baseModules;
 
       homeManagerDarwinModules = [
         home-manager.darwinModules.home-manager
-        {
-          home-manager.sharedModules = homeManagerModules;
-        }
+        { home-manager.sharedModules = homeManagerModules; }
       ];
     in inputs.darwin.lib.darwinSystem {
       inherit system extraSpecialArgs;
 
       modules = baseDarwinModules ++ homeManagerDarwinModules ++ modules;
     };
-
 
   homeManagerConfiguration = let
     # This is a function because we rely on the pkgset as provided in the

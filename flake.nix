@@ -15,8 +15,8 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs =
-    inputs@{ self, nixpkgs, nixpkgs-mac, darwin, emacs-overlay, home-manager, nixos-hardware }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-mac, darwin, emacs-overlay
+    , home-manager, nixos-hardware }:
     let
       inherit (nixpkgs) lib;
 
@@ -92,9 +92,7 @@
       darwinConfigurations = {
         "Fountain-of-Ahmed-III" = myLib.darwinSystem {
           system = "aarch64-darwin";
-          modules = [
-            ./darwin/machines/Fountain-of-Ahmed-III.nix
-          ];
+          modules = [ ./darwin/machines/Fountain-of-Ahmed-III.nix ];
         };
       };
 
@@ -120,13 +118,13 @@
           # Would have been simpler to just derive this from pkgs/final, but
           # if this package ever gets into nixpkgs it likely should follow
           # the callPackage nix paradigm for flexibility
-          okta-awscli = final.python3Packages.callPackage ./packages/okta-awscli.nix {};
+          okta-awscli =
+            final.python3Packages.callPackage ./packages/okta-awscli.nix { };
         };
       };
 
-      packages = myLib.forAllSystems
-        (pkgs: {
-          inherit (pkgs) gaelan-emacs gaelan-emacs-config okta-awscli;
-        });
+      packages = myLib.forAllSystems (pkgs: {
+        inherit (pkgs) gaelan-emacs gaelan-emacs-config okta-awscli;
+      });
     };
 }
