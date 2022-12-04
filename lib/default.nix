@@ -12,10 +12,39 @@ let
 
   # What overlays do I expect all my machines to use?
   baseOverlays = [ inputs.emacs-overlay.overlays.default ]
-    ++ lib.attrValues self.overlays;
+                 ++ lib.attrValues self.overlays;
 
   # What home manager modules do I expect all my configurations to use?
   baseHomeManagerModules = lib.attrValues self.homeManagerModules;
+
+  # What NixOS / nix-darwin moduels do I expect all my machines to use?
+  baseModules = [
+    {
+      # Inherit common overlays
+      nixpkgs.overlays = baseOverlays;
+    }
+    # Note that we haven't loaded the (OS-specific) module that enables NixOS
+    # or nix-darwin to include home-manager configurations. Thanks to the power
+    # of lazy-evaluation, we can include home-manager configuration despite not
+    # having the actual module loaded yet.
+    {
+      home-manager = {
+        # Share the same pkgs attrset as nixos, don't create a separate one
+        # for each user. If I ever define multiple users this is a potential
+        # security hazard if they pull random things in via nix-env
+        useGlobalPkgs = true;
+        # Allow users to include their own packages via
+        # NixOS' user.users.<name>.packages.
+        # I am unsure the ramifications of this.
+        useUserPackages = false;
+
+        # This is Home Manager's attribute for importing _Home Manager_ modules
+        sharedModules = baseHomeManagerModules;
+      };
+    }
+  ];
+
+
   ## Could pkgsForSystem be used externally? Possibly. If so I'll want to
   ## include it in my output attrSet. Since other functions use it, I'll have to
   # either make a recursive attrSet (which is an anti-pattern) or define it in
@@ -76,17 +105,11 @@ in {
       baseNixosModules = [
         # Standard hardware detection module I've seen in NiOS configurations
         nixpkgs.nixosModules.notDetected
-        {
-          # Inherit flake overlays
-          nixpkgs.overlays = baseOverlays;
-          # Enable non-free software
-          nixpkgs.config.allowUnfree = true;
-
-        }
-        # In an ideal world we'd be also including my flake's NixOS modules here
-        # but I haven't gotten all my hosts to leverage those moduels yet
-        # (so they have duplicate content)
-      ]; # ++ (lib.attrValues self.nixosModules);
+      ] ++ baseModules;
+      # In an ideal world we'd be also including my flake's NixOS modules here
+      # but I haven't gotten all my hosts to leverage those moduels yet
+      # (so they have duplicate content)
+      # ++ (lib.attrValues self.nixosModules);
 
       # If we're loading Home Manager config via NixOS modules, we have to load
       # Home Manager's nix module. While we're at it, set some global defaults.
@@ -94,19 +117,7 @@ in {
       homeManagerNixosModules = [
         home-manager.nixosModules.home-manager
         {
-          home-manager = {
-            # Share the same pkgs attrset as nixos, don't create a separate one
-            # for each user. If I ever define multiple users this is a potential
-            # security hazard if they pull random things in via nix-env
-            useGlobalPkgs = true;
-            # Allow users to include their own packages via
-            # NixOS' user.users.<name>.packages.
-            # I am unsure the ramifications of this.
-            useUserPackages = false;
-
-            # This is Home Manager's attribute for importing _Home Manager_ modules
-            sharedModules = baseHomeManagerModules;
-          };
+          home-manager.sharedModules = homeManagerModules;
         }
       ];
     in lib.nixosSystem {
@@ -114,6 +125,36 @@ in {
 
       modules = baseNixosModules ++ homeManagerNixosModules ++ modules;
     };
+
+
+  # Our wrapper for nix-darwin configurations.
+  darwinConfiguration =
+    # The CPU architecture of the host being generated
+    { system
+    # NixOS modules or inline configuration
+    , modules ? [ ]
+    # Are there additional homeManager Modules specific to this system?
+    , homeManagerModules ? [ ]
+    # parameters to inject into every module
+    # This is probably an anti-pattern honestly, since in theory all of my nix
+    # modules shouldn't depend on the existence of non-standard params in the
+    # module function definition.
+    , extraSpecialArgs ? { } }:
+    let
+      baseDarwinModules = baseModules;
+
+      homeManagerDarwinModules = [
+        home-manager.darwinModules.home-manager
+        {
+          home-manager.sharedModules = homeManagerModules;
+        }
+      ];
+    in inputs.darwin.lib.darwinSystem {
+      inherit system extraSpecialArgs;
+
+      modules = baseDarwinModules ++ homeManagerDarwinModules ++ modules;
+    };
+
 
   homeManagerConfiguration = let
     # This is a function because we rely on the pkgset as provided in the
