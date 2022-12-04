@@ -162,6 +162,9 @@
               ];
             }
             {
+              nix.settings.trusted-users = [ "gaelan.dcosta" ];
+            }
+            {
               system.keyboard = {
                 enableKeyMapping = true;
                 remapCapsLockToControl = true;
