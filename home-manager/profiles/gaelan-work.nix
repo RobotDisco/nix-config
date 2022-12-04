@@ -4,9 +4,12 @@
   configuration = {
     robot-disco.development-environment = {
       enable = true;
+
       fullname = "Gaelan D'costa";
       email = "gaelan@tulip.com";
       gpgKey = "814CF88EBD7287A1!";
+
+      signCommits = true;
     };
 
     robot-disco.emacs.enable = true;
