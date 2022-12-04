@@ -90,92 +90,10 @@
         ]);
 
       darwinConfigurations = {
-        "Fountain-of-Ahmed-III" = darwin.lib.darwinSystem {
+        "Fountain-of-Ahmed-III" = myLib.darwinSystem {
           system = "aarch64-darwin";
           modules = [
-            {
-              # Use a custom configuration.nix location.
-              # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
-              # environment.darwinConfig = "$HOME/.config/nixpkgs/darwin/configuration.nix";
-
-              # Auto upgrade nix package and the daemon service.
-              services.nix-daemon.enable = true;
-              # nix.package = pkgs.nix;
-
-              # Create /etc/zshrc that loads the nix-darwin environment.
-              programs.zsh.enable = true;
-
-              # Used for backwards compatibility, please read the changelog before
-              # changing.
-              # $ darwin-rebuild changelog
-              system.stateVersion = 4;
-            }
-            {
-              # Inherit flake overlays
-              # nixpkgs.overlays = baseOverlays;
-              nixpkgs.overlays = [ emacs-overlay.overlays.default ]
-                                 ++ lib.attrValues self.overlays;
-              # Enable non-free software
-              nixpkgs.config.allowUnfree = true;
-            }
-            home-manager.darwinModules.home-manager
-            {
-              home-manager = {
-                sharedModules = nixpkgs.lib.attrValues self.homeManagerModules;
-                useGlobalPkgs = true;
-                useUserPackages = false;
-              };
-            }
-            {
-              users.users."gaelan.dcosta" = {
-                home = "/Users/gaelan.dcosta";
-              };
-
-              home-manager.users."gaelan.dcosta" = import
-                ./home-manager/profiles/gaelan-work.nix;
-            }
-            {
-              homebrew.enable = true;
-              homebrew.taps = [
-                "homebrew/cask-drivers"
-              ];
-              homebrew.casks = [
-                "bitwarden"
-                "brave-browser"
-                "calibre"
-                "chef-workstation"
-                "kobo"
-                # Work already installs/updates this
-                #"mattermost";
-                "seafile-client"
-                "signal"
-                "slack"
-                "tidal"
-                "whatsapp"
-                "zotero"
-                # Stuff from drivers
-                "fujitsu-scansnap-manager-s1300"
-                "kensingtonworks"
-                "uhk-agent"
-                "yubico-authenticator"
-                "yubico-yubikey-manager"
-              ];
-            }
-            {
-              nix.settings.trusted-users = [ "gaelan.dcosta" ];
-            }
-            {
-              system.keyboard = {
-                enableKeyMapping = true;
-                remapCapsLockToControl = true;
-                # I want this to not affect internal keyboard
-                # swapLeftCommandAndLeftAlt = true;
-              };
-            }
-            {
-              programs.gnupg.agent.enable = true;
-              programs.gnupg.agent.enableSSHSupport = true;
-            }
+            ./darwin/machines/Fountain-of-Ahmed-III.nix
           ];
         };
       };
