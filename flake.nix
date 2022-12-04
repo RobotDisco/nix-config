@@ -61,19 +61,17 @@
           # lib/
           {
             name = "darwin-switch";
-            runtimeInputs = [ pkgs.darwin-rebuild ];
             text = "darwin-rebuild switch --flake ${toString ./.}#";
           }
           {
             name = "nixos-switch";
-            runtimeInputs = [ pkgs.nixos-rebuild ];
             text = "sudo nixos-rebuild switch --flake ${toString ./.}#";
           }
           {
             name = "use-caches";
             runtimeInputs = [ pkgs.cachix ];
             text = ''
-              cachix use -O . nix-community
+              ${pkgs.cachix}/bin/cachix use -O . nix-community
             '';
           }
         ] [
