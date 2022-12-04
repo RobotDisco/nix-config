@@ -8,6 +8,7 @@ This repo is heavily indebted to [[https://github.com/terlar/nix-config][terlar]
 This flake includes the following components:
 
 - apps :: commands which this flake provides, and commands for development workflow. Use with =nix run .#<command>=
+  - ~darwin-switch~ :: run =darwin-rebuild --switch= for this flake.
   - ~nixos-switch~ :: run =nixos-rebuild --switch= for this flake.
   - ~use-caches~ :: add caches to the project's =nix.conf=. This is only needed when modifying cache sources.
 - devShell :: a shell environment with tools used for development. Run using =nix develop=
