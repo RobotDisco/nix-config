@@ -20,7 +20,7 @@ Things I should do eventually
   - linting
 - Rewrite apps section to encapsulate app definitions from the transformation code I use to minimize boilerplate
 - Lean on github actions for now for:
-  - dependabot
+  - dependabot (or something for flake updates)
   - cachix (so I don't have to recompile across instances?)
 - Find graceful way to install linux/MacOS shared apps from single source
 - Update docs to note that MacOS requires following installs before I can converge my nix-config
@@ -29,3 +29,5 @@ Things I should do eventually
   - Nix-darwin
 - Attempt to modify nix-darwin to work with hardware-specific keyboard mappings
 - okta-awscli should be a publicly accessible package I feel
+- After getting github/CI to automatically update flakes, pin nix/darwin autoupgrades to flake
+  https://discourse.nixos.org/t/flakes-and-autoupgrade/12994
