@@ -6,7 +6,7 @@ let
   # Emacs package generated from use-package s-expressions in our emacs
   # configuration file.
   runtime = final.emacsWithPackagesFromUsePackage {
-    package = final.emacsNativeComp;
+    package = final.emacs;
 
     # Parse this org file for "use-package" s-expressions to implicitly
     # import emacs-overlay nix elisp packages from.
