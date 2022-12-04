@@ -14,6 +14,9 @@
     options = "--delete-older-than 30d";
   };
 
+  # Try out nsncd instead of ncsd, will become standard in 23.05
+  services.nscd.enableNsncd = true;
+
   # Don't allow anyone except those in the admin group to
   # perform a sudo.
   security.sudo.execWheelOnly = true;
@@ -29,13 +32,13 @@
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
-
-    # Enable binary cache downloads of standard nix packages
-    binaryCaches = [ "https://nix-community.cachix.org" ];
-    binaryCachePublicKeys = [
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    ];
   };
+
+  # Enable binary cache downloads of standard nix packages
+  nix.settings.substituters = [ "https://nix-community.cachix.org" ];
+  nix.settings.trusted-public-keys = [
+    "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+  ];
 
   time.timeZone = "America/Toronto";
   i18n.defaultLocale = "en_CA.UTF-8";
@@ -48,6 +51,6 @@
   hardware.cpu.intel.updateMicrocode =
     lib.mkDefault config.hardware.enableRedistributableFirmware;
 
-  nix.maxJobs = lib.mkDefault "auto";
-  system.stateVersion = "22.05";
+  nix.settings.max-jobs = lib.mkDefault "auto";
+  system.stateVersion = "22.11";
 }
