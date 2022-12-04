@@ -11,7 +11,7 @@
     nixpkgs-mac.url = "github:nixos/nixpkgs/nixpkgs-22.11-darwin";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    home-manager.url = "github:nix-community/home-manager/release-22.05";
+    home-manager.url = "github:nix-community/home-manager/release-22.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
@@ -131,8 +131,8 @@
                 home = "/Users/gaelan.dcosta";
               };
 
-              home-manager.users."gaelan.dcosta" = (import
-                ./home-manager/profiles/gaelan-work.nix).configuration;
+              home-manager.users."gaelan.dcosta" = import
+                ./home-manager/profiles/gaelan-work.nix;
             }
             {
               homebrew.enable = true;
