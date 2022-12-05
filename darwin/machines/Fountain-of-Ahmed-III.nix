@@ -1,3 +1,5 @@
+{ pkgs, ... }:
+
 {
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
@@ -20,6 +22,22 @@
   home-manager.users."gaelan.dcosta" =
     import ../../home-manager/profiles/gaelan-work.nix;
 
+  nix = {
+    # Enable nix flakes
+    package = pkgs.nixFlakes;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+
+    # Eventually get rid of old nix derivations
+    # Let's do weekly on Thursdays during vidq
+    gc = {
+      automatic = true;
+      interval = { Weekday = 5; Hour = 14; Minute = 30; };
+      options = "--delete-older-than 30d";
+    };
+  };
+  
   # Allow Gaelan to set up caches.
   nix.settings.trusted-users = [ "gaelan.dcosta" ];
 
