@@ -112,9 +112,13 @@
       prefixLength = 24;
     }];
   };
+
   networking.interfaces.enp6s0f0.useDHCP = lib.mkDefault false;
-  # Let's see if using dynamic home vlan IPs works for my purposes
   networking.interfaces.enp6s0f1.useDHCP = lib.mkDefault false;
+    networking.interfaces.enp6s0f1.addresses = [{
+    address = "192.168.20.99";
+    prefixLength = 24;
+  }];
 
   hardware.cpu.intel.updateMicrocode =
     lib.mkDefault config.hardware.enableRedistributableFirmware;
@@ -239,11 +243,6 @@
     };
   };
 
-  networking.interfaces.enp6s0f1.useDHCP = false;
-  networking.interfaces.enp6s0f1.addresses = [{
-    address = "192.168.20.99";
-    prefixLength = 24;
-  }];
   networking.interfaces.vlan50.useDHCP = false;
   # I currently do port forwarding which requires a static IP
   networking.interfaces.vlan50.ipv4.addresses = [{
