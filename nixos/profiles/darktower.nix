@@ -48,7 +48,7 @@
   # networking.firewall.allowedTCPPorts = [ ];
   # networking.firewall.allowedUDPPorts = [ ];
 
-  system.stateVersion = "22.10";
+  system.stateVersion = "22.11";
 
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
@@ -378,7 +378,7 @@
         };
       };
       config = {
-        system.stateVersion = "22.10";
+        system.stateVersion = "22.11";
         services.postgresql = {
           package = pkgs.postgresql_13;
           enable = true;
