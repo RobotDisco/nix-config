@@ -397,9 +397,7 @@
         # see https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading
         environment.systemPackages = [
           (let
-            newPostgres = pkgs.postgres_14.withPackages (pp: [
-              # Install necessary extensions here.
-            ]);
+            newPostgres = pkgs.postgresql_14;
           in pkgs.writeScriptBin "upgrade-pg-cluster" ''
             set -eux
             # XXX stop all services depending on postgresql first.
