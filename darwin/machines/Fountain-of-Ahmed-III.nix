@@ -18,7 +18,7 @@
   users.users."gaelan.dcosta" = { home = "/Users/gaelan.dcosta"; };
 
   home-manager.users."gaelan.dcosta" =
-    import ./home-manager/profiles/gaelan-work.nix;
+    import ../../home-manager/profiles/gaelan-work.nix;
 
   # Allow Gaelan to set up caches.
   nix.settings.trusted-users = [ "gaelan.dcosta" ];
@@ -41,7 +41,7 @@
 
     taps = [ "homebrew/cask-drivers" ];
 
-    homebrew.casks = [
+    casks = [
       "bitwarden"
       "brave-browser"
       "calibre"

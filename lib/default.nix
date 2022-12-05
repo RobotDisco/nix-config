@@ -123,7 +123,7 @@ in {
     };
 
   # Our wrapper for nix-darwin configurations.
-  darwinConfiguration =
+  darwinSystem =
     # The CPU architecture of the host being generated
     { system
     # NixOS modules or inline configuration
@@ -134,7 +134,7 @@ in {
       # This is probably an anti-pattern honestly, since in theory all of my nix
       # modules shouldn't depend on the existence of non-standard params in the
       # module function definition.
-    , extraSpecialArgs ? { } }:
+    , specialArgs ? { } }:
     let
       baseDarwinModules = baseModules;
 
@@ -143,7 +143,7 @@ in {
         { home-manager.sharedModules = homeManagerModules; }
       ];
     in inputs.darwin.lib.darwinSystem {
-      inherit system extraSpecialArgs;
+      inherit system specialArgs;
 
       modules = baseDarwinModules ++ homeManagerDarwinModules ++ modules;
     };
