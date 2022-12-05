@@ -238,7 +238,13 @@
       interface = "enp6s0f1";
     };
   };
-  networking.interfaces.vlan50.useDHCP = lib.mkDefault false;
+
+  networking.interfaces.enp6s0f1.useDHCP = false;
+  networking.interfaces.enp6s0f1.addresses = [{
+    address = "192.168.20.99";
+    prefixLength = 24;
+  }];
+  networking.interfaces.vlan50.useDHCP = false;
   # I currently do port forwarding which requires a static IP
   networking.interfaces.vlan50.ipv4.addresses = [{
     address = "192.168.50.99";
