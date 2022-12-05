@@ -378,7 +378,7 @@
         };
       };
       config = {
-        system.stateVersion = "21.05";
+        system.stateVersion = "22.10";
         services.postgresql = {
           package = pkgs.postgresql_13;
           enable = true;
