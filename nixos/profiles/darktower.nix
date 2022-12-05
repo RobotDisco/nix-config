@@ -309,7 +309,7 @@
     reverseproxy = {
       autoStart = true;
       config = {
-        system.stateVersion = "22.05";
+        system.stateVersion = "22.11";
 
         security.acme = {
           acceptTerms = true;
@@ -405,7 +405,7 @@
         };
       };
       config = {
-        system.stateVersion = "22.05";
+        system.stateVersion = "22.11";
         services.vaultwarden = {
           enable = true;
           dbBackend = "postgresql";
