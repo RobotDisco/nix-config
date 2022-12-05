@@ -48,7 +48,7 @@
   # networking.firewall.allowedTCPPorts = [ ];
   # networking.firewall.allowedUDPPorts = [ ];
 
-  system.stateVersion = "22.05";
+  system.stateVersion = "22.10";
 
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
@@ -151,7 +151,7 @@
       "$6$rounds=2500000$cB5yavkAPQdBU$ATYQgQQHsMRQP9kLIIG12MNX62Gb04V.8Pl2.1hMPAN78CpR0qzLYvEuy3sjLw1/eJ90mAKqeSk9eJV.N/e9P0";
   };
 
-  nix.trustedUsers = [ "gaelan " ];
+  nix.settings.trusted-users = [ "gaelan " ];
 
   services.sshguard.enable = true;
 
