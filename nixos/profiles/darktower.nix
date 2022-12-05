@@ -114,11 +114,13 @@
   };
 
   networking.interfaces.enp6s0f0.useDHCP = lib.mkDefault false;
-  networking.interfaces.enp6s0f1.useDHCP = lib.mkDefault false;
-    networking.interfaces.enp6s0f1.addresses = [{
-    address = "192.168.20.99";
-    prefixLength = 24;
-  }];
+  networking.interfaces.enp6s0f1 = {
+    useDHCP = lib.mkDefault false;
+    ipv4.addresses = [{
+      address = "192.168.20.99";
+      prefixLength = 24;
+    }];
+  };
 
   hardware.cpu.intel.updateMicrocode =
     lib.mkDefault config.hardware.enableRedistributableFirmware;
