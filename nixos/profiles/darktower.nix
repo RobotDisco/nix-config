@@ -380,7 +380,7 @@
       config = {
         system.stateVersion = "22.11";
         services.postgresql = {
-          package = pkgs.postgresql_13;
+          package = pkgs.postgresql_14;
           enable = true;
           enableTCPIP = false;
           authentication = ''
