@@ -37,7 +37,7 @@
       options = "--delete-older-than 30d";
     };
   };
-  
+
   # Allow Gaelan to set up caches.
   nix.settings.trusted-users = [ "gaelan.dcosta" ];
 
