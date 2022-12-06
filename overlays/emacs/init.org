@@ -593,6 +593,12 @@ Support flycheck syntax checking
     :after (geiser)
     :ensure t)
 #+END_SRC
+*** Rust
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rustic
+    :ensure t
+    :mode (("\\.rs\\'" . rustic-mode)))
+#+END_SRC
 *** Terraform
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package terraform-mode
