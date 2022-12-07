@@ -64,6 +64,7 @@
       "brave-browser"
       "calibre"
       "chef-workstation"
+      "discord"
       "kobo"
       "seafile-client"
       "signal"
