@@ -4,7 +4,7 @@ profile = awsusa
 username = gaelan@tulip.com 
 app-link = https://tulip.okta.com/app/amazon_aws/exk3pwmuolwADDkn75d7/sso/saml
 duration = 14400
-role = arn:aws-cn:iam::004493658315:role/Okta-Admin
+role = arn:aws:iam::991815424517:role/Okta-Admin
 
 [awscn]
 base-url = tulip.okta.com 

@@ -26,6 +26,13 @@ in {
     ];
 
     #okta-awscli config
-    home.file.".okta-aws".source = ./okta-aws.toml;
+    home.file.".okta-aws".source =
+      # This nix function makes a symlink to a file that is out of the nix
+      # store, rather than copying the file into the nix store first.
+      #
+      # The reason it is used here is because okta-aws wants to write to the
+      # file and files in /nix/store are immutable.
+      config.lib.file.mkOutOfStoreSymlink
+        "${config.home.homeDirectory}/code/nix-config/home-manager/modules/tulip/okta-aws.toml";
   };
 }
