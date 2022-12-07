@@ -427,6 +427,16 @@ candidates by multiple regex patterns separated by a space.
     ;; partial completion (like /u/s/l for /usr/share/local)
     (completion-category-overrides '((file (styles basic partial-completion)))))
 #+END_SRC
+** which-key
+When you start a keybinding, list possible completions are and what they do
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package which-key
+    :ensure t
+    :defer 1
+    :commands (which-key-mode)
+    :config
+    (which-key-mode))
+#+END_SRC
 * Functionality
 ** Reverting
 Automatically revert when a file changes on disk; this happens a lot given my files are managed in Seafile
