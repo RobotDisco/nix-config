@@ -397,7 +397,7 @@ Emacs should handle keyboard media shortcuts
     (desktop-environment-mode))
 #+END_SRC
 
-* Completion
+* Minibuffer / Completion
 Vertico adds a good UX to Emacs' default completion framework, as well as
 fuzzy matching.
 The defaults in Emacs 28 (~fido-mode~, ~vertical-fido-mode~) do not make it
@@ -410,6 +410,13 @@ easy for me to see potential options in various contexts, I have found.
     :ensure t
     :config
     (vertico-mode +1))
+
+  ;; Save sessionbuffer history
+  ;; Vertico uses this to prefer popular choices when listing.
+  (use-package savehist
+    :demand 1
+    :config
+    (savehist-mode))
 #+END_SRC
 
 Enable helm-like searching via completion frameworks, where I can filter
