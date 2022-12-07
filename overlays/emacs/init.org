@@ -746,11 +746,11 @@ An implementation of Zettelkasten for org, inspired by org-roam
     (org-roam-directory "~/Documents/brain")
     (org-roam-dailies-directory "journal/")
     (org-roam-dailies-capture-templates
-     '(("d" "default" entry
+     '(("j" "daily log entry" entry
 	"* %<%0H:%M> %?"
 	:target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>" ("Log"))
 	:unnarrowed t)
-       ("m" "Daily Morning Reflection" entry
+       ("d" "Daily Morning Reflection" entry
 	"* Daily Morning Reflection\n** What are my most important tasks today?\n- [ ] %?"
 	:jump-to-captured t
 	:prepend t
