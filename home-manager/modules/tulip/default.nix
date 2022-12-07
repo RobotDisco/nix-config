@@ -20,6 +20,7 @@ in {
       # Docker VM for macs
       colima
       docker
+      kubectl
 
       google-cloud-sdk
     ];
