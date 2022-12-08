@@ -417,11 +417,21 @@ easy for me to see potential options in various contexts, I have found.
   ;; Save sessionbuffer history
   ;; Vertico uses this to prefer popular choices when listing.
   (use-package savehist
-    :demand 1
+    :defer 2
     :config
     (savehist-mode))
-#+END_SRC
 
+  ;; Some recommended vertico UX settings
+  ;; A few more useful configurations...
+  (use-package emacs
+
+    :init
+    ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+    ;; Vertico commands are hidden in normal buffers.
+    (setq read-extended-command-predicate
+	  #'command-completion-default-include-p)
+
+#+END_SRC
 ** Corfu
 Completion popups in the regular buffer
 
