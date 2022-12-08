@@ -429,7 +429,7 @@ easy for me to see potential options in various contexts, I have found.
     ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
     ;; Vertico commands are hidden in normal buffers.
     (setq read-extended-command-predicate
-	  #'command-completion-default-include-p)
+	  #'command-completion-default-include-p))
 
 #+END_SRC
 ** Corfu
@@ -438,11 +438,11 @@ Completion popups in the regular buffer
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package corfu
     :defer 1
-    :commands (global-corfu-mode)
+    :commands (corfu-mode global-corfu-mode)
     :ensure t
-    :hooks ((eshell-mode-hook . (lambda ()
-				  (setq-local corfu-auto nil)
-				  (corfu-mode))))
+    :hook ((eshell-mode-hook . (lambda ()
+				 (setq-local corfu-auto nil)
+				 (corfu-mode))))
     :config
     (global-corfu-mode))
 #+END_SRC
