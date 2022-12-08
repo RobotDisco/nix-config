@@ -19,7 +19,8 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 - package management :: [[https://github.com/jwiegley/use-package][use-package]]
 - buffer navigation :: [[https://github.com/abo-abo/avy][avy]]
 - completion
-  - UX :: [[https://github.com/minad/vertico][vertico]]
+  - Completion-in-buffer :: [[https://github.com/minad/corfu][corfu]]
+  - Completion-in-minibuffer :: [[https://github.com/minad/vertico][vertico]]
   - regex / fuzzy / multi-segment searching :: [[https://github.com/oantolin/orderless][orderless]]
 - window management :: [[https://github.com/ch11ng/exwm][exwm]]
 - version control (git) :: [[https://magit.vc/][magit]]
@@ -398,9 +399,10 @@ Emacs should handle keyboard media shortcuts
     (desktop-environment-mode))
 #+END_SRC
 
-* Minibuffer / Completion
-Vertico adds a good UX to Emacs' default completion framework, as well as
-fuzzy matching.
+* Completion / Minibuffer
+** Vertico
+Vertico adds a good minibuffer UX to Emacs' default completion framework.
+
 The defaults in Emacs 28 (~fido-mode~, ~vertical-fido-mode~) do not make it
 easy for me to see potential options in various contexts, I have found.
 
@@ -420,6 +422,21 @@ easy for me to see potential options in various contexts, I have found.
     (savehist-mode))
 #+END_SRC
 
+** Corfu
+Completion popups in the regular buffer
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package corfu
+    :defer 1
+    :commands (global-corfu-mode)
+    :ensure t
+    :hooks ((eshell-mode-hook . (lambda ()
+				  (setq-local corfu-auto nil)
+				  (corfu-mode))))
+    :config
+    (global-corfu-mode))
+#+END_SRC
+** Orderless
 Enable helm-like searching via completion frameworks, where I can filter
 candidates by multiple regex patterns separated by a space.
 
@@ -565,7 +582,14 @@ IDE-like functionality such as intellisense, debugging
   (use-package lsp-mode
     :ensure t
     :commands (lsp lsp-deferred)
-    :hook (prog-mode-hook . lsp))
+    :init
+    (defun gaelan/lsp-mode-setup-completion ()
+      (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+	    'orderless))
+    :custom
+    (lsp-completion-provider :none) ;; we use Corfu
+    :hook ((prog-mode-hook . lsp)
+	   (lsp-completion-mode . gaelan/lsp-mode-setup-completion)))
 
   (use-package lsp-ui
     :ensure t
