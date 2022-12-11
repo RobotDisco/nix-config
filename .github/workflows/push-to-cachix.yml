@@ -13,9 +13,9 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v16
         with:
-	  nixpkgs=channel:nixos-22.11
+          nixpkgs=channel:nixos-22.11
       - name: Publish to cachix
         uses: cachix/cachix-action@v12
-	with:
-	  name: robot-disco
-	  signingKey: ${{ secrets.CACHIX_KEY }}
+        with:
+          name: robot-disco
+          signingKey: ${{ secrets.CACHIX_KEY }}
