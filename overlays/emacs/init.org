@@ -673,6 +673,13 @@ Support flycheck syntax checking
       :ensure t
       :mode "\\.tf\\'")
 #+END_SRC
+*** YAML
+#+BEGIN_SRC emacs-lisp :tnagle yes
+  (use-package yaml-mode
+    :ensure t
+    :bind-map
+    :mode "\\.ya?ml\\'")
+#+END_SRC
 * SRE / Devops
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package kubernetes
