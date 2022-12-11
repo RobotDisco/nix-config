@@ -1,8 +1,8 @@
 name: push-to-cachix
 on:
   push:
-    tags:
-    - 'master'
+    branches:
+    - 'trunk'
 
 jobs:
   cachix:
