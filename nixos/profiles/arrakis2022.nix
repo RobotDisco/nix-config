@@ -13,6 +13,9 @@
 
   networking.hostName = "arrakis";
 
+  # Support thunderbolt
+  services.hardware.bolt.enable = true;
+
   services.autorandr = {
     enable = true;
 
