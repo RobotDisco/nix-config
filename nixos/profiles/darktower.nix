@@ -353,6 +353,24 @@
       };
     };
 
+    microblog = {
+      autoStart = true;
+      bindMounts = {
+        "/var/lib/pleroma" = {
+          hostPath = "/srv/storagepool/data/microblog";
+          isReadOnly = false;
+        };
+      };
+
+      config = {
+        system.stateVersion = "22.11";
+
+        services.pleroma = {
+          enable = true;
+        };
+      };
+    };
+
     mysql = {
       autoStart = true;
       bindMounts = {
