@@ -367,8 +367,39 @@
 
         services.pleroma = {
           enable = true;
+          secretConfigFile = "/var/lib/pleroma/secrets.exs";
+          configs = [
+            ''
+            import Config
 
-          configs = [];
+            config :pleroma, Pleroma.Web.Endpoint,
+              url: [host: "microblog.robot-disco.net", scheme: "https", port: 443],
+              host: [ip: {127, 0, 0, 1}, port:4000]
+
+            config :pleroma, :instance,
+              name: "Thoughts",
+              email: "gdcosta@gmail.com",
+              notify_email: "gdcosta@gmail.com",
+              limit: 5000,
+              registrations_open: false
+
+            config :pleroma, :media_proxy,
+              enabled: false,
+              redirect_on_failure: true
+
+            config :pleroma, Pleroma.Repo,
+              adapter: Ecto.Adapters.Postgres,
+              username: "pleroma",
+              database: "pleroma",
+              hostname: "localhost"
+
+            # Configure web push notifications
+            config :web_push_encryption, :vapid_details,
+              subject: "mailto:gdcosta@gmail.com"
+
+            # ... TO CONTINUE ...
+            ''
+          ];
         };
       };
     };
