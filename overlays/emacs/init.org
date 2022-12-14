@@ -830,7 +830,15 @@ An implementation of Zettelkasten for org, inspired by org-roam
 					     org-roam-directory)
 			 "/")))
     ;; Scan for org-roam changes and rebuild database opportunistically
-    (org-roam-db-autosync-mode))
+    (org-roam-db-autosync-mode)
+    ;; Ensure the *org-roam* buffer comes up to the right of the frame,
+    ;; 1/3rd of the size
+    (add-to-list 'display-buffer-alist
+		 '("\\*org-roam\\*"
+		   (display-buffer-in-direction)
+		   (direction . right)
+		   (window-width . 0.33)
+		   (window-height . fit-window-to-buffer))))
 #+END_SRC
 
 Also enable a UI that makes overseeing my knowledge base easier.
