@@ -374,7 +374,7 @@
 
             config :pleroma, Pleroma.Web.Endpoint,
               url: [host: "microblog.robot-disco.net", scheme: "https", port: 443],
-              host: [ip: {127, 0, 0, 1}, port:4000]
+              host: [ip: {127, 0, 0, 1}, port: 4000]
 
             config :pleroma, :instance,
               name: "Thoughts",
