@@ -365,7 +365,7 @@
       config = {
         system.stateVersion = "22.11";
 
-        service.pleroma = {
+        services.pleroma = {
           enable = true;
         };
       };
