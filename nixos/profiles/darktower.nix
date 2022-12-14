@@ -367,6 +367,8 @@
 
         services.pleroma = {
           enable = true;
+
+          configs = [];
         };
       };
     };
