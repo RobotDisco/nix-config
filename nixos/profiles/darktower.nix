@@ -363,7 +363,7 @@
                   add_header 'Access-Control-Allow-Origin' '*' always;
                   add_header 'Access-Control-Allow-Methods' 'POST, PUT, DELETE, GET, PATCH, OPTIONS' always;
                   add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, Idempotency-Key' always;
-                  add_header 'Access-Control-Expose-Headers 'Link, X-RateLimit-Reset, X-RateLimit-Limit, X-RateLimit-Remaining, X-Request-Id' always;
+                  add_header 'Access-Control-Expose-Headers' 'Link, X-RateLimit-Reset, X-RateLimit-Limit, X-RateLimit-Remaining, X-Request-Id' always;
                   if ($request_method = OPTIONS) {
                     return 204;
                   }
