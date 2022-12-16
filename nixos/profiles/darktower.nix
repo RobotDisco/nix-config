@@ -419,6 +419,11 @@
               limit: 5000,
               registrations_open: false
 
+            config :pleroma, :frontend_configurations,
+              pleroma_fe: %{
+                theme: "redmond-xx"
+              }
+
             config :pleroma, :media_proxy,
               enabled: false,
               redirect_on_failure: true
