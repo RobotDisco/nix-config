@@ -355,6 +355,7 @@
 
               locations."/" = {
                 proxyPass = "http://localhost:4000";
+                recommendedProxySettings = false;
 
                 extraConfig = ''
                   etag on;
