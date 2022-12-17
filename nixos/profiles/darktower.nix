@@ -114,13 +114,7 @@
   };
 
   networking.interfaces.enp6s0f0.useDHCP = lib.mkDefault false;
-  networking.interfaces.enp6s0f1 = {
-    useDHCP = lib.mkDefault false;
-    #ipv4.addresses = [{
-    #  address = "192.168.20.99";
-    #  prefixLength = 24;
-    #}];
-  };
+  networking.interfaces.enp6s0f1.useDHCP = lib.mkDefault false;
 
   hardware.cpu.intel.updateMicrocode =
     lib.mkDefault config.hardware.enableRedistributableFirmware;
@@ -239,12 +233,21 @@
 
   # I only use this for cloud services, so specify the vlan
   networking.vlans = {
+    vlan20 = {
+      id = 20;
+      interface = "enp6s0f1";
+    };
     vlan50 = {
       id = 50;
       interface = "enp6s0f1";
     };
   };
 
+  networking.interfaces.vlan20.useDHCP = false;
+  networking.interfaces.vlan20.ipv4.addresses = [{
+    address = "192.168.20.99";
+    prefixLength = 24;
+  }];
   networking.interfaces.vlan50.useDHCP = false;
   # I currently do port forwarding which requires a static IP
   networking.interfaces.vlan50.ipv4.addresses = [{
