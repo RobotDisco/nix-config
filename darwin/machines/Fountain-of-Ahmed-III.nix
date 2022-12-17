@@ -81,5 +81,9 @@
       "yubico-authenticator"
       "yubico-yubikey-manager"
     ];
+
+    masApps = {
+      "WireGuard" = 1451685025;
+    };
   };
 }
