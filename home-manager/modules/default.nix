@@ -51,5 +51,10 @@
       # TODO do I really want this enabled?
       tray = true;
     };
+
+    pam.yubico.authorizedYubiKeys.ids = [
+      # Backup Yubikey
+      "cccccclbhcbc"
+    ];
   };
 }
