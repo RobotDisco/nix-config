@@ -21,6 +21,8 @@ in {
     security.pam.yubico = {
       enable = true;
       # Use a local challenge-response, not yubico's cloud service
+      # Remember that every user has to run `ykpamcfg -<slotnum> -v`
+      # to generate a challenge for the yubikey to work.
       mode = "challenge-response";
       # Require password AND yubikey
       control = if cfg.require2FA
