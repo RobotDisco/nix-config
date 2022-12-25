@@ -419,7 +419,6 @@ easy for me to see potential options in various contexts, I have found.
   ;; Some recommended vertico UX settings
   ;; A few more useful configurations...
   (use-package emacs
-
     :init
     ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
     ;; Vertico commands are hidden in normal buffers.
@@ -677,7 +676,6 @@ Support flycheck syntax checking
 #+BEGIN_SRC emacs-lisp :tnagle yes
   (use-package yaml-mode
     :ensure t
-    :bind-map
     :mode "\\.ya?ml\\'")
 #+END_SRC
 * SRE / Devops
@@ -859,6 +857,19 @@ Also enable a UI that makes overseeing my knowledge base easier.
 	  org-roam-ui-update-on-save t
 	  org-roam-ui-open-on-start t))
 #+END_SRC
+
+navigating my org-roam corpus will involve me clicking through a bunch of links and then realizing I need to back-track. =winner-mode= is a simple way of implementing browser-like history, by allowing me to keep track of and navigate backwards and forwards through a history of what buffers were shown in each window.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package emacs
+    :ensure nil
+    :demand 0
+    :bind (:map winner-mode-map
+		("C-c w p" . winner-undo)
+		("C-c w n" . winner-redo))
+    :config
+    (winner-mode +1))
+#+END_SRC
+
 
 Use deft for full-text search
 #+BEGIN_SRC emacs-lisp :tangle yes
