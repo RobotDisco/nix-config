@@ -761,12 +761,15 @@ An implementation of Zettelkasten for org, inspired by org-roam
   (use-package org-roam
     :ensure t
     :bind (("C-c j d" . org-roam-dailies-goto-date)
-	   ("C-c j j" . org-roam-dailies-capture-today)
+	   ("C-c j D" . org-roam-dailies-capture-date)
+	   ("C-c j t" . org-roam-dailies-goto-today)
+	   ("C-c j T" . org-roam-dailies-capture-today)
+	   ("C-c j y" . org-roam-dailies-goto-yesterday)
+	   ("C-c j Y" . org-roam-dailies-capture-yesterday)
 	   ("C-c j n" . org-roam-dailies-goto-next-note)
 	   ("C-c j p" . org-roam-dailies-goto-previous-note)
-	   ("C-c j t" . org-roam-dailies-goto-today)
-	   ("C-c j y" . org-roam-dailies-goto-yesterday)
 	   ("C-c n b" . org-roam-buffer-toggle)
+	   ("C-c n c" . org-id-get-create)
 	   ("C-c n f" . org-roam-node-find)
 	   ("C-c n i" . org-roam-node-insert))
     :commands (org-roam-db-autosync-mode)
