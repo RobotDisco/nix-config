@@ -1,5 +1,6 @@
 {
   robot-disco.hardware.framework.enable = true;
+  robot-disco.hardware.home-devices.enable = true;
   robot-disco.audio.enable = true;
   robot-disco.boot.hostId = "887ab783";
   robot-disco.window-manager.enable = true;
