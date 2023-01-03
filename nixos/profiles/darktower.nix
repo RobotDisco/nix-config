@@ -416,10 +416,10 @@
               host: [ip: {127, 0, 0, 1}, port: 4000]
 
             config :pleroma, :instance,
-              name: "Thoughts",
+              name: "More toots about emacs and food",
               email: "gdcosta@gmail.com",
               notify_email: "gdcosta@gmail.com",
-              limit: 5000,
+              limit: 10,
               registrations_open: false
 
             config :pleroma, :frontend_configurations,
