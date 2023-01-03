@@ -10,6 +10,8 @@ in {
   config = lib.mkIf cfg.enable {
     # User-level access to power management?
     services.upower.enable = true;
+    # Currently use PowerOff as ZFS doesn't support Hibernate
+    services.upower.criticalPowerAction = "PowerOff";
     # System-level laptop power management
     services.tlp.enable = true;
     # Temperature management
