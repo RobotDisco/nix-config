@@ -6,6 +6,7 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs-mac";
 
     emacs-overlay.url = "github:nix-community/emacs-overlay";
+    emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
     nixpkgs-mac.url = "github:nixos/nixpkgs/nixpkgs-22.11-darwin";
