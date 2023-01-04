@@ -262,7 +262,7 @@
 
   containers = {
     fileserver = {
-      autoStart = false;
+      autoStart = true;
       bindMounts = {
         "/srv/archive" = {
           hostPath = "/srv/storagepool/archive";
@@ -271,7 +271,7 @@
       };
 
       config = {
-        system.stateVersion = "22.05";
+        system.stateVersion = "22.11";
 
         users.users.gaelan = {
           shell = pkgs.zsh;
