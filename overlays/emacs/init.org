@@ -762,6 +762,13 @@ An implementation of Zettelkasten for org, inspired by org-roam
 	   ("C-c j D" . org-roam-dailies-capture-date)
 	   ("C-c j t" . org-roam-dailies-goto-today)
 	   ("C-c j T" . org-roam-dailies-capture-today)
+
+	   ;; Buttonmash combo for logging something
+	   ;; doesn't match my mnenomic scheme otherwise.
+	   ;; TODO define a function to pass nil "j" so I don't
+	   ;; have to choose a selector
+	   ("C-c j j" . org-roam-dailies-capture-today)
+
 	   ("C-c j y" . org-roam-dailies-goto-yesterday)
 	   ("C-c j Y" . org-roam-dailies-capture-yesterday)
 	   ("C-c j n" . org-roam-dailies-goto-next-note)
