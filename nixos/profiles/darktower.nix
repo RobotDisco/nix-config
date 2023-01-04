@@ -409,7 +409,7 @@
               name: "More toots about emacs and food",
               email: "gdcosta@gmail.com",
               notify_email: "gdcosta@gmail.com",
-              limit: 10,
+              limit: 5000,
               registrations_open: false
 
             config :pleroma, :frontend_configurations,
