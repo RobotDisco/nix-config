@@ -64,11 +64,16 @@
             primary = true;
             mode = "1920x1200";
             position = "0x0";
+            scale.x = 1;
+            scale.y = 1;
           };
           DP-4-2 = {
             enable = true;
             mode = "1920x1200";
             position = "1920x0";
+            scale.x = 1;
+            scale.y = 1;
+
           };
         };
       };
@@ -85,11 +90,15 @@
             primary = true;
             mode = "1920x1200";
             position = "0x0";
+            scale.x = 1;
+            scale.y = 1;
           };
           DP-4-2 = {
             enable = true;
             mode = "1920x1200";
             position = "1920x0";
+            scale.x = 1;
+            scale.y = 1;
           };
         };
       };
