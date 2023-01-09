@@ -54,6 +54,8 @@ in {
     # Assume we're using a SSD and enable periodic SSD trim
     services.fstrim.enable = true;
 
+    # Enable bluetotoh
+    hardware.bluetooth.enable = true;
     services.blueman.enable = true;
 
     # Enable screen locking in X
