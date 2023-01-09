@@ -39,8 +39,6 @@ in {
       wifi.powersave = true;
     };
 
-    environment.systemPackages = with pkgs; [ networkmanagerapplet ];
-
     powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
     # Disable laptop's touchpad tap-to-click functionality
@@ -54,6 +52,8 @@ in {
 
     # Assume we're using a SSD and enable periodic SSD trim
     services.fstrim.enable = true;
+
+    services.blueman.enable = true;
 
     # Enable screen locking in X
     programs.xss-lock = {

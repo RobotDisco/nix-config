@@ -16,4 +16,6 @@ in {
   home.stateVersion = "22.11";
   home.homeDirectory = "/home/${username}";
   home.username = username;
+
+  services.seafile-client.enable = true;
 }

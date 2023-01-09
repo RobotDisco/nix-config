@@ -6,6 +6,7 @@
     ./emacs.nix
     ./games.nix
     ./gnupg.nix
+    ./seafile-client.nix
     ./tulip
   ];
 
@@ -35,7 +36,6 @@
       bitwarden
       calibre
       discord
-      seafile-client
       signal-desktop
       slack
     ]);

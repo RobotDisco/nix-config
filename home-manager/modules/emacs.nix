@@ -187,7 +187,10 @@ in {
       else
         "${emacsBin} -f exwm-enable";
 
+      services.blueman-applet.enable = true;
       services.dunst.enable = true;
+      services.network-manager-applet.enable = true;
+      services.pasystray.enable = true;
       services.picom.enable = true;
 
       # Install external commands used by emacs when in desktop environment mode
