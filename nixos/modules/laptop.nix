@@ -38,6 +38,7 @@ in {
       enable = true;
       wifi.powersave = true;
     };
+    services.wg-netmanager.enable = true;
 
     powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
