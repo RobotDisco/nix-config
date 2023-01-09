@@ -873,7 +873,7 @@ navigating my org-roam corpus will involve me clicking through a bunch of links 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package emacs
     :ensure nil
-    :declare (winner-mode-map)
+    :defines (winner-mode-map)
     :demand 0
     :bind (:map winner-mode-map
 		("C-c w p" . winner-undo)
