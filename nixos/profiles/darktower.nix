@@ -406,7 +406,7 @@
               host: [ip: {127, 0, 0, 1}, port: 4000]
 
             config :pleroma, :instance,
-              name: "More toots about emacs and food",
+              name: "An ounce of perception, a pound of obscure",
               email: "gdcosta@gmail.com",
               notify_email: "gdcosta@gmail.com",
               limit: 5000,
