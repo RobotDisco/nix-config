@@ -800,7 +800,7 @@ An implementation of Zettelkasten for org, inspired by org-roam
 	:prepend t
 	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>"))
        ("e" "Daily Evening Reflection" entry
-	"* Daily Evening Reflection\n** What were my wins today?\n- %?\n** What did I learn today?\n- \n** What delightful or upsetting things happened today?\n- \n** What am I grateful for today?\n** What did I do to improve my future?\n** What did I do to help others?"
+	"* Daily Evening Reflection\n** What were my wins today?\n- %?\n** What did I learn today?\n- \n** What delightful or upsetting surprises happened today?\n- \n** What am I grateful for today?\n** What did I do to improve my future?\n** What did I do to help others?"
 	:target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>")
 	:unnarrowed t)
        ("w" "Weekly Reflection" entry
