@@ -288,7 +288,6 @@ I love Emacs so much, I use it as my primary computing environment :)
     :ensure t
     :preface
     (declare-function exwm-workspace-rename-buffer "exwm")
-    (declare-function exwm-input-set-local-simulation-keys "exwm")
     :defines (epg-pinentry-mode)
     :functions (exwm-randr-enable)
     :if (eq system-type 'gnu/linux)
@@ -344,6 +343,7 @@ I love Emacs so much, I use it as my primary computing environment :)
     (exwm-workspace-number 4)
     ;; Handle specific apps in particular window management ways.
     (exwm-manage-configurations '(((string= exwm-instance-name "brave-browser") workspace 2)
+				  ((string= exwm-instance-name "signal") workspace 3)
 				  ((string= exwm-instance-name "slack") workspace 3)
 				  ((string= exwm-instance-name "whatsapp-for-linux") workspace 3)))
     :hook ((exwm-update-class-hook .
