@@ -15,17 +15,19 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 
 - I am super indebted to whoever [[http://github.com/terlar/emacs-config][Terlar]] is, their nix package and structure is one I found a lot of insight about how to write nix packages from. 
 
-** Overview
+** Key package choices
 - package management :: [[https://github.com/jwiegley/use-package][use-package]]
+- X Window Managemer :: [[https://github.com/ch11ng/exwm][exwm]]
 - buffer navigation :: [[https://github.com/abo-abo/avy][avy]]
 - completion
   - Completion-in-buffer :: [[https://github.com/minad/corfu][corfu]]
   - Completion-in-minibuffer :: [[https://github.com/minad/vertico][vertico]]
   - regex / fuzzy / multi-segment searching :: [[https://github.com/oantolin/orderless][orderless]]
-- window management :: [[https://github.com/ch11ng/exwm][exwm]]
 - version control (git) :: [[https://magit.vc/][magit]]
 - structured editing :: [[https://github.com/Fuco1/smartparens][smartparens]]
 - project management :: [[https://github.com/bbatsov/projectile][projectile]]
+- citation Management :: [[https://github.com/emacs-citar/citar][citar]]
+- knowledge/idea management :: [[https://www.orgroam.com/][org-roam]]
 
 * Early Initialization
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
@@ -784,7 +786,11 @@ An implementation of Zettelkasten for org, inspired by org-roam
     :commands (org-roam-db-autosync-mode)
     :custom
     (org-roam-capture-templates
-     '(("p" "permanent" plain "%?"
+     '(("l" "literature" plain
+	(file "~/Documents/brain/templates/literature.org")
+	:target (file+head "literature/${citekey}.org" "#+TITLE: ${title}\n#+FILETAGS: literature\n")
+	:unnarrowed t)
+       ("p" "permanent" plain "%?"
 	:target (file+head "permanent/%<%Y%m%d%H%M%S>-${slug}.org"
 			   "#+TITLE: ${title}")
 	:unnarrowed t)
@@ -819,7 +825,9 @@ An implementation of Zettelkasten for org, inspired by org-roam
 	"* Yearly Reflection\n** What were my biggest wins this year?\n- %?\n** What was I most grateful for this year?\n** What tensions did I remove this year?\n- \n** What did I learn this year?\n- \n** How have I grown this year?\n- "
 	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>")
 	:unnarrowed t)))
-    (org-roam-mode-sections '(org-roam-backlinks-section
+    (org-roam-mode-sections '(orb-section-reference
+			      orb-section-file
+			      org-roam-backlinks-section
 			      org-roam-reflinks-section
 			      org-roam-unlinked-references-section))
     (org-roam-node-display-template
@@ -913,4 +921,48 @@ Block-level editing/embedding, approximating the way Roam/logseq do it
     :ensure t
     :bind (("C-c n a" . org-transclusion-add)
 	   ("C-c n t" . org-transclusion-mode)))
+#+END_SRC
+** Org-roam BibTeX processing
+Allow BibTeX field processing in org-roam templates, and be able to show citation information in the org-roam sidebar
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-roam-bibtex
+    :after (org-roam)
+    :ensure t
+    :commands (orb-insert-link orb-note-actions)
+    :custom
+    (bibtex-completion-bibliography "~/Documents/brain/literature/REFERENCES.bib")
+    (orb-roam-ref-format 'org-cite)
+    (orb-preformat-keywords '("citekey" "date" "entry-type" "file" "pdf?" "note?" "author" "editor" "author-abbrev" "editor-abbrev" "author-or-editor-abbrev"))
+    (orb-process-file-keyword t)
+    (orb-abbreviate-file-name t))
+#+END_SRC
+
+** Citations
+I am using the new [[https://orgmode.org/manual/Citations.html][org-cite]] system for working with bibliographic information
+
+Citar is a plugin for easily managing them.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package citar
+    :ensure t
+    :defer 2
+    :bind (("C-c b" . citar-insert-citation))
+    ;; :map minibuffer-local-map
+    ;; ("M-b" . citar-insert-preset)))
+    :custom
+    (citar-bibliography '("~/Documents/brain/literature/REFERENCES.bib")))
+#+END_SRC
+
+Allow citar to work with org-roam particulars, including the ability to work at org-roam node levels (file or header IDs)
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package citar-org-roam
+    :ensure t
+    :commands (citar-org-roam-mode)
+    :after (citar org-roam)
+    :no-require
+    :custom
+    (citar-org-roam-subdir "literature")
+    (citar-org-roam-note-title-template "${author} - ${editor}")
+    :config (citar-org-roam-mode))
 #+END_SRC
