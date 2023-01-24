@@ -38,6 +38,9 @@
       discord
       signal-desktop
       slack
+      whatsapp-for-linux
+      zotero
+      yubioath-desktop
     ]);
 
     services.gammastep = lib.mkIf pkgs.stdenv.isLinux {
