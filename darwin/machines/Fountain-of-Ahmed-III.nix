@@ -63,6 +63,7 @@
       "bitwarden"
       "brave-browser"
       "calibre"
+      # Currently broken https://github.com/chef/chef-workstation/issues/3021
       "chef-workstation"
       "discord"
       "kobo"
