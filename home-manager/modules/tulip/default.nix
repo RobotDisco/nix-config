@@ -23,6 +23,12 @@ in {
       kubectl
 
       google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [gke-gcloud-auth-plugin])
+
+      # Useful debugging tools
+      # telnet, traceroute, etc...
+      inetutils
+      # constantly polling a url
+      siege
     ];
 
     #okta-awscli config
