@@ -64,7 +64,7 @@
       "brave-browser"
       "calibre"
       # Currently broken https://github.com/chef/chef-workstation/issues/3021
-      "chef-workstation"
+      # "chef-workstation"
       "discord"
       "kobo"
       "seafile-client"
