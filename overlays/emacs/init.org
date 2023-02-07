@@ -899,7 +899,7 @@ Use deft for full-text search
     :bind ("C-c n d" . deft)
     :custom
     (deft-recursive t)
-    (deft-use-filter-string-for-filename t)
+    (deft-use-filename-as-title t)
     (deft-default-extension "org")
     (deft-directory org-roam-directory))
 #+END_SRC
