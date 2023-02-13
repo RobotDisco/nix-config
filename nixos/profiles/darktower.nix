@@ -324,6 +324,8 @@
           recommendedGzipSettings = true;
           recommendedProxySettings = true;
 
+          services.nginx.clientMaxBodySize = "100m"; # Need this for larger webdav uploads
+
           virtualHosts = {
             "vaultwarden.robot-disco.net" = {
               locations."/" = { proxyPass = "http://localhost:8000"; };
