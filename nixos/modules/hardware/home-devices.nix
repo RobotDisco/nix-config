@@ -27,7 +27,6 @@ in
     }];
 
     # We need udev magic for my wonderfully proprietary Apple DVD burner
-    environment.systemPackages = [ pkgs.sg3_utils ];
     services.udev.extraRules = ''
       # Initialise Apple SuperDrive
       ACTION=="add", ATTRS{idProduct}=="1500", ATTRS{idVendor}=="05ac", DRIVERS=="usb", RUN+="${pkgs.sg3_utils}/bin/sg_raw /dev/$kernel EA 00 00 00 00 00 01"
@@ -44,5 +43,13 @@ in
               Option "ButtonMapping" "1 2 8 4 5 6 7 3 9"
       EndSection
     '';
+
+    # One of my workhorse kebyards has configuration software.
+    hardware.keyboard.uhk.enable = true;
+   
+    environment.systemPackages = [
+      pkgs.sg3_utils
+      pkgs.uhk-agent
+    ];
   };
 }
