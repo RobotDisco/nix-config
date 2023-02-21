@@ -38,7 +38,10 @@ in {
       enable = true;
       wifi.powersave = true;
     };
+    # Enable wireguard on laptops
     services.wg-netmanager.enable = true;
+    # Enable avahi for chromecast support
+    services.avahi.enable = true;
 
     powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
