@@ -616,7 +616,6 @@
     ];
     jails = {
       seafile = ''
-        [seafile]
         enabled = true
         port = http, https
         filter = seafile-auth
