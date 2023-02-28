@@ -544,6 +544,7 @@
           '';
         };
         services.fail2ban = {
+          banaction-allports = "iptables-allports";
           enable = true;
           ignoreIP = [
             "192.168.10.0/24"
