@@ -590,18 +590,42 @@
   virtualisation.oci-containers.containers = {
     "seafile-memcached" = {
       autoStart = true;
-      image = "memcached:1.6";
+      image = "memcached:1.6.18";
       entrypoint = "memcached";
       cmd = [ "-m" "256" ];
       ports = [ "127.0.0.1:11211:11211" ];
     };
     "seafile-mc" = {
       autoStart = true;
-      image = "seafileltd/seafile-mc:9.0.9";
+      image = "seafileltd/seafile-mc:9.0.10";
       dependsOn = [ "seafile-memcached" ];
       environmentFiles = [ "/srv/storagepool/data/webdav/seafile_env_vars" ];
       volumes = [ "/srv/storagepool/data/webdav/shared:/shared" ];
       ports = [ "127.0.0.1:8001:8000" ];
+    };
+  };
+
+  services.fail2ban = {
+    banaction-allports = "iptables-allports";
+    enable = true;
+    ignoreIP = [
+      "192.168.10.0/24"
+      "192.168.11.0/24"
+      "192.168.20.0/24"
+      "192.168.21.0/24"
+    ];
+    jails = {
+      seafile = ''
+        [seafile]
+        enabled = true
+        port = http, https
+        filter = seafile-auth
+        logpath = /srv/storagepool/data/webdav/shared/seafile/logs/seahub.log
+        banaction = %(banaction_allports)s
+        maxretry = 3
+        bantime = 14400
+        findtime = 14400
+      '';
     };
   };
 
@@ -626,6 +650,16 @@
   };
 
   environment.etc = {
+    "fail2ban/filter.d/seafile-auth.conf".text = ''
+      [INCLUDES]
+      before = common.conf
+
+      [Definition]
+
+      _daemon = seaf-server
+      failregex = Login attempt limit reached.*, ip: <HOST>
+      ignoreregex =
+   '';
     "nut/upsd.conf" = {
       text = ''
         LISTEN 127.0.0.1
