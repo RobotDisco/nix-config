@@ -523,6 +523,57 @@
             require_device_email = true;
           };
         };
+        environment.etc = {
+          "fail2ban/filter.d/vaultwarden.conf".text = ''
+            [INCLUDES]
+            before = common.conf
+
+            [Definition]
+            failregex = ^.*Username or password is incorrect\. Try again\. IP: <ADDR>\. Username:.*$
+            ignoreregex =
+            journalmatch = UNIT=vaultwarden.service
+          '';
+          "fail2ban/filter.d/vaultwarden-admin.conf".text = ''
+            [INCLUDES]
+            before = common.conf
+
+            [Definition]
+            failregex = ^.*Invalid admin token\. IP: <ADDR>.*$
+            ignoreregex =
+            journalmatch = UNIT=vaultwarden.service
+          '';
+        };
+        services.fail2ban = {
+          enable = true;
+          ignoreIP = [
+            "192.168.10.0/24"
+            "192.168.11.0/24"
+            "192.168.20.0/24"
+            "192.168.21.0/24
+          ];
+          jails = {
+            vaultwarden-webvault = ''
+              enabled = true
+              port = 8000
+              filter = vaultwarden
+              banaction = %(banaction_allports)s
+              backend = systemd
+              maxretry = 3
+              bantime = 14400
+              findtime = 14400
+            '';
+            vaultwarden-admin = ''
+              enabled = true;
+              port = 8000
+              filter = vaultwarden-admin
+              banaction = %(banaction_allports)s
+              backend = systemd
+              maxretry = 3
+              bantime = 14400
+              findtime = 14400
+            '';
+          };
+        };
       };
     };
   };
