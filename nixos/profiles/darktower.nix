@@ -563,7 +563,7 @@
               findtime = 14400
             '';
             vaultwarden-admin = ''
-              enabled = true;
+              enabled = true
               port = 8000
               filter = vaultwarden-admin
               banaction = %(banaction_allports)s
