@@ -328,7 +328,7 @@
 
           virtualHosts = {
             "vaultwarden.robot-disco.net" = {
-              locations."/" = { proxyPass = "http://localhost:8000"; };
+              locations."/raziel/" = { proxyPass = "http://localhost:8000"; };
 
               forceSSL = true;
               enableACME = true;
@@ -512,8 +512,9 @@
           config = {
             signups_allowed = false;
             signups_verify = true;
+            show_password_hint = false;
 
-            domain = "https://vaultwarden.robot-disco.net";
+            domain = "https://vaultwarden.robot-disco.net/raziel";
             invitation_org_name = "Robot Disco";
 
             smtp_host = "out.teksavvy.com";
