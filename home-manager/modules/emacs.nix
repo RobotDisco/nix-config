@@ -211,6 +211,9 @@ in {
         # nov.el
         unzip
 
+        # Display images
+        imagemagick
+
         # System widgets
         pavucontrol
       ];
