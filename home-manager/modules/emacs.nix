@@ -213,6 +213,7 @@ in {
 
         # Display images
         imagemagick
+        image_optim
 
         # System widgets
         pavucontrol
