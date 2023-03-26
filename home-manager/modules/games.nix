@@ -13,6 +13,8 @@ in {
         enableFPS = false;
       })
       nethack
+      flightgear
+      scummvm
     ];
   };
 }
