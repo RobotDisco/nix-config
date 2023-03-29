@@ -17,12 +17,16 @@ in {
     home.packages = with pkgs; [
       awscli2
       okta-awscli
+
+      (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [gke-gcloud-auth-plugin]))
+
       # Docker VM for macs
       colima
       docker
       kubectl
 
-      (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [gke-gcloud-auth-plugin]))
+      terraform-ls
+      terraform-lsp
 
       # Useful debugging tools
       # telnet, traceroute, etc...
