@@ -401,6 +401,12 @@ Emacs should handle keyboard media shortcuts
 #+END_SRC
 
 * Completion / Minibuffer
+** Consult
+Enhance emacs commands based on completion
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package consult
+    :demand t
+    :ensure t)
 #+END_SRC
 ** Corfu
 Completion popups in the regular buffer
