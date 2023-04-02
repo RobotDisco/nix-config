@@ -139,7 +139,7 @@ in {
           };
           "module/battery" = {
             type = "internal/battery";
-            time.format = "%H:%M";
+            time.format = "B: %H:%M";
             battery = "BAT1";
             adapter = "ACAD";
           };
@@ -153,10 +153,10 @@ in {
           "module/wlan" = {
             type = "internal/network";
             interface-type = "wireless";
-            format-connected = "<label-connected>";
-            format-disconnected = "<label-disconnected>";
-            label-disconnected = "W: %ifname%";
-            label-connected = "W: %ifname% %essid%";
+            format-connected = "W: <label-connected>";
+            format-disconnected = "W: <label-disconnected>";
+            label-disconnected = "<disconnected>";
+            label-connected = "%essid%";
           };
           "module/pulseaudio" = {
             type = "internal/pulseaudio";
@@ -170,7 +170,14 @@ in {
           "module/xworkspaces" = {
             type = "internal/xworkspaces";
 
-            label-active = "[%name%]";
+            label-active = " [%name%]";
+
+            pin-workspaces = true;
+
+            enable-click = true;
+          };
+          "settings" = {
+            screenchange-reload = true;
           };
         };
       };
