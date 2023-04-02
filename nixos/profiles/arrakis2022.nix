@@ -20,7 +20,7 @@ in
   robot-disco.hardware.framework.enable = true;
   robot-disco.hardware.home-devices.enable = true;
   robot-disco.audio.enable = true;
-  robot-disco.boot.hostId = "887ab783";
+  robot-disco.boot.fde = true;
   robot-disco.window-manager.enable = true;
   robot-disco.laptop.enable = true;
   robot-disco.steam.enable = true;
