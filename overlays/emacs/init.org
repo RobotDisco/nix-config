@@ -544,16 +544,6 @@ We use smartparens for structured editing like Ruby blocks or lisp s-expressions
     :bind (("C-c s" . rg-menu))
     :ensure t)
 #+END_SRC
-** File Management
-I am most comfortable with orthodox file managers.
-
-Sunrise Commander is like the old Norton Commander but in Emacs.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-    (use-package sunrise-commander
-      :ensure t
-      :commands (sunrise sunrise-cd))
-#+END_SRC
 * Software Development
 ** Packages
 *** envrc
