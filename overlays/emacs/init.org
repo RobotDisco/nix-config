@@ -401,6 +401,50 @@ Emacs should handle keyboard media shortcuts
 #+END_SRC
 
 * Completion / Minibuffer
+#+END_SRC
+** Corfu
+Completion popups in the regular buffer
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package corfu
+    :defer 1
+    :commands (corfu-mode global-corfu-mode)
+    :ensure t
+    :hook ((eshell-mode-hook . (lambda ()
+				 (setq-local corfu-auto nil)
+				 (corfu-mode))))
+    :config
+    (global-corfu-mode))
+#+END_SRC
+** Marginalia
+Add annotations to minibuffer completions to provide you with more information about the displayed options
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package marginalia
+    :demand t
+    :ensure t
+    :commands (marginalia-mode)
+    :bind (:map minibuffer-local-map
+		("M-A" . marginalia-cycle))
+    :init
+    (marginalia-mode))
+#+END_SRC
+** Orderless
+Enable helm-like searching via completion frameworks, where I can filter
+candidates by multiple regex patterns separated by a space.
+
+#+BEGIN_SRC elisp :tangle yes
+  (use-package orderless
+    :defer 1
+    :ensure t
+    :custom
+    ;; Fallback to basic for completions that depend on dynamic completion
+    ;; tables, whatever that is.
+    (completion-styles '(orderless basic))
+    ;; TRAMP can't use orderless at all, so override it to use basic and
+    ;; partial completion (like /u/s/l for /usr/share/local)
+    (completion-category-overrides '((file (styles basic partial-completion)))))
+#+END_SRC
 ** Vertico
 Vertico adds a good minibuffer UX to Emacs' default completion framework.
 
@@ -431,36 +475,6 @@ easy for me to see potential options in various contexts, I have found.
     (setq read-extended-command-predicate
 	  #'command-completion-default-include-p))
 
-#+END_SRC
-** Corfu
-Completion popups in the regular buffer
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package corfu
-    :defer 1
-    :commands (corfu-mode global-corfu-mode)
-    :ensure t
-    :hook ((eshell-mode-hook . (lambda ()
-				 (setq-local corfu-auto nil)
-				 (corfu-mode))))
-    :config
-    (global-corfu-mode))
-#+END_SRC
-** Orderless
-Enable helm-like searching via completion frameworks, where I can filter
-candidates by multiple regex patterns separated by a space.
-
-#+BEGIN_SRC elisp :tangle yes
-  (use-package orderless
-    :defer 1
-    :ensure t
-    :custom
-    ;; Fallback to basic for completions that depend on dynamic completion
-    ;; tables, whatever that is.
-    (completion-styles '(orderless basic))
-    ;; TRAMP can't use orderless at all, so override it to use basic and
-    ;; partial completion (like /u/s/l for /usr/share/local)
-    (completion-category-overrides '((file (styles basic partial-completion)))))
 #+END_SRC
 ** which-key
 When you start a keybinding, list possible completions are and what they do
