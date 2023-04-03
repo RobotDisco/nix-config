@@ -3,12 +3,12 @@
 let cfg = config.robot-disco.boot;
 
 in {
-  options.robot-disco.boot.fde = lib.mkEnableOption {
+  options.robot-disco.boot.enableFDE = lib.mkEnableOption {
       description = "Enable yubikey-based FDE as per https://nixos.wiki/wiki/Yubikey_based_Full_Disk_Encryption_(FDE)_on_NixOS";
   };
 
   config = lib.mkMerge [
-    lib.mkIf cfg.fde {
+    (lib.mkIf cfg.enableFDE {
       # Minimal list of modules to use the EFI system partition and Yubikey
       boot.initrd.kernelModules = [
         "vfat"
@@ -23,7 +23,7 @@ in {
       # Configuration to use luks w/ yubikey
       boot.initrd.luks.device = {
         nixoscrypt = {
-          device = "/dev/disk/by-label/lukspart0";
+          device = "/dev/nvmen0p2";
           # Set to false if you need things like networking to happen first
           preLVM = true;
 
@@ -36,7 +36,7 @@ in {
           };
         };
       };
-    }
+    })
     {
       # To make my life easier I've come up with a partition naming scheme
       # that's common to all of my NixOS devices.
