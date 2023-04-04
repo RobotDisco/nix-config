@@ -21,7 +21,7 @@ in {
       boot.init.luks.yubikeySupport = true;
 
       # Configuration to use luks w/ yubikey
-      boot.initrd.luks.device = {
+      boot.initrd.luks.devices = {
         nixoscrypt = {
           device = "/dev/nvmen0p2";
           # Set to false if you need things like networking to happen first
@@ -38,6 +38,9 @@ in {
       };
     })
     {
+      boot.loader.systemd-boot.enable = true;
+      boot.loader.efi.canTouchEfiVariables = true;
+
       # To make my life easier I've come up with a partition naming scheme
       # that's common to all of my NixOS devices.
 
