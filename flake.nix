@@ -45,7 +45,6 @@
           system = "x86_64-linux";
           modules = [
             nixos-hardware.nixosModules.framework
-            nixos-hardware.nixosModules.common.hidpi
             ./nixos/profiles/arrakis2022.nix
           ] ++ nixpkgs.lib.attrValues self.nixosModules;
         };
