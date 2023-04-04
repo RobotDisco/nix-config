@@ -34,7 +34,7 @@ in
   boot.kernelModules = [ "dm-snapshot" ];
 
   # Framework has a "retina" screen
-  hardware.video.hidpi = enable;
+  hardware.video.hidpi.enable = true;
 
   # Fix font sizes in X
   services.xserver.dpi = 200;
