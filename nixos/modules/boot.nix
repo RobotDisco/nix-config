@@ -18,7 +18,7 @@ in {
       ];
 
       # Enable support for Yubikey PBA
-      boot.init.luks.yubikeySupport = true;
+      boot.initrd.luks.yubikeySupport = true;
 
       # Configuration to use luks w/ yubikey
       boot.initrd.luks.devices = {
