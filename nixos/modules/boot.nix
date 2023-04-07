@@ -23,7 +23,7 @@ in {
       # Configuration to use luks w/ yubikey
       boot.initrd.luks.devices = {
         nixoscrypt = {
-          device = "/dev/nvmen0p2";
+          device = "/dev/nvme0n1p2";
           # Set to false if you need things like networking to happen first
           preLVM = true;
 
