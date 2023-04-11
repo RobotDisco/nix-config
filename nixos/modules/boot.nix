@@ -26,6 +26,12 @@ in {
       boot.initrd.luks.devices = {
         nixoscrypt = {
           device = "/dev/nvme0n1p2";
+
+          # I'd rather have TRIM support than perfect security
+          allowDiscards = true;
+          # increase performance on SSDs
+          bypassWorkqueues = true;
+
           # Set to false if you need things like networking to happen first
           preLVM = true;
 
