@@ -10,15 +10,17 @@ in {
   config = lib.mkMerge [
     (lib.mkIf cfg.enableFDE {
       # Minimal list of modules to use the EFI system partition and Yubikey
-      boot.initrd.kernelModules = [
-        "vfat"
-        "nls_cp437"
-        "nls_iso8859-1"
-        "usbhid"
-      ];
+      #boot.initrd.kernelModules = [
+      #  "vfat"
+      #  "nls_cp437"
+      #  "nls_iso8859-1"
+      #  "usbhid"
+      #];
 
-      # Enable support for Yubikey PBA
-      boot.initrd.luks.yubikeySupport = true;
+      # This keeps breaking, something keeps corrupting
+      # /dev/disk/by-label/EFIBOOT0/crypt-storage/default
+      # to contain jibberish instead of the salt + iterations
+      # boot.initrd.luks.yubikeySupport = true;
 
       # Configuration to use luks w/ yubikey
       boot.initrd.luks.devices = {
@@ -27,13 +29,13 @@ in {
           # Set to false if you need things like networking to happen first
           preLVM = true;
 
-          yubikey = {
-            slot = 2; # Long press on my yubikey.
-            twoFactor = true; # Set false if you don't use password
-            storage = {
-              device = "/dev/disk/by-label/EFIBOOT0";
-            };
-          };
+          #yubikey = {
+          #  slot = 2; # Long press on my yubikey.
+          #  twoFactor = true; # Set false if you don't use password
+          #  storage = {
+          #    device = "/dev/disk/by-label/EFIBOOT0";
+          #  };
+          #};
         };
       };
     })
