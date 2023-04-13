@@ -81,6 +81,7 @@
       "uhk-agent"
       "yubico-authenticator"
       "yubico-yubikey-manager"
+      "yubico-yubikey-personalization-gui"
     ];
 
     masApps = {
