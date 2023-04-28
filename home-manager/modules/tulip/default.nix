@@ -44,5 +44,10 @@ in {
       # file and files in /nix/store are immutable.
       config.lib.file.mkOutOfStoreSymlink
         "${config.home.homeDirectory}/code/nix-config/home-manager/modules/tulip/okta-aws.toml";
+
+    #tulip's .ssh/config
+    home.file.".ssh/config".source =
+      config.lib.file.mkOutOfStoreSymlink
+        "${config.home.homeDirectory}/workspace/dotfiles/ssh/config";
   };
 }
