@@ -16,6 +16,14 @@ This flake includes the following components:
   - pkgsForSystem :: provide, for all supported systems, an imported =nixpkgs= with additional overlays I wish to include.
   - forAllSystem~ :: given a function that takes in a system, produced an attribute set containing nix evaluations for every supported system. It contains a local binding called =supportedSystems= which lists the targets I expect this flake to build for.
 
+* Installation (MacOS)
+1. Install nix
+2. Install nix-darwin
+3. Install homebrew
+4. set hostname (via control panel) to "Fountain-of-Ahmed-III"
+5. Configure keyboards to remap modifier keys (don't know how to do this keyboard-by-keyboard)
+6. ~nix run .#darwin-switch~
+
 * Usage
 Show what this flake provides
 #+BEGIN_SRC sh
