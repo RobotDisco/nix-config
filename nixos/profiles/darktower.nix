@@ -348,7 +348,7 @@
                 extraConfig = ''
                   client_max_body_size 0;
 
-                  add_header 'Access-Control-Allow-Origin' 'https://organice.robot-disco.net/';
+                  add_header 'Access-Control-Allow-Origin' 'https://organice.robot-disco.net';
                   add_header 'Access-Control-Allow-Methods' 'GET,POST,OPTIONS,DELETE,PUT,PROPFIND';
                   add_header 'Access-Control-Allow-Headers' 'Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization,X-CSRF-Token,Depth';
                   add_header 'Access-Control-Allow-Credentials' true;
