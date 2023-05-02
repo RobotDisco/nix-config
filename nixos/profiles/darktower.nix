@@ -324,8 +324,6 @@
           recommendedGzipSettings = true;
           recommendedProxySettings = true;
 
-          clientMaxBodySize = "100m"; # Need this for larger webdav uploads
-
           virtualHosts = {
             "organice.robot-disco.net" = {
               locations."/" = { proxyPass = "http://localhost:8002"; };
@@ -344,7 +342,13 @@
                 proxy_set_header X-Forwarded-For $remote_addr;
               '';
 
-              locations."/" = { proxyPass = "http://localhost:8001"; };
+              locations."/" = {
+                proxyPass = "http://localhost:8001";
+
+                extraConfig = ''
+                  client_max_body_size 0;
+                '';
+              };
 
               forceSSL = true;
               enableACME = true;
