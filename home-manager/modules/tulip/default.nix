@@ -17,6 +17,7 @@ in {
     home.packages = with pkgs; [
       awscli2
       okta-awscli
+      amazon-ecr-credential-helper
 
       (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [gke-gcloud-auth-plugin]))
 
