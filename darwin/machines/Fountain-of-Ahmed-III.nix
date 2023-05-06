@@ -88,15 +88,27 @@
     };
   };
 
-  services.yabai.enable = true;
+  services.yabai = {
+    enable = true;
+
+    config = {
+      external_bar = "main";
+      mouse_follows_focus = "on";
+      # focus_follows_mouse = "autoraise";
+      layout = "bsp";
+    };
+  };
   services.spacebar = {
     enable = true;
     package = pkgs.spacebar;
 
     config = {
-      mouse_follows_focus = "on";
-      # focus_follows_mouse = "autoraise";
-      layout = "bsp";
+      display = "main";
+      position = "top";
+      spaces = "on";
+      spaces_for_all_displays = "on";
+      clock = "on";
+      power = "on";
     };
   };
   services.skhd.enable = true;
