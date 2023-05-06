@@ -504,7 +504,6 @@ Automatically revert when a file changes on disk; this happens a lot given my fi
 				(global-auto-revert-mode +1)))))
 #+END_SRC
 ** Spellchecking
-
 #+BEGIN_SRC emacs-lisp :tangle yes
     (use-package emacs
       :bind (("C-c f" . flyspell-toggle)))
