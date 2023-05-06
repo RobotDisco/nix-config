@@ -63,7 +63,6 @@
       "bitwarden"
       "brave-browser"
       "calibre"
-      # Currently broken https://github.com/chef/chef-workstation/issues/3021
       "chef-workstation"
       "discord"
       "kobo"
@@ -88,4 +87,13 @@
       "WireGuard" = 1451685025;
     };
   };
+
+  services.yabai.enable = true;
+  services.spacebar = {
+    enable = true;
+    package = pkgs.spacebar;
+  };
+  services.skhd.enable = true;
+
+  networking.computerName = "Fountain-of-Ahmed-III";
 }
