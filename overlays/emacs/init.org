@@ -503,6 +503,12 @@ Automatically revert when a file changes on disk; this happens a lot given my fi
     :hook ((after-load-hook . (lambda ()
 				(global-auto-revert-mode +1)))))
 #+END_SRC
+** Spellchecking
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+    (use-package emacs
+      :bind (("C-c f" . flyspell-toggle)))
+#+END_SRC
 ** Project Management
 
 Projectile is a framework for managing (usually) software development projects in a standard way, so that the same keybindings can be used to test projects, compile them, etc...
