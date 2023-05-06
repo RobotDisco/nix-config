@@ -92,6 +92,12 @@
   services.spacebar = {
     enable = true;
     package = pkgs.spacebar;
+
+    config = {
+      mouse_follows_focus = "on";
+      # focus_follows_mouse = "autoraise";
+      layout = "bsp";
+    };
   };
   services.skhd.enable = true;
 
