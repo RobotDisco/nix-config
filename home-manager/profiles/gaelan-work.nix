@@ -1,4 +1,4 @@
-let username = "gaelan.dcosta";
+let username = "gaelan";
 in {
   robot-disco.development-environment = {
     enable = true;

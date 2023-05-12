@@ -17,9 +17,9 @@
   nixpkgs.config.allowUnfree = true;
 
   # Set up user and home-manager configuration.
-  users.users."gaelan.dcosta" = { home = "/Users/gaelan.dcosta"; };
+  users.users."gaelan" = { home = "/Users/gaelan"; };
 
-  home-manager.users."gaelan.dcosta" =
+  home-manager.users."gaelan" =
     import ../../home-manager/profiles/gaelan-work.nix;
 
   nix = {
@@ -39,7 +39,7 @@
   };
 
   # Allow Gaelan to set up caches.
-  nix.settings.trusted-users = [ "gaelan.dcosta" ];
+  nix.settings.trusted-users = [ "gaelan" ];
 
   system.keyboard = {
     enableKeyMapping = true;
@@ -73,7 +73,7 @@
       "whatsapp"
       "zotero"
       # Work already installs/updates these packages
-      #"mattermost";
+      "mattermost"
       # Stuff from drivers tap
       "fujitsu-scansnap-manager-s1300"
       "kensingtonworks"
