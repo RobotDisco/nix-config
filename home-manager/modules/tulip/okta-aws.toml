@@ -2,6 +2,8 @@
 base-url = tulip.okta.com
 username = gaelan@tulip.com
 duration = 14400
+app-link = https://tulip.okta.com/home/amazon_aws/0oa6h9ji70dvt6G4M5d7/272
+role = arn:aws-cn:iam::004493658315:role/Okta-Admin
 
 [awsusa]
 profile = awsusa
