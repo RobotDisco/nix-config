@@ -89,7 +89,7 @@
   };
 
   services.yabai = {
-    enable = true;
+    enable = false;
 
     config = {
       external_bar = "main";
@@ -99,7 +99,7 @@
     };
   };
   services.spacebar = {
-    enable = true;
+    enable = false;
     package = pkgs.spacebar;
 
     config = {
