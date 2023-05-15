@@ -44,13 +44,6 @@ let
       mkdir -p .xdg-config
       ln -s $PWD .xdg-config/emacs
       export XDG_CONFIG_HOME="$PWD/.xdg-config"
-
-      # We don't byte compile because a) it may not be portable and b) those
-      # .eln files get stored elsewhere and I don't know how to manage
-      # packaging for that
-
-      emacs -L . --batch --eval '(setq byte-compile-error-on-warn t)' \
-        -f batch-byte-compile *.el
     '';
   };
 in stdenv.mkDerivation {

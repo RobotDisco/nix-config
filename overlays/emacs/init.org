@@ -280,18 +280,12 @@ I love Emacs so much, I use it as my primary computing environment :)
   (use-package pinentry
     :after (exwm)
     :ensure t
-    :preface
-    (declare-function pinentry-start "pinentry")
     :config
     (pinentry-start))
 
   (use-package exwm
     :defer 0
     :ensure t
-    :preface
-    (declare-function exwm-workspace-rename-buffer "exwm")
-    :defines (epg-pinentry-mode)
-    :functions (exwm-randr-enable)
     :if (eq system-type 'gnu/linux)
     :custom
     ;; Set window management key bindings
@@ -357,9 +351,6 @@ I love Emacs so much, I use it as my primary computing environment :)
     :ensure nil
     :defer 0
     :after (exwm)
-    :preface
-    (declare-function exwm-randr-enable "exwm-randr")
-    :functions (gaelan/exwm-randr-screen-change-hook)
     :init
     (defun gaelan/exwm-randr-screen-change-hook ()
       "Run autorandr whenever exwm detects a screen change"
@@ -389,8 +380,6 @@ in a floating frame rather than an Emacs window.
 Emacs should handle keyboard media shortcuts
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package desktop-environment
-    :preface
-    (declare-function desktop-environment-mode "desktop-environment")
     :ensure t
     :defer 1
     :after (exwm)
