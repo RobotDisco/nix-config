@@ -1,4 +1,3 @@
-
 # -*- mode: org; coding: utf-8; -*-
 #+TITLE: GNU Emacs Configuration
 #+AUTHOR: Gaelan D'costa
@@ -30,12 +29,15 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 - knowledge/idea management :: [[https://www.orgroam.com/][org-roam]]
 
 * Early Initialization
+
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
   ;;; early-init.el --- Early Initialization -*- lexical-binding: t; -*-
 #+END_SRC
   
 ** Version Sentinal
+
 I am not sure if this config will work with older versions of emacs, so I'll abort if the running version of emacs is older than a known good version.
+
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
   (let ((minver "28.1"))
     (when (version< emacs-version minver)
@@ -43,7 +45,9 @@ I am not sure if this config will work with older versions of emacs, so I'll abo
 #+END_SRC
 
 ** Startup
+
 Let's time and display the amount of time it takes to bring up my Emacs configuration
+
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
   (add-hook 'emacs-startup-hook
 	    (lambda ()
@@ -72,49 +76,33 @@ This is a pattern I have seen various people use, so it seems like a good idea.
 		       gc-cons-percentage ,normal-gc-cons-percentage
 		       file-name-handler-alist ',normal-file-name-handler-alist))))
 #+END_SRC
-
 Inhibit startup screen and messages.
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
-  (setq inhibit-startup-screen t
-	initial-scratch-message nil)
-#+END_SRC
 
-Performance tweak: Don't load default library, and use =fundamental-mode= to reduce hooks running on startup.
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
-  (setq inhibit-default-init t)
-  (setq initial-major-mode 'fundamental-mode)
+  (setq inhibit-startup-screen t)
 #+END_SRC
 
 ** UI speedups
+
 Disable unnecessary GUI components.
 
-We are not using builtin functions for these because we previously disabled loding those via setting  =inhibit-default-init=.
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
   (setq use-dialog-box nil)
-  (push '(menu-bar-lines . 0) default-frame-alist)
-  (push '(tool-bar-lines . 0) default-frame-alist)
-  (push '(vertical-scroll-bars) default-frame-alist)
-#+END_SRC
-
-Don't implicitly resize frames when changing various settings. I don't know what the benefits of this are, so let's try it!
-
-TODO Is this worth keeping?
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
-  (setq frame-inhibit-implied-resize t)
-#+END_SRC
-
-Ignore X resources. Don't allow config outside of emacs itself to set GUI chrome attributes.
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
-  (advice-add #'x-apply-session-resources :override #'ignore)
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
 #+END_SRC
 
 * Base settings
+
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;;; init.el --- Initialization -*- lexical-binding: t; -*-
 #+END_SRC
 
 ** Variables
+
 Private an easy way to toggle debug mode which will set certain variables to produce each informative output. It can be set either by providing the environment variable =DEBUG= or start Emacs with =--debug-init=.
+
 #+BEGIN_SRC emacs-lisp :tangle yes
   (eval-and-compile
     (when (getenv "DEBUG") (setq init-file-debug t))
@@ -122,6 +110,7 @@ Private an easy way to toggle debug mode which will set certain variables to pro
 #+END_SRC
    
 Provide XDG-compliant locations for Emacs to store and cache data.
+
 #+BEGIN_SRC emacs-lisp :tangle yes
   (eval-and-compile
     (defvar gaelan/data-dir
@@ -220,10 +209,6 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
    Set the default Mac modifier bindings to mirror Linux bindings
    #+BEGIN_SRC emacs-lisp :tangle yes
      (when (eq system-type 'darwin)
-       ;; On linux these variables aren't defined, which causes byte-compilation
-       ;; to fail. So we define the variables.
-       (defvar mac-option-modifier)
-       (defvar mac-command-modifier)
        (setq mac-option-modifier 'super
 	     mac-command-modifier 'meta))
    #+END_SRC
