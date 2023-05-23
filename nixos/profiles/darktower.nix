@@ -347,12 +347,6 @@
 
                 extraConfig = ''
                   client_max_body_size 0;
-
-                  add_header 'Access-Control-Allow-Origin' 'https://organice.robot-disco.net';
-                  add_header 'Access-Control-Allow-Methods' 'GET,POST,OPTIONS,DELETE,PUT,PROPFIND';
-                  add_header 'Access-Control-Allow-Headers' 'Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers,Authorization,X-CSRF-Token,Depth';
-                  add_header 'Access-Control-Allow-Credentials' true;
-                  add_header 'Allow' 'OPTIONS,GET,HEAD,POST,DELETE,TRACE,PROPFIND,PROPPATCH,COPY,MOVE,LOCK,UNLOCK'; 
                 '';
               };
 
@@ -614,7 +608,7 @@
     };
     "seafile-mc" = {
       autoStart = true;
-      image = "seafileltd/seafile-mc:9.0.10";
+      image = "seafileltd/seafile-mc:10.0.1";
       dependsOn = [ "seafile-memcached" ];
       environmentFiles = [ "/srv/storagepool/data/webdav/seafile_env_vars" ];
       volumes = [ "/srv/storagepool/data/webdav/shared:/shared" ];
