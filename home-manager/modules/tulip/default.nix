@@ -20,6 +20,7 @@ in {
       amazon-ecr-credential-helper
 
       (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [gke-gcloud-auth-plugin]))
+      docker-credential-gcr
 
       # Docker VM for macs
       colima
