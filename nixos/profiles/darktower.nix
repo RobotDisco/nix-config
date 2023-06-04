@@ -261,7 +261,7 @@
       };
 
       config = {
-        system.stateVersion = "22.11";
+        system.stateVersion = "23.05";
 
         users.users.gaelan = {
           shell = pkgs.zsh;
@@ -309,7 +309,7 @@
     reverseproxy = {
       autoStart = true;
       config = {
-        system.stateVersion = "22.11";
+        system.stateVersion = "23.05";
 
         security.acme = {
           acceptTerms = true;
@@ -404,7 +404,7 @@
       };
 
       config = {
-        system.stateVersion = "22.11";
+        system.stateVersion = "23.05";
 
         services.pleroma = {
           enable = true;
@@ -459,7 +459,7 @@
         };
       };
       config = {
-        system.stateVersion = "22.11";
+        system.stateVersion = "23.05";
         services.mysql = {
           enable = true;
           package = pkgs.mariadb;
@@ -482,7 +482,7 @@
         };
       };
       config = {
-        system.stateVersion = "22.11";
+        system.stateVersion = "23.05";
         services.postgresql = {
           package = pkgs.postgresql_14;
           enable = true;
@@ -514,7 +514,7 @@
         };
       };
       config = {
-        system.stateVersion = "22.11";
+        system.stateVersion = "23.05";
         services.vaultwarden = {
           enable = true;
           dbBackend = "postgresql";
