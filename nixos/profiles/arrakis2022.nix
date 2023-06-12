@@ -53,16 +53,6 @@ in
   # Support thunderbolt
   services.hardware.bolt.enable = true;
 
-  # Allow clamshell mode when plugged in
-  # Ideally this would be only when docked but that doesn't seem to work for some reason
-  services.logind = {
-    # Ideally this wouldn't be set as it means the laptop doesn't ever sleep when closed.
-    lidSwitchExternalPower = "ignore";
-    # Ideally this would work because it would only prevent sleeping when a
-    # dock device is plugged in.
-    lidSwitchDocked = "ignore";
-  };
-
   services.autorandr = {
     enable = true;
 
