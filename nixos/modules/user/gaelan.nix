@@ -33,6 +33,9 @@ in {
       # Gaelan owns this machine, so let him do nix stuff.
       nix.settings.trusted-users = [ "gaelan" ];
 
+      # Enable ZSH
+      programs.zsh.enable = true;
+
       # Define the gaelan user
       users.users.gaelan = {
         description = "Gaelan D'costa";

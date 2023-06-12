@@ -40,7 +40,7 @@
       slack
       whatsapp-for-linux
       zotero
-      yubioath-desktop
+      yubioath-flutter
     ]);
 
     services.gammastep = lib.mkIf pkgs.stdenv.isLinux {

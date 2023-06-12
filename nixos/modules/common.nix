@@ -70,6 +70,6 @@ in {
       lib.mkDefault config.hardware.enableRedistributableFirmware;
 
     nix.settings.max-jobs = lib.mkDefault "auto";
-    system.stateVersion = "22.11";
+    system.stateVersion = "23.05";
   }];
 }
