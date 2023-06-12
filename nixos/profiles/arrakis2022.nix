@@ -17,6 +17,7 @@ let
 in
 
 {
+  robot-disco.common.autoUpgrade.enable = false;
   robot-disco.hardware.home-devices.enable = true;
   robot-disco.audio.enable = true;
   robot-disco.boot.enableFDE = true;
