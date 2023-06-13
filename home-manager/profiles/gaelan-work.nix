@@ -15,7 +15,7 @@ in {
 
   robot-disco.tulip.enable = true;
 
-  home.stateVersion = "22.11";
+  home.stateVersion = "23.05";
   home.homeDirectory = "/Users/${username}";
   home.username = username;
 }
