@@ -91,7 +91,7 @@
         ]);
 
       darwinConfigurations = {
-        "Fountain-of-Ahmed-III" = myLib.darwinSystem {
+        "fountain-of-ahmed-iii" = myLib.darwinSystem {
           system = "aarch64-darwin";
           modules = [ ./darwin/machines/Fountain-of-Ahmed-III.nix ];
         };
