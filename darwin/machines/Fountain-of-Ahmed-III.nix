@@ -101,6 +101,7 @@
       window_opacity = "on";
       active_window_opacity = "1.0";
       normal_window_opacity = "0.80";
+      external_bar = "all";
     };
 
     extraConfig = ''
@@ -137,16 +138,17 @@ yabai -m rule --add app="WhatsApp" space=chat
   };
 
   services.spacebar = {
-    enable = false;
+    enable = true;
     package = pkgs.spacebar;
 
     config = {
-      display = "main";
-      position = "top";
-      spaces = "on";
-      spaces_for_all_displays = "on";
-      clock = "on";
-      power = "on";
+      height = 33;
+      clock_format = "%F%t%R";
+      space_icon_strip  = "1 2 3 4 5 6 7 8 9 10";
+      text_font = "Verdana:Bold:12.0";
+      background_color = "0xffbd00ff";
+      foreground_color = "0xff3fff2d";
+      space_icon_color = "0xfffeff6e";
     };
   };
   services.skhd = {
