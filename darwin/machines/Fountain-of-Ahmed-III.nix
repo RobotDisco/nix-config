@@ -94,8 +94,13 @@
 
     config = {
       mouse_follows_focus = "on";
-      # focus_follows_mouse = "autoraise";
+      focus_follows_mouse = "autofocus";
       layout = "bsp";
+      window_origin_display = "focused";
+      window_border = "on";
+      window_opacity = "on";
+      active_window_opacity = "1.0";
+      normal_window_opacity = "0.80";
     };
 
     extraConfig = ''
@@ -124,6 +129,7 @@ setup_space 5 chat 2
 yabai -m rule --add app="Brave Browser" space=web
 yabai -m rule --add app="emacs" space=emacs
 yabai -m rule --add app="Mattermost" space=work
+yabai -m rule --add app="Discord" space=chat
 yabai -m rule --add app="Slack" space=chat
 yabai -m rule --add app="Signal" space=chat
 yabai -m rule --add app="WhatsApp" space=chat
@@ -147,36 +153,53 @@ yabai -m rule --add app="WhatsApp" space=chat
     enable = true;
 
     skhdConfig = ''
-alt - q : ${pkgs.yabai}/bin/yabai -m window --close
-alt - w : ${pkgs.yabai}/bin/yabai -m space --layout bsp
-alt - e : ${pkgs.yabai}/bin/yabai -m space --layout float
+shift + ralt - q : ${pkgs.yabai}/bin/yabai -m window --close
+ralt - w : ${pkgs.yabai}/bin/yabai -m space --layout bsp
+ralt - e : ${pkgs.yabai}/bin/yabai -m space --layout float
+shift + ralt - e : launchctl stop org.nixos.yabai
+shift + ralt - r : launchctl stop org.nixos.yabai; launchctl start org.nixos.yabai 
+shift + ralt - y : launchctl start org.nixos.yabai
 
-alt - s : ${pkgs.yabai}/bin/yabai -m space --layout stack
-alt - f : ${pkgs.yabai}/bin/yabai -m window --toggle zoom-fullscreen
+ralt - a : ${pkgs.yabai}/bin/yabai -m window --focus recent
+shift + ralt - a : ${pkgs.yabai}/bin/yabai -m display --focus recent
+ralt - s : ${pkgs.yabai}/bin/yabai -m space --layout stack
+ralt - f : ${pkgs.yabai}/bin/yabai -m window --toggle zoom-fullscreen
+shift + ralt - f : ${pkgs.yabai}/bin/yabai -m window --toggle native-fullscreen
 
-# shift + alt - f : ${pkgs.yabai}/bin/yabai -m window --toggle native-fullscreen
+ralt - h : ${pkgs.yabai}/bin/yabai -m window --focus west
+ralt - j : ${pkgs.yabai}/bin/yabai -m window --focus south
+ralt - k : ${pkgs.yabai}/bin/yabai -m display --focus next
+ralt - l : ${pkgs.yabai}/bin/yabai -m window --focus east
 
-alt - h : ${pkgs.yabai}/bin/yabai -m window --focus west
-alt - j : ${pkgs.yabai}/bin/yabai -m window --focus south
-alt - k : ${pkgs.yabai}/bin/yabai -m display --focus next
-alt - l : ${pkgs.yabai}/bin/yabai -m window --focus east
+shift + ralt - h : ${pkgs.yabai}/bin/yabai -m window --swap west
+shift + ralt - j : ${pkgs.yabai}/bin/yabai -m window --swap south
+shift + ralt - k : ${pkgs.yabai}/bin/yabai -m window --swap north
+shift + ralt - l : ${pkgs.yabai}/bin/yabai -m window --swap east
 
-shift + alt - h : ${pkgs.yabai}/bin/yabai -m window --warp west
-shift + alt - j : ${pkgs.yabai}/bin/yabai -m window --warp south
-shift + alt - k : ${pkgs.yabai}/bin/yabai -m window --warp north
-shift + alt - l : ${pkgs.yabai}/bin/yabai -m window --warp east
+ralt - v : ${pkgs.yabai}/bin/yabai -m window --toggle split
+ralt - b : ${pkgs.yabai}/bin/yabai -m space --balance
 
-alt - v : ${pkgs.yabai}/bin/yabai -m window --toggle split
+ralt - 1 : ${pkgs.yabai}/bin/yabai -m space --focus main
+ralt - 2 : ${pkgs.yabai}/bin/yabai -m space --focus web
+ralt - 3 : ${pkgs.yabai}/bin/yabai -m space --focus work
+ralt - 4 : ${pkgs.yabai}/bin/yabai -m space --focus chat
 
-alt - 1 : ${pkgs.yabai}/bin/yabai -m space --focus main
-alt - 2 : ${pkgs.yabai}/bin/yabai -m space --focus web
-alt - 3 : ${pkgs.yabai}/bin/yabai -m space --focus work
-alt - 4 : ${pkgs.yabai}/bin/yabai -m space --focus chat
+ralt - 0x2B : ${pkgs.yabai}/bin/yabai -m space --focus prev
+ralt - 0x2F : ${pkgs.yabai}/bin/yabai -m space --focus next
 
-shift + alt - a : ${pkgs.yabai}/bin/yabai -m display --focus prev
-shift + alt - s : ${pkgs.yabai}/bin/yabai -m space --focus prev
-shift + alt - d : ${pkgs.yabai}/bin/yabai -m space --focus next
-shift + alt - f : ${pkgs.yabai}/bin/yabai -m display --focus next
+shift + ralt - 0x2B : ${pkgs.yabai}/bin/yabai -m space --move prev
+shift + ralt - 0x2F : ${pkgs.yabai}/bin/yabai -m space --move next
+
+ralt - 0x21 : ${pkgs.yabai}/bin/yabai -m display --focus prev
+ralt - 0x1E : ${pkgs.yabai}/bin/yabai -m display --focus next
+
+shift + ralt - 0x21 : ${pkgs.yabai}/bin/yabai -m display --move prev
+shift + ralt - 0x1E : ${pkgs.yabai}/bin/yabai -m display --move next
+
+ralt - 0x18 : ${pkgs.yabai}/bin/yabai -m space --create
+ralt - 0x1B : ${pkgs.yabai}/bin/yabai -m space --destroy
+
+ralt - m : ${pkgs.yabai}/bin/yabai -m space --toggle mission-control
     '';
   };
 
