@@ -101,7 +101,7 @@
       window_opacity = "on";
       active_window_opacity = "1.0";
       normal_window_opacity = "0.80";
-      external_bar = "all";
+      external_bar = "all:33:0";
     };
 
     extraConfig = ''
