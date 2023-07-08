@@ -678,7 +678,7 @@ Support flycheck syntax checking
       :mode "\\.tf\\'")
 #+END_SRC
 *** YAML
-#+BEGIN_SRC emacs-lisp :tnagle yes
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yaml-mode
     :ensure t
     :mode "\\.ya?ml\\'")
