@@ -14,10 +14,13 @@
 
     home-manager.url = "github:nix-community/home-manager/release-23.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    robonona.url = "github:RobotDisco/robonona-clj";
+    robonona.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-mac, darwin, emacs-overlay
-    , home-manager, nixos-hardware }:
+    , home-manager, nixos-hardware, ... }:
     let
       inherit (nixpkgs) lib;
 
@@ -46,6 +49,11 @@
           modules = [
             nixos-hardware.nixosModules.framework
             ./nixos/profiles/arrakis2022.nix
+            {
+              environment.systemPackages = [
+                inputs.robonona.packages.default
+              ];
+            }
           ] ++ nixpkgs.lib.attrValues self.nixosModules;
         };
       };
