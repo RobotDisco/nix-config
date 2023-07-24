@@ -139,6 +139,8 @@
     settings = { ZED_EMAIL_ADDR = [ "gdcosta@gmail.com" ]; };
   };
 
+  programs.zsh.enable = true;
+
   users.users.gaelan = {
     shell = pkgs.zsh;
     isNormalUser = true;
