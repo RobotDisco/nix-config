@@ -48,7 +48,7 @@
   # networking.firewall.allowedTCPPorts = [ ];
   # networking.firewall.allowedUDPPorts = [ ];
 
-  system.stateVersion = "22.11";
+  system.stateVersion = "23.05";
 
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
