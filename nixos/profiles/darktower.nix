@@ -247,7 +247,7 @@
     prefixLength = 24;
   }];
 
-  networking.firewall.interfaces.cni-podman0.allowedTCPPorts = [ 3306 11211 ];
+  networking.firewall.interfaces.podman0.allowedTCPPorts = [ 3306 11211 ];
   networking.firewall.interfaces.vlan50.allowedTCPPorts = [ 139 80 443 445 ];
   networking.firewall.checkReversePath = "loose";
 
