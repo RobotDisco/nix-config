@@ -16,7 +16,6 @@
   boot.loader.grub.efiInstallAsRemovable = true;
   # OpenZFS recommends grub; sure, why not
   boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
   # Copy kernels to /boot
   boot.loader.grub.copyKernels = true;
   boot.loader.grub.efiSupport = true;
