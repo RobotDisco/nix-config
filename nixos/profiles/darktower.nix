@@ -264,6 +264,8 @@
       config = {
         system.stateVersion = "23.05";
 
+        programs.zsh.enable = true;
+
         users.users.gaelan = {
           shell = pkgs.zsh;
           isNormalUser = true;
