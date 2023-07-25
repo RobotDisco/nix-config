@@ -51,7 +51,8 @@
             ./nixos/profiles/arrakis2022.nix
             {
               systemd.timers."robonona" = {
-                wantedBy = [ "timers.target" ];
+                enable = true;
+                wantedBy = [ "timers.target" "network-online.target" ];
                 timerConfig = {
                     OnCalendar = "*:/5:*";
                     RandomizeDelaySec = "300";
@@ -60,6 +61,8 @@
               };
 
               systemd.services."robonona" = {
+                enable = true;
+                wantedBy = [ "network-online.target" ];
                 script = ''
                   set -eu
                   ${inputs.robonona.packages.default}/bin/robonona dev
