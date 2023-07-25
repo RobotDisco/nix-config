@@ -50,9 +50,25 @@
             nixos-hardware.nixosModules.framework
             ./nixos/profiles/arrakis2022.nix
             {
-              environment.systemPackages = [
-                inputs.robonona.packages.default
-              ];
+              systemd.timers."robonona" = {
+                wantedBy = [ "timers.target" ];
+                timerConfig = {
+                    OnCalendar = "*:/5:*";
+                    RandomizeDelaySec = "300";
+                  Unit = "robonona.service";
+                };
+              };
+
+              systemd.services."robonona" = {
+                script = ''
+                  set -eu
+                  ${inputs.robonona.packages.default}/bin/robonona dev
+                '';
+                serviceConfig = {
+                  Type = "oneshot";
+                  User = "gaelan";
+                };
+              };
             }
           ] ++ nixpkgs.lib.attrValues self.nixosModules;
         };
