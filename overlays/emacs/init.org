@@ -17,7 +17,6 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 ** Key package choices
 - package management :: [[https://github.com/jwiegley/use-package][use-package]]
 - X Window Managemer :: [[https://github.com/ch11ng/exwm][exwm]]
-- buffer navigation :: [[https://github.com/abo-abo/avy][avy]]
 - completion
   - Completion-in-buffer :: [[https://github.com/minad/corfu][corfu]]
   - Completion-in-minibuffer :: [[https://github.com/minad/vertico][vertico]]
@@ -499,22 +498,6 @@ Projectile is a framework for managing (usually) software development projects i
 		("C-c p" . projectile-command-map)))
 #+END_SRC
 
-** Buffer Fast-travel
-Avy allows you to zip around the visible part of an emacs buffer by using letter sequences to transport quickly to various parts of the buffer
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package avy
-    :ensure t
-    :autoload (avy-setup-default)
-    :bind (("C-:" . avy-goto-char)
-	   ("C-'" . avy-goto-char-2)
-	   ("C-c C-j" . avy-resume)
-	   ("M-g e" . avy-goto-word-0)
-	   ("M-g f" . avy-goto-line)
-	   ("M-g w" . avy-goto-word-1))
-    :hook ((after-init-hook . (lambda ()
-				(avy-setup-default)))))
-#+END_SRC
 ** Structured Editing
 We use smartparens for structured editing like Ruby blocks or lisp s-expressions
 
