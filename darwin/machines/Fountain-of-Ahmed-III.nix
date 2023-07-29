@@ -182,9 +182,13 @@ ralt - v : ${pkgs.yabai}/bin/yabai -m window --toggle split
 ralt - b : ${pkgs.yabai}/bin/yabai -m space --balance
 
 ralt - 1 : ${pkgs.yabai}/bin/yabai -m space --focus main
+shift + ralt - 1 : ${pkgs.yabai}/bin/yabai -m space --move main
 ralt - 2 : ${pkgs.yabai}/bin/yabai -m space --focus web
+shift + ralt - 2 : ${pkgs.yabai}/bin/yabai -m space --move web
 ralt - 3 : ${pkgs.yabai}/bin/yabai -m space --focus work
+shift + ralt - 3 : ${pkgs.yabai}/bin/yabai -m space --move work
 ralt - 4 : ${pkgs.yabai}/bin/yabai -m space --focus chat
+shift + ralt - 4 : ${pkgs.yabai}/bin/yabai -m space --move chat
 
 ralt - 0x2B : ${pkgs.yabai}/bin/yabai -m space --focus prev
 ralt - 0x2F : ${pkgs.yabai}/bin/yabai -m space --focus next
