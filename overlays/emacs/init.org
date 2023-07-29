@@ -529,8 +529,7 @@ We use smartparens for structured editing like Ruby blocks or lisp s-expressions
     :ensure t)
 #+END_SRC
 * Software Development
-** Packages
-*** envrc
+** envrc
 Project-specific environment variables via =direnv=
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package direnv
@@ -541,19 +540,17 @@ Project-specific environment variables via =direnv=
     (direnv-mode))
 #+END_SRC
 
-*** editconfig
+** editorconfig
 A editor-agnostic way to maintain project coding styles
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package editorconfig
     :ensure t
     :defer 1
-    :commands
-    (editorconfig-mode)
     :config
     (editorconfig-mode 1))
 #+END_SRC
 
-*** flycheck
+** flycheck
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package flycheck
     :ensure t
@@ -567,7 +564,7 @@ A editor-agnostic way to maintain project coding styles
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package magit
     :ensure t
-    :defer 3)
+    :defer 2)
 #+END_SRC
 ** Language Server Protocol
 IDE-like functionality such as intellisense, debugging
@@ -582,8 +579,7 @@ IDE-like functionality such as intellisense, debugging
 	    'orderless))
     :custom
     (lsp-completion-provider :none) ;; we use Corfu
-    :hook ((prog-mode-hook . lsp)
-	   (lsp-completion-mode . gaelan/lsp-mode-setup-completion)))
+    :hook ((lsp-completion-mode . gaelan/lsp-mode-setup-completion)))
 
   (use-package lsp-ui
     :ensure t
@@ -592,7 +588,7 @@ IDE-like functionality such as intellisense, debugging
 #+END_SRC
 * Programming Language support / environments
 *** Elm
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package elm-mode
     :ensure t
     :mode "\\.elm\\'")
@@ -651,7 +647,7 @@ Support flycheck syntax checking
     :ensure t)
 #+END_SRC
 *** Rust
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package rustic
     :ensure t
     :mode (("\\.rs\\'" . rustic-mode)))
