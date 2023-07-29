@@ -42,30 +42,25 @@
       nixosConfigurations = {
         darktower = myLib.nixosSystem {
           system = "x86_64-linux";
-          modules = [ ./nixos/profiles/darktower.nix ];
-        };
-        arrakis = myLib.nixosSystem {
-          system = "x86_64-linux";
           modules = [
-            nixos-hardware.nixosModules.framework
-            ./nixos/profiles/arrakis2022.nix
+            ./nixos/profiles/darktower.nix
             {
               systemd.timers."robonona" = {
                 enable = true;
-                wantedBy = [ "timers.target" "network-online.target" ];
+                wantedBy = [ "timers.target" ];
                 timerConfig = {
-                    OnCalendar = "*:/5:*";
-                    RandomizeDelaySec = "300";
+                  OnCalendar = "Mon *-*-* 08:30";
+                  RandomizedDelaySec = "300";
                   Unit = "robonona.service";
                 };
               };
 
               systemd.services."robonona" = {
                 enable = true;
-                wantedBy = [ "network-online.target" ];
+                wants = [ "network-online.target" ];
                 script = ''
                   set -eu
-                  ${inputs.robonona.packages.default}/bin/robonona dev
+                  ${inputs.robonona.packages.x86_64-linux.default}/bin/robonona prod
                 '';
                 serviceConfig = {
                   Type = "oneshot";
@@ -73,6 +68,13 @@
                 };
               };
             }
+          ];
+        };
+        arrakis = myLib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            nixos-hardware.nixosModules.framework
+            ./nixos/profiles/arrakis2022.nix
           ] ++ nixpkgs.lib.attrValues self.nixosModules;
         };
       };
