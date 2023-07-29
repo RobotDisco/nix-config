@@ -7,19 +7,17 @@ let
   # configuration file.
   runtime = final.emacsWithPackagesFromUsePackage {
     package = if final.stdenv.isDarwin
-      then
-        final.emacs.overrideAttrs(old: {
-          patches  =
-            (old.patches or []) ++ [
-              # Fix OS window role (needed for window managers like yabai)
-              (final.fetchpatch {
-                url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-28/fix-window-role.patch";
-                sha256 = "sha256-+z/KfsBm1lvZTZNiMbxzXQGRTjkCFO4QPlEK35upjsE=";
-              })
-            ];
-        })
-              else
-                final.emacs;
+    then prev.emacs.overrideAttrs(old: {
+      patches  =
+        (old.patches or []) ++ [
+          # Fix OS window role (needed for window managers like yabai)
+          (final.fetchpatch {
+            url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-28/fix-window-role.patch";
+            sha256 = "sha256-+z/KfsBm1lvZTZNiMbxzXQGRTjkCFO4QPlEK35upjsE=";
+          })
+        ];
+    })
+              else final.emacs;
 
     # Parse this org file for "use-package" s-expressions to implicitly
     # import emacs-overlay nix elisp packages from.

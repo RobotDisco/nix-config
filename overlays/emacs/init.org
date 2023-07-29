@@ -88,7 +88,9 @@ Disable unnecessary GUI components.
 
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
   (setq use-dialog-box nil)
-  (menu-bar-mode -1)
+  ;; Because Emacs on OSX has a bug in it, we need the menu bar
+  (unless (eq system-type 'darwin)
+    (menu-bar-mode -1))
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
 #+END_SRC
