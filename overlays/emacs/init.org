@@ -684,10 +684,18 @@ Support flycheck syntax checking
     :mode "\\.ya?ml\\'")
 #+END_SRC
 * SRE / Devops
+** Kubernetes
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package kubernetes
     :ensure t
     :commands kubernetes-overview)
+#+END_SRC
+** VTerm
+A more performant terminal that can handle interactive programs
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package vterm
+    :commands (vterm vterm-other-window)
+    :ensure t)
 #+END_SRC
 * Productivity
 Read PDF files and epub ebooks on Emacs
