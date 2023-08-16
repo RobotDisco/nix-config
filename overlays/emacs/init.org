@@ -752,6 +752,7 @@ An implementation of Zettelkasten for org, inspired by org-roam
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-roam
     :ensure t
+    :defer 2
     :bind (("C-c j d" . org-roam-dailies-goto-date)
 	   ("C-c j D" . org-roam-dailies-capture-date)
 	   ("C-c j t" . org-roam-dailies-goto-today)
@@ -771,12 +772,11 @@ An implementation of Zettelkasten for org, inspired by org-roam
 	   ("C-c n c" . org-id-get-create)
 	   ("C-c n f" . org-roam-node-find)
 	   ("C-c n i" . org-roam-node-insert))
-    :commands (org-roam-db-autosync-mode)
     :custom
     (org-roam-capture-templates
      '(("l" "literature" plain
 	(file "~/Documents/brain/templates/literature.org")
-	:target (file+head "literature/${citekey}.org" "#+TITLE: ${title}\n#+FILETAGS: literature\n")
+	:target (file+head "literature/${citar-citekey}.org" "#+TITLE: ${citar-author} (${citar-date}) - ${citar-title}\n#+FILETAGS: literature fleeting\n")
 	:unnarrowed t)
        ("p" "permanent" plain "%?"
 	:target (file+head "permanent/%<%Y%m%d%H%M%S>-${slug}.org"
@@ -813,8 +813,9 @@ An implementation of Zettelkasten for org, inspired by org-roam
 	(file "~/Documents/brain/templates/yearly.org")
 	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: fleeting")
 	:unnarrowed t)))
-    (org-roam-mode-sections '(orb-section-reference
-			      orb-section-file
+    (org-roam-mode-sections '(
+			      ; orb-section-reference
+			      ; orb-section-file
 			      org-roam-backlinks-section
 			      org-roam-reflinks-section
 			      org-roam-unlinked-references-section))
@@ -910,47 +911,21 @@ Block-level editing/embedding, approximating the way Roam/logseq do it
     :bind (("C-c n a" . org-transclusion-add)
 	   ("C-c n t" . org-transclusion-mode)))
 #+END_SRC
-** Org-roam BibTeX processing
-Allow BibTeX field processing in org-roam templates, and be able to show citation information in the org-roam sidebar
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package org-roam-bibtex
-    :after (org-roam)
-    :ensure t
-    :commands (orb-insert-link orb-note-actions)
-    :custom
-    (bibtex-completion-bibliography "~/Documents/brain/literature/REFERENCES.bib")
-    (orb-roam-ref-format 'org-cite)
-    (orb-preformat-keywords '("citekey" "date" "entry-type" "file" "pdf?" "note?" "author" "editor" "author-abbrev" "editor-abbrev" "author-or-editor-abbrev"))
-    (orb-process-file-keyword t)
-    (orb-abbreviate-file-name t))
-#+END_SRC
-
 ** Citations
 I am using the new [[https://orgmode.org/manual/Citations.html][org-cite]] system for working with bibliographic information
-
-Citar is a plugin for easily managing them.
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package citar
-    :ensure t
-    :defer 2
-    :bind (("C-c b" . citar-insert-citation))
-    ;; :map minibuffer-local-map
-    ;; ("M-b" . citar-insert-preset)))
-    :custom
-    (citar-bibliography '("~/Documents/brain/literature/REFERENCES.bib")))
-#+END_SRC
 
 Allow citar to work with org-roam particulars, including the ability to work at org-roam node levels (file or header IDs)
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package citar-org-roam
     :ensure t
-    :commands (citar-org-roam-mode)
-    :after (citar org-roam)
-    :no-require
+    :after (org-roam)
+    :defer 2
+    :diminish nil
     :custom
-    (citar-org-roam-subdir "literature")
-    (citar-org-roam-note-title-template "${author} - ${editor}")
-    :config (citar-org-roam-mode))
+    (citar-bibliography '("~/Documents/brain/literature/REFERENCES.bib"))
+    (citar-org-roam-note-title-template "${author} (${date}) - ${title}")
+    (citar-org-roam-capture-template-key "l")
+    :config
+    (citar-org-roam-mode))
 #+END_SRC
