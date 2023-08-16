@@ -21,6 +21,7 @@ in
   robot-disco.hardware.home-devices.enable = true;
   robot-disco.audio.enable = true;
   robot-disco.boot.enableFDE = true;
+  robot-disco.hidpi.enable = true;
   robot-disco.window-manager.enable = true;
   robot-disco.laptop.enable = true;
   robot-disco.steam.enable = true;
