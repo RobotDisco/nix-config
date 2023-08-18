@@ -17,97 +17,102 @@ let
 in
 
 {
-  robot-disco.common.autoUpgrade.enable = false;
-  robot-disco.hardware.home-devices.enable = true;
-  robot-disco.audio.enable = true;
-  robot-disco.boot.enableFDE = true;
-  robot-disco.hidpi.enable = true;
-  robot-disco.window-manager.enable = true;
-  robot-disco.laptop.enable = true;
-  robot-disco.steam.enable = true;
-  robot-disco.yubikey.enable = true;
-  robot-disco.user.gaelan = {
-    enable = true;
-    enableExwm = true;
-  };
+  imports = [
+    ../modules/audio.nix
+    ../modules/boot.nix
+    ../modules/common.nix
+    ../modules/hardware/home-devices.nix
+    ../modules/hidpi.nix
+    ../modules/laptop.nix
+    ../modules/steam.nix
+    ../modules/window-manager.nix
+    ../modules/yubikey.nix
+  ];
 
-  boot.initrd.availableKernelModules =
-    [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "usbhid" "sd_mod" ];
-  boot.kernelModules = [ "dm-snapshot" ];
+  config = {
+    robot-disco.user.gaelan = {
+      enable = true;
+      enableExwm = true;
+    };
 
-  networking.hostName = "arrakis";
+    boot.initrd.availableKernelModules =
+      [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "usbhid" "sd_mod" ];
+    boot.kernelModules = [ "dm-snapshot" ];
 
-  # Enable the Framework networking device
-  networking.interfaces.wlp170s0.useDHCP = true;
+    networking.hostName = "arrakis";
 
-  # Support thunderbolt
-  services.hardware.bolt.enable = true;
+    # Enable the Framework networking device
+    networking.interfaces.wlp170s0.useDHCP = true;
 
-  services.autorandr = {
-    enable = true;
+    # Support thunderbolt
+    services.hardware.bolt.enable = true;
 
-    profiles = {
-      default = {
-        fingerprint."${displays.builtin.device}" = displays.builtin.fingerprint;
-        config = {
-          "${displays.builtin.device}" = {
-            enable = true;
-            mode = "2256x1504";
-            position = "0x0";
+    services.autorandr = {
+      enable = true;
+
+      profiles = {
+        default = {
+          fingerprint."${displays.builtin.device}" = displays.builtin.fingerprint;
+          config = {
+            "${displays.builtin.device}" = {
+              enable = true;
+              mode = "2256x1504";
+              position = "0x0";
+            };
           };
         };
-      };
-      clamshell-open = {
-        fingerprint = {
-          "${displays.builtin.device}" = displays.builtin.fingerprint;
-          "${displays.landscape.device}" = displays.landscape.fingerprint;
-          "${displays.portrait.device}" = displays.portrait.fingerprint;
+        clamshell-open = {
+          fingerprint = {
+            "${displays.builtin.device}" = displays.builtin.fingerprint;
+            "${displays.landscape.device}" = displays.landscape.fingerprint;
+            "${displays.portrait.device}" = displays.portrait.fingerprint;
+          };
+          config = {
+            "${displays.builtin.device}" = {
+              enable = true;
+              mode = "2256x1504";
+              position = "0x1200";
+            };
+            "${displays.landscape.device}" = {
+              enable = true;
+              primary = true;
+              mode = "1920x1200";
+              position = "0x0";
+              scale.x = 1;
+              scale.y = 1;
+            };
+            "${displays.portrait.device}" = {
+              enable = true;
+              mode = "1920x1200";
+              position = "1920x0";
+              scale.x = 1;
+              scale.y = 1;
+              rotate = "right";
+            };
+          };
         };
-        config = {
-          "${displays.builtin.device}" = {
-            enable = true;
-            mode = "2256x1504";
-            position = "0x1200";
+        clamshell-closed = {
+          fingerprint = {
+            "${displays.landscape.device}" = displays.landscape.fingerprint;
+            "${displays.portrait.device}" = displays.portrait.fingerprint;
           };
-          "${displays.landscape.device}" = {
-            enable = true;
-            primary = true;
-            mode = "1920x1200";
-            position = "0x0";
-            scale.x = 1;
-            scale.y = 1;
-          };
-          "${displays.portrait.device}" = {
-            enable = true;
-            mode = "1920x1200";
-            position = "1920x0";
-            scale.x = 1;
-            scale.y = 1;
-            rotate = "right";
-          };
-        };
-      };
-      clamshell-closed = {
-        fingerprint = {
-          "${displays.landscape.device}" = displays.landscape.fingerprint;
-          "${displays.portrait.device}" = displays.portrait.fingerprint;
-        };
-        config = {
-          "${displays.landscape.device}" = {
-            enable = true;
-            primary = true;
-            mode = "1920x1200";
-            position = "0x0";
-            scale.x = 1;
-            scale.y = 1;
-          };
-          "${displays.portrait.device}" = {
-            enable = true;
-            mode = "1920x1200";
-            position = "1920x0";
-            scale.x = 1;
-            scale.y = 1;
-            rotate = "right";
+          config = {
+            "${displays.landscape.device}" = {
+              enable = true;
+              primary = true;
+              mode = "1920x1200";
+              position = "0x0";
+              scale.x = 1;
+              scale.y = 1;
+            };
+            "${displays.portrait.device}" = {
+              enable = true;
+              mode = "1920x1200";
+              position = "1920x0";
+              scale.x = 1;
+              scale.y = 1;
+              rotate = "right";
+            };
           };
         };
       };

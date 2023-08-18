@@ -1,79 +1,43 @@
-{ config, lib, ... }:
+{
+  boot.initrd.luks.devices = {
+    nixoscrypt = {
+      device = "/dev/nvme0n1p2";
 
-let cfg = config.robot-disco.boot;
+      # I'd rather have TRIM support than perfect security
+      allowDiscards = true;
+      # increase performance on SSDs
+      bypassWorkqueues = true;
 
-in {
-  options.robot-disco.boot.enableFDE = lib.mkEnableOption {
-      description = "Enable yubikey-based FDE as per https://nixos.wiki/wiki/Yubikey_based_Full_Disk_Encryption_(FDE)_on_NixOS";
+      # Set to false if you need things like networking to happen first
+      preLVM = true;
+    };
+  };
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
+  # To make my life easier I've come up with a partition naming scheme
+  # that's common to all of my NixOS devices.
+
+  fileSystems."/" = {
+    device = "/dev/rootvg/rootpart0";
+    fsType = "btrfs";
+    options = [ "subvol=@root" "compress=zstd" "noatime" ];
+  };
+  fileSystems."/home" = {
+    device = "/dev/rootvg/rootpart0";
+    fsType = "btrfs";
+    options = [ "subvol=@home" "compress=zstd" "noatime" ];
+  };
+  fileSystems."/nix" = {
+    device = "/dev/rootvg/rootpart0";
+    fsType = "btrfs";
+    options = [ "subvol=@nix" "compress=zstd" "noatime" ];
+  };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-label/EFIBOOT0";
+    fsType = "vfat";
+    options = [ "noatime" ];
   };
 
-  config = lib.mkMerge [
-    (lib.mkIf cfg.enableFDE {
-      # Minimal list of modules to use the EFI system partition and Yubikey
-      #boot.initrd.kernelModules = [
-      #  "vfat"
-      #  "nls_cp437"
-      #  "nls_iso8859-1"
-      #  "usbhid"
-      #];
-
-      # This keeps breaking, something keeps corrupting
-      # /dev/disk/by-label/EFIBOOT0/crypt-storage/default
-      # to contain jibberish instead of the salt + iterations
-      # boot.initrd.luks.yubikeySupport = true;
-
-      # Configuration to use luks w/ yubikey
-      boot.initrd.luks.devices = {
-        nixoscrypt = {
-          device = "/dev/nvme0n1p2";
-
-          # I'd rather have TRIM support than perfect security
-          allowDiscards = true;
-          # increase performance on SSDs
-          bypassWorkqueues = true;
-
-          # Set to false if you need things like networking to happen first
-          preLVM = true;
-
-          #yubikey = {
-          #  slot = 2; # Long press on my yubikey.
-          #  twoFactor = true; # Set false if you don't use password
-          #  storage = {
-          #    device = "/dev/disk/by-label/EFIBOOT0";
-          #  };
-          #};
-        };
-      };
-    })
-    {
-      boot.loader.systemd-boot.enable = true;
-      boot.loader.efi.canTouchEfiVariables = true;
-
-      # To make my life easier I've come up with a partition naming scheme
-      # that's common to all of my NixOS devices.
-
-      fileSystems."/" = {
-        device = "/dev/rootvg/rootpart0";
-        fsType = "btrfs";
-        options = [ "subvol=@root" "compress=zstd" "noatime" ];
-      };
-      fileSystems."/home" = {
-        device = "/dev/rootvg/rootpart0";
-        fsType = "btrfs";
-        options = [ "subvol=@home" "compress=zstd" "noatime" ];
-      };
-      fileSystems."/nix" = {
-        device = "/dev/rootvg/rootpart0";
-        fsType = "btrfs";
-        options = [ "subvol=@nix" "compress=zstd" "noatime" ];
-      };
-      fileSystems."/boot" = {
-        device = "/dev/disk/by-label/EFIBOOT0";
-        fsType = "vfat";
-        options = [ "noatime" ];
-      };
-
-      swapDevices = [{ device = "/dev/rootvg/swappart0"; }];
-    }
-  ];
+  swapDevices = [{ device = "/dev/rootvg/swappart0"; }];
 }
