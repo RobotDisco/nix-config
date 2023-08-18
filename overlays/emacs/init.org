@@ -784,7 +784,11 @@ An implementation of Zettelkasten for org, inspired by org-roam
 	:unnarrowed t)
        ("r" "rolodex" plain "%?"
 	:target (file+head "rolodex/%<%Y%m%d%H%M%S>-${slug}.org"
-			   "#+TITLE: ${title}"))))
+			   "#+TITLE: ${title}"))
+       ("j" "project" plain
+	(file "~/Documents/brain/templates/project.org")
+	:target (file+head "project/%<%Y%m%d%H%M%S>-${slug}.org"
+			   "#+TITLE: #{title}"))))
     (org-roam-directory "~/Documents/brain")
     (org-roam-dailies-directory "journal/")
     (org-roam-dailies-capture-templates
