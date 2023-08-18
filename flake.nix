@@ -43,7 +43,7 @@
         darktower = myLib.nixosSystem {
           system = "x86_64-linux";
           modules = [
-            ./nixos/profiles/darktower.nix
+            ./nixos/machines/darktower.nix
             {
               systemd.timers."robonona" = {
                 enable = true;
@@ -74,7 +74,7 @@
           system = "x86_64-linux";
           modules = [
             nixos-hardware.nixosModules.framework
-            ./nixos/profiles/arrakis2022.nix
+            ./nixos/machines/arrakis2022.nix
           ] ++ nixpkgs.lib.attrValues self.nixosModules;
         };
       };
