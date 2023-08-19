@@ -27,14 +27,10 @@ in
     ../modules/steam.nix
     ../modules/window-manager.nix
     ../modules/yubikey.nix
+    ../../users/gaelan
   ];
 
   config = {
-    robot-disco.user.gaelan = {
-      enable = true;
-      enableExwm = true;
-    };
-
     boot.initrd.availableKernelModules =
       [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "usbhid" "sd_mod" ];
     boot.kernelModules = [ "dm-snapshot" ];

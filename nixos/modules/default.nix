@@ -1,5 +1,2 @@
 {
-  imports = [
-    ./user/gaelan.nix
-  ];
 }
