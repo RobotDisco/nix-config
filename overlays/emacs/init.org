@@ -719,11 +719,6 @@ Read PDF files and epub ebooks on Emacs
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org
     :ensure t
-    :defines (org-capture-templates
-	      org-refile-targets
-	      org-agenda-custom-commands
-	      org-stuck-projects)
-    :commands (org-narrow-to-subtree)
     :hook (org-mode-hook . (lambda ()
 			     (visual-line-mode +1)))
     :mode ("\\.org\\'" . org-mode)
