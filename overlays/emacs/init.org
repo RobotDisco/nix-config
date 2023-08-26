@@ -652,6 +652,9 @@ Support flycheck syntax checking
   (use-package geiser-racket
     :after (geiser)
     :ensure t)
+  (use-package geiser-guile
+    :after (geiser)
+    :ensure t)
 #+END_SRC
 *** Rust
 #+BEGIN_SRC emacs-lisp :tangle no
