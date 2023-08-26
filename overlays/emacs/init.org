@@ -634,6 +634,13 @@ Support flycheck syntax checking
 			  (clj-refactor-mode 1)))
     :ensure t)
 #+END_SRC
+*** Idris
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; The book "Type-Driven Development with Idris" still uses Idris 1
+  (use-package idris-mode
+      :ensure t
+      :mode "\\.idr\\'")
+#+END_SRC
 *** Racket / Scheme
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; Core REPL environment
