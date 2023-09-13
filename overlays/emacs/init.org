@@ -711,7 +711,7 @@ Read PDF files and epub ebooks on Emacs
     "Directory containing my Zettelkasten")
 
   (defvar gaelan/gtd-dir
-    (expand-file-name "gtd" gaelan/documents-dir)
+    (expand-file-name "gtd" gaelan/brain-dir)
     "Directory containing my tasks")
 #+END_SRC
 
