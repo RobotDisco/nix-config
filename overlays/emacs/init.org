@@ -731,12 +731,12 @@ Read PDF files and epub ebooks on Emacs
 			    (expand-file-name "gtd.org" gaelan/gtd-dir)
 			    (expand-file-name "tickler.org" gaelan/gtd-dir))
 	  org-capture-templates
-	  '(("t" "Todo" entry (file "~/Documents/gtd/inbox.org")
+	  '(("t" "Todo" entry (file "~/Documents/brain/gtd/inbox.org")
 	     "* TODO %?"))
 	  org-refile-targets
-	  '(("~/Documents/gtd/gtd.org" . (:maxlevel . 2))
-	    ("~/Documents/gtd/someday.org" . (:level . 1))
-	    ("~/Documents/gtd/tickler.org" . (:level . 1)))
+	  '(("~/Documents/brain/gtd/gtd.org" . (:maxlevel . 2))
+	    ("~/Documents/brain/gtd/someday.org" . (:level . 1))
+	    ("~/Documents/brain/gtd/tickler.org" . (:level . 1)))
 	  ;; Handy search views for agenda mode
 	  org-agenda-custom-commands
 	  '(("n" "Current Actions"
