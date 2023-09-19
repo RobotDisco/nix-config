@@ -36,6 +36,7 @@
       bitwarden
       calibre
       discord
+      firefox
       signal-desktop
       slack
       whatsapp-for-linux
