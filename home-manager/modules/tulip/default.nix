@@ -25,6 +25,7 @@ in {
       # Docker VM for macs
       colima
       docker
+      istioctl
       kubectl
 
       terraform-ls
