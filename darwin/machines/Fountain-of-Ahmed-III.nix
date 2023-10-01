@@ -57,8 +57,6 @@
   homebrew = {
     enable = true;
 
-    taps = [ "homebrew/cask-drivers" ];
-
     casks = [
       "bitwarden"
       "brave-browser"
@@ -75,12 +73,11 @@
       # Work already installs/updates these packages
       "mattermost"
       # Stuff from drivers tap
-      "fujitsu-scansnap-manager-s1300"
-      "kensingtonworks"
+      "fujitsu-scansnap-home"
+      #"kensingtonworks"
       "uhk-agent"
       "yubico-authenticator"
       "yubico-yubikey-manager"
-      "yubico-yubikey-personalization-gui"
     ];
 
     masApps = {
