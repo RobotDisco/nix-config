@@ -771,6 +771,8 @@ An implementation of Zettelkasten for org, inspired by org-roam
 
 	   ("C-c j y" . org-roam-dailies-goto-yesterday)
 	   ("C-c j Y" . org-roam-dailies-capture-yesterday)
+	   ("C-c j r" . org-roam-dailies-goto-tomorrow)
+	   ("C-c j R" . org-roam-dailies-capture-tomorrow)
 	   ("C-c j n" . org-roam-dailies-goto-next-note)
 	   ("C-c j p" . org-roam-dailies-goto-previous-note)
 	   ("C-c n b" . org-roam-buffer-toggle)
