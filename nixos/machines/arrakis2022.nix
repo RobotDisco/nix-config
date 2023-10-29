@@ -27,6 +27,7 @@ in
     ../modules/hidpi.nix
     ../modules/laptop.nix
     ../modules/steam.nix
+    ../modules/virtualbox.nix
     ../modules/window-manager.nix
     ../modules/yubikey.nix
     ../../users/gaelan
