@@ -98,7 +98,7 @@
       window_opacity = "on";
       active_window_opacity = "1.0";
       normal_window_opacity = "0.80";
-      external_bar = "all:33:0";
+      external_bar = "all:32:0";
     };
 
     extraConfig = ''
@@ -135,7 +135,7 @@ yabai -m rule --add app="WhatsApp" space=chat
   };
 
   services.spacebar = {
-    enable = true;
+    enable = false;
     package = pkgs.spacebar;
 
     config = {
@@ -147,6 +147,17 @@ yabai -m rule --add app="WhatsApp" space=chat
       foreground_color = "0xff3fff2d";
       space_icon_color = "0xfffeff6e";
     };
+  };
+  services.sketchybar = {
+    enable = true;
+    config = ''
+  ${pkgs.sketchybar}/bin/sketchybar \
+    --bar \
+    height=32 \
+    color=0xffbd00ff \
+    --default \
+    text.color=0xff3fff2d
+    '';
   };
   services.skhd = {
     enable = true;
