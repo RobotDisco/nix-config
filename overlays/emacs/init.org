@@ -734,7 +734,8 @@ Read PDF files and epub ebooks on Emacs
 	  '(("t" "Todo" entry (file "~/Documents/brain/gtd/inbox.org")
 	     "* TODO %?"))
 	  org-refile-targets
-	  '(("~/Documents/brain/gtd/gtd.org" . (:maxlevel . 2))
+	  '(("~/Documents/brain/gtd/gtd.org" . (:level . 1))
+	    ("~/Documents/brain/gtd/gtd.org" . (:tag . "PROJECT"))
 	    ("~/Documents/brain/gtd/someday.org" . (:level . 1))
 	    ("~/Documents/brain/gtd/tickler.org" . (:level . 1)))
 	  ;; Handy search views for agenda mode
@@ -780,6 +781,7 @@ An implementation of Zettelkasten for org, inspired by org-roam
 	   ("C-c n f" . org-roam-node-find)
 	   ("C-c n i" . org-roam-node-insert))
     :custom
+    (org-tags-exclude-from-inheritance '(area resource))
     (org-roam-capture-templates
      '(("l" "literature" plain
 	(file "~/Documents/brain/templates/literature.org")
