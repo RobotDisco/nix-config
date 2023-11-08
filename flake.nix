@@ -2,14 +2,14 @@
   description = "Gaelan's nix-based systems configuration";
 
   inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+
     darwin.url = "github:lnl7/nix-darwin/master";
-    darwin.inputs.nixpkgs.follows = "nixpkgs-mac";
+    darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
-    nixpkgs-mac.url = "github:nixos/nixpkgs/nixpkgs-23.05-darwin";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     home-manager.url = "github:nix-community/home-manager/release-23.05";
@@ -19,7 +19,7 @@
     robonona.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-mac, darwin, emacs-overlay
+  outputs = inputs@{ self, nixpkgs, darwin, emacs-overlay
     , home-manager, nixos-hardware, ... }:
     let
       inherit (nixpkgs) lib;
