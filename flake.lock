@@ -26,7 +26,7 @@
     "darwin": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-mac"
+          "nixpkgs"
         ]
       },
       "locked": {
@@ -242,22 +242,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-mac": {
-      "locked": {
-        "lastModified": 1699375123,
-        "narHash": "sha256-ny0+k0LQPVAhntYZo/FMVFxUlejpn4pIQVOo5Vdek/I=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "bceb3bff2ee78424c1073d0b4676858265f926d1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixpkgs-23.05-darwin",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "nixpkgs-stable": {
       "locked": {
         "lastModified": 1699291058,
@@ -304,7 +288,6 @@
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-mac": "nixpkgs-mac",
         "robonona": "robonona"
       }
     },

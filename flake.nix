@@ -33,6 +33,7 @@
       # The name is cringe but I want to make it clear what I have defined vs
       # what is actually part of a standard library.
       myLib = import ./lib { inherit inputs supportedSystems; };
+      newLib = import ./newlib { inherit lib nixpkgs; };
 
     in {
       homeManagerModules = { default = import ./home-manager/modules; };
@@ -79,7 +80,7 @@
         };
       };
 
-      apps = myLib.forAllSystems (pkgs:
+      apps = newLib.forAllSystems (pkgs:
         pkgs.lib.trivial.pipe [
           # This list is honestly all I want to see here
           # possibly, even hiding the fact that it is an
@@ -126,7 +127,7 @@
         };
       };
 
-      devShells = myLib.forAllSystems (pkgs: {
+      devShells = newLib.forAllSystems (pkgs: {
         default = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [ git nix nixfmt rnix-lsp ];
           shellHook = "  export NIX_USER_CONF_FILES=${toString ./.}/nix.conf\n";
@@ -134,7 +135,7 @@
       });
 
       # Run ~nix fmt~ to use this package to format nix files
-      formatter = myLib.forAllSystems (pkgs: pkgs.nixfmt);
+      formatter = newLib.forAllSystems (pkgs: pkgs.nixfmt);
 
       # Conceptually it feels like I should be defining my packages
       # in the packages settings and then defining overlays that reference
@@ -154,7 +155,7 @@
         };
       };
 
-      packages = myLib.forAllSystems (pkgs: {
+      packages = newLib.forAllSystems (pkgs: {
         inherit (pkgs) gaelan-emacs gaelan-emacs-config okta-awscli;
       });
     };

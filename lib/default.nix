@@ -48,19 +48,6 @@ let
   ## include it in my output attrSet. Since other functions use it, I'll have to
   # either make a recursive attrSet (which is an anti-pattern) or define it in
   # a let block and inherit it in the output.
-
-  # For a given system, return the appropate legacyPackages for the given
-  # operating system.
-  # Note 1: This is done because every "import" of nixpkgs creates a new thunk,
-  # which can cause multiple evaluations of nixpkgs
-  # see https://discourse.nixos.org/t/using-nixpkgs-legacypackages-system-vs-import/17462 for why.
-
-  # Note 2: This would be simplified if darwin didn't have a completely different
-  # nixpkgs branch, necessitating a different input.
-  # Reason: https://discourse.nixos.org/t/on-niv-running-on-mac-which-branch-should-i-use-to-update-to-21-11-i-cant-find-release-21-11-darwin-branch-on-nixpkgs/16446
-  # Unfortunately, the nix expression we use to determine the platform is
-  # in nixpkgs itself, so we assume that the "standard" nixpkgs can be used in
-  # MacOS to make this decision.
   pkgsForSystem = system:
     let
       correctNixpkgs =
@@ -71,20 +58,6 @@ let
     in correctNixpkgs.legacyPackages."${system}";
 
 in {
-  # For all supported systems
-  # given a function that takes a system string as its only input
-  # return an attrset where the key is each supported system string and the
-  # value is the respective result of calling our supplied function for each
-  # system string.
-  forAllSystems = func:
-    lib.genAttrs supportedSystems
-    # This tripped me up the first time I saw it for a while.
-    # This is basically leveraging a closure to reference a function passed
-    # in our outer function argument list to be invoked by our inner function
-    # Understanding what lib.genAttrs does will be important; an attrSet is
-    # basically Nix's implementation of a map/dictionary.
-    (system: func (pkgsForSystem system));
-
   # This is our wrapper around nixpkgs.lib.nixosSystem that includes a bunch of
   # configuration we want.
   nixosSystem =
