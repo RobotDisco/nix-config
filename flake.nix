@@ -150,6 +150,7 @@
           # the callPackage nix paradigm for flexibility
           okta-awscli =
             final.python3Packages.callPackage ./packages/okta-awscli.nix { };
+	  brlaser = final.callPackage ./packages/brlaser.nix {};
         };
       };
 
