@@ -134,5 +134,8 @@ in
         "gid=100"
       ];
     };
+    services.fwupd.extraRemotes = [
+      "lvfs-testing"
+    ];
   };
 }
