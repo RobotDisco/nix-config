@@ -20,16 +20,16 @@ in
 
 {
   imports = [
-    ../modules/audio.nix
-    ../modules/boot.nix
-    ../modules/common.nix
-    ../modules/hardware/home-devices.nix
-    ../modules/hidpi.nix
-    ../modules/laptop.nix
-    ../modules/steam.nix
-    ../modules/virtualbox.nix
-    ../modules/window-manager.nix
-    ../modules/yubikey.nix
+    ../profiles/audio.nix
+    ../profiles/boot.nix
+    ../profiles/common.nix
+    ../profiles/hardware/home-devices.nix
+    ../profiles/hidpi.nix
+    ../profiles/laptop.nix
+    ../profiles/steam.nix
+    ../profiles/virtualbox.nix
+    ../profiles/window-manager.nix
+    ../profiles/yubikey.nix
     ../../users/gaelan
   ];
 

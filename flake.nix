@@ -37,7 +37,7 @@
     in {
       homeManagerModules = { default = import ./home-manager/modules; };
 
-      nixosModules = { default = import ./nixos/modules; };
+      nixosModules = { default = import ./nixos/profiles; };
 
       nixosConfigurations = {
         darktower = myLib.nixosSystem {
