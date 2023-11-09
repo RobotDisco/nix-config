@@ -22,10 +22,13 @@ in
   imports = [
     ../profiles/audio.nix
     ../profiles/boot.nix
-    ../profiles/common.nix
-    ../profiles/hardware/home-devices.nix
+    ../profiles/firmware.nix
     ../profiles/hidpi.nix
+    ../profiles/home-devices.nix
     ../profiles/laptop.nix
+    ../profiles/nix.nix
+    ../profiles/regional.nix
+    ../profiles/security.nix
     ../profiles/steam.nix
     ../profiles/virtualbox.nix
     ../profiles/window-manager.nix
@@ -45,6 +48,11 @@ in
 
     # Support thunderbolt
     services.hardware.bolt.enable = true;
+
+    # Framework firmware is in the lvfs-testing repo
+    services.fwupd.extraRemotes = [
+      "lvfs-testing"
+    ];
 
     services.autorandr = {
       enable = true;
@@ -116,26 +124,5 @@ in
         };
       };
     };
-
-    fileSystems."/home/gaelan/fileserver" = {
-      device = "//192.168.50.99/archive";
-      fsType = "cifs";
-      options = [
-        # Prevent hanging on network split
-        "x-systemd.automount"
-        "noauto"
-        "x-systemd.idle-timeout=60"
-        "x-systemd.device-timeout=5s"
-        "x-systemd.mount-timeout=5s"
-        # Set samba credentials
-        "credentials=/home/gaelan/smb-secrets"
-        # Mount as user
-        "uid=1000"
-        "gid=100"
-      ];
-    };
-    services.fwupd.extraRemotes = [
-      "lvfs-testing"
-    ];
   };
 }

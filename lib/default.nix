@@ -71,11 +71,14 @@ in {
       # This is probably an anti-pattern honestly, since in theory all of my nix
       # modules shouldn't depend on the existence of non-standard params in the
       # module function definition.
-    , specialArgs ? { } }:
+    , specialArgs ? { }
+    , stateVersion ? "23.05" }:
     let
       baseNixosModules = [
         # Standard hardware detection module I've seen in NiOS configurations
         nixpkgs.nixosModules.notDetected
+        # Set the stateVersion
+        { system.stateVersion = stateVersion; }
       ] ++ baseModules;
       # In an ideal world we'd be also including my flake's NixOS modules here
       # but I haven't gotten all my hosts to leverage those moduels yet

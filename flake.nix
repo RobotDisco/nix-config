@@ -77,6 +77,7 @@
             nixos-hardware.nixosModules.framework
             ./nixos/machines/arrakis2022.nix
           ] ++ nixpkgs.lib.attrValues self.nixosModules;
+          stateVersion = "23.05";
         };
       };
 

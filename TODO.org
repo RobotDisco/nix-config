@@ -29,5 +29,7 @@ Things I should do eventually
   - Nix-darwin
 - Attempt to modify nix-darwin to work with hardware-specific keyboard mappings
 - okta-awscli should be a publicly accessible package I feel
+  - same with my fork of brother-laser
 - After getting github/CI to automatically update flakes, pin nix/darwin autoupgrades to flake
   https://discourse.nixos.org/t/flakes-and-autoupgrade/12994
+- make a service for uhk-agent

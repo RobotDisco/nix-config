@@ -54,7 +54,7 @@
     EndSection
   '';
 
-  # One of my workhorse kebyards has configuration software.
+  # One of my workhorse keyboards has configuration software.
   hardware.keyboard.uhk.enable = true;
    
   environment.systemPackages = [
