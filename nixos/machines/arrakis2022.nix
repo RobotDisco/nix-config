@@ -26,10 +26,11 @@ in
     ../profiles/hidpi.nix
     ../profiles/home-devices.nix
     ../profiles/keyboard.nix
-    ../profiles/laptop.nix
+    ../profiles/laptop
     ../profiles/nix.nix
     ../profiles/regional.nix
     ../profiles/security.nix
+    ../profiles/ssd.nix
     ../profiles/steam.nix
     ../profiles/virtualbox.nix
     ../profiles/window-manager.nix
