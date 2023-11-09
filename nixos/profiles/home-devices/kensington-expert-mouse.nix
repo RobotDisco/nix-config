@@ -3,6 +3,9 @@
   # Remap buttons for my kensington trackball
   # NOTE For xserver config limitation reasons I can see this moving into a
   # dedicated module, it doesn't seem composable.
+
+  # Because Wayland expects configuration at the user wayland compositor level,
+  # we can't configure it universally.
   services.xserver.config = ''
     Section "InputClass"
       Identifier "Kensington Expert Mouse"

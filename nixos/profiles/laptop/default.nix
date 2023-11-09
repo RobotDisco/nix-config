@@ -11,9 +11,6 @@
     ./wireless.nix
   ];
 
-  # Assume we need monitor hotplug support
-  services.autorandr = { enable = true; };
-
   # Enable screen locking in X
   programs.xss-lock = {
     enable = true;
