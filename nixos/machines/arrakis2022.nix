@@ -25,6 +25,7 @@ in
     ../profiles/firmware.nix
     ../profiles/hidpi.nix
     ../profiles/home-devices.nix
+    ../profiles/keyboard.nix
     ../profiles/laptop.nix
     ../profiles/nix.nix
     ../profiles/regional.nix
