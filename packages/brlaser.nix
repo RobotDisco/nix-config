@@ -104,6 +104,11 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Owl-maintain/brlaser";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ RobotDisco ];
+    maintainers = [{
+      email = "gdcosta@gmail.com";
+      github = "RobotDisco";
+      githubId = "487847";
+      name = "Gaelan D'costa";
+    }];
   };
 }

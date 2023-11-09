@@ -156,8 +156,22 @@
         };
       };
 
-      packages = newLib.forAllSystems (pkgs: {
-        inherit (pkgs) gaelan-emacs gaelan-emacs-config okta-awscli;
-      });
+      packages."x86_64-linux" =
+        let
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        in
+          {
+            brlaser = pkgs.callPackage ./packages/brlaser.nix {};
+            okta-awscli =
+              pkgs.python3Packages.callPackage ./packages/okta-awscli.nix {};
+          };
+      packages."aarch64-darwin" =
+        let
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        in
+          {
+            okta-awscli =
+              pkgs.python3Packages.callPackage ./packages/okta-awscli.nix {};
+          };
     };
 }
