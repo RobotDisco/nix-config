@@ -13,7 +13,7 @@
     ../profiles/ssd.nix
     ../profiles/steam.nix
     ../profiles/virtualbox.nix
-    ../profiles/window-manager.nix
+    ../profiles/window-manager/wayland.nix
     ../profiles/yubikey.nix
     ../../users/gaelan
   ];
