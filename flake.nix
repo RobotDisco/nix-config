@@ -104,6 +104,7 @@
             runtimeInputs = [ pkgs.cachix ];
             text = ''
               ${pkgs.cachix}/bin/cachix use -O . nix-community
+              ${pkgs.cachix}/bin/cachix use -O . robot-disco
             '';
           }
         ] [
