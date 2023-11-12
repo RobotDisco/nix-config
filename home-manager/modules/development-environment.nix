@@ -45,7 +45,10 @@ in {
         };
       };
     })
-    { home.packages = with pkgs; [ git jq ripgrep ]; }
+    {
+      # Key tools I use in all development
+      home.packages = with pkgs; [ git jq ripgrep ];
+    }
     {
       programs.direnv = {
         enable = true;
