@@ -3,6 +3,7 @@ in
 {
   imports = [
     ./bitwarden.nix
+    ./emacs.nix
     ./games.nix
     ./gammastep.nix
     ./keyboard.nix
