@@ -24,6 +24,7 @@ in
       fullname = "Gaelan D'costa";
       email = "gdcosta@gmail.com";
       gpgKey = "814CF88EBD7287A1!";
+      defaultBranch = "trunk";
 
       signCommits = true;
     };

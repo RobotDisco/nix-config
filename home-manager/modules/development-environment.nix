@@ -20,6 +20,11 @@ in {
       description = "Email address to put in git commits.";
       type = lib.types.str;
     };
+    defaultBranch = lib.mkOption {
+      description = "Main branch should be named this when creating a new git repo.";
+      default = "main";
+      type = lib.types.str;
+    };
   };
 
   config = lib.mkIf cfg.enable (lib.mkMerge [
@@ -29,6 +34,7 @@ in {
         extraConfig = {
           core = { autocrlf = "input"; };
           hub = { protocol = "https"; };
+          init = { defaultBranch = cfg.defaultBranch; };
         };
 
         userEmail = cfg.email;
@@ -46,8 +52,8 @@ in {
       };
     })
     {
-      # Key tools I use in all development
-      home.packages = with pkgs; [ git jq ripgrep ];
+      programs.jq.enable = true;
+      home.packages = [ pkgs.ripgrep ];
     }
     {
       programs.direnv = {
