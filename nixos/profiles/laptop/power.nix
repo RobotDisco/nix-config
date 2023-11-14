@@ -1,6 +1,8 @@
 {
-  # User-level access to read power management info?
-  services.upower.enable = false;
+  # The daemon that handles things like power actions on lid close, and power
+  # actions on low battery.
+  # By default it uses hybrid sleep on critical power actions.
+  services.upower.enable = true;
   # System-level laptop power management
   services.tlp.enable = true;
   # Temperature management
@@ -11,9 +13,6 @@
   services.logind = {
     lidSwitch = "hybrid-sleep";
   };
-
-  # Don't know if I need this, TPM might handle this for me
-  # powerManagement.cpuFreqGovernor = "powersave";
 
   # Enable powersaving in network manager.
   networking.networkmanager.wifi.powersave = true;

@@ -1,5 +1,17 @@
+{ pkgs, ... }:
+
 {
-  programs.sway.enable = true;
+  programs.sway = {
+    enable = true;
+    extraPackages = with pkgs; [
+      brightnessctl
+      dmenu
+      gammastep
+      seafile-client
+      swayidle
+      swaylock
+    ];
+  };
 
   # Historical notes
   # environment.systemPackages = [
