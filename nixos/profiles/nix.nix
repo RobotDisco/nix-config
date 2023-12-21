@@ -19,6 +19,9 @@
   nixpkgs = {
     # Enable nonfree software
     config.allowUnfree = true;
+    config.permittedInsecurePackages = [
+      "zotero-6.0.26"
+    ];
   };
 
   nix = {
