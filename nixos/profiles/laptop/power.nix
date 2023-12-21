@@ -2,7 +2,12 @@
   # The daemon that handles things like power actions on lid close, and power
   # actions on low battery.
   # By default it uses hybrid sleep on critical power actions.
-  services.upower.enable = true;
+  services.upower = {
+    enable = true;
+
+    percentageCritical = 5;
+    percentageAction = 4;
+  };
   # System-level laptop power management
   services.tlp.enable = true;
   # Temperature management
