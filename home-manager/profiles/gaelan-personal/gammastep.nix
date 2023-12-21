@@ -8,6 +8,6 @@
     longitude = -79.429290;
 
     # TODO do I really want this enabled?
-    tray = true;
+    tray = false;
   };
 }
