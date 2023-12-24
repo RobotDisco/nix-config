@@ -1,5 +1,6 @@
 {
   imports = [
+    ../profiles/android.nix    
     ../profiles/audio.nix
     ../profiles/boot.nix
     ../profiles/firmware.nix
@@ -12,7 +13,6 @@
     ../profiles/security.nix
     ../profiles/ssd.nix
     ../profiles/steam.nix
-    ../profiles/virtualbox.nix
     ../profiles/window-manager/wayland.nix
     ../profiles/yubikey.nix
     ../../users/gaelan
