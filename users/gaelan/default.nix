@@ -6,24 +6,9 @@
   ];
 
   config = {
-    # For whatever reason I have to configure lightdm to run sessions
-    # defined by home-manager's xsession support.
-    services.xserver.desktopManager.session = [{
-      name = "home-manager";
-      start = ''
-      ${pkgs.runtimeShell} $HOME/.xsession &
-      waitPID = $!
-    '';
-    }];
-    # Since this server is full-disk-encrypted, just automatically log in
-    services.xserver.displayManager.autoLogin = {
-      enable = true;
-      user = "gaelan";
-    };
-
     # Managed home directories + Gaelan's HM customizations.
     home-manager.users.gaelan =
-      import ./home-manager.nix;
+      import ../../home-manager/profiles/gaelan-personal;
 
     # Gaelan owns this machine, so let him do nix stuff.
     nix.settings.trusted-users = [ "gaelan" ];
