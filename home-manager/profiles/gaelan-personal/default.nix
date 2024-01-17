@@ -3,7 +3,7 @@ in
 {
   imports = [
     ./bitwarden.nix
-    ./emacs.nix
+    ../../modules/emacs
     ./games.nix
     ./gammastep.nix
     ./keyboard.nix
@@ -29,8 +29,8 @@ in
       signCommits = true;
     };
 
-    robot-disco.emacs.enable = false;
-    robot-disco.emacs.enableExwm = false;
+    #robot-disco.emacs.enable = false;
+    #robot-disco.emacs.enableExwm = false;
 
     robot-disco.gnupg.enable = true;
 
