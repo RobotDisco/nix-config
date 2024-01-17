@@ -6,6 +6,7 @@
     ./emacs.nix
     ./gnupg.nix
     ./seafile-client.nix
+    ./sway.nix
     ./tulip
   ];
 }

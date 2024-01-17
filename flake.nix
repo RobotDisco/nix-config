@@ -38,8 +38,6 @@
     in {
       homeManagerModules = { default = import ./home-manager/modules; };
 
-      nixosModules = { default = import ./nixos/profiles; };
-
       nixosConfigurations = {
         darktower = myLib.nixosSystem {
           system = "x86_64-linux";
@@ -76,7 +74,7 @@
           modules = [
             nixos-hardware.nixosModules.framework-11th-gen-intel
             ./nixos/machines/arrakis2022.nix
-          ] ++ nixpkgs.lib.attrValues self.nixosModules;
+          ];
           stateVersion = "23.05";
         };
       };
