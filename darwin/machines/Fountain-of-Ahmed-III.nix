@@ -90,48 +90,14 @@
     enableScriptingAddition = true;
 
     config = {
-      mouse_follows_focus = "on";
-      focus_follows_mouse = "autofocus";
+      #mouse_follows_focus = "on";
+      #focus_follows_mouse = "autofocus";
       layout = "bsp";
-      window_origin_display = "focused";
-      window_border = "on";
-      window_opacity = "on";
-      active_window_opacity = "1.0";
-      normal_window_opacity = "0.80";
-      external_bar = "all:32:0";
+      #window_opacity = "on";
+      #active_window_opacity = "1.0";
+      #normal_window_opacity = "0.80";
+      #external_bar = "all:32:0";
     };
-
-    extraConfig = ''
-function setup_space {
-  local idx="$1"
-  local name="$2"
-  local dsply="$3"
-  local space=
-  echo "setup space $idx: $name"
-
-  space=$(yabai -m query --spaces --space "$idx")
-  if [ -z "$space" ]; then
-    yabai -m space --create
-  fi
-
-  yabai -m space "$idx" --label "$name"
-  yabai -m space "$name" --display "$dsply"
-}
-
-setup_space 1 main 1
-setup_space 2 web 1
-setup_space 3 work 2
-setup_space 4 emacs 2
-setup_space 5 chat 2
-
-yabai -m rule --add app="Brave Browser" space=web
-yabai -m rule --add app="emacs" space=emacs
-yabai -m rule --add app="Mattermost" space=work
-yabai -m rule --add app="Discord" space=chat
-yabai -m rule --add app="Slack" space=chat
-yabai -m rule --add app="Signal" space=chat
-yabai -m rule --add app="WhatsApp" space=chat
-    '';
   };
 
   services.spacebar = {
@@ -139,17 +105,14 @@ yabai -m rule --add app="WhatsApp" space=chat
     package = pkgs.spacebar;
 
     config = {
-      height = 33;
       clock_format = "%F%t%R";
       space_icon_strip  = "1 2 3 4 5 6 7 8 9 10";
       text_font = "Verdana:Bold:12.0";
-      background_color = "0xffbd00ff";
-      foreground_color = "0xff3fff2d";
       space_icon_color = "0xfffeff6e";
     };
   };
   services.sketchybar = {
-    enable = true;
+    enable = false;
     config = ''
   ${pkgs.sketchybar}/bin/sketchybar \
     --bar \
@@ -163,57 +126,27 @@ yabai -m rule --add app="WhatsApp" space=chat
     enable = true;
 
     skhdConfig = ''
-shift + ralt - q : ${pkgs.yabai}/bin/yabai -m window --close
-ralt - w : ${pkgs.yabai}/bin/yabai -m space --layout bsp
-ralt - e : ${pkgs.yabai}/bin/yabai -m space --layout float
-shift + ralt - e : launchctl stop org.nixos.yabai
-shift + ralt - r : launchctl stop org.nixos.yabai; launchctl start org.nixos.yabai 
-shift + ralt - y : launchctl start org.nixos.yabai
+alt - f : ${pkgs.yabai}/bin/yabai -m window --focus east
+alt + shift - f : ${pkgs.yabai}/bin/yabai -m window --swap east
+alt - b : ${pkgs.yabai}/bin/yabai -m window --focus west
+alt + shift - b : ${pkgs.yabai}/bin/yabai -m window --swap west
+alt - p : ${pkgs.yabai}/bin/yabai -m window --focus north
+alt + shift - p : ${pkgs.yabai}/bin/yabai -m window --swap north
+alt - n : ${pkgs.yabai}/bin/yabai -m window --focus south
+alt + shift - n : ${pkgs.yabai}/bin/yabai -m window --swap south
 
-ralt - a : ${pkgs.yabai}/bin/yabai -m window --focus recent
-shift + ralt - a : ${pkgs.yabai}/bin/yabai -m display --focus recent
-ralt - s : ${pkgs.yabai}/bin/yabai -m space --layout stack
-ralt - f : ${pkgs.yabai}/bin/yabai -m window --toggle zoom-fullscreen
-shift + ralt - f : ${pkgs.yabai}/bin/yabai -m window --toggle native-fullscreen
+alt - return : open -a emacs
 
-ralt - h : ${pkgs.yabai}/bin/yabai -m window --focus west
-ralt - j : ${pkgs.yabai}/bin/yabai -m window --focus south
-ralt - k : ${pkgs.yabai}/bin/yabai -m display --focus next
-ralt - l : ${pkgs.yabai}/bin/yabai -m window --focus east
+alt + shift - 0x18 : ${pkgs.yabai}/bin/yabai -m space --create
+alt - 0x1B : ${pkgs.yabai}/bin/yabai -m space --destroy
 
-shift + ralt - h : ${pkgs.yabai}/bin/yabai -m window --swap west
-shift + ralt - j : ${pkgs.yabai}/bin/yabai -m window --swap south
-shift + ralt - k : ${pkgs.yabai}/bin/yabai -m window --swap north
-shift + ralt - l : ${pkgs.yabai}/bin/yabai -m window --swap east
+alt - 0x2B : ${pkgs.yabai}/bin/yabai -m space --focus prev
+alt - 0x2F : ${pkgs.yabai}/bin/yabai -m space --focus next
 
-ralt - v : ${pkgs.yabai}/bin/yabai -m window --toggle split
-ralt - b : ${pkgs.yabai}/bin/yabai -m space --balance
+alt + shift - 0x2B : ${pkgs.yabai}/bin/yabai -m window --space prev
+alt + shift - 0x2F : ${pkgs.yabai}/bin/yabai -m window --space next
 
-ralt - 1 : ${pkgs.yabai}/bin/yabai -m space --focus main
-shift + ralt - 1 : ${pkgs.yabai}/bin/yabai -m space --move main
-ralt - 2 : ${pkgs.yabai}/bin/yabai -m space --focus web
-shift + ralt - 2 : ${pkgs.yabai}/bin/yabai -m space --move web
-ralt - 3 : ${pkgs.yabai}/bin/yabai -m space --focus work
-shift + ralt - 3 : ${pkgs.yabai}/bin/yabai -m space --move work
-ralt - 4 : ${pkgs.yabai}/bin/yabai -m space --focus chat
-shift + ralt - 4 : ${pkgs.yabai}/bin/yabai -m space --move chat
-
-ralt - 0x2B : ${pkgs.yabai}/bin/yabai -m space --focus prev
-ralt - 0x2F : ${pkgs.yabai}/bin/yabai -m space --focus next
-
-shift + ralt - 0x2B : ${pkgs.yabai}/bin/yabai -m space --move prev
-shift + ralt - 0x2F : ${pkgs.yabai}/bin/yabai -m space --move next
-
-ralt - 0x21 : ${pkgs.yabai}/bin/yabai -m display --focus prev
-ralt - 0x1E : ${pkgs.yabai}/bin/yabai -m display --focus next
-
-shift + ralt - 0x21 : ${pkgs.yabai}/bin/yabai -m display --move prev
-shift + ralt - 0x1E : ${pkgs.yabai}/bin/yabai -m display --move next
-
-ralt - 0x18 : ${pkgs.yabai}/bin/yabai -m space --create
-ralt - 0x1B : ${pkgs.yabai}/bin/yabai -m space --destroy
-
-ralt - m : ${pkgs.yabai}/bin/yabai -m space --toggle mission-control
+alt + ctrl - 0x12 : ${pkgs.yabai}/bin/yabai -m window --toggle zoom-fullscreen
     '';
   };
 
