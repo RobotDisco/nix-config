@@ -3,5 +3,5 @@
   # This should work even if I don't activate X11
   console.useXkbConfig = true;
 
-  services.xserver.xkbOptions = "ctrl:nocaps";
+  services.xserver.xkb.options = "ctrl:nocaps";
 }

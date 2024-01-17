@@ -2,7 +2,7 @@
   description = "Gaelan's nix-based systems configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
 
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -12,7 +12,7 @@
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    home-manager.url = "github:nix-community/home-manager/release-23.05";
+    home-manager.url = "github:nix-community/home-manager/release-23.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     robonona.url = "github:RobotDisco/robonona-clj";
@@ -75,7 +75,7 @@
             nixos-hardware.nixosModules.framework-11th-gen-intel
             ./nixos/machines/arrakis2022.nix
           ];
-          stateVersion = "23.05";
+          stateVersion = "23.11";
         };
       };
 
