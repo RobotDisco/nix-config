@@ -35,7 +35,7 @@ in {
       # telnet, traceroute, etc...
       inetutils
       # constantly polling a url
-      siege
+      # siege
     ];
 
     #okta-awscli config
