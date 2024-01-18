@@ -3,7 +3,9 @@
 {
   programs.emacs = {
     enable = true;
-    package = pkgs.emacs29;
+    package = if pkgs.stdenv.isDarwin
+              then pkgs.emacs-macport
+              else pkgs.emacs-pgtk;
     extraPackages = epkgs: [ epkgs.use-package ];
   };
 
