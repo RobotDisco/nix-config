@@ -1,5 +1,5 @@
 { lib, buildPythonApplication, fetchPypi, beautifulsoup4, boto3, click
-, configparser, requests, validators }:
+, configparser, pip, requests, setuptools, validators }:
 
 buildPythonApplication rec {
   pname = "okta-awscli";
@@ -15,6 +15,8 @@ buildPythonApplication rec {
   preConfigure = ''
     substituteInPlace setup.py --replace "bs4" "beautifulsoup4"
   '';
+
+  nativeBuildInputs = [ pip setuptools ];
 
   propagatedBuildInputs =
     [ beautifulsoup4 boto3 click configparser requests validators ];
