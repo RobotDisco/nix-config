@@ -35,5 +35,7 @@ in
     robot-disco.gnupg.enable = true;
 
     robot-disco.services.seafile-client.enable = true;
+
+    robot-disco.sway.enable = true;
   };
 }
