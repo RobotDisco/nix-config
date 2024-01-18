@@ -1,5 +1,10 @@
 let username = "gaelan";
 in {
+imports = [
+  ../modules/emacs
+];
+
+config = {
   robot-disco.development-environment = {
     enable = true;
 
@@ -10,7 +15,7 @@ in {
     signCommits = true;
   };
 
-  robot-disco.emacs.enable = true;
+  #robot-disco.emacs.enable = true;
   robot-disco.gnupg.enable = true;
 
   robot-disco.tulip.enable = true;
@@ -18,4 +23,5 @@ in {
   home.stateVersion = "23.05";
   home.homeDirectory = "/Users/${username}";
   home.username = username;
+};
 }
