@@ -53,7 +53,13 @@ in {
     })
     {
       programs.jq.enable = true;
-      home.packages = [ pkgs.ripgrep ];
+      home.packages = [
+        # Nix LSP
+        pkgs.nil
+        pkgs.nixd
+        # Better than grep
+        pkgs.ripgrep
+      ];
     }
     {
       programs.direnv = {
