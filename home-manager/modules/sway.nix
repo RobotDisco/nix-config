@@ -20,13 +20,17 @@ in
       '';
     
       config = {
-#        modifier = "Mod4";
+        modifier = "Mod4";
 #        left = "b";
 #        down = "n";
 #        up = "p";
 #        right = "f";
 #        terminal = "${pkgs.emacs}/bin/emacsclient -c";
 #        menu = "${pkgs.dmenu}/bin/dmenu_run | ${pkgs.dmenu}/bin/dmenu | ${pkgs.fileutils}/bin/xargs swaymsg exec --";
+        input."type:keyboard".xkb_options = "ctrl:nocaps";
+        output."eDP-1" = {
+          resolution = "2256x1504 scale 1.5";
+        };
       };
     };
   };
