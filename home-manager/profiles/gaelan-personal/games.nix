@@ -7,7 +7,7 @@
       enableFPS = false;
     })
     nethack
-    flightgear
+    # flightgear
     # Adventure-game engine
     scummvm
     # Open up GOG artifacts
