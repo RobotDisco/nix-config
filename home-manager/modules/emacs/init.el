@@ -9,8 +9,6 @@
 					     before-init-time)))
 		     gcs-done)))
 
-(menu-bar-mode t)
-
 (setq custom-file "~/.config/emacs/custom.el")
 (load custom-file)
 
@@ -20,6 +18,13 @@
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta
 	mac-option-modifier 'super))
+
+;; Remove unnecessary chrome
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+
+;; Add colum to modeline
+(column-number-mode +1)
 
 
 ;; Always use Y/N prompts instead of "yes"/"no".
