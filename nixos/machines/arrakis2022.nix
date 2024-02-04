@@ -1,3 +1,5 @@
+{ pkgs, ... }:
+
 {
   imports = [
     ../profiles/android.nix    
@@ -13,6 +15,7 @@
     ../profiles/security.nix
     ../profiles/ssd.nix
     ../profiles/steam.nix
+    ../profiles/sway.nix
     ../profiles/yubikey.nix
     ../../users/gaelan
   ];
@@ -34,5 +37,16 @@
     services.fwupd.extraRemotes = [
       "lvfs-testing"
     ];
+
+    # Enable Intel accelerated video playback
+    hardware.opengl = {
+      enable = true;
+      extraPackages = with pkgs; [
+        intel-media-driver
+      ];
+      extraPackages32 = with pkgs; [
+        intel-media-driver
+      ];
+    };
   };
 }
