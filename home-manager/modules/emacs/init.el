@@ -151,18 +151,18 @@
     (org-roam-capture-templates
      '(("l" "literature" plain
 	(file "~/Documents/brain/templates/literature.org")
-	:target (file+head "literature/${citar-citekey}.org" "#+TITLE: ${citar-author} (${citar-date}) - ${citar-title}\n#+FILETAGS: literature fleeting\n")
+	:target (file+head "${citar-citekey}.org" "#+TITLE: ${citar-author} (${citar-date}) - ${citar-title}\n#+FILETAGS: literature fleeting\n")
 	:unnarrowed t)
        ("p" "permanent" plain "%?"
-	:target (file+head "permanent/%<%Y%m%d%H%M%S>-${slug}.org"
+	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
 			   "#+TITLE: ${title}")
 	:unnarrowed t)
        ("r" "rolodex" plain "%?"
-	:target (file+head "rolodex/%<%Y%m%d%H%M%S>-${slug}.org"
+	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
 			   "#+TITLE: ${title}"))
        ("j" "project" plain
 	(file "~/Documents/brain/templates/project.org")
-	:target (file+head "project/%<%Y%m%d%H%M%S>-${slug}.org"
+	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
 			   "#+TITLE: #{title}"))))
     (org-roam-directory "~/Documents/brain")
     (org-roam-dailies-directory "journal/")
@@ -198,13 +198,13 @@
 (use-package citar
   :ensure t
   :custom
-  (citar-bibliography '("~/Documents/brain/literature/REFERENCES.bib")))
+  (citar-bibliography '("~/Documents/brain/REFERENCES.bib")))
 
 (use-package citar-org-roam
   :ensure t
   :after (citar org-roam)
   :custom
-  (citar-bibliography '("~/Documents/brain/literature/REFERENCES.bib"))
+  (citar-bibliography '("~/Documents/brain/REFERENCES.bib"))
   (citar-org-roam-note-title-template "${author} (${date}) - ${title}")
   (citar-org-roam-capture-template-key "l")
   :config
