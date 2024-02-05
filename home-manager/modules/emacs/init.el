@@ -72,23 +72,15 @@
   (org-agenda-files '("~/Documents/brain/gtd/inbox.org"
 		      "~/Documents/brain/gtd/gtd.org"
 		      "~/Documents/brain/gtd/tickler.org"))
-  (org-capture-templates 
-   '(("t" "New TODO" entry (file "~/Documents/brain/gtd/inbox.org")
-      "* TODO %?")
-     ("p" "New PROJECT" entry (file "~/Documents/brain/gtd/inbox.org")
-      "* PLAN %? :PROJECT:")))
-  (org-refile-targets
-   '(("~/Documents/brain/gtd/gtd.org" . (:level . 1))
-     ;; Maybe I want to move a TODO into a project, which is itself at level 1?
-     ;; But I don't want to see non-project tasks.
-     ("~/Documents/brain/gtd/gtd.org" . (:tag . "PROJECT"))
-     ("~/Documents/brain/gtd/someday.org" . (:level . 1))
-     ("~/Documents/brain/gtd/tickler.org" . (:level . 1))))
-  (org-todo-keywords
-   '((sequence
-      "TODO(q)" "STARTED(e!)" "WAITING(r@/!)" "|" "DONE(t!)" "CANCELLED(y@/!)")
-     (sequence
-      "PLAN(z)" "ACTIVE(x!)" "PAUSED(s@/!)" "RETRO(c)" "|" "COMPLETED(v!)" "ABANDONED(a@/!)")))
+  (org-archive-location "~/Documents/brain/gtd/archive/archive.org::datetree/")
+  (org-enforce-todo-dependencies t)
+  (org-global-properties
+   '(("Effort_ALL" . "0 0:05 0:10 0:15 0:30 1:00 2:00 4:00 8:00")))
+  (org-log-done 'time)
+  (org-log-into-drawer t)
+  (org-priority-highest ?A)
+  (org-priority-default ?D)
+  (org-priority-lowest ?D)
   (org-tag-alist
    '((:startgroup)
      ("Contexts")
@@ -97,12 +89,12 @@
      (:endgroup)
      (:startgroup) ("Focus") (:grouptags) ("DEEP" . ?d) ("SHALLOW" . ?s) (:endgroup)
      ("WORK") ("PROJECT")))
-  (org-priority-highest ?A)
-  (org-priority-default ?D)
-  (org-priority-lowest ?D)
-  (org-log-done 'time)
-  (org-enforce-todo-dependencies t)
-  (org-tags-exclude-from-inheritance '(resource area)))
+  (org-tags-exclude-from-inheritance '(resource area))
+  (org-todo-keywords
+   '((sequence
+      "TODO(q)" "STARTED(e!)" "WAITING(r@/!)" "|" "DONE(t!)" "CANCELLED(y@/!)")
+     (sequence
+      "PLAN(z)" "ACTIVE(x!)" "PAUSED(s@/!)" "RETRO(c)" "|" "COMPLETED(v!)" "ABANDONED(a@/!)"))))
 
 
   (use-package org-roam
