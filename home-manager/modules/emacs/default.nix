@@ -10,6 +10,8 @@ in lib.mkMerge [
     };
 
     xdg.configFile."emacs/init.el".source = ./init.el;
+
+    home.packages = [ emacsPkg ];
   }
   (lib.mkIf pkgs.stdenv.isDarwin {
     programs.zsh.shellAliases.emacs =
