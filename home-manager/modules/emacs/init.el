@@ -69,32 +69,24 @@
   :config
   (add-to-list 'org-modules 'org-habit t)
   :custom
-  (org-agenda-files '("~/Documents/brain/gtd/inbox.org"
-		      "~/Documents/brain/gtd/gtd.org"
-		      "~/Documents/brain/gtd/tickler.org"))
+  (org-agenda-files '("~/Documents/brain"))
   (org-archive-location "~/Documents/brain/gtd/archive/archive.org::datetree/")
   (org-enforce-todo-dependencies t)
   (org-global-properties
-   '(("Effort_ALL" . "0 0:05 0:10 0:15 0:30 1:00 2:00 4:00 8:00")))
+   '(("EFFORT_ALL" . "0 0:05 0:10 0:15 0:30 1:00 2:00 4:00 8:00")))
   (org-log-done 'time)
   (org-log-into-drawer t)
   (org-priority-highest ?A)
   (org-priority-default ?D)
   (org-priority-lowest ?D)
-  (org-tag-alist
-   '((:startgroup)
-     ("Contexts")
-     (:grouptags)
-     ("@home" . ?h) ("@lappy" . ?l) ("@online" . ?n) ("@phone" . ?p) ("@errand" . ?e)
-     (:endgroup)
-     (:startgroup) ("Focus") (:grouptags) ("DEEP" . ?d) ("SHALLOW" . ?s) (:endgroup)
-     ("WORK") ("PROJECT")))
-  (org-tags-exclude-from-inheritance '(resource area))
+  (org-tags-exclude-from-inheritance '("area"))
   (org-todo-keywords
    '((sequence
-      "TODO(q)" "STARTED(e!)" "WAITING(r@/!)" "|" "DONE(t!)" "CANCELLED(y@/!)")
+      "TODO" "TRIAGE" "|")
      (sequence
-      "PLAN(z)" "ACTIVE(x!)" "PAUSED(s@/!)" "RETRO(c)" "|" "COMPLETED(v!)" "ABANDONED(a@/!)"))))
+      "BACKLOG(q)" "NEXT(w!)" "DOING(e!/!)" "WAITING(r@/@)" "|" "DONE(t!)" "CANCELLED(y@)")
+     (sequence
+      "PLAN(z)" "ACTIVE(x!/!)" "RETRO(c)" "PAUSED(v@/!)" "|" "COMPLETED(b!)" "ABANDONED(n@)"))))
 
 
   (use-package org-roam
@@ -184,6 +176,11 @@
 	(file "~/Documents/brain/templates/yearly.org")
 	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :fleeting:")
 	:unnarrowed t)))
+    (org-roam-node-display-template
+     ;; Concatting allows vertico to separate fields out
+     ;; in a nice column-based way
+     (concat "${title:*} "
+	     (propertize "${tags:20}" 'face 'org-tag)))
     :config
     (org-roam-db-autosync-mode))
 
