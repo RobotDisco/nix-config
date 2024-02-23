@@ -30,6 +30,41 @@
 ;; Always use Y/N prompts instead of "yes"/"no".
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+;; Random functions I've made for myself
+;; Will have to refactor out eventually
+(defun gaelan-agenda-files ()
+  "Dynamically list every org-roam node that we expect TODOs in.
+
+Currently this is just any node that is tagged as an :area:."
+  ;; Get the string out of each one-item list.
+  (mapcar #'car
+	  ;; join nodes to tags table to get files of all nodes that have area tag.
+	  (org-roam-db-query [:select [nodes:file]
+				      :from tags
+				      :left-join nodes
+				      :on (= tags:node-id nodes:id)
+				      :where (= tag "area")])))
+
+;;; Functions I've written for custom behaviour. Stolen/inspired from a bunch of sources:
+;;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
+;;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol5.html
+(defun gaelan-agenda-files-update (&rest _)
+  "Hook that dynamically sets org-agenda-files list based on org-roam query."
+  (setq org-agenda-files (gaelan-agenda-files)))
+
+(defun gaelan-agenda-category (&optional length)
+  (gaelan-buffer-prop-get "TITLE"))
+
+(defun gaelan-buffer-prop-get (name)
+  "Get a buffer property called NAME as a string."
+  (org-with-point-at 1
+    (when (re-search-forward (concat "^#\\+" name ": \\(.*\\)")
+                             (point-max) t)
+      (buffer-substring-no-properties
+       (match-beginning 1)
+       (match-end 1)))))
+
+
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -69,7 +104,11 @@
   :config
   (add-to-list 'org-modules 'org-habit t)
   :custom
-  (org-agenda-files '("~/Documents/brain"))
+  (org-agenda-prefix-format
+      '((agenda . " %i %(gaelan-agenda-category 12)%?-12t% s")
+        (todo . " %i %(gaelan-agenda-category 12) ")
+        (tags . " %i %(gaelan-agenda-category 12) ")
+        (search . " %i %(gaelan-agenda-category 12) ")))
   (org-archive-location "~/Documents/brain/gtd/archive/archive.org::datetree/")
   (org-enforce-todo-dependencies t)
   (org-global-properties
@@ -91,6 +130,7 @@
 
   (use-package org-roam
     :ensure t
+    :commands org-agenda
     :bind (("C-c j d" . (lambda ()
 			  (interactive)
 			  (org-roam-dailies-goto-date nil "j")))
@@ -128,7 +168,7 @@
 	   ("C-c n R" . (lambda ()
 			  (interactive)
 			  (org-roam-node-random nil (lambda (node)
-						      (and 
+						      (and
 						       (member "journal" (org-roam-node-tags node))
 						       (> (org-roam-node-level node) 0)))))))
     :custom
@@ -182,6 +222,8 @@
      (concat "${title:*} "
 	     (propertize "${tags:20}" 'face 'org-tag)))
     :config
+    ;; We use a dynamic hook to popualte org-agenda-files whenever we view our org-agenda.
+    (advice-add 'org-agenda :before #'gaelan-agenda-files-update)
     (org-roam-db-autosync-mode))
 
 (use-package citar
