@@ -193,28 +193,28 @@ Currently this is just any node that is tagged as an :area:."
     (org-roam-dailies-capture-templates
      '(("j" "Daily Log Entry" entry
 	"* %<%0H:%M> %?"
-	:target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :fleeting:" ("Log"))
+	:target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:" ("Log"))
 	:unnarrowed t)
        ("d" "Daily Morning Reflection" entry
 	(file "~/Documents/brain/templates/daily.org")
 	:jump-to-captured t
 	:prepend t
-	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :fleeting:"))
+	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:"))
        ("e" "Daily Evening Reflection" entry
 	(file "~/Documents/brain/templates/evening.org")
-	:target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :fleeting:")
+	:target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:")
 	:unnarrowed t)
        ("w" "Weekly Reflection" entry
 	(file "~/Documents/brain/templates/weekly.org")
-	:target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :fleeting:")
+	:target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:")
 	:unnarrowed t)
        ("m" "Monthly Reflection" entry
 	(file "~/Documents/brain/templates/monthly.org")
-	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :fleeting:")
+	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:")
 	:unnarrowed t)
        ("y" "Yearly Reflection" entry
 	(file "~/Documents/brain/templates/yearly.org")
-	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :fleeting:")
+	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:")
 	:unnarrowed t)))
     (org-roam-node-display-template
      ;; Concatting allows vertico to separate fields out
