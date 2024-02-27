@@ -43,7 +43,7 @@ Currently this is just any node that is tagged as an :area:."
 				      :from tags
 				      :left-join nodes
 				      :on (= tags:node-id nodes:id)
-				      :where (= tag "area")])))
+				      :where (= tag "TODOS")])))
 
 ;;; Functions I've written for custom behaviour. Stolen/inspired from a bunch of sources:
 ;;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
@@ -53,7 +53,7 @@ Currently this is just any node that is tagged as an :area:."
   (setq org-agenda-files (gaelan-agenda-files)))
 
 (defun gaelan-agenda-category (&optional length)
-  (gaelan-buffer-prop-get "TITLE"))
+  (gaelan-buffer-prop-get "title"))
 
 (defun gaelan-buffer-prop-get (name)
   "Get a buffer property called NAME as a string."
@@ -64,7 +64,34 @@ Currently this is just any node that is tagged as an :area:."
        (match-beginning 1)
        (match-end 1)))))
 
+(defun gaelan-has-todos-p ()
+  "Return non-nil if current-buffer contains uncompleted todo entries.
 
+Note that we are explicitly ignoring headlines that are in a completed state
+(i.e. have a :todo-type value of 'done) and entries that aren't todos at all
+(i.e. are missing a :todo-type property).
+
+This function only cares about the presence of even a single qualifying todo."
+  (org-element-map
+      (org-element-parse-buffer 'headline)
+      'headline
+    (lambda (h)
+      (eq (org-element-property :todo-type h)
+	  'todo))
+    nil 'first-match))
+
+(defun gaelan-roam-todos-update-file ()
+  "If current buffer is an org-roam file, tag it based on presence of todos.
+
+If any uncompleted todos are found, add a :todos: tag if not present.
+If there are no uncompleted todos in the file, remove any :todos: tag."
+  (when (org-roam-file-p)
+    (save-excursion
+      ;; Go to the beginning of the file to insert any tags as a FILETAG.
+      (goto-char (point-min))
+      (if (gaelan-has-todos-p)
+	  (org-roam-tag-add '("TODOS"))
+	(org-roam-tag-remove '("TODOS"))))))
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -131,6 +158,8 @@ Currently this is just any node that is tagged as an :area:."
   (use-package org-roam
     :ensure t
     :commands org-agenda
+    :hook ((find-file . gaelan-roam-todos-update-file)
+	    (before-save . gaelan-roam-todos-update-file))
     :bind (("C-c j d" . (lambda ()
 			  (interactive)
 			  (org-roam-dailies-goto-date nil "j")))
