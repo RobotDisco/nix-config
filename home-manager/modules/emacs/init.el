@@ -89,9 +89,13 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
     (save-excursion
       ;; Go to the beginning of the file to insert any tags as a FILETAG.
       (goto-char (point-min))
-      (if (gaelan-has-todos-p)
-	  (org-roam-tag-add '("TODOS"))
-	(org-roam-tag-remove '("TODOS"))))))
+      (when-let* ((node (org-roam-node-at-point))
+		  (tags (org-roam-node-tags node)))
+	(if (gaelan-has-todos-p)
+	    (unless (memq "TODOS" tags)
+	      (org-roam-tag-add '("TODOS")))
+	  (if (memq "TODOS" tags)
+	      (org-roam-tag-remove '("TODOS"))))))))
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
