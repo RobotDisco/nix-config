@@ -220,14 +220,14 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
     (org-roam-capture-templates
      '(("l" "literature" plain
 	(file "~/Documents/brain/templates/literature.org")
-	:target (file+head "${citar-citekey}.org" "#+TITLE: ${citar-author} (${citar-date}) - ${citar-title}\n#+FILETAGS: literature fleeting\n")
+	:target (file "${citar-citekey}.org")
 	:unnarrowed t)
        ("p" "permanent" plain "%?"
 	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
 			   "#+TITLE: ${title}")
 	:unnarrowed t)
        ("r" "rolodex" plain "%?"
-	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg"
 			   "#+TITLE: ${title}"))
        ("j" "project" plain
 	(file "~/Documents/brain/templates/project.org")
