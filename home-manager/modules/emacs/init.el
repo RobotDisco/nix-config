@@ -105,7 +105,7 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
 
 (eval-when-compile
   (require 'use-package))
-;; (require 'diminish) ; If I use the :diminish keyword
+(require 'diminish) ; If I use the :diminish keyword
 ;; (require 'delight) ; If I use the :delight keyword maybe?
 ;; (require 'bind-key) ; If I use the :bind keyword
 
@@ -271,14 +271,10 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
     (advice-add 'org-agenda :before #'gaelan-agenda-files-update)
     (org-roam-db-autosync-mode))
 
-(use-package citar
-  :ensure t
-  :custom
-  (citar-bibliography '("~/Documents/brain/REFERENCES.bib")))
-
 (use-package citar-org-roam
+  :diminish citar-org-roam
   :ensure t
-  :after (citar org-roam)
+  :after (org-roam)
   :custom
   (citar-bibliography '("~/Documents/brain/REFERENCES.bib"))
   (citar-org-roam-note-title-template "${author} (${date}) - ${title}")
