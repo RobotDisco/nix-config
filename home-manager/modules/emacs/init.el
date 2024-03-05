@@ -332,3 +332,11 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
   (setq-local fill-column 80)
   :config
   (global-auto-revert-mode +1))
+
+(use-package magit
+  :ensure t
+  :bind (("C-x g" . magit-status)
+	 ("C-c g" . magit-dispatch)
+	 ("C-c f" . magit-file-dispatch))
+  :custom
+  (magit-wip-mode t))
