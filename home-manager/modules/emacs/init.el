@@ -85,7 +85,8 @@ This function only cares about the presence of even a single qualifying todo."
 
 If any uncompleted todos are found, add a :todos: tag if not present.
 If there are no uncompleted todos in the file, remove any :todos: tag."
-  (when (org-roam-file-p)
+  (when (and (org-roam-file-p)
+	     (not (active-minibuffer-window)))
     (save-excursion
       ;; Go to the beginning of the file to insert any tags as a FILETAG.
       (goto-char (point-min))
