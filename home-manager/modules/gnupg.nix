@@ -33,6 +33,8 @@ in {
         no-symkey-cache = true;
         use-agent = true;
         throw-keyids = true;
+
+        default-recipient-self = true;
       };
     };
 

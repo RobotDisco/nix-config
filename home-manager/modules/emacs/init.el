@@ -329,6 +329,7 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
   :hook (program-mode . (lambda ()
 			  (auto-fill-mode + 1)))
   :custom
+  (epa-file-encrypt-to "gdcosta@gmail.com")
   (epg-pinentry-mode 'loopback)
   (fill-column 80)
   :config
