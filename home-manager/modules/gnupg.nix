@@ -32,8 +32,13 @@ in {
         require-cross-certification = true;
         no-symkey-cache = true;
         use-agent = true;
-        throw-keyids = true;
+        # public Key IDs in headers can be sussed out through traffic analysis,
+        # but not having them requires brute force decryption attempts which are painful
+        # for a security level that's unwarranted for my use case.
+        # throw-keyids = true;
 
+        # I almost always want to encrypt files for myself, so mark myself as recipient
+        # unless I explicitly specify another.
         default-recipient-self = true;
       };
     };
