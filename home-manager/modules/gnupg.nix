@@ -54,5 +54,16 @@ in {
       defaultCacheTtl = 60;
       maxCacheTtl = 120;
     };
+
+    programs.keychain = {
+      enable = true;
+
+      agents = [ "gpg" ];
+      enableZshIntegration = true;
+
+      keys = [
+        "A815AC9D526EE85A"
+      ];
+    };
   };
 }
