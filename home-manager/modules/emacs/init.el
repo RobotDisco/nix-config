@@ -30,73 +30,6 @@
 ;; Always use Y/N prompts instead of "yes"/"no".
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Random functions I've made for myself
-;; Will have to refactor out eventually
-(defun gaelan-agenda-files ()
-  "Dynamically list every org-roam node that we expect TODOs in.
-
-Currently this is just any node that is tagged as an :area:."
-  ;; Get the string out of each one-item list.
-  (mapcar #'car
-	  ;; join nodes to tags table to get files of all nodes that have area tag.
-	  (org-roam-db-query [:select [nodes:file]
-				      :from tags
-				      :left-join nodes
-				      :on (= tags:node-id nodes:id)
-				      :where (= tag "TODOS")])))
-
-;;; Functions I've written for custom behaviour. Stolen/inspired from a bunch of sources:
-;;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
-;;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol5.html
-(defun gaelan-agenda-files-update (&rest _)
-  "Hook that dynamically sets org-agenda-files list based on org-roam query."
-  (setq org-agenda-files (gaelan-agenda-files)))
-
-(defun gaelan-agenda-category (&optional length)
-  (gaelan-buffer-prop-get "title"))
-
-(defun gaelan-buffer-prop-get (name)
-  "Get a buffer property called NAME as a string."
-  (org-with-point-at 1
-    (when (re-search-forward (concat "^#\\+" name ": \\(.*\\)")
-                             (point-max) t)
-      (buffer-substring-no-properties
-       (match-beginning 1)
-       (match-end 1)))))
-
-(defun gaelan-has-todos-p ()
-  "Return non-nil if current-buffer contains uncompleted todo entries.
-
-Note that we are explicitly ignoring headlines that are in a completed state
-(i.e. have a :todo-type value of 'done) and entries that aren't todos at all
-(i.e. are missing a :todo-type property).
-
-This function only cares about the presence of even a single qualifying todo."
-  (org-element-map
-      (org-element-parse-buffer 'headline)
-      'headline
-    (lambda (h)
-      (eq (org-element-property :todo-type h)
-	  'todo))
-    nil 'first-match))
-
-(defun gaelan-roam-todos-update-file ()
-  "If current buffer is an org-roam file, tag it based on presence of todos.
-
-If any uncompleted todos are found, add a :todos: tag if not present.
-If there are no uncompleted todos in the file, remove any :todos: tag."
-  (when (and (org-roam-file-p)
-	     (not (active-minibuffer-window)))
-    (save-excursion
-      ;; Go to the beginning of the file to insert any tags as a FILETAG.
-      (goto-char (point-min))
-      (when-let* ((node (org-roam-node-at-point))
-		  (tags (org-roam-node-tags node)))
-	(if (gaelan-has-todos-p)
-	    (unless (memq "TODOS" tags)
-	      (org-roam-tag-add '("TODOS")))
-	  (if (memq "TODOS" tags)
-	      (org-roam-tag-remove '("TODOS"))))))))
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -127,20 +60,25 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
 
 (use-package org
   :ensure t
-  :hook (org-mode . (lambda ()
-			   (setq-local fill-column 80)
-			   (visual-line-mode +1)))
-  :bind (("C-c l" . org-store-link)
-	 ("C-c a" . org-agenda)
+  :hook ((org-mode . (lambda ()
+		      (setq-local fill-column 80)
+		      (visual-line-mode +1))))
+  :bind (("C-c a" . gaelan-org-agenda)
+	 ("C-c l" . org-store-link)
 	 ("C-c c" . org-capture))
   :config
   (add-to-list 'org-modules 'org-habit t)
+  :init
+  (defun gaelan-org-agenda ()
+    (interactive)
+    (require 'org-roam)
+    (org-agenda))
   :custom
   (org-agenda-prefix-format
-      '((agenda . " %i %(gaelan-agenda-category 12)%?-12t% s")
-        (todo . " %i %(gaelan-agenda-category 12) ")
-        (tags . " %i %(gaelan-agenda-category 12) ")
-        (search . " %i %(gaelan-agenda-category 12) ")))
+   '((agenda . " %i %(gaelan-agenda-category 12)%?-12t% s")
+     (todo . " %i %(gaelan-agenda-category 12) ")
+     (tags . " %i %(gaelan-agenda-category 12) ")
+     (search . " %i %(gaelan-agenda-category 12) ")))
   (org-archive-location "~/Documents/brain/gtd/archive/archive.org::datetree/")
   (org-enforce-todo-dependencies t)
   (org-global-properties
@@ -173,7 +111,6 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
 
   (use-package org-roam
     :ensure t
-    :commands org-agenda
     :hook ((find-file . gaelan-roam-todos-update-file)
 	    (before-save . gaelan-roam-todos-update-file))
     :bind (("C-c j d" . (lambda ()
@@ -267,7 +204,84 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
      (concat "${title:*} "
 	     (propertize "${tags:20}" 'face 'org-tag)))
     :config
-    ;; We use a dynamic hook to popualte org-agenda-files whenever we view our org-agenda.
+    (defun gaelan-agenda-files ()
+      "Dynamically list every org-roam node that we expect TODOs in.
+
+Currently this is just any node that is tagged as an :area:."
+      ;; Get the string out of each one-item list.
+      (mapcar #'car
+	      ;; join nodes to tags table to get files of all nodes that have area tag.
+	      (org-roam-db-query [:select [nodes:file]
+					  :from tags
+					  :left-join nodes
+					  :on (= tags:node-id nodes:id)
+					  :where (= tag "TODOS")])))
+
+    ;; Functions I've written for custom behaviour. Stolen/inspired from a bunch of sources:
+    ;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
+    ;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol5.html
+    (defun gaelan-agenda-files-update (&rest _)
+      "Hook that dynamically sets org-agenda-files list based on org-roam query."
+      (setq org-agenda-files (gaelan-agenda-files)))
+
+    (defun gaelan-agenda-category (&optional len)
+      "Return the title of the org file.
+
+If LEN is supplied, truncate the string to those many characters."
+      ;; If there are subheadings in an org file, we want the first/root
+      ;; heading anyway.
+      (org-with-point-at (point-min)
+	(when-let ((fullstr (or
+			     (gaelan-org-buffer-keyword-get "TITLE")
+			     (org-get-heading t t t t)
+			     (file-name-base (buffer-file-name)))))
+	  (if len
+	      (substring fullstr 0 (min (length fullstr) len))
+	    fullstr))))
+
+    (defun gaelan-org-buffer-keyword-get (name)
+      "Get a buffer keyword called NAME as a string.
+
+Note that this will obey inheritance from a keyword like #+SETUPFILE:"
+      (when-let* ((namelist (list name))
+		  (alist (assoc name
+			       (org-collect-keywords namelist))))
+	(cdr (assoc name (org-collect-keywords (list name) (list name))))))
+
+    (defun gaelan-has-todos-p ()
+      "Return non-nil if current-buffer contains uncompleted todo entries.
+
+Note that we are explicitly ignoring headlines that are in a completed state
+(i.e. have a :todo-type value of 'done) and entries that aren't todos at all
+(i.e. are missing a :todo-type property).
+
+This function only cares about the presence of even a single qualifying todo."
+      (org-element-map
+	  (org-element-parse-buffer 'headline)
+	  'headline
+	(lambda (h)
+	  (eq (org-element-property :todo-type h)
+	      'todo))
+	nil 'first-match))
+
+    (defun gaelan-roam-todos-update-file ()
+      "If current buffer is an org-roam file, tag it based on presence of todos.
+
+If any uncompleted todos are found, add a :todos: tag if not present.
+If there are no uncompleted todos in the file, remove any :todos: tag."
+      (when (and (org-roam-file-p)
+		 (not (active-minibuffer-window)))
+	(save-excursion
+	  ;; Go to the beginning of the file to insert any tags as a FILETAG.
+	  (goto-char (point-min))
+	  (when-let* ((node (org-roam-node-at-point))
+		      (tags (org-roam-node-tags node)))
+	(if (gaelan-has-todos-p)
+	    (unless (memq "TODOS" tags)
+	      (org-roam-tag-add '("TODOS")))
+	  (when (memq "TODOS" tags)
+	    (org-roam-tag-remove '("TODOS"))))))))
+    ;; We use a dynamic hook to populate org-agenda-files whenever we view our org-agenda.
     (advice-add 'org-agenda :before #'gaelan-agenda-files-update)
     (org-roam-db-autosync-mode))
 
