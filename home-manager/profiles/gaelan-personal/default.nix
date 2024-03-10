@@ -23,7 +23,7 @@ in
       enable = true;
       fullname = "Gaelan D'costa";
       email = "gdcosta@gmail.com";
-      gpgKey = "814CF88EBD7287A1!";
+      gpgKey = "A517704FBD8D1018!";
       defaultBranch = "trunk";
 
       signCommits = true;
