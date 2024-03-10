@@ -15,7 +15,7 @@ in
   ];
   
   config = {
-    home.stateVersion = "23.05";
+    home.stateVersion = "23.11";
     home.homeDirectory = "/home/${username}";
     home.username = username;
 
