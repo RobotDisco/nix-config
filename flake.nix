@@ -129,7 +129,7 @@
 
       devShells = newLib.forAllSystems (pkgs: {
         default = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [ git nix nixfmt rnix-lsp ];
+          nativeBuildInputs = with pkgs; [ git nix nixfmt ];
           shellHook = "  export NIX_USER_CONF_FILES=${toString ./.}/nix.conf\n";
         };
       });
