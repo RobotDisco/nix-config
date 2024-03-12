@@ -76,9 +76,9 @@
   :custom
   (org-agenda-prefix-format
    '((agenda . " %i %(gaelan-agenda-category 12)%?-12t% s")
-     (todo . " %i %(gaelan-agenda-category 12) ")
-     (tags . " %i %(gaelan-agenda-category 12) ")
-     (search . " %i %(gaelan-agenda-category 12) ")))
+     (todo . " %i %(gaelan-agenda-category 12)")
+     (tags . " %i %(gaelan-agenda-category 12)")
+     (search . " %i %(gaelan-agenda-category 12)")))
   (org-archive-location "~/Documents/brain/gtd/archive/archive.org::datetree/")
   (org-enforce-todo-dependencies t)
   (org-global-properties
@@ -89,24 +89,21 @@
   (org-priority-default ?D)
   (org-priority-lowest ?D)
   (org-tag-alist '((:startgroup)
-		   ("HIGH")
-		   ("MED")
-		   ("LOW")
+		   ("DEEP")
+		   ("SHALLOW")
+		   ("RELAX")
 		   (:endgroup)
 		   ("tulip")
-		   ("relax")
 		   ("@lappy")
 		   ("@online")
 		   ("@phone")
 		   ("@brain")))
-  (org-tags-exclude-from-inheritance '("TODOS" "area"))
+  (org-tags-exclude-from-inheritance '("project" "TODOS" "area"))
   (org-todo-keywords
    '((sequence
-      "TODO" "TRIAGE" "|")
+      "TRIAGE" "TODO(q)" "NEXT(w!)" "DOING(e!/!)" "WAITING(r@/@)" "|" "DONE(t!)" "CANCELLED(y@)")
      (sequence
-      "BACKLOG(q)" "NEXT(w!)" "DOING(e!/!)" "WAITING(r@/@)" "|" "DONE(t!)" "CANCELLED(y@)")
-     (sequence
-      "PLAN(z)" "ACTIVE(x!/!)" "RETRO(c)" "PAUSED(v@/!)" "|" "COMPLETED(b!)" "ABANDONED(n@)"))))
+      "PLAN(z)" "ACTIVE(x!/!)" "RETRO(c)" "PAUSED(v@/!)" "|" "COMPLETED(b!)" "ABANDONED(n@)"))))g
 
 
   (use-package org-roam
@@ -231,13 +228,15 @@ If LEN is supplied, truncate the string to those many characters."
       ;; If there are subheadings in an org file, we want the first/root
       ;; heading anyway.
       (org-with-point-at (point-min)
-	(when-let ((fullstr (or
-			     (gaelan-org-buffer-keyword-get "TITLE")
-			     (org-get-heading t t t t)
-			     (file-name-base (buffer-file-name)))))
-	  (if len
-	      (substring fullstr 0 (min (length fullstr) len))
-	    fullstr))))
+	(if-let* ((str (or
+		       (gaelan-org-buffer-keyword-get "TITLE")
+		       (org-get-heading t t t t)
+		       (if-let (filename (buffer-file-name))
+			   (file-name-base filename))))
+		 (cstr (concat str ":")))
+	    (if len
+		(string-pad cstr len)
+	       cstr))))
 
     (defun gaelan-org-buffer-keyword-get (name)
       "Get a buffer keyword called NAME as a string.
@@ -269,18 +268,18 @@ This function only cares about the presence of even a single qualifying todo."
 
 If any uncompleted todos are found, add a :todos: tag if not present.
 If there are no uncompleted todos in the file, remove any :todos: tag."
-      (when (and (org-roam-file-p)
-		 (not (active-minibuffer-window)))
+      (unless (or (not (org-roam-file-p))
+		  (active-minibuffer-window))
 	(save-excursion
 	  ;; Go to the beginning of the file to insert any tags as a FILETAG.
 	  (goto-char (point-min))
 	  (when-let* ((node (org-roam-node-at-point))
 		      (tags (org-roam-node-tags node)))
-	(if (gaelan-has-todos-p)
-	    (unless (memq "TODOS" tags)
-	      (org-roam-tag-add '("TODOS")))
-	  (when (memq "TODOS" tags)
-	    (org-roam-tag-remove '("TODOS"))))))))
+	    (if (gaelan-has-todos-p)
+		(unless (member "TODOS" tags)
+		  (org-roam-tag-add '("TODOS")))
+	      (when (member "TODOS" tags)
+		(org-roam-tag-remove '("TODOS"))))))))
     ;; We use a dynamic hook to populate org-agenda-files whenever we view our org-agenda.
     (advice-add 'org-agenda :before #'gaelan-agenda-files-update)
     (org-roam-db-autosync-mode))
