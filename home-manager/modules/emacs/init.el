@@ -88,6 +88,10 @@
   (org-priority-highest ?A)
   (org-priority-default ?D)
   (org-priority-lowest ?D)
+  (org-refile-targets '((org-agenda-files . (:tag . "GTD"))
+			(org-agenda-files . (:tag . "SOMEDAY"))
+  			(org-agenda-files . (:tag . "TICKLER"))))
+  (org-stuck-projects '("project" ("TODO" "NEXT" "DOING") nil ""))
   (org-tag-alist '((:startgroup)
 		   ("DEEP")
 		   ("SHALLOW")
@@ -103,7 +107,7 @@
    '((sequence
       "TRIAGE" "TODO(q)" "NEXT(w!)" "DOING(e!/!)" "WAITING(r@/@)" "|" "DONE(t!)" "CANCELLED(y@)")
      (sequence
-      "PLAN(z)" "ACTIVE(x!/!)" "RETRO(c)" "PAUSED(v@/!)" "|" "COMPLETED(b!)" "ABANDONED(n@)"))))g
+      "PLAN(z)" "ACTIVE(x!/!)" "RETRO(c)" "PAUSED(v@/!)" "|" "COMPLETED(b!)" "ABANDONED(n@)"))))
 
 
   (use-package org-roam
