@@ -74,6 +74,8 @@
     (require 'org-roam)
     (org-agenda))
   :custom
+  (org-agenda-custom-commands
+   '(("k" "Tickler" tags-todo "TICKLER")))
   (org-agenda-prefix-format
    '((agenda . " %i %(gaelan-agenda-category 12)%?-12t% s")
      (todo . " %i %(gaelan-agenda-category 12)")
