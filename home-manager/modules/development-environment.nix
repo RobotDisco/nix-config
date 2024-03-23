@@ -45,8 +45,6 @@ in {
       programs.git = {
         signing = {
           signByDefault = true;
-          # subkeys require a ! suffix
-          # key = "814CF88EBD7287A1!";
           key = cfg.gpgKey;
         };
       };
@@ -56,7 +54,6 @@ in {
       home.packages = [
         # Nix LSP
         pkgs.nil
-        pkgs.nixd
         # Better than grep
         pkgs.ripgrep
       ];
