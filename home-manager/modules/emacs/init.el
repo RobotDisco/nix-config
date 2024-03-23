@@ -345,8 +345,11 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
 
 (use-package emacs
   :defer 2
-  :hook (program-mode . (lambda ()
-			  (auto-fill-mode + 1)))
+  :hook ((prog-mode . (lambda ()
+		       (auto-fill-mode +1)
+		       (flyspell-prog-mode +1)))
+	 (org-mode . (lambda ()
+		       (flyspell-mode +1))))
   :custom
   ;; This ID corresponds to my key for gdcosta@gmail.com
   (epa-file-encrypt-to '("A815AC9D526EE85A"))

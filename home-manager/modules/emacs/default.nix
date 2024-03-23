@@ -11,7 +11,13 @@ in lib.mkMerge [
 
     xdg.configFile."emacs/init.el".source = ./init.el;
 
-    home.packages = [ emacsPkg ];
+    home.packages = [
+      emacsPkg
+      pkgs.aspell
+      pkgs.aspellDicts.en
+      pkgs.aspellDicts.en-science
+      pkgs.aspellDicts.en-computers
+    ];
   }
   (lib.mkIf pkgs.stdenv.isDarwin {
     programs.zsh.shellAliases.emacs =
