@@ -363,7 +363,7 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
   :custom
   ;; This ID corresponds to my key for gdcosta@gmail.com
   (epa-file-encrypt-to '("A815AC9D526EE85A"))
-  (epg-pinentry-mode 'loopback)
+  ;; (epg-pinentry-mode 'loopback) ; Seems to not work.
   (fill-column 80)
   :config
   (global-auto-revert-mode +1))
