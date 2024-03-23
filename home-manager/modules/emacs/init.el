@@ -330,6 +330,9 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
   :defer 2
   :custom
   (completion-styles '(orderless basic))
+  ;; Things to add here and try out
+  ;; (eglot (styles orderless))
+  ;; (eglot-capf (styles orderless))
   (completion-category-overrides '((file (styles basic partial-completion)))))
 
 ;; Vertico isn't the regular tab-based completion.  It pops up a menu,
@@ -342,6 +345,13 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
   :after (orderless)
   :config
   (vertico-mode))
+
+;; Completion
+(use-package corfu
+  :ensure t
+  :defer 2
+  :config
+  (global-corfu-mode))
 
 (use-package emacs
   :defer 2
@@ -357,6 +367,15 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
   (fill-column 80)
   :config
   (global-auto-revert-mode +1))
+
+(use-package eglot
+  :after (corfu)
+  :config
+  ;; Ensure `nil` is in your PATH.
+  (add-to-list 'eglot-server-programs '(nix-mode . ("nil")))
+  ;; (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster)
+  :hook
+  (nix-mode . eglot-ensure))
 
 (use-package magit
   :ensure t
