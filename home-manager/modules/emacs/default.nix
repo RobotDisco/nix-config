@@ -13,10 +13,13 @@ in lib.mkMerge [
 
     home.packages = [
       emacsPkg
+      # Dictionary support
       pkgs.aspell
       pkgs.aspellDicts.en
       pkgs.aspellDicts.en-science
       pkgs.aspellDicts.en-computers
+      # Graphics support
+      pkgs.imagemagick
     ];
   }
   (lib.mkIf pkgs.stdenv.isDarwin {
