@@ -357,7 +357,7 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
   :defer 2
   :hook ((prog-mode . (lambda ()
 		       (auto-fill-mode +1)
-		       (flyspell-prog-mode +1)))
+		       (flyspell-prog-mode)))
 	 (org-mode . (lambda ()
 		       (flyspell-mode +1))))
   :custom
