@@ -58,6 +58,10 @@
   :ensure t
   :mode "\\.ya?ml\\'")
 
+(use-package pdf-tools
+  :ensure t
+  :mode "\\.pdf\\'")
+
 (use-package org
   :ensure t
   :hook ((org-mode . (lambda ()
