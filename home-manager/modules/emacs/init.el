@@ -79,7 +79,10 @@
     (org-agenda))
   :custom
   (org-agenda-custom-commands
-   '(("k" "Tickler" tags-todo "TICKLER")))
+   '(("k" "Tickler" tags-todo "TICKLER")
+     ("pc" "Active Projects" tags-todo "project+TODO=ACTIVE")
+     ("pl" "All Projects" tags-todo "project|PROJECT")
+     ("i" "Unprocessed TODOS" tags-todo "journal|fleeting")))
   (org-agenda-prefix-format
    '((agenda . " %i %(gaelan-agenda-category 12)%?-12t% s")
      (todo . " %i %(gaelan-agenda-category 12)")
@@ -94,9 +97,9 @@
   (org-priority-highest ?A)
   (org-priority-default ?D)
   (org-priority-lowest ?D)
-  (org-refile-targets '((org-agenda-files . (:tag . "GTD"))
-			(org-agenda-files . (:tag . "SOMEDAY"))
-  			(org-agenda-files . (:tag . "TICKLER"))))
+  (org-refile-targets '((org-agenda-files . (:regexp . "^Tasks$"))
+			(org-agenda-files . (:regexp . "^Someday/Maybe$"))
+			(org-agenda-files . (:regexp . "^Tickler$"))))
   (org-stuck-projects '("project" ("TODO" "NEXT" "DOING") nil ""))
   (org-tag-alist '((:startgroup)
 		   ("DEEP")
@@ -111,7 +114,7 @@
   (org-tags-exclude-from-inheritance '("project" "TODOS" "area"))
   (org-todo-keywords
    '((sequence
-      "TRIAGE" "TODO(q)" "NEXT(w!)" "DOING(e!/!)" "WAITING(r@/@)" "|" "DONE(t!)" "CANCELLED(y@)")
+      "TODO(q)" "NEXT(w!)" "DOING(e!/!)" "WAITING(r@/@)" "|" "DONE(t!)" "CANCELLED(y@)")
      (sequence
       "PLAN(z)" "ACTIVE(x!/!)" "RETRO(c)" "PAUSED(v@/!)" "|" "COMPLETED(b!)" "ABANDONED(n@)"))))
 
