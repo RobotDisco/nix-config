@@ -173,15 +173,14 @@
 	:unnarrowed t)
        ("p" "permanent" plain "%?"
 	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-			   "#+TITLE: ${title}")
+			   "#+TITLE: ${title}\n#+FILETAGS: :fleeting:")
 	:unnarrowed t)
        ("r" "rolodex" plain "%?"
 	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg"
-			   "#+TITLE: ${title}"))
-       ("j" "project" plain
+			   "#+TITLE: ${title}\n#+FILETAGS: :fleeting:person:"))
+       ("j" "project" entry
 	(file "~/Documents/brain/templates/project.org")
-	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-			   "#+TITLE: #{title}"))))
+	:target (file "%<%Y%m%d%H%M%S>-${slug}.org"))))
     (org-roam-directory "~/Documents/brain")
     (org-roam-dailies-directory "journal/")
     (org-roam-dailies-capture-templates
