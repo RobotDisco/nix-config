@@ -94,6 +94,7 @@
      (tags . " %i %(gaelan-agenda-category 12)")
      (search . " %i %(gaelan-agenda-category 12)")))
   (org-archive-location "~/Documents/brain/gtd/archive/archive.org::datetree/")
+  (org-enforce-todo-checkbox dependencies t)
   (org-enforce-todo-dependencies t)
   (org-global-properties
    '(("EFFORT_ALL" . "0 0:05 0:15 0:30 1:00 2:00 4:00 8:00")))
