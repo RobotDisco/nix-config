@@ -80,8 +80,8 @@
   :custom
   (org-agenda-custom-commands
    '(("k" "Tickler" tags-todo "TICKLER")
-     ("pc" "Active Projects" tags-todo "project+TODO=ACTIVE")
-     ("pl" "All Projects" tags-todo "project|PROJECT")
+     ("pc" "Active Projects" tags-todo "project/ACTIVE")
+     ("pl" "All Projects" tags-todo "project")
      ("i" "Unprocessed TODOS" tags-todo "journal|fleeting")))
   (org-agenda-prefix-format
    '((agenda . " %i %(gaelan-agenda-category 12)%?-12t% s")
