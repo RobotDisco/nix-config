@@ -97,8 +97,9 @@
   (org-enforce-todo-checkbox dependencies t)
   (org-enforce-todo-dependencies t)
   (org-global-properties
-   '(("EFFORT_ALL" . "0 0:05 0:15 0:30 1:00 2:00 4:00 8:00")))
-  ;; Count task statistica recursively, not just for child tasks
+   '(("EFFORT_ALL" . "0 0:05 0:15 0:30 1:00 2:00 4:00 8:00")
+     ("ORDERED" . "t")))
+  ;; Count task statistics recursively, not just for child tasks
   (org-hierarchical-todo-statistics nil)
   (org-log-done 'time)
   (org-log-into-drawer t)
