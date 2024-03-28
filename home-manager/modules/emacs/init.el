@@ -79,10 +79,15 @@
     (org-agenda))
   :custom
   (org-agenda-custom-commands
-   '(("k" "Tickler" tags-todo "TICKLER")
-     ("pc" "Active Projects" tags-todo "project/ACTIVE")
+   '(("pc" "Active Projects" tags-todo "project/ACTIVE")
      ("pl" "All Projects" tags-todo "project")
-     ("i" "Unprocessed TODOS" tags-todo "journal|fleeting")))
+     ("s" "Someday" tags-todo "SOMEDAY")
+     ("i" "Unprocessed" tags-todo "journal|fleeting")
+     ("c" "fnord" ((tags-todo "/{DOING|NEXT}")
+		   (agenda)
+		   (agenda*)
+		   (tags-todo "project/ACTIVE")
+		   (tags-todo "fleeting|journal")))))
   (org-agenda-prefix-format
    '((agenda . " %i %(gaelan-agenda-category 12)%?-12t% s")
      (todo . " %i %(gaelan-agenda-category 12)")
@@ -243,11 +248,14 @@ If LEN is supplied, truncate the string to those many characters."
       ;; heading anyway.
       (org-with-point-at (point-min)
 	(if-let* ((str (or
-		       (gaelan-org-buffer-keyword-get "TITLE")
-		       (org-get-heading t t t t)
-		       (if-let (filename (buffer-file-name))
-			   (file-name-base filename))))
-		 (cstr (concat str ":")))
+			(gaelan-org-buffer-keyword-get "TITLE")
+			(org-get-heading t t t t)
+			(if-let (filename (buffer-file-name))
+			    (file-name-base filename))))
+		  (sstr (if len
+			    (substring str 0 (min len (length str)))
+			  str))
+		  (cstr (concat sstr ":")))
 	    (if len
 		(string-pad cstr len)
 	       cstr))))
