@@ -40,7 +40,7 @@
   (require 'use-package))
 (require 'diminish) ; If I use the :diminish keyword
 ;; (require 'delight) ; If I use the :delight keyword maybe?
-;; (require 'bind-key) ; If I use the :bind keyword
+(require 'bind-key) ; If I use the :bind keyword
 
 (use-package emacs
   :defer 2
