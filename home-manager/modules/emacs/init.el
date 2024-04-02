@@ -101,9 +101,10 @@
   (org-agenda-custom-commands
    '(("pc" "Active Projects" tags-todo "project/ACTIVE")
      ("pl" "All Projects" tags-todo "project")
+     ("pp" "Unplanned Projects" tags-todo "project/PLAN")
      ("s" "Someday" tags-todo "SOMEDAY")
      ("i" "Unprocessed" tags-todo "journal|fleeting")
-     ("c" "fnord" ((tags-todo "/{DOING|NEXT}")
+     ("c" "The Panopticon" ((tags-todo "/{DOING|NEXT}")
 		   (agenda)
 		   (agenda*)
 		   (tags-todo "project/ACTIVE")
