@@ -5,7 +5,7 @@ in lib.mkMerge [
     programs.emacs = {
       enable = true;
       package =
-        if pkgs.stdenv.isDarwin then pkgs.emacs-macport else pkgs.emacs-pgtk;
+        if pkgs.stdenv.isDarwin then pkgs.emacs29-macport else pkgs.emacs29-pgtk;
       extraPackages = epkgs: [ epkgs.diminish epkgs.use-package ];
     };
 
