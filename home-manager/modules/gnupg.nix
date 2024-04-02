@@ -47,10 +47,6 @@ in {
       enable = pkgs.stdenv.isLinux;
       enableExtraSocket = true;
       enableSshSupport = true;
-      extraConfig = ''
-        allow-emacs-pinentry
-        allow-loopback-pinentry
-      '';
       defaultCacheTtl = 60;
       maxCacheTtl = 120;
     };
