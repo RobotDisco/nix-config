@@ -49,6 +49,20 @@
   :config
   (winner-mode +1))
 
+(use-package rainbow-delimiters
+  :ensure t
+  :hook ((scheme-mode . rainbow-delimiters-mode)
+	 (racket-mode . rainbow-delimiters-mode)))
+
+(use-package racket-mode
+  :ensure t
+  :mode "\\.rkt\\'")
+
+(use-package paredit
+ :ensure t
+  :hook ((scheme-mode . enable-paredit-mode)
+	 (racket-mode . enable-paredit-mode)))
+
 (use-package nix-mode
   :ensure t
   :mode "\\.nix\\'")
