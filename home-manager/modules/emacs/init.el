@@ -63,6 +63,12 @@
   :hook ((scheme-mode . enable-paredit-mode)
 	 (racket-mode . enable-paredit-mode)))
 
+(use-package direnv-emacs
+  :ensure t
+  :defer 2
+  :config
+  (direnv-mode))
+
 (use-package nix-mode
   :ensure t
   :mode "\\.nix\\'")
