@@ -90,12 +90,10 @@
           # and should be encapsulated somewhere else, like in
           # lib/
           {
-            name = "darwin-switch";
-            text = "darwin-rebuild switch --flake ${toString ./.}#";
-          }
-          {
-            name = "nixos-switch";
-            text = "sudo nixos-rebuild switch --flake ${toString ./.}#";
+            name = "switch";
+            text = if pkgs.stdenv.isDarwin
+              then "darwin-rebuild switch --flake ${toString ./.}#"
+              else "sudo nixos-rebuild switch --flake ${toString ./.}#";
           }
           {
             name = "use-caches";
