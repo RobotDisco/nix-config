@@ -102,13 +102,16 @@
    '(("pc" "Active Projects" tags-todo "project/ACTIVE")
      ("pl" "All Projects" tags-todo "project")
      ("pp" "Unplanned Projects" tags-todo "project/PLAN")
+     ("n" "Active tasks" tags-todo "/{DOING|NEXT}")
      ("s" "Someday" tags-todo "SOMEDAY")
      ("i" "Unprocessed" tags-todo "journal|fleeting")
      ("c" "The Panopticon" ((tags-todo "/{DOING|NEXT}")
-		   (agenda)
-		   (agenda*)
-		   (tags-todo "project/ACTIVE")
-		   (tags-todo "fleeting|journal")))))
+			    (agenda ""
+				    ;; Don't need daily repeated tasks for every
+				    ;; day, just the one I currently care about.
+				    ((org-agenda-show-future-repeats nil)))
+			    (tags-todo "project/ACTIVE")
+			    (tags-todo "fleeting|journal")))))
   (org-agenda-prefix-format
    '((agenda . " %i %(gaelan-agenda-category 12)%?-12t% s")
      (todo . " %i %(gaelan-agenda-category 12)")
