@@ -63,7 +63,7 @@
   :hook ((scheme-mode . enable-paredit-mode)
 	 (racket-mode . enable-paredit-mode)))
 
-(use-package direnv-emacs
+(use-package direnv
   :ensure t
   :defer 2
   :config
