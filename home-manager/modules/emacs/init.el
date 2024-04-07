@@ -343,6 +343,36 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
   :config
   (citar-org-roam-mode))
 
+(use-package deft
+  :ensure t
+  :bind (("C-c n d" . deft))
+  :init
+  (defun gaelan/deft-parse-title (file contents)
+    (let ((re (concat
+		;; Match text of first headline found, strip away tags and
+		;; trailing whitespace
+		"^\\*+\\s-+\\(.*?\\)\\s-*\\(?:\\s-:.*\\)?$"
+		;; or
+		"\\|"
+		;; Match text of first #+TITLE: found
+		"^\\s-*#\\+[Tt][Ii][Tt][Ll][Ee]:\\s-*\\(.*\\)$")))
+      (when (string-match re contents)
+	(or (match-string 1 contents)
+       	    (match-string 2 contents)))))
+  :config
+  (advice-add 'deft-parse-title :override #'gaelan/deft-parse-title)
+  :custom
+  (deft-recursive t)
+  (deft-default-extension "org")
+  (deft-directory org-roam-directory)
+  (deft-strip-summary-regexp (concat
+			      ;; Strip anything that looks like org property.
+			      "^\\s-*:.*:\\s-*.*$"
+			      ;; Or
+			      "\\|"
+			      ;; Strip anything that looks like #+KEYWORD
+			      "^\\s-*#\\+.*:.*$"))
+
 ;; The default completions in emacs 28 are as follows:
 
 ;; basic :: foo|bar looks for all completions that have foo at the
