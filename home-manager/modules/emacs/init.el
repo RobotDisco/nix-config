@@ -371,7 +371,7 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
 			      ;; Or
 			      "\\|"
 			      ;; Strip anything that looks like #+KEYWORD
-			      "^\\s-*#\\+.*:.*$"))
+			      "^\\s-*#\\+.*:.*$")))
 
 ;; The default completions in emacs 28 are as follows:
 
