@@ -250,14 +250,18 @@
       "Dynamically list every org-roam node that we expect TODOs in.
 
 Currently this is just any node that is tagged as an :area:."
-      ;; Get the string out of each one-item list.
-      (mapcar #'car
-	      ;; join nodes to tags table to get files of all nodes that have area tag.
-	      (org-roam-db-query [:select [nodes:file]
-					  :from tags
-					  :left-join nodes
-					  :on (= tags:node-id nodes:id)
-					  :where (= tag "TODOS")])))
+      (append
+       ; Fixed files
+       '("~/Documents/brain/gtd/gcal/personal.org"
+	"~/Documents/brain/gtd/gcal/tulip.org")
+	;; Get the string out of each one-item list.
+	(mapcar #'car
+		;; join nodes to tags table to get files of all nodes that have area tag.
+		(org-roam-db-query [:select [nodes:file]
+					    :from tags
+					    :left-join nodes
+					    :on (= tags:node-id nodes:id)
+					    :where (= tag "TODOS")]))))
 
     ;; Functions I've written for custom behaviour. Stolen/inspired from a bunch of sources:
     ;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
@@ -372,6 +376,32 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
 			      "\\|"
 			      ;; Strip anything that looks like #+KEYWORD
 			      "^\\s-*#\\+.*:.*$")))
+
+(use-package plstore
+  :ensure nil
+  :defer 2
+  :custom
+  (plstore-encrypt-to '("A815AC9D526EE85A")))
+
+(use-package org-gcal
+  :ensure t
+  :after plstore
+  :defer 2
+  :init
+  (require 'auth-source)
+  (when-let* ((credential (car (auth-source-search :host "gcal-oauth-service"
+						   :type 'netrc
+						   :max 1)))
+	      (id (plist-get credential :client-id))
+	      (secret (plist-get credential :client-secret)))
+    (setq org-gcal-client-id id
+	  org-gcal-client-secret secret
+	  org-gcal-fetch-file-alist
+	  '(("gdcosta@gmail.com" .  "~/Documents/brain/gtd/gcal/personal.org")
+                               ("gaelan@tulip.com" .
+				"~/Documents/brain/gtd/gcal/tulip.org")))))
+  
+
 
 ;; The default completions in emacs 28 are as follows:
 
