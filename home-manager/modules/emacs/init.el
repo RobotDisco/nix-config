@@ -54,6 +54,14 @@
   :hook ((scheme-mode . rainbow-delimiters-mode)
 	 (racket-mode . rainbow-delimiters-mode)))
 
+(use-package projectile
+  :ensure t
+  :defer 2
+  :bind (:map projectile-mode-map
+	      ("C-c p" . projectile-command-map))
+  :config
+  (projectile-mode +1))
+
 (use-package racket-mode
   :ensure t
   :mode "\\.rkt\\'")
