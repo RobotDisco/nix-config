@@ -477,3 +477,8 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
 	 ("C-c f" . magit-file-dispatch))
   :custom
   (magit-wip-mode t))
+
+(use-package rebecca-theme
+  :ensure t
+  :config
+  (load-theme 'rebecca t))
