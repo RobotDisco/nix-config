@@ -474,7 +474,12 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
   :config
   (global-auto-revert-mode +1))
 
+(use-package lsp-ui
+  :ensure t
+  :defer 2)
+
 (use-package lsp-mode
+  :after lsp-ui
   :ensure t
   :hook (prog-mode . lsp))
 
