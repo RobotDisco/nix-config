@@ -47,6 +47,7 @@
         "chef-workstation"
         "discord"
         "kobo"
+        "orbstack"
         "seafile-client"
         "signal"
         "slack"

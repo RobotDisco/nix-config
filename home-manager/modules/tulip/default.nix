@@ -23,7 +23,6 @@ in {
       docker-credential-gcr
 
       # Docker VM for macs
-      colima
       docker
       istioctl
       kubectl
