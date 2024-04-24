@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     darwin.url = "github:lnl7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
@@ -19,7 +20,7 @@
     robonona.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, emacs-overlay
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, darwin, emacs-overlay
     , home-manager, nixos-hardware, ... }:
     let
       inherit (nixpkgs) lib;
@@ -121,7 +122,18 @@
       darwinConfigurations = {
         "Fountain-of-Ahmed-III" = myLib.darwinSystem {
           system = "aarch64-darwin";
-          modules = [ ./darwin/machines/Fountain-of-Ahmed-III.nix ];
+          modules = [
+            # Override okta-aws-cli while IT is forcing me onto a version that
+            # hasn't made it to my nixos distribution yet.
+            ({ pkgs, ... }: {
+              nixpkgs.overlays = [
+                (self: super: {
+                  okta-aws-cli = nixpkgs-unstable.legacyPackages.aarch64-darwin.okta-aws-cli;
+                })
+              ];
+            })
+            ./darwin/machines/Fountain-of-Ahmed-III.nix
+          ];
         };
       };
 
@@ -144,11 +156,6 @@
       overlays = {
         emacs = final: prev: import ./overlays/emacs final prev;
         default = final: prev: {
-          # Would have been simpler to just derive this from pkgs/final, but
-          # if this package ever gets into nixpkgs it likely should follow
-          # the callPackage nix paradigm for flexibility
-          okta-awscli =
-            final.python3Packages.callPackage ./packages/okta-awscli.nix { };
           brlaser = final.callPackage ./packages/brlaser.nix {};
         };
       };
@@ -159,14 +166,6 @@
         in
           {
             brlaser = pkgs.callPackage ./packages/brlaser.nix {};
-            okta-awscli =
-              pkgs.python3Packages.callPackage ./packages/okta-awscli.nix {};
-          };
-      packages."aarch64-darwin" =
-        let
-          pkgs = nixpkgs.legacyPackages."x86_64-linux";
-        in
-          {
             okta-awscli =
               pkgs.python3Packages.callPackage ./packages/okta-awscli.nix {};
           };

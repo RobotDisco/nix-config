@@ -16,7 +16,7 @@ in {
 
     home.packages = with pkgs; [
       awscli2
-      okta-awscli
+      okta-aws-cli
       amazon-ecr-credential-helper
 
       (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [gke-gcloud-auth-plugin]))
@@ -36,16 +36,6 @@ in {
       # constantly polling a url
       # siege
     ];
-
-    #okta-awscli config
-    home.file.".okta-aws".source =
-      # This nix function makes a symlink to a file that is out of the nix
-      # store, rather than copying the file into the nix store first.
-      #
-      # The reason it is used here is because okta-aws wants to write to the
-      # file and files in /nix/store are immutable.
-      config.lib.file.mkOutOfStoreSymlink
-        "${config.home.homeDirectory}/code/nix-config/home-manager/modules/tulip/okta-aws.toml";
 
     #tulip's .ssh/config
     home.file.".ssh/config".source =
