@@ -166,8 +166,6 @@
         in
           {
             brlaser = pkgs.callPackage ./packages/brlaser.nix {};
-            okta-awscli =
-              pkgs.python3Packages.callPackage ./packages/okta-awscli.nix {};
           };
     };
 }
