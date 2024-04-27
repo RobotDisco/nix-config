@@ -499,6 +499,7 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
   (magit-wip-mode t))
 
 (use-package tabnine
+  :ensure t
   :commands (tabnine-start-process)
   :hook (prog-mode . tabnine-mode)
   :diminish "⌬"
