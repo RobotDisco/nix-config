@@ -33,5 +33,9 @@
   # on the old <nixpkgs> channel. Since nix flakes don't manage traditional
   # nixchannels, let's set it here to pin <nixpkgs> to our current nixpkgs
   # input.
-  environment.variables.NIX_PATH = [ "nixpkgs=${pkgs.path}" ];
+  #
+  # But this is already set when you set up a nixos system via flakes
+  # so we don't need to set up anything on NixOS
+  #
+  # environment.variables.NIX_PATH = [ "nixpkgs=${pkgs.path}" ];
 }
