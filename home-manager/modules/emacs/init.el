@@ -86,10 +86,6 @@
   :ensure t
   :mode "\\.ya?ml\\'")
 
-(use-package pdf-tools
-  :ensure t
-  :mode "\\.pdf\\'")
-
 (use-package org
   :ensure t
   :hook ((org-mode . (lambda ()
@@ -408,6 +404,19 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
 	  '(("gdcosta@gmail.com" .  "~/Documents/brain/gtd/gcal/personal.org")
                                ("gaelan@tulip.com" .
 				"~/Documents/brain/gtd/gcal/tulip.org")))))
+
+(use-package nov
+  :ensure t
+  :mode ("\\.epub\\'" . nov-mode))
+
+(use-package pdf-tools
+  :ensure t
+  :mode "\\.pdf\\'")
+
+(use-package org-noter
+  :ensure t
+  :commands (org-noter)
+  :after (org))
   
 
 
