@@ -481,7 +481,14 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
 (use-package lsp-mode
   :after lsp-ui
   :ensure t
-  :hook (prog-mode . lsp))
+  :init
+  (defun gaelan/lsp-mode-setup-completion ()
+    ;; Set LSP up to use orderless
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+	  '(orderless)))
+  :hook
+  (lsp-completion-mode . gaelan/lsp-mode-setup-completion)
+  (prog-mode . lsp))
 
 (use-package magit
   :ensure t
