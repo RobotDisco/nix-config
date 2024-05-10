@@ -81,6 +81,9 @@
   :ensure t
   :mode "\\.nix\\'")
 
+(use-package terraform-mode
+  :ensure t
+  :mode "\\.tf\\'")
 
 (use-package yaml-mode
   :ensure t
