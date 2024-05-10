@@ -20,6 +20,8 @@ in lib.mkMerge [
       pkgs.aspellDicts.en-computers
       # Graphics support
       pkgs.imagemagick
+      # LaTeX support
+      pkgs.texlive.combined.scheme-full
     ];
   }
   (lib.mkIf pkgs.stdenv.isDarwin {

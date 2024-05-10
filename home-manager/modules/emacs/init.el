@@ -413,6 +413,10 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
   :ensure t
   :mode "\\.pdf\\'")
 
+(use-package auctex
+  :ensure t
+  :mode "\\.tex\\'")
+
 (use-package org-noter
   :ensure t
   :commands (org-noter)
