@@ -22,6 +22,8 @@ in lib.mkMerge [
       pkgs.imagemagick
       # LaTeX support
       pkgs.texlive.combined.scheme-full
+      # ePub support
+      pkgs.unzip
     ];
   }
   (lib.mkIf pkgs.stdenv.isDarwin {
