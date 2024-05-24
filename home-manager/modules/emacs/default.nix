@@ -6,7 +6,7 @@ in lib.mkMerge [
       enable = true;
       package =
         if pkgs.stdenv.isDarwin then pkgs.emacs29-macport else pkgs.emacs29-pgtk;
-      extraPackages = epkgs: [ epkgs.diminish epkgs.use-package ];
+      extraPackages = epkgs: [ epkgs.diminish epkgs.use-package epkgs.vterm ];
     };
 
     xdg.configFile."emacs/init.el".source = ./init.el;
