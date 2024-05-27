@@ -52,7 +52,9 @@
 (use-package rainbow-delimiters
   :ensure t
   :hook ((scheme-mode . rainbow-delimiters-mode)
-	 (racket-mode . rainbow-delimiters-mode)))
+	 (racket-mode . rainbow-delimiters-mode)
+	 (clojure-mode . rainbow-delimiters-mode)
+	 (emacs-lisp-mode . rainbow-delimiters-mode)))
 
 (use-package projectile
   :ensure t
@@ -62,6 +64,18 @@
   :config
   (projectile-mode +1))
 
+(use-package cider
+  :ensure t
+  :commands (cider-jack-in))
+
+(use-package clojure-mode
+  :ensure t
+  :mode "\\.\\(clj\\|bb\\)\\'")
+
+(use-package inf-clojure
+  :ensure t
+  :commands (inf-clojure-minor-mode))
+
 (use-package racket-mode
   :ensure t
   :mode "\\.rkt\\'")
@@ -69,7 +83,9 @@
 (use-package paredit
  :ensure t
   :hook ((scheme-mode . enable-paredit-mode)
-	 (racket-mode . enable-paredit-mode)))
+	 (racket-mode . enable-paredit-mode)
+	 (clojure-mode . enable-paredit-mode)
+	 (emacs-lisp-mode . enable-paredit-mode)))
 
 (use-package direnv
   :ensure t
