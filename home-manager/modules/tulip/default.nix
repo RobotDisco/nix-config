@@ -26,6 +26,7 @@ in {
       docker
       istioctl
       kubectl
+      argo-rollouts
 
       terraform-ls
       terraform-lsp
@@ -41,5 +42,11 @@ in {
     home.file.".ssh/config".source =
       config.lib.file.mkOutOfStoreSymlink
         "${config.home.homeDirectory}/workspace/dotfiles/ssh/config";
+
+    # useful shell aliases that are simple enough to apply to all shells
+    home.shellAliases = {
+      k = "kubectl";
+      kar = "kubectl-argo-rollouts";
+    };
   };
 }
