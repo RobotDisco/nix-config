@@ -125,10 +125,10 @@
    '(("pc" "Active Projects" tags-todo "project/ACTIVE")
      ("pl" "All Projects" tags-todo "project")
      ("pp" "Unplanned Projects" tags-todo "project/PLAN")
-     ("n" "Active tasks" tags-todo "/{DOING|NEXT}")
+     ("n" "Active tasks" tags-todo "/DOING")
      ("s" "Someday" tags-todo "SOMEDAY")
      ("i" "Unprocessed" tags-todo "journal|fleeting")
-     ("c" "The Panopticon" ((tags-todo "/{DOING|NEXT}")
+     ("c" "The Panopticon" ((tags-todo "GTD")
 			    (agenda ""
 				    ;; Don't need daily repeated tasks for every
 				    ;; day, just the one I currently care about.
@@ -167,12 +167,12 @@
 		   ("@online")
 		   ("@phone")
 		   ("@brain")))
-  (org-tags-exclude-from-inheritance '("project" "TODOS" "area"))
+  (org-tags-exclude-from-inheritance '("project" "TODOS" "area" "resource"))
   (org-todo-keywords
    '((sequence
-      "TODO(q)" "NEXT(w!)" "DOING(e!/!)" "WAITING(r@/@)" "|" "DONE(t!)" "CANCELLED(y@)")
+      "TODO(w)" "DOING(e!/!)" "WAITING(r@/@)" "|" "DONE(t!)" "CANCELLED(y@)")
      (sequence
-      "PLAN(z)" "ACTIVE(x!/!)" "RETRO(c)" "PAUSED(v@/!)" "|" "COMPLETED(b!)" "ABANDONED(n@)"))))
+      "PLAN(q)" "ACTIVE(z!/!)" "RETRO(x)" "PAUSED(c@/!)" "|" "COMPLETED(v!)" "ABANDONED(b@)"))))
 
 
   (use-package org-roam
