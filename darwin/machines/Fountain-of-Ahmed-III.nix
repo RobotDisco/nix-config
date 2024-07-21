@@ -48,6 +48,7 @@
         "discord"
         "kobo"
         "orbstack"
+        "seadrive"
         "seafile-client"
         "signal"
         "slack"
