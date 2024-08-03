@@ -310,6 +310,9 @@
     },
     "root": {
       "inputs": {
+        "agenix": [
+          "nixpkgs"
+        ],
         "darwin": "darwin",
         "emacs-overlay": "emacs-overlay",
         "home-manager": "home-manager",
