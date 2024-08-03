@@ -218,6 +218,9 @@ in {
         # nov.el
         unzip
 
+        # org-roam graph generation
+        graphviz
+
         # Display images
         imagemagick
         image_optim

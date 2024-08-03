@@ -18,6 +18,8 @@ in lib.mkMerge [
       pkgs.aspellDicts.en
       pkgs.aspellDicts.en-science
       pkgs.aspellDicts.en-computers
+      # org-roam graph support
+      pkgs.graphviz
       # Graphics support
       pkgs.imagemagick
       # LaTeX support
