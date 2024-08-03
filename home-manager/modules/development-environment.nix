@@ -35,8 +35,15 @@ in {
           core = { autocrlf = "input"; };
           hub = { protocol = "https"; };
           init = { defaultBranch = cfg.defaultBranch; };
+          # Configuration for Emacs' Magit Forge package
+          # https://magit.vc/manual/forge.html
+          github = {
+            user = "RobotDisco";
+          };
+          gitlab."git.internal.tulip.io" = {
+            user = "gaelan";
+          };
         };
-
         userEmail = cfg.email;
         userName = cfg.fullname;
       };

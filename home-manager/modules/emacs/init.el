@@ -533,6 +533,10 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
   :custom
   (magit-wip-mode t))
 
+(use-package forge
+  :ensure t
+  :after magit)
+
 (use-package tabnine
   :ensure t
   :commands (tabnine-start-process)
