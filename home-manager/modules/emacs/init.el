@@ -227,9 +227,12 @@
 	:unnarrowed t)
        ("p" "permanent" plain "%?"
 	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-			   "#+TITLE: ${title}\n#+FILETAGS: :fleeting:")
+			   "#+TITLE: ${title}\n#+FILETAGS: :fleeting:\n- previous :: ")
 	:unnarrowed t)
-       ("r" "rolodex" plain "%?"
+       ("b" "business" plain "%?"
+	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+			   "#+TITLE: ${title}\n#+FILETAGS: :fleeting:business:"))
+       ("r" "person" plain "%?"
 	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg"
 			   "#+TITLE: ${title}\n#+FILETAGS: :fleeting:person:"))
        ("j" "project" entry
