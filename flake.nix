@@ -2,8 +2,7 @@
   description = "Gaelan's nix-based systems configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
 
     # Secrets management
     agenix = {
@@ -19,14 +18,14 @@
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    home-manager.url = "github:nix-community/home-manager/release-23.11";
+    home-manager.url = "github:nix-community/home-manager/release-24.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     robonona.url = "github:RobotDisco/robonona-clj";
     robonona.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, darwin, emacs-overlay
+  outputs = inputs@{ self, nixpkgs, darwin, emacs-overlay
     , home-manager, nixos-hardware, ... }:
     let
       inherit (nixpkgs) lib;
@@ -129,15 +128,6 @@
         "Fountain-of-Ahmed-III" = myLib.darwinSystem {
           system = "aarch64-darwin";
           modules = [
-            # Override okta-aws-cli while IT is forcing me onto a version that
-            # hasn't made it to my nixos distribution yet.
-            ({ pkgs, ... }: {
-              nixpkgs.overlays = [
-                (self: super: {
-                  okta-aws-cli = nixpkgs-unstable.legacyPackages.aarch64-darwin.okta-aws-cli;
-                })
-              ];
-            })
             ./darwin/machines/Fountain-of-Ahmed-III.nix
           ];
         };
