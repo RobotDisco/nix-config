@@ -1,10 +1,24 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-let cfg = config.robot-disco.tulip;
+let
+  cfg = config.robot-disco.tulip;
 
-in {
+in
+{
+  imports = [
+    ./aws.nix
+    ./docker.nix
+    ./gcp.nix
+    ./kubernetes.nix
+  ];
+
   options.robot-disco.tulip = {
-    enable = lib.mkEnableOption "Enable Tulip devops environment";
+    enable = lib.mkEnableOption "Enable Tulip cloudplatform environment";
   };
 
   config = lib.mkIf cfg.enable {
@@ -14,39 +28,17 @@ in {
       email = lib.mkDefault "gaelan@tulip.com";
     };
 
-    home.packages = with pkgs; [
-      awscli2
-      okta-aws-cli
-      amazon-ecr-credential-helper
-
-      (google-cloud-sdk.withExtraComponents (with google-cloud-sdk.components; [gke-gcloud-auth-plugin]))
-      docker-credential-gcr
-
-      # Docker VM for macs
-      docker
-      istioctl
-      kubectl
-      argo-rollouts
-
-      terraform-ls
-      terraform-lsp
-
+    home.packages = [
       # Useful debugging tools
       # telnet, traceroute, etc...
-      inetutils
+      pkgs.inetutils
       # constantly polling a url
-      # siege
+      # pkgs.siege
     ];
 
-    #tulip's .ssh/config
-    home.file.".ssh/config".source =
-      config.lib.file.mkOutOfStoreSymlink
-        "${config.home.homeDirectory}/workspace/dotfiles/ssh/config";
-
-    # useful shell aliases that are simple enough to apply to all shells
-    home.shellAliases = {
-      k = "kubectl";
-      kar = "kubectl-argo-rollouts";
-    };
+    # tulip has a custom .ssh/config that has made ... choices.
+    # until I need to, just symlink to it for now since we'll likely have that
+    # repo cloned.
+    home.file.".ssh/config".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/workspace/dotfiles/ssh/config";
   };
 }

@@ -1,4 +1,4 @@
-{pkgs, ... }:
+{ ... }:
 let username = "gaelan";
 in {
   imports = [ ../modules/emacs ];
@@ -22,10 +22,6 @@ in {
     home.stateVersion = "23.11";
     home.homeDirectory = "/Users/${username}";
     home.username = username;
-
-    home.packages = [
-      pkgs.okta-aws-cli
-    ];
 
     programs.zsh.enable = true;
   };
