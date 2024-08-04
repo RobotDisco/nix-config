@@ -135,13 +135,13 @@
 
       devShells = newLib.forAllSystems (pkgs: {
         default = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [ git nix nixfmt ];
+          nativeBuildInputs = with pkgs; [ git nix nixfmt-rfc-style ];
           shellHook = "  export NIX_USER_CONF_FILES=${toString ./.}/nix.conf\n";
         };
       });
 
       # Run ~nix fmt~ to use this package to format nix files
-      formatter = newLib.forAllSystems (pkgs: pkgs.nixfmt);
+      formatter = newLib.forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
 
       # Conceptually it feels like I should be defining my packages
       # in the packages settings and then defining overlays that reference
