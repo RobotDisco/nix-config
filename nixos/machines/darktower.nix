@@ -371,7 +371,7 @@
         system.stateVersion = "23.05";
         services.mysql = {
           enable = true;
-          package = pkgs.mariadb;
+          package = pkgs.mariadb_106;
         };
         services.mysqlBackup = {
           enable = true;
