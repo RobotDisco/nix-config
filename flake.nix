@@ -59,8 +59,16 @@
       nixosConfigurations = {
         darktower = myLib.nixosSystem {
           system = "x86_64-linux";
+          specialArgs = { inherit (inputs) robotdisco-secrets; };
           modules = [
             ./nixos/machines/darktower.nix
+            {
+              # Secure secret injection
+              imports = [
+                inputs.agenix.nixosModules.default
+                ./secrets/nixos.nix
+              ];
+            }
             {
               systemd.timers."robonona" = {
                 enable = true;
