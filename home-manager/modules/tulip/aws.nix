@@ -8,6 +8,8 @@
 let
   inherit (lib) types;
   cfg = config.robot-disco.tulip;
+
+  okta = pkgs.okta-aws-cli;
 in
 {
   options.robot-disco.tulip.aws = {
@@ -34,6 +36,24 @@ in
           pkgs.amazon-ecr-credential-helper
         ];
       })
+      {
+        # In home-manager, the .path attribute relies on the nix config
+        # eventually resolving environment variables and command subshells.
+        #
+        # Apparently using mkOutOfStoreSymlink doesn't work, because it doesn't
+        # evaluate the .path attribute including resolutions.
+        #
+        # So instead, use an activation hook.
+        home.activation.linkOktaYaml = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+          run ln -sf $VERBOSE_ARG "${config.age.secrets.okta-yaml.path}" "${config.home.homeDirectory}/.okta/okta.yaml" 
+        '';
+      }
+      {
+        home.shellAliases = {
+          awscn = "${okta}/bin/okta-aws-cli --profile us";
+          awsus = "${okta}/bin/okta-aws-cli --profile cn";
+        };
+      }
     ]
   );
 }

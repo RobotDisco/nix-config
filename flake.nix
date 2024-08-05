@@ -5,9 +5,21 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
 
     # Secrets management
+    # Using a fork of flake-nix as I wait for
+    # https://github.com/ryantm/agenix/pull/273
+    # to get in.
     agenix = {
-      url = "github:ryantm/agenix";
+      url = "github:RobotDisco/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # My private secrets repository.
+    # use ssh protocol to authenticate via ssh-agent/ssh-key
+    # and shallow clone to save time.
+    # Idea from https://github.com/ryan4yin/nix-config
+    robotdisco-secrets = {
+      url = "git+ssh://git@github.com/RobotDisco/nix-secrets.git?shallow=1";
+      flake = false;
     };
 
     darwin.url = "github:lnl7/nix-darwin/master";
@@ -129,6 +141,19 @@
           system = "aarch64-darwin";
           modules = [
             ./darwin/machines/Fountain-of-Ahmed-III.nix
+            {
+              # Agenix support and secrets
+              home-manager = {
+                extraSpecialArgs = {
+                  # Inserting this module into home-manager modules
+                  inherit (inputs) robotdisco-secrets;
+                };
+                sharedModules = [
+                  inputs.agenix.homeManagerModules.default
+                  ./secrets/home-manager.nix
+                ];
+              };
+            }
           ];
         };
       };
