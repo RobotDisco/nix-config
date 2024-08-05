@@ -18,6 +18,8 @@ lib.mkMerge [
     # Include identityPaths for Yubikeys
     age.identityPaths = [
       "${s}/yk-main.id"
+      "${s}/yk-work.id"
+      "${s}/yk-backup.id"
     ];
 
     age.secrets =
