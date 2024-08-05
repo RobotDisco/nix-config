@@ -258,7 +258,7 @@
       };
 
       config = {
-        system.stateVersion = "23.05";
+        system.stateVersion = "24.05";
 
         programs.zsh.enable = true;
 
@@ -308,7 +308,7 @@
     reverseproxy = {
       autoStart = true;
       config = {
-        system.stateVersion = "23.05";
+        system.stateVersion = "24.05";
 
         security.acme = {
           acceptTerms = true;
@@ -366,7 +366,7 @@
         };
       };
       config = {
-        system.stateVersion = "23.05";
+        system.stateVersion = "24.05";
         services.mysql = {
           enable = true;
           package = pkgs.mariadb_106;
@@ -389,7 +389,7 @@
         };
       };
       config = {
-        system.stateVersion = "23.05";
+        system.stateVersion = "24.05";
         services.postgresql = {
           package = pkgs.postgresql_14;
           enable = true;
@@ -421,7 +421,7 @@
         };
       };
       config = {
-        system.stateVersion = "23.05";
+        system.stateVersion = "24.05";
         services.vaultwarden = {
           enable = true;
           dbBackend = "postgresql";
