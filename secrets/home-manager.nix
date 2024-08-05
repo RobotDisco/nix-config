@@ -1,4 +1,9 @@
-{ lib, pkgs, robotdisco-secrets, ... }:
+{
+  lib,
+  pkgs,
+  robotdisco-secrets,
+  ...
+}:
 
 let
   s = robotdisco-secrets;
@@ -13,7 +18,7 @@ lib.mkMerge [
   })
   {
     # We need to ensure age-plugin-yubikey is in age's path.
-    age.ageBin = "PATH=$PATH:${lib.makeBinPath [pkgs.age-plugin-yubikey]} ${pkgs.age}/bin/age";
+    age.ageBin = "PATH=$PATH:${lib.makeBinPath [ pkgs.age-plugin-yubikey ]} ${pkgs.age}/bin/age";
 
     # Include identityPaths for Yubikeys
     age.identityPaths = [
@@ -24,11 +29,11 @@ lib.mkMerge [
 
     age.secrets =
       # let
-        ## Haven't used common schemes for files yet, worry about later.
-        # user_readable = {
-        #   mode = "0400";
-        #   owner = "gaelan";
-        # };
+      ## Haven't used common schemes for files yet, worry about later.
+      # user_readable = {
+      #   mode = "0400";
+      #   owner = "gaelan";
+      # };
       # in
       {
         okta-yaml = {

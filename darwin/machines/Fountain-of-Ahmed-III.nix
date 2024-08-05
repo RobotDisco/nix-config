@@ -16,10 +16,13 @@
     system.stateVersion = 4;
 
     # Set up user and home-manager configuration.
-    users.users."gaelan" = { home = "/Users/gaelan"; };
+    users.users."gaelan" = {
+      home = "/Users/gaelan";
+    };
 
-    home-manager.users."gaelan" =
-      import ../../home-manager/profiles/gaelan-work.nix;
+    home-manager = {
+      users."gaelan" = import ../../home-manager/profiles/gaelan-work.nix;
+    };
 
     # Allow Gaelan to set up caches.
     nix.settings.trusted-users = [ "gaelan" ];
@@ -65,7 +68,9 @@
         "yubico-yubikey-manager"
       ];
 
-      masApps = { "WireGuard" = 1451685025; };
+      masApps = {
+        "WireGuard" = 1451685025;
+      };
     };
 
     services.yabai = {
