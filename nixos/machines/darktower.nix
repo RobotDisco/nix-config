@@ -47,8 +47,6 @@
   # networking.firewall.allowedTCPPorts = [ ];
   # networking.firewall.allowedUDPPorts = [ ];
 
-  system.stateVersion = "24.05";
-
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot.initrd.availableKernelModules =

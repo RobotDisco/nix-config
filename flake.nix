@@ -59,6 +59,7 @@
       nixosConfigurations = {
         darktower = myLib.nixosSystem {
           system = "x86_64-linux";
+          stateVersion = "24.05";
           specialArgs = { inherit (inputs) robotdisco-secrets; };
           modules = [
             ./nixos/machines/darktower.nix

@@ -72,7 +72,7 @@ in {
       # modules shouldn't depend on the existence of non-standard params in the
       # module function definition.
     , specialArgs ? { }
-    , stateVersion ? "23.05" }:
+    , stateVersion }:
     let
       baseNixosModules = [
         # Standard hardware detection module I've seen in NiOS configurations
