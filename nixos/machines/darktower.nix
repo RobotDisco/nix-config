@@ -515,7 +515,7 @@
     };
     "seafile-mc" = {
       autoStart = true;
-      image = "seafileltd/seafile-mc:10.0.1";
+      image = "seafileltd/seafile-mc:11.0-latest";
       dependsOn = [ "seafile-memcached" ];
       environmentFiles = [ "/srv/storagepool/data/webdav/seafile_env_vars" ];
       volumes = [ "/srv/storagepool/data/webdav/shared:/shared" ];
