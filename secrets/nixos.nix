@@ -6,5 +6,6 @@ in
   age.secrets = {
     upsmon-primary.file = "${s}/ups-user-primary.age";
     upsmon-secondary.file = "${s}/ups-user-secondary.age";
+    seafile-envs.file = "${s}/seafile-envs.age";
   };
 }

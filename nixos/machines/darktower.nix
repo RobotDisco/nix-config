@@ -517,7 +517,7 @@
       autoStart = true;
       image = "seafileltd/seafile-mc:11.0-latest";
       dependsOn = [ "seafile-memcached" ];
-      environmentFiles = [ "/srv/storagepool/data/webdav/seafile_env_vars" ];
+      environmentFiles = [ config.age.secrets.seafile-envs.path ];
       volumes = [ "/srv/storagepool/data/webdav/shared:/shared" ];
       ports = [ "127.0.0.1:8001:8000" ];
     };
