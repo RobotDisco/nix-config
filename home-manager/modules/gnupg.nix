@@ -49,6 +49,7 @@ in {
       enableSshSupport = true;
       defaultCacheTtl = 60;
       maxCacheTtl = 120;
+      pinentryPackage = pkgs.pinentry-gtk2;
     };
   };
 }
