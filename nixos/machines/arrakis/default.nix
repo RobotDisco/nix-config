@@ -1,7 +1,10 @@
 { ... }:
 
 let
-  btrfs-options = [ "compress=zstd" "noatime" ];
+  btrfs-options = [
+    "compress=zstd"
+    "noatime"
+  ];
 in
 {
   imports = [
@@ -57,7 +60,5 @@ in
   services.hardware.bolt.enable = true;
 
   # Framework firmware is in the lvfs-testing repo
-  services.fwupd.extraRemotes = [
-    "lvfs-testing"
-  ];
+  services.fwupd.extraRemotes = [ "lvfs-testing" ];
 }

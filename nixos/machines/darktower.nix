@@ -1,4 +1,10 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}:
 
 {
   networking.hostName = "darktower";
@@ -38,19 +44,21 @@
   boot.zfs.forceImportRoot = false;
   boot.zfs.forceImportAll = false;
 
-  users.users.root.initialHashedPassword =
-    "$6$rounds=2500000$NC9QlbTMMOJ8$h.coBkWCDI/epZApjonqHPvOjZ4ys8O44OERo2mK5ehB8TUgK8.FWW4tknxXYrlFKa/9t5tGWALBDoUNbCMjx1";
+  users.users.root.initialHashedPassword = "$6$rounds=2500000$NC9QlbTMMOJ8$h.coBkWCDI/epZApjonqHPvOjZ4ys8O44OERo2mK5ehB8TUgK8.FWW4tknxXYrlFKa/9t5tGWALBDoUNbCMjx1";
   time.timeZone = "America/Toronto";
 
   services.openssh.enable = true;
 
-  # networking.firewall.allowedTCPPorts = [ ];
-  # networking.firewall.allowedUDPPorts = [ ];
-
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
-  boot.initrd.availableKernelModules =
-    [ "xhci_pci" "ehci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+  boot.initrd.availableKernelModules = [
+    "xhci_pci"
+    "ehci_pci"
+    "ahci"
+    "usb_storage"
+    "usbhid"
+    "sd_mod"
+  ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
@@ -60,33 +68,48 @@
   fileSystems."/" = {
     device = "rootpool/nixos/root";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = [
+      "zfsutil"
+      "X-mount.mkdir"
+    ];
   };
 
   fileSystems."/home" = {
     device = "rootpool/nixos/home";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = [
+      "zfsutil"
+      "X-mount.mkdir"
+    ];
   };
 
   # Where containers and possibly VMs live
   fileSystems."/var/lib" = {
     device = "rootpool/nixos/var/lib";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = [
+      "zfsutil"
+      "X-mount.mkdir"
+    ];
   };
 
   # Where logs live
   fileSystems."/var/log" = {
     device = "rootpool/nixos/var/log";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = [
+      "zfsutil"
+      "X-mount.mkdir"
+    ];
   };
 
   fileSystems."/boot" = {
     device = "bootpool/nixos/root";
     fsType = "zfs";
-    options = [ "zfsutil" "X-mount.mkdir" ];
+    options = [
+      "zfsutil"
+      "X-mount.mkdir"
+    ];
   };
 
   fileSystems."/boot/efis/EFIBOOT0" = {
@@ -99,22 +122,26 @@
     fsType = "vfat";
   };
 
-  swapDevices = [ { label = "swappart0"; } { label = "swappart1"; } ];
+  swapDevices = [
+    { label = "swappart0"; }
+    { label = "swappart1"; }
+  ];
 
   networking.useDHCP = lib.mkDefault false;
   networking.interfaces.eno1 = {
     useDHCP = lib.mkDefault false;
-    ipv4.addresses = [{
-      address = "192.168.10.3";
-      prefixLength = 24;
-    }];
+    ipv4.addresses = [
+      {
+        address = "192.168.10.3";
+        prefixLength = 24;
+      }
+    ];
   };
 
   networking.interfaces.enp6s0f0.useDHCP = lib.mkDefault false;
   networking.interfaces.enp6s0f1.useDHCP = lib.mkDefault false;
 
-  hardware.cpu.intel.updateMicrocode =
-    lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   services.fstrim.enable = true;
   services.zfs.trim.enable = true;
@@ -128,12 +155,11 @@
     enable = true;
   };
 
-  nixpkgs.config.packageOverrides = pkgs: {
-    zfs = pkgs.zfs.override { enableMail = true; };
-  };
   services.zfs.zed = {
     enableMail = true;
-    settings = { ZED_EMAIL_ADDR = [ "gdcosta@gmail.com" ]; };
+    settings = {
+      ZED_EMAIL_ADDR = [ "gdcosta@gmail.com" ];
+    };
   };
 
   programs.zsh.enable = true;
@@ -144,10 +170,9 @@
     home = "/home/gaelan";
     description = "Gaelan D'costa";
     extraGroups = [ "wheel" ];
-    # passwordFile = "/run/secrets/users_gaelan_password";
+    # hashedPasswordFile = "/run/secrets/users_gaelan_password";
     # temp password just to get me by
-    initialHashedPassword =
-      "$6$rounds=2500000$cB5yavkAPQdBU$ATYQgQQHsMRQP9kLIIG12MNX62Gb04V.8Pl2.1hMPAN78CpR0qzLYvEuy3sjLw1/eJ90mAKqeSk9eJV.N/e9P0";
+    initialHashedPassword = "$6$rounds=2500000$cB5yavkAPQdBU$ATYQgQQHsMRQP9kLIIG12MNX62Gb04V.8Pl2.1hMPAN78CpR0qzLYvEuy3sjLw1/eJ90mAKqeSk9eJV.N/e9P0";
   };
 
   nix.settings.trusted-users = [ "gaelan " ];
@@ -157,10 +182,16 @@
     interface = "eno1";
   };
 
-  networking.nameservers = [ "8.8.8.8" "8.8.4.4" ];
+  networking.nameservers = [
+    "8.8.8.8"
+    "8.8.4.4"
+  ];
 
   # I don't care about specific mountpoints, so just mount the pools
-  boot.zfs.extraPools = [ "storagepool" "backuppool" ];
+  boot.zfs.extraPools = [
+    "storagepool"
+    "backuppool"
+  ];
 
   # Automatically snapshot ZFS volumes
   services.sanoid = {
@@ -212,7 +243,10 @@
   };
 
   services.borgbackup.jobs."borgbase" = {
-    paths = [ "/srv/storagepool/data" "/srv/storagepool/backups" ];
+    paths = [
+      "/srv/storagepool/data"
+      "/srv/storagepool/backups"
+    ];
     repo = "mwhkrvt4@mwhkrvt4.repo.borgbase.com:repo";
     encryption = {
       mode = "keyfile-blake2";
@@ -238,13 +272,23 @@
 
   networking.interfaces.vlan50.useDHCP = false;
   # I currently do port forwarding which requires a static IP
-  networking.interfaces.vlan50.ipv4.addresses = [{
-    address = "192.168.50.99";
-    prefixLength = 24;
-  }];
+  networking.interfaces.vlan50.ipv4.addresses = [
+    {
+      address = "192.168.50.99";
+      prefixLength = 24;
+    }
+  ];
 
-  networking.firewall.interfaces.podman0.allowedTCPPorts = [ 3306 11211 ];
-  networking.firewall.interfaces.vlan50.allowedTCPPorts = [ 139 80 443 445 ];
+  networking.firewall.interfaces.podman0.allowedTCPPorts = [
+    3306
+    11211
+  ];
+  networking.firewall.interfaces.vlan50.allowedTCPPorts = [
+    139
+    80
+    443
+    445
+  ];
   networking.firewall.checkReversePath = "loose";
 
   containers = {
@@ -267,10 +311,9 @@
           isNormalUser = true;
           home = "/home/gaelan";
           description = "Gaelan D'costa";
-          # passwordFile = "/run/secrets/users_gaelan_password";
+          # hashPasswordFile = "/run/secrets/users_gaelan_password";
           # temp password just to get me by
-          initialHashedPassword =
-            "$6$rounds=2500000$cB5yavkAPQdBU$ATYQgQQHsMRQP9kLIIG12MNX62Gb04V.8Pl2.1hMPAN78CpR0qzLYvEuy3sjLw1/eJ90mAKqeSk9eJV.N/e9P0";
+          initialHashedPassword = "$6$rounds=2500000$cB5yavkAPQdBU$ATYQgQQHsMRQP9kLIIG12MNX62Gb04V.8Pl2.1hMPAN78CpR0qzLYvEuy3sjLw1/eJ90mAKqeSk9eJV.N/e9P0";
         };
 
         services.samba = {
@@ -325,13 +368,17 @@
 
           virtualHosts = {
             "organice.robot-disco.net" = {
-              locations."/" = { proxyPass = "http://localhost:8002"; };
+              locations."/" = {
+                proxyPass = "http://localhost:8002";
+              };
 
               forceSSL = true;
               enableACME = true;
             };
             "vaultwarden.robot-disco.net" = {
-              locations."/raziel/" = { proxyPass = "http://localhost:8000"; };
+              locations."/raziel/" = {
+                proxyPass = "http://localhost:8000";
+              };
 
               forceSSL = true;
               enableACME = true;
@@ -373,7 +420,11 @@
         };
         services.mysqlBackup = {
           enable = true;
-          databases = [ "ccnet_db" "seafile_db" "seahub_db" ];
+          databases = [
+            "ccnet_db"
+            "seafile_db"
+            "seahub_db"
+          ];
           calendar = "*-*-* *:05,15,35,45:00";
           location = "/var/backup/mysql";
         };
@@ -510,7 +561,10 @@
       autoStart = true;
       image = "memcached:1.6.18";
       entrypoint = "memcached";
-      cmd = [ "-m" "256" ];
+      cmd = [
+        "-m"
+        "256"
+      ];
       ports = [ "127.0.0.1:11211:11211" ];
     };
     "seafile-mc" = {
@@ -524,10 +578,8 @@
     "organice" = {
       autoStart = true;
       image = "twohundredok/organice:latest";
-      ports = [ "127.0.0.1:8002:5000"];
-      environmentFiles = [
-        "/srv/storagepool/data/webdav/organice_env_vars"
-      ];
+      ports = [ "127.0.0.1:8002:5000" ];
+      environmentFiles = [ "/srv/storagepool/data/webdav/organice_env_vars" ];
     };
   };
 
@@ -554,14 +606,14 @@
     };
   };
 
-#  users.users.nut = {
-#    uid = 84;
-#    home = "/var/lib/nut";
-#    createHome = true;
-#    group = "nut";
-#    description = "Network UPS Tools service account";
-#  };
-#  users.groups."nut" = { gid = 84; };
+  #  users.users.nut = {
+  #    uid = 84;
+  #    home = "/var/lib/nut";
+  #    createHome = true;
+  #    group = "nut";
+  #    description = "Network UPS Tools service account";
+  #  };
+  #  users.groups."nut" = { gid = 84; };
 
   power.ups = {
     enable = true;
@@ -575,12 +627,8 @@
     };
     upsd = {
       listen = [
-        {
-          address = "127.0.0.1";
-        }
-        {
-          address = "192.168.10.3";
-        }
+        { address = "127.0.0.1"; }
+        { address = "192.168.10.3"; }
       ];
     };
     upsmon.monitor.ups = {
@@ -609,7 +657,7 @@
       _daemon = seaf-server
       failregex = Login attempt limit reached.*, ip: <HOST>
       ignoreregex =
-   '';
+    '';
   };
 
   # Get emails for any hard drive failures
