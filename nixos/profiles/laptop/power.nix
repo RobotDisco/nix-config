@@ -8,9 +8,9 @@
     percentageCritical = 5;
     percentageAction = 4;
   };
-  # System-level laptop power management
-  services.tlp.enable = true;
-  # Temperature management
+  # System-level laptop power management (currently AMD prefers power-profile-daemon)
+  # services.tlp.enable = true;
+  # Temperature management for Intel systems
   services.thermald.enable = true;
 
   # Ideally I want to use hybrid-sleep, but for some reason it doesn't work

@@ -99,10 +99,10 @@
         arrakis = myLib.nixosSystem {
           system = "x86_64-linux";
           modules = [
-            nixos-hardware.nixosModules.framework-11th-gen-intel
+            nixos-hardware.nixosModules.framework-13-7040-amd
             ./nixos/machines/arrakis
           ];
-          stateVersion = "23.11";
+          stateVersion = "24.05";
         };
       };
 
