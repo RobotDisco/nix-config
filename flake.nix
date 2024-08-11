@@ -100,7 +100,7 @@
           system = "x86_64-linux";
           modules = [
             nixos-hardware.nixosModules.framework-11th-gen-intel
-            ./nixos/machines/arrakis2022.nix
+            ./nixos/machines/arrakis.nix
           ];
           stateVersion = "23.11";
         };
