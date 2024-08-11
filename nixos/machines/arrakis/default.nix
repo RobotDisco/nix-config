@@ -19,7 +19,6 @@ in
     ../../profiles/security.nix
     ../../profiles/ssd.nix
     ../../profiles/steam.nix
-    ../../profiles/sway.nix
     ../../profiles/yubikey.nix
     ../../../users/gaelan
   ];

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.robot-disco.sway;
@@ -9,7 +14,6 @@ in
 
   config = lib.mkIf cfg.enable {
     wayland.windowManager.sway = {
-      package = null;
       enable = true;
 
       # systemd.xdgAutostart = true;
@@ -27,24 +31,24 @@ in
         bindswitch --reload --locked lid:on output eDP-1 disable
         bindswitch --reload --locked lid:off output eDP-1 enable
       '';
-    
+
       config = {
         modifier = "Mod4";
-#        left = "b";
-#        down = "n";
-#        up = "p";
-#        right = "f";
-#        splitv = "v";
-#        splith = "h";
-#        terminal = "${pkgs.emacs}/bin/emacsclient -c";
-#        menu = "${pkgs.dmenu}/bin/dmenu_run | ${pkgs.dmenu}/bin/dmenu | ${pkgs.fileutils}/bin/xargs swaymsg exec --";
+        #        left = "b";
+        #        down = "n";
+        #        up = "p";
+        #        right = "f";
+        #        splitv = "v";
+        #        splith = "h";
+        #        terminal = "${pkgs.emacs}/bin/emacsclient -c";
+        #        menu = "${pkgs.dmenu}/bin/dmenu_run | ${pkgs.dmenu}/bin/dmenu | ${pkgs.fileutils}/bin/xargs swaymsg exec --";
         input."type:keyboard".xkb_options = "ctrl:nocaps";
         output."eDP-1" = {
           resolution = "2256x1504";
           scale = "1.5";
         };
         output."*" = {
-          bg = "backgrounds/moosevalley.jpg fill";
+          bg = "${./backgrounds/moosevalley.jpg} fill";
         };
         # Wayland, unlike autorandr, doesn't keep port names the
         # same. Have to use monitor identifier.
@@ -64,15 +68,16 @@ in
             modifier = config.wayland.windowManager.sway.config.modifier;
             brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
             wpctl = "${pkgs.wireplumber}/bin/wpctl";
-            rfkill = "${pkgs.util-linux}/bin/rfkill";            
-          in lib.mkOptionDefault {
+            rfkill = "${pkgs.util-linux}/bin/rfkill";
+          in
+          lib.mkOptionDefault {
             XF86AudioMute = "exec ${wpctl} set-mute @DEFAULT_AUDIO_SINK@ toggle";
             XF86AudioLowerVolume = "exec ${wpctl} set-volume @DEFAULT_AUDIO_SINK@ 5%-";
             XF86AudioRaiseVolume = "exec ${wpctl} set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+";
             XF86MonBrightnessDown = "exec ${brightnessctl} set 5%-";
             XF86MonBrightnessUp = "exec ${brightnessctl} set 5%+";
             XF86RFKill = "exec ${rfkill} toggle 0; ${rfkill} toggle 6";
-          };  
+          };
       };
     };
   };
