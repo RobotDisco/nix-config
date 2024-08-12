@@ -98,11 +98,25 @@
         };
         arrakis = myLib.nixosSystem {
           system = "x86_64-linux";
+          specialArgs = { inherit (inputs) robotdisco-secrets; };
+          stateVersion = "24.05";
           modules = [
             nixos-hardware.nixosModules.framework-13-7040-amd
+            {
+              # Agenix support and secrets
+              home-manager = {
+                extraSpecialArgs = {
+                  # Inserting this module into home-manager modules
+                  inherit (inputs) robotdisco-secrets;
+                };
+                sharedModules = [
+                  inputs.agenix.homeManagerModules.default
+                  ./secrets/home-manager.nix
+                ];
+              };
+            }
             ./nixos/machines/arrakis
           ];
-          stateVersion = "24.05";
         };
       };
 

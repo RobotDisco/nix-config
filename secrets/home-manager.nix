@@ -39,6 +39,9 @@ lib.mkMerge [
         okta-yaml = {
           file = "${s}/okta-aws-cli.yaml.age";
         };
+        u2f_keys = {
+          file = "${s}/u2f_keys.age";
+        };
       };
   }
 ]

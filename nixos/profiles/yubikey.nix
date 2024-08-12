@@ -9,17 +9,18 @@
     udev.packages = [ pkgs.yubikey-personalization ];
   };
 
-  # Enable yubikey as a way to login
-  security.pam.yubico = {
-    enable = true;
-    # Use a local challenge-response, not yubico's cloud service
-    # Remember that every user has to run `ykpamcfg -<slotnum> -v`
-    # to generate a challenge for the yubikey to work.
-    mode = "challenge-response";
-    control = "sufficient";
-    # Require password AND yubikey
-    # control = if cfg.require2FA
-    #           then "required"
-    #           else "sufficient";
+  # Enable yubikey as a way to login (via U2F)
+  security.pam = {
+    services = {
+      login.u2fAuth = true;
+      sudo.u2fAuth = true;      
+    };
+    u2f = {
+      enable = true;
+      # Prompt for the u2f device.
+      cue = true;
+      # Require yubikey auth
+      control = "required";
+    };
   };
 }
