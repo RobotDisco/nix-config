@@ -141,7 +141,7 @@
   networking.interfaces.enp6s0f0.useDHCP = lib.mkDefault false;
   networking.interfaces.enp6s0f1.useDHCP = lib.mkDefault false;
 
-  hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.intel.updateMicrocode = true;
 
   services.fstrim.enable = true;
   services.zfs.trim.enable = true;
