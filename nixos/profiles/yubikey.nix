@@ -11,16 +11,12 @@
 
   # Enable yubikey as a way to login (via U2F)
   security.pam = {
-    services = {
-      login.u2fAuth = true;
-      sudo.u2fAuth = true;      
-    };
     u2f = {
       enable = true;
       # Prompt for the u2f device.
       cue = true;
-      # Require yubikey auth
-      control = "required";
+      # Require yubikey auth as well as passwords
+      # control = "required";
     };
   };
 }
