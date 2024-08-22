@@ -293,7 +293,7 @@
 
   containers = {
     calibre = {
-      autostart = true;
+      autoStart = true;
       bindMounts = {
         "/srv/calibre" = {
           hostPath = "/srv/storagepool/data/calibre";
