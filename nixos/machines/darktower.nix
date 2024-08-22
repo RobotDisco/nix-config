@@ -288,6 +288,10 @@
     80
     443
     445
+    # Calibre server
+    8003
+    # Calibre web
+    8004
   ];
   networking.firewall.checkReversePath = "loose";
 
