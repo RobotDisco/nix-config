@@ -311,7 +311,7 @@
           enable = true;
           host = "192.168.50.99";
           port = "8003";
-          library = [ "/srv/calibre"; ];
+          library = [ "/srv/calibre" ];
         };
         services.calibre-web = {
           enable = true;
