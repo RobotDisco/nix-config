@@ -314,14 +314,14 @@
         services.calibre-server = {
           enable = true;
           host = "192.168.50.99";
-          port = "8003";
+          port = 8003;
           libraries = [ "/srv/calibre" ];
         };
         services.calibre-web = {
           enable = true;
           listen = {
             ip = "192.168.50.99";
-            port = "8004";
+            port = 8004;
           };
           options.calibreLibrary = "/srv/calibre-web";
         };
