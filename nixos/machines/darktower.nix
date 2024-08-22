@@ -319,7 +319,7 @@
             ip = "192.168.50.99";
             port = "8004";
           };
-          options = "/srv/calibre-web";
+          options.calibreLibrary = "/srv/calibre-web";
         };
       };
     };
