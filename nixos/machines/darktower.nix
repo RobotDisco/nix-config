@@ -292,6 +292,38 @@
   networking.firewall.checkReversePath = "loose";
 
   containers = {
+    calibre = {
+      autostart = true;
+      bindMounts = {
+        "/srv/calibre" = {
+          hostPath = "/srv/storagepool/data/calibre";
+          isReadOnly = false;
+        };
+        "/srv/calibre-web" = {
+          hostPath = "/srv/storagepool/data/calibre-web";
+          isReadOnly = false;
+        };
+      };
+      config = {
+        system.stateVersion = "24.05";
+
+        services.calibre-server = {
+          enable = true;
+          host = "192.168.50.99";
+          port = "8003";
+          library = [ "/srv/calibre"; ];
+        };
+        services.calibre-web = {
+          enable = true;
+          listen = {
+            ip = "192.168.50.99";
+            port = "8004";
+          };
+          options = "/srv/calibre-web";
+        };
+      };
+    };
+
     fileserver = {
       autoStart = true;
       bindMounts = {
