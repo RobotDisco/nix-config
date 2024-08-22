@@ -14,5 +14,7 @@
     innoextract
     # Interactive Fiction engine
     frotz
+    # Diablo 1
+    devilutionx
   ];
 }
