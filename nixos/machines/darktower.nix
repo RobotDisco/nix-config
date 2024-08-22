@@ -710,4 +710,7 @@
     relayHost = "out.teksavvy.com";
     relayPort = 587;
   };
+
+  # Turn on nix flake support, make my life easier
+  nix.extraOptions = "experimental-features = nix-command flakes";
 }
