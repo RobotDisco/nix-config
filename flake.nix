@@ -45,31 +45,64 @@
       ### HERE BEGINS WHAT IS EFFECTIVELY MY CONFIGURATION SECTION
       # What platforms do I support?
       supportedSystems = [ "x86_64-linux" "aarch64-darwin" ];
-
       #### THIS ENDS WHAT IS EFFECTIVELY MY CONFIGURATION SECTION.
-      # My helper functions.
-      # The name is cringe but I want to make it clear what I have defined vs
-      # what is actually part of a standard library.
-      myLib = import ./lib { inherit inputs supportedSystems; };
-      newLib = import ./newlib { inherit lib nixpkgs; };
 
+      ### HERE BEGINS MY HELPER FUNCTION LIBRARY ###
+      # for a list of system strings, and a function which takes a string argument,
+      # for each system string list, produce an attribute set where the key is
+      # the string and the value is the result of applying that function to the string.
+      forEachSystem = systems: func: lib.genAttrs systems func;
+      # Like the above but with our supportedSystems list partially applied.
+      # remember that nix functions can be curried, so we can pre-supply the first
+      # argument to return a function that only needs the second.
+      forAllSystems = forEachSystem supportedSystems;
+      # Darwin config generator
+      darwinSystem = import ./lib/darwinSystem.nix;
+      # NixOS config generator
+      nixosSystem = import ./lib/nixosSystem.nix;
+      ### HERE ENDS MY HELPER FUNCTION LIBRARY ###
     in {
-      homeManagerModules = { default = import ./home-manager/modules; };
+      darwinConfigurations = {
+        "Fountain-of-Ahmed-III" = darwinSystem {
+          inherit darwin home-manager;
+          system = "aarch64-darwin";
+          darwinModules = [
+            ./darwin/machines/Fountain-of-Ahmed-III.nix
+          ];
+          darwinSpecialArgs = {};
+          homeModules = [
+            inputs.agenix.homeManagerModules.default
+            ./secrets/home-manager.nix
+          ];
+          homeSpecialArgs = { inherit (inputs) agenix robotdisco-secrets; };
+        };
+      };
 
       nixosConfigurations = {
-        darktower = myLib.nixosSystem {
+        arrakis = nixosSystem {
+          inherit nixpkgs home-manager;
           system = "x86_64-linux";
-          stateVersion = "24.05";
-          specialArgs = { inherit (inputs) robotdisco-secrets; };
-          modules = [
+          nixosModules = [
+            inputs.nixos-hardware.nixosModules.framework-13-7040-amd
+            ./nixos/machines/arrakis
+          ];
+          nixosSpecialArgs = { inherit (inputs) agenix robotdisco-secrets; };
+          homeModules = [
+            inputs.agenix.homeManagerModules.default
+            ./secrets/home-manager.nix
+          ];
+          homeSpecialArgs = { inherit (inputs) agenix robotdisco-secrets; };
+        };
+        darktower = nixosSystem {
+          inherit nixpkgs home-manager;
+          system = "x86_64-linux";
+          homeModules = [];
+          homeSpecialArgs = {};
+          nixosModules = [
             ./nixos/machines/darktower.nix
-            {
               # Secure secret injection
-              imports = [
-                inputs.agenix.nixosModules.default
-                ./secrets/nixos.nix
-              ];
-            }
+            inputs.agenix.nixosModules.default
+            ./secrets/nixos.nix
             {
               systemd.timers."robonona" = {
                 enable = true;
@@ -95,32 +128,13 @@
               };
             }
           ];
-        };
-        arrakis = myLib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit (inputs) robotdisco-secrets; };
-          stateVersion = "24.05";
-          modules = [
-            nixos-hardware.nixosModules.framework-13-7040-amd
-            {
-              # Agenix support and secrets
-              home-manager = {
-                extraSpecialArgs = {
-                  # Inserting this module into home-manager modules
-                  inherit (inputs) robotdisco-secrets;
-                };
-                sharedModules = [
-                  inputs.agenix.homeManagerModules.default
-                  ./secrets/home-manager.nix
-                ];
-              };
-            }
-            ./nixos/machines/arrakis
-          ];
+          nixosSpecialArgs = { inherit (inputs) robotdisco-secrets; };
         };
       };
 
-      apps = newLib.forAllSystems (pkgs:
+      apps = forAllSystems (system:
+        let pkgs = nixpkgs.legacyPackages."${system}";
+        in
         pkgs.lib.trivial.pipe [
           # This list is honestly all I want to see here
           # possibly, even hiding the fact that it is an
@@ -159,36 +173,18 @@
           builtins.listToAttrs
         ]);
 
-      darwinConfigurations = {
-        "Fountain-of-Ahmed-III" = myLib.darwinSystem {
-          system = "aarch64-darwin";
-          modules = [
-            ./darwin/machines/Fountain-of-Ahmed-III.nix
-            {
-              # Agenix support and secrets
-              home-manager = {
-                extraSpecialArgs = {
-                  # Inserting this module into home-manager modules
-                  inherit (inputs) robotdisco-secrets;
-                };
-                sharedModules = [
-                  inputs.agenix.homeManagerModules.default
-                  ./secrets/home-manager.nix
-                ];
-              };
-            }
-          ];
-        };
-      };
-
-      devShells = newLib.forAllSystems (pkgs: {
-        default = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [ git nix nixfmt-rfc-style ];
-        };
-      });
+      devShells = forAllSystems (system:
+        let pkgs = nixpkgs.legacyPackages."${system}";
+        in
+          {
+            default = pkgs.mkShell {
+              nativeBuildInputs = with pkgs; [ git nix nixfmt-rfc-style ];
+            };
+          });
 
       # Run ~nix fmt~ to use this package to format nix files
-      formatter = newLib.forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
+      formatter = forAllSystems (system:
+        nixpkgs.legacyPackages."${system}".nixfmt-rfc-style);
 
       # Conceptually it feels like I should be defining my packages
       # in the packages settings and then defining overlays that reference

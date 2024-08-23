@@ -1,0 +1,11 @@
+* Gaelan's Nix function library
+Helper functions, made reusable, to keep my flake.nix and other nix files small.
+
+* Functions included
+- darwinSystem :: A function to generate configuration sets for MacOS.
+- nixosSystem :: A function to generate configuration sets for NixOS.
+- forEachSystem :: [flake.nix] Given a list of system strings and a function, generate an attribute set whose keys are the system strings and whose values are the result of the function applied to that string.
+- forAllSystems :: [flake.nix] A function that does the above for a pre-supplied list of system strings.
+
+* Values included
+- supportedSystems :: [flake.nix] The list of system strings this flake officially supports.
