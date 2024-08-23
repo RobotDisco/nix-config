@@ -288,46 +288,10 @@
     80
     443
     445
-    # Calibre server
-    8003
-    # Calibre web
-    8004
   ];
   networking.firewall.checkReversePath = "loose";
 
   containers = {
-    calibre = {
-      autoStart = true;
-      bindMounts = {
-        "/srv/calibre" = {
-          hostPath = "/srv/storagepool/data/calibre";
-          isReadOnly = false;
-        };
-        "/srv/calibre-web" = {
-          hostPath = "/srv/storagepool/data/calibre-web";
-          isReadOnly = false;
-        };
-      };
-      config = {
-        system.stateVersion = "24.05";
-
-        services.calibre-server = {
-          enable = true;
-          host = "192.168.50.99";
-          port = 8003;
-          libraries = [ "/srv/calibre" ];
-        };
-        services.calibre-web = {
-          enable = true;
-          listen = {
-            ip = "192.168.50.99";
-            port = 8004;
-          };
-          options.calibreLibrary = "/srv/calibre-web";
-        };
-      };
-    };
-
     fileserver = {
       autoStart = true;
       bindMounts = {
