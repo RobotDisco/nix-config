@@ -1,0 +1,18 @@
+#+TITLE: Machines
+
+- arrakis :: NixOS on Framework 13" AMD 7040, 64G RAM + 1T SSD
+  personal laptop
+- Fountain-of-Ahmed-III :: Macbook for work
+- darktower.nix :: Dell T20, Intel Xeon E3-1225v3, 32G RAM + 4x4TB HDD + 2x512G SSD
+  Homelab + NAS
+- darktower :: Unused, eventual modular configuration for Dell T20
+
+* How to add a new host
+1. Under ~machines/~
+   1. Create a new folder under ~machines/~ with the name of the new host.
+   2. Create & add the new host's ~hardware-configuration.nix~ to the new folder, and add the new
+      host's ~configuration.nix~ to ~machines/<name>/default.nix~.
+2. In ~flake.nix~
+   1. If a NixOS host, add following content to the ~nixosConfigurations~ output with the ~nixosSystem~ function.
+      If a MacOS host, add the following content to the ~darwinConfigurations~ output with the ~darwinSystem~ function.
+   2. Look at an existing hose to see the general structure. At the very least, include the new ~./machines/<name>~ into the ~nixosModules~ or ~darwinModules~ argument.

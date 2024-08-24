@@ -69,7 +69,7 @@
           inherit darwin home-manager;
           system = "aarch64-darwin";
           darwinModules = [
-            ./darwin/machines/Fountain-of-Ahmed-III.nix
+            ./machines/Fountain-of-Ahmed-III.nix
           ];
           darwinSpecialArgs = {};
           homeModules = [
@@ -86,7 +86,7 @@
           system = "x86_64-linux";
           nixosModules = [
             inputs.nixos-hardware.nixosModules.framework-13-7040-amd
-            ./nixos/machines/arrakis
+            ./machines/arrakis
           ];
           nixosSpecialArgs = { inherit (inputs) agenix robotdisco-secrets; };
           homeModules = [
@@ -101,7 +101,7 @@
           homeModules = [];
           homeSpecialArgs = {};
           nixosModules = [
-            ./nixos/machines/darktower.nix
+            ./machines/darktower.nix
               # Secure secret injection
             inputs.agenix.nixosModules.default
             ./secrets/nixos.nix
