@@ -1,0 +1,5 @@
+#+TITLE: NixOS / Nix-Darwin modules
+
+- common :: Common configuration for both NixOS and Nix-Darwin.
+- darwin :: MacOSX-specific configuration.
+- nixos :: NixOS-specific configuration.

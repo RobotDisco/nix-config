@@ -10,20 +10,20 @@ in
   imports = [
     ./hardware-configuration.nix
 
-    ../../profiles/android.nix
-    ../../profiles/audio.nix
-    ../../profiles/firmware.nix
-    ../../profiles/hidpi.nix
-    ../../profiles/home-devices
-    ../../profiles/keyboard.nix
-    ../../profiles/laptop
-    ../../profiles/nix.nix
-    ../../profiles/regional.nix
-    ../../profiles/security.nix
-    ../../profiles/ssd.nix
-    ../../profiles/steam.nix
-    ../../profiles/yubikey.nix
-    ../../../users/gaelan
+    ../../modules/nixos/android.nix
+    ../../modules/nixos/audio.nix
+    ../../modules/nixos/firmware.nix
+    ../../modules/nixos/hidpi.nix
+    ../../modules/nixos/home-devices
+    ../../modules/nixos/keyboard.nix
+    ../../modules/nixos/laptop
+    ../../modules/nixos/nix.nix
+    ../../modules/nixos/regional.nix
+    ../../modules/nixos/security.nix
+    ../../modules/nixos/ssd.nix
+    ../../modules/nixos/steam.nix
+    ../../modules/nixos/yubikey.nix
+    ../../users/gaelan
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -81,3 +81,4 @@ in
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "21.11"; # Did you read the comment?
 }
+  
