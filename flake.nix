@@ -196,18 +196,7 @@
       # other way around.
       overlays = {
         emacs = final: prev: import ./overlays/emacs final prev;
-        default = final: prev: {
-          brlaser = final.callPackage ./packages/brlaser.nix {};
-        };
       };
-
-      packages."x86_64-linux" =
-        let
-          pkgs = nixpkgs.legacyPackages."x86_64-linux";
-        in
-          {
-            brlaser = pkgs.callPackage ./packages/brlaser.nix {};
-          };
     };
 
   # Supply a project-specific attribute set of nix configuration
