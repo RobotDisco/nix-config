@@ -5,9 +5,7 @@
   # up timed tasks than Linux's systemd. So we need to specify timing
   # differently.
 
-  imports = [
-    ../../common/profiles/nix.nix
-  ];
+  imports = [ ../../modules/common/nix.nix ];
 
   config = {
     # Run garbage collection weekly, around dev-all-hands
