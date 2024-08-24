@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  imports = [ ../profiles/nix.nix ];
+  imports = [ ../modules/darwin/nix.nix ];
 
   config = {
     # Let daemon service be managed by Nix.
@@ -21,7 +21,7 @@
     };
 
     home-manager = {
-      users."gaelan" = import ../../home-manager/profiles/gaelan-work.nix;
+      users."gaelan" = import ../home-manager/profiles/gaelan-work.nix;
     };
 
     # Allow Gaelan to set up caches.
