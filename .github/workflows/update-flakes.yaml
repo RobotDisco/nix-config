@@ -20,3 +20,4 @@ jobs:
             dependencies
             automated
           pr-assignees: RobotDisco
+          token: ${{ secrets.GH_TOKEN_FOR_UPDATES }}
