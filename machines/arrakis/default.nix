@@ -23,6 +23,9 @@ in
     ../../modules/nixos/ssd.nix
     ../../modules/nixos/steam.nix
     ../../modules/nixos/yubikey.nix
+
+    ../../modules/nixos/window-manager/wayland.nix
+
     ../../users/gaelan
   ];
 

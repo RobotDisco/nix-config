@@ -14,6 +14,7 @@ in
 
   config = lib.mkIf cfg.enable {
     wayland.windowManager.sway = {
+      package = null;
       enable = true;
 
       # systemd.xdgAutostart = true;
