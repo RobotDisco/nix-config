@@ -8,221 +8,62 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ehci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "rootpool/nixos/root";
-      fsType = "zfs";
-    };
-
-  fileSystems."/var/lib" =
-    { device = "rootpool/nixos/var/lib";
-      fsType = "zfs";
-    };
-
-  fileSystems."/var/log" =
-    { device = "rootpool/nixos/var/log";
-      fsType = "zfs";
+    { device = "/dev/disk/by-label/rootpool";
+      fsType = "btrfs";
+      options = [ "subvol=@root" "compress=zstd" "noatime" ];
     };
 
   fileSystems."/home" =
-    { device = "rootpool/nixos/home";
-      fsType = "zfs";
+    { device = "/dev/disk/by-label/rootpool";
+      fsType = "btrfs";
+      options = [ "subvol=@home" "compress=zstd" "noatime" ];
     };
 
-  fileSystems."/boot" =
-    { device = "bootpool/nixos/root";
-      fsType = "zfs";
+  fileSystems."/nix" =
+    { device = "/dev/disk/by-label/rootpool";
+      fsType = "btrfs";
+      options = [ "subvol=@nix" "compress=zstd" "noatime" ];
     };
 
-  fileSystems."/boot/efis/EFIBOOT0" =
-    { device = "/dev/disk/by-uuid/43BB-B5B3";
+  fileSystems."/var/lib" =
+    { device = "/dev/disk/by-label/rootpool";
+      fsType = "btrfs";
+      options = [ "subvol=@varlib" "compress=zstd" "noatime" ];
+    };
+
+  fileSystems."/var/log" =
+    { device = "/dev/disk/by-label/rootpool";
+      fsType = "btrfs";
+      options = [ "subvol=@varlog" "compress=zstd" "noatime" ];
+    };
+
+  fileSystems."/var/mail" =
+    { device = "/dev/disk/by-label/rootpool";
+      fsType = "btrfs";
+      options = [ "subvol=@varmail" "compress=zstd" "relatime" ];
+    };
+
+  fileSystems."/boot0" =
+    { device = "/dev/disk/by-label/EFIBOOT0";
       fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
+      options = [ "fmask=0022" "dmask=0022" "noatime" ];
     };
 
-  fileSystems."/boot/efis/EFIBOOT1" =
-    { device = "/dev/disk/by-uuid/4755-40BF";
+  fileSystems."/boot1" =
+    { device = "/dev/disk/by-label/EFIBOOT1";
       fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
-
-  fileSystems."/srv/storagepool" =
-    { device = "storagepool";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/data" =
-    { device = "storagepool/data";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/iocage" =
-    { device = "storagepool/iocage";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/archive" =
-    { device = "storagepool/archive";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/backups" =
-    { device = "storagepool/backups";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/data/drone-ci" =
-    { device = "storagepool/data/drone-ci";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/data/postgres12" =
-    { device = "storagepool/data/postgres12";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/iocage/releases" =
-    { device = "storagepool/iocage/releases";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/data/postgres10" =
-    { device = "storagepool/data/postgres10";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/data/microblog" =
-    { device = "storagepool/data/microblog";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/iocage/jails" =
-    { device = "storagepool/iocage/jails";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/data/minecraft" =
-    { device = "storagepool/data/minecraft";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/data/git" =
-    { device = "storagepool/data/git";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/data/webdav" =
-    { device = "storagepool/data/webdav";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/iocage/releases/11.1-RELEASE" =
-    { device = "storagepool/iocage/releases/11.1-RELEASE";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/iocage/jails/readlater" =
-    { device = "storagepool/iocage/jails/readlater";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/iocage/releases/11.2-RELEASE" =
-    { device = "storagepool/iocage/releases/11.2-RELEASE";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/iocage/jails/postgres" =
-    { device = "storagepool/iocage/jails/postgres";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/iocage/releases/12.0-RELEASE" =
-    { device = "storagepool/iocage/releases/12.0-RELEASE";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/backups/mariadb" =
-    { device = "storagepool/backups/mariadb";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/iocage/releases/12.1-RELEASE" =
-    { device = "storagepool/iocage/releases/12.1-RELEASE";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/backups/postgresql" =
-    { device = "storagepool/backups/postgresql";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/iocage/releases/11.1-RELEASE/root" =
-    { device = "storagepool/iocage/releases/11.1-RELEASE/root";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/iocage/jails/postgres/root" =
-    { device = "storagepool/iocage/jails/postgres/root";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/iocage/releases/11.2-RELEASE/root" =
-    { device = "storagepool/iocage/releases/11.2-RELEASE/root";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/iocage/jails/readlater/root" =
-    { device = "storagepool/iocage/jails/readlater/root";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/iocage/releases/12.0-RELEASE/root" =
-    { device = "storagepool/iocage/releases/12.0-RELEASE/root";
-      fsType = "zfs";
-    };
-
-  fileSystems."/srv/storagepool/iocage/releases/12.1-RELEASE/root" =
-    { device = "storagepool/iocage/releases/12.1-RELEASE/root";
-      fsType = "zfs";
-    };
-
-  fileSystems."/var/lib/containers/storage/zfs-containers/7af11af7b0c5a87ef954b3d3c25f30e6341b9f3be0b66b2543d4903a14687905/userdata/shm" =
-    { device = "shm";
-      fsType = "tmpfs";
-    };
-
-  fileSystems."/var/lib/containers/storage/zfs/graph/94057dac36ab605aa7f056bb8bbc6aaa0f9f1232ae56e41e90b477b2a31f45c4" =
-    { device = "rootpool/nixos/var/lib/94057dac36ab605aa7f056bb8bbc6aaa0f9f1232ae56e41e90b477b2a31f45c4";
-      fsType = "zfs";
-    };
-
-  fileSystems."/var/lib/containers/storage/zfs-containers/3f135a4923055c05ae4239f7ab56cd416292f43ade73c3b69a33b9de9a2797a7/userdata/shm" =
-    { device = "shm";
-      fsType = "tmpfs";
-    };
-
-  fileSystems."/var/lib/containers/storage/zfs/graph/b420a657bb392bc989a6de7e06455bb2ec6a667ff8e93861666b628d86fd5daf" =
-    { device = "rootpool/nixos/var/lib/b420a657bb392bc989a6de7e06455bb2ec6a667ff8e93861666b628d86fd5daf";
-      fsType = "zfs";
-    };
-
-  fileSystems."/var/lib/containers/storage/zfs-containers/91f6807351c1647a49f3447d1145a13f237628dc3ad4b112a7a6ce196b6c0db3/userdata/shm" =
-    { device = "shm";
-      fsType = "tmpfs";
-    };
-
-  fileSystems."/var/lib/containers/storage/zfs/graph/80c5f74bc6b8293afce007de9d0790717b06d8d44cc7508a286eff7f58230425" =
-    { device = "rootpool/nixos/var/lib/80c5f74bc6b8293afce007de9d0790717b06d8d44cc7508a286eff7f58230425";
-      fsType = "zfs";
+      options = [ "fmask=0022" "dmask=0022" "noatime" ];
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/5969c94e-cd73-443f-9e5d-2e3038601780"; }
-      { device = "/dev/disk/by-uuid/2f89d7f4-3070-4ce3-842c-4fdc044e82c3"; }
+    [ { device = "/dev/disk/by-label/swappart0"; }
+      { device = "/dev/disk/by-label/swappart1"; }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -233,11 +74,6 @@
   # networking.interfaces.eno1.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp6s0f0.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp6s0f1.useDHCP = lib.mkDefault true;
-  # networking.interfaces.podman0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.veth0.useDHCP = lib.mkDefault true;
-  # networking.interfaces.veth1.useDHCP = lib.mkDefault true;
-  # networking.interfaces.veth2.useDHCP = lib.mkDefault true;
-  # networking.interfaces.vlan50.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;

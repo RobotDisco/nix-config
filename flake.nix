@@ -118,7 +118,6 @@
           src = ./.;
         };
       });
-
       darwinConfigurations = {
         "Fountain-of-Ahmed-III" = darwinSystem {
           inherit darwin home-manager;
@@ -165,7 +164,7 @@
           homeModules = [ ];
           homeSpecialArgs = { };
           nixosModules = [
-            ./machines/darktower.nix
+            ./machines/darktower
             # Secure secret injection
             inputs.agenix.nixosModules.default
             ./secrets/nixos.nix
@@ -196,7 +195,7 @@
           ];
           nixosSpecialArgs = {
             inherit myLib;
-            inherit (inputs) robotdisco-secrets;
+            inherit (inputs) agenix robotdisco-secrets;
           };
         };
       };

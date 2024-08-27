@@ -27,7 +27,7 @@ in
       "wheel"
     ];
     # Make sure Gaelan's yubikey can ssh into this machine
-    openssh.authorizedKeys.keyFiles = [ ./gaelan.pub ];
+    openssh.authorizedKeys.keyFiles = [ ./user-gaelan.pub ];
     # Gaelan uses the Z Shell.
     shell = pkgs.zsh;
   };
