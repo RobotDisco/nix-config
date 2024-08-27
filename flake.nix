@@ -180,7 +180,13 @@
         in
           {
             default = pkgs.mkShell {
-              nativeBuildInputs = with pkgs; [ git nix nixfmt-rfc-style ];
+              nativeBuildInputs = with pkgs; [
+                # Linter
+                statix
+                # Check for unused imports and other dead code
+                deadnix
+                # Upcoming official nixpkgs formatter
+                nixfmt-rfc-style ];
             };
           });
 
