@@ -563,3 +563,9 @@ If there are no uncompleted todos in the file, remove any :todos: tag."
   :ensure t
   :config
   (load-theme 'rebecca t))
+
+(use-package xclip
+  :ensure t
+  :defer 2
+  :config
+  (xclip-mode +1))
