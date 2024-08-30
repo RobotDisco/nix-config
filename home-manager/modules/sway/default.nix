@@ -10,7 +10,14 @@ let
 in
 
 {
-  options.robot-disco.sway.enable = lib.mkEnableOption "Enable Sway WM";
+  options.robot-disco.sway = {
+    enable = lib.mkEnableOption "Enable Sway WM";
+
+    bluetoothID = lib.mkOption {
+      type = lib.types.int;
+      description = "Bluetooth device ID to toggle via rfkill";
+    };
+  };
 
   config = lib.mkIf cfg.enable {
     wayland.windowManager.sway = {
@@ -77,7 +84,9 @@ in
             XF86AudioRaiseVolume = "exec ${wpctl} set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+";
             XF86MonBrightnessDown = "exec ${brightnessctl} set 5%-";
             XF86MonBrightnessUp = "exec ${brightnessctl} set 5%+";
-            XF86RFKill = "exec ${rfkill} toggle 0; ${rfkill} toggle 6";
+            # TODO these values should be customizable because different laptops
+            # have different device values.
+            XF86RFKill = "exec ${rfkill} toggle 0; ${rfkill} toggle ${toString cfg.bluetoothID}";
           };
       };
     };
