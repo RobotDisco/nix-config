@@ -3,7 +3,7 @@
   # in this case, nix and darwin don't have a unified configuration structure,
   # but lean on the native structures.
 
-  imports = [ ../common/nix.nix ];
+  imports = [ ../../common/nix.nix ];
 
   config = {
     # Run garbage collection weekly

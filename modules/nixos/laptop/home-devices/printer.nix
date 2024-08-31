@@ -5,7 +5,7 @@
   services.printing = {
     enable = true;
     drivers = [
-     pkgs. brlaser
+     pkgs.brlaser
     ];
   };
   hardware.printers = {

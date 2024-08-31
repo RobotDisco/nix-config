@@ -3,3 +3,11 @@
 - common :: Common configuration for both NixOS and Nix-Darwin.
 - darwin :: MacOSX-specific configuration.
 - nixos :: NixOS-specific configuration.
+
+
+* How to use (starting points)
+My current operating principle is that while any nix file in here can be directly imported if appropriate.
+
+However, each first-level directory will be a class of expected behaviour (a ~laptop/~ profile, a ~server/~ profile, etc...) so it will be reasonable to import the default.nix of at least one root directory when setting up a new machine/system.
+
+Any directory without a ~default.nix~ is for behaviour that is expected to be loaded in by other files, or imported explicitly.

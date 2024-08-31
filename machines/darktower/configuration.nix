@@ -9,7 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
 
-      ../../modules/nixos/server/user-gaelan.nix
+      ../../modules/nixos/common
     ];
 
   # Use the systemd-boot EFI boot loader.

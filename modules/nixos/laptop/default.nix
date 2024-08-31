@@ -1,20 +1,19 @@
-{ pkgs, ... }:
-
 {
   imports = [
+    ../common
+    
+    ../hardware/ssd.nix
+
+    ./desktop
+    ./home-devices
+
+    ./audio.nix
     ./bluetooth.nix
-    ../chromecast.nix
-    ./power.nix
+    ./power-management.nix
     ./removable-disks.nix
+    ./steam.nix
     ./touchpad.nix
-    ./wireguard.nix
     ./wireless.nix
+    ./yubikey.nix
   ];
-
-  # Enable screen locking in X
-  programs.xss-lock = {
-    enable = true;
-
-    lockerCommand = "${pkgs.i3lock}/bin/i3lock -c 746542";
-  };
 }
