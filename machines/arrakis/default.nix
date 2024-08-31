@@ -10,21 +10,7 @@ in
   imports = [
     ./hardware-configuration.nix
 
-    ../../modules/nixos/android.nix
-    ../../modules/nixos/audio.nix
-    ../../modules/nixos/firmware.nix
-    ../../modules/nixos/hidpi.nix
-    ../../modules/nixos/home-devices
-    ../../modules/nixos/keyboard.nix
     ../../modules/nixos/laptop
-    ../../modules/nixos/nix.nix
-    ../../modules/nixos/regional.nix
-    ../../modules/nixos/security.nix
-    ../../modules/nixos/ssd.nix
-    ../../modules/nixos/steam.nix
-    ../../modules/nixos/yubikey.nix
-
-    ../../modules/nixos/window-manager/wayland.nix
 
     ../../users/gaelan
   ];

@@ -27,15 +27,7 @@
     };
   };
 
+  # Install tooling that downloads pre-built non-nixpkgs derivations.
+  # This avoids unnecessary compilation.
   environment.systemPackages = [ pkgs.cachix ];
-
-  # Sometimes it's easier / more feasible to use legacy nix commands that rely
-  # on the old <nixpkgs> channel. Since nix flakes don't manage traditional
-  # nixchannels, let's set it here to pin <nixpkgs> to our current nixpkgs
-  # input.
-  #
-  # But this is already set when you set up a nixos system via flakes
-  # so we don't need to set up anything on NixOS
-  #
-  # environment.variables.NIX_PATH = [ "nixpkgs=${pkgs.path}" ];
 }

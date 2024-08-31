@@ -1,6 +1,7 @@
 {pkgs, ... }:
 let
   swayConfig = pkgs.writeText "greet-sway-config" ''
+    output * enable bg ${../../../../home-manager/modules/sway/backgrounds/moosevalley.jpg} fill
     # `-l` activates layer-shell mode. Notice that `swaymsg exit` will run after gtkgreet.
     exec "${pkgs.greetd.gtkgreet}/bin/gtkgreet -l; swaymsg exit"
     bindsym Mod4+shift+e exec swaynag \
