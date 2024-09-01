@@ -3,13 +3,10 @@
 
 This is the configuration for my NixOS installations and also my user dot files, as laid down by nix. It is structured as a Nix flake.
 
-This repo is heavily indebted to [[https://github.com/terlar/nix-config][terlar]] whose nix-config repo has heavily influenced this latest iteration of my confic.
-
 This flake includes the following components:
 
 - apps :: commands which this flake provides, and commands for development workflow. Use with =nix run .#<command>=
-  - ~darwin-switch~ :: run =darwin-rebuild --switch= for this flake.
-  - ~nixos-switch~ :: run =nixos-rebuild --switch= for this flake.
+  - ~switch~ :: run =darwin-rebuild --switch= or =nixos-rebuild --switch= for this flake, platform depending..
   - ~use-caches~ :: add caches to the project's =nix.conf=. This is only needed when modifying cache sources.
 - devShell :: a shell environment with tools used for development. Run using =nix develop=
 - lib :: library functions used within this flake
@@ -32,7 +29,7 @@ nix flake show
 
 Switch to flake's NixOS configuration (and through embedding, home-manager configuration)
 #+BEGIN_SRC sh
-nix run .#nixos-switch
+nix run .#switch
 #+END_SRC
 
 Update all flake inputs and generate a commit
@@ -198,3 +195,9 @@ nix flake lock --override-input <input> path:../<input-path>
    There can be costs to this; one of the reasons all of terlar's =lib= members hasn't been moved into a separate nix module is so that imports don't have to be passed in (and thus referenced explicitly?)
 
    The aforementioned =importDirToAttrs= function means means that nix modules aren't loaded in via a =default.nix= that loads them in explicitly. Each file becomes its own module, effectively. That doesn't feel idiomatic. But do I care?
+* Influences
+- https://github.com/ryan4yin/nix-config (also, Ryan Yin's [[https://github.com/ryan4yin/nixos-and-flakes-book][guide to Nix and Flakes]] is an essential read if you are getting started)
+- https://github.com/yomaq/nix-config
+- https://github.com/terlar/nix-config (and particularly https://github.com/terlar/emacs-config)
+- https://github.com/cmacrae/config
+- https://github.com/peel/dotfiles
