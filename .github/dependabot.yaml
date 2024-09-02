@@ -7,7 +7,7 @@ updates:
     assignees:
       - "RobotDisco"
     commit-message:
-      prefix: "gh-action"
+      prefix: "chore"
     labels:
       - dependencies
       - automated

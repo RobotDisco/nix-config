@@ -2,7 +2,7 @@ name: update-flake-lock
 on:
   workflow_dispatch: # allows manual triggering
   schedule:
-    - cron: '0 0 * * 0' # runs weekly on Sundat at 00:00
+    - cron: '0 0 * * 0' # runs weekly on Sunday at 00:00 UTC
 
 jobs:
   lockfile:
@@ -19,8 +19,8 @@ jobs:
       - name: Update flake.lock
         uses: DeterminateSystems/update-flake-lock@v23
         with:
-          commit-msg: "gh-action: Update flake.lock to latest inputs"
-          pr-title: "gh-action: Update flake.lock to latest inputs" # Title of PR to be created.
+          commit-msg: "chore: Update flake.lock to latest inputs"
+          pr-title: "chore: Update flake.lock to latest inputs" # Title of PR to be created.
           pr-labels: | # Labels to be set on the PR
             dependencies
             automated
