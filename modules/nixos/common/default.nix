@@ -2,6 +2,7 @@
   imports = [
     ../../common
 
+    ./btrfs.nix
     ./firmware.nix
     ./keyboard.nix
     ./nix.nix

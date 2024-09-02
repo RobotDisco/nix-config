@@ -29,6 +29,10 @@ in
   fileSystems."/home".options = btrfs-options;
   fileSystems."/boot".options = [ "noatime" ];
 
+  # By default btrfs will scrub filesystems multiple times if subvolumes are
+  # mounted; explicitly list one subvolume as the others are covered implicitly.
+  services.btrfs.autoScrub.fileSystems = [ "/" ];
+
   # Simple password-based Full Disk Encryption
   boot.initrd.luks.devices = {
     nixoscrypt = {
