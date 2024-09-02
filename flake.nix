@@ -61,7 +61,7 @@
       # Darwin config generator
       darwinSystem = import ./lib/darwinSystem.nix;
       # NixOS config generator
-      nixosSystem = import ./lib/nixosSystem.nix;
+      nixosSystem = import ./lib/nixosSystem.nix (lib.attrValues self.overlays);
       ### HERE ENDS MY HELPER FUNCTION LIBRARY ###
     in {
       darwinConfigurations = {
@@ -202,7 +202,17 @@
       # other way around.
       overlays = {
         emacs = final: prev: import ./overlays/emacs final prev;
+        default = final: prev: {
+          sunsama = final.callPackage ./packages/sunsama.nix {};
+        };
       };
+
+      packages."x86_64-linux" = let
+        pkgs = import nixpkgs { system = "x86_64-linux"; config.allowUnfree = true; };
+      in
+        {
+          sunsama = pkgs.callPackage ./packages/sunsama.nix {};
+        };
     };
 
   # Supply a project-specific attribute set of nix configuration

@@ -55,6 +55,7 @@
         "seafile-client"
         "signal"
         "slack"
+        "sunsama"
         "tidal"
         "whatsapp"
         "zotero"

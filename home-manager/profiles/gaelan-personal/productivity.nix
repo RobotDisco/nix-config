@@ -1,8 +1,10 @@
 { pkgs, ... }:
 
 {
-  home.packages = [
-    pkgs.calibre
-    pkgs.zotero
+  home.packages = with pkgs; [
+    calibre
+    # Sunsama is currently a package installed via personal overlay
+    sunsama
+    zotero
   ];
 }
