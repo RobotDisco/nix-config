@@ -10,7 +10,7 @@ let
   cfg = config.robot-disco.wayland.hyprland;
 
   # Clipboard managers I'm evaluating
-  clipse = "${pkgs.clipse}/bin/clipse";
+  # clipse = "${pkgs.clipse}/bin/clipse";
   cliphist = "${pkgs.cliphist}/bin/cliphist";
   # Standard clipboard tooling
   wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy";

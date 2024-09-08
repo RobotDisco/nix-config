@@ -7,37 +7,69 @@
 }:
 
 {
-  networking.hostName = "darktower";
-  # Let's lean into ZFS unless I ever need non-ZFS
-  boot.supportedFilesystems = [ "zfs" ];
-  # This should be parameterized, an eight-character hex string
-  networking.hostId = "aa3d3177";
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+  networking = {
+    hostName = "darktower";
+    # This should be parameterized, an eight-character hex string
+    hostId = "aa3d3177";
 
-  # Don't allow system to change EFI variables
-  boot.loader.efi.canTouchEfiVariables = false;
-  # Copy kernel files into /boot so /nix/store isn't needed
-  boot.loader.generationsDir.copyKernels = true;
-  # TL;DR Don't depend on NVRAM state
-  boot.loader.grub.efiInstallAsRemovable = true;
-  # OpenZFS recommends grub; sure, why not
-  boot.loader.grub.enable = true;
-  # Copy kernels to /boot
-  boot.loader.grub.copyKernels = true;
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.zfsSupport = true;
-  # Since we mirror our system drives, mirror boot partitions.
-  boot.loader.grub.mirroredBoots = [
-    {
-      devices = [ "nodev" ];
-      path = "/boot/efis/EFIBOOT0";
-      efiSysMountPoint = "/boot/efis/EFIBOOT0";
-    }
-    {
-      devices = [ "nodev" ];
-      path = "/boot/efis/EFIBOOT1";
-      efiSysMountPoint = "/boot/efis/EFIBOOT1";
-    }
+    useDHCP = lib.mkDefault false;
+    interfaces.eno1 = {
+      useDHCP = lib.mkDefault false;
+      ipv4.addresses = [
+        {
+          address = "192.168.10.3";
+          prefixLength = 24;
+        }
+      ];
+      enp6s0f0.useDHCP = lib.mkDefault false;
+      enp6s0f1.useDHCP = lib.mkDefault false;
+    };
+  };
+
+  boot = {
+    loader = {
+      # Don't allow system to change EFI variables
+      efi.canTouchEfiVariables = false;
+      # Copy kernel files into /boot so /nix/store isn't needed
+      generationsDir.copyKernels = true;
+
+      grub = {
+        # TL;DR Don't depend on NVRAM state
+        efiInstallAsRemovable = true;
+        # OpenZFS recommends grub; sure, why not
+        enable = true;
+        # Copy kernels to /boot
+        copyKernels = true;
+        efiSupport = true;
+        zfsSupport = true;
+
+        # Since we mirror our system drives, mirror boot partitions.
+        mirroredBoots = [
+          {
+            devices = [ "nodev" ];
+            path = "/boot/efis/EFIBOOT0";
+            efiSysMountPoint = "/boot/efis/EFIBOOT0";
+          }
+          {
+            devices = [ "nodev" ];
+            path = "/boot/efis/EFIBOOT1";
+            efiSysMountPoint = "/boot/efis/EFIBOOT1";
+          }
+        ];
+      };
+    };
+  };
+
+  # Make sure my kernel supports ZFS
+  kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+
+  # Let's lean into ZFS unless I ever need non-ZFS
+  supportedFilesystems = [ "zfs" ];
+
+  # I don't care about specific mountpoints, so just mount the pools
+  zfs.extraPools = [
+    "storagepool"
+    "backuppool"
   ];
 
   # Don't force import of root ZFS pools
@@ -46,8 +78,6 @@
 
   users.users.root.initialHashedPassword = "$6$rounds=2500000$NC9QlbTMMOJ8$h.coBkWCDI/epZApjonqHPvOjZ4ys8O44OERo2mK5ehB8TUgK8.FWW4tknxXYrlFKa/9t5tGWALBDoUNbCMjx1";
   time.timeZone = "America/Toronto";
-
-  services.openssh.enable = true;
 
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
@@ -65,61 +95,63 @@
   # My AMT/VNC-enabled server requires this or remote reboots get sad.
   boot.kernelParams = [ "nomodeset" ];
 
-  fileSystems."/" = {
-    device = "rootpool/nixos/root";
-    fsType = "zfs";
-    options = [
-      "zfsutil"
-      "X-mount.mkdir"
-    ];
-  };
+  fileSystems = {
+    "/" = {
+      device = "rootpool/nixos/root";
+      fsType = "zfs";
+      options = [
+        "zfsutil"
+        "X-mount.mkdir"
+      ];
+    };
 
-  fileSystems."/home" = {
-    device = "rootpool/nixos/home";
-    fsType = "zfs";
-    options = [
-      "zfsutil"
-      "X-mount.mkdir"
-    ];
-  };
+    "/home" = {
+      device = "rootpool/nixos/home";
+      fsType = "zfs";
+      options = [
+        "zfsutil"
+        "X-mount.mkdir"
+      ];
+    };
 
-  # Where containers and possibly VMs live
-  fileSystems."/var/lib" = {
-    device = "rootpool/nixos/var/lib";
-    fsType = "zfs";
-    options = [
-      "zfsutil"
-      "X-mount.mkdir"
-    ];
-  };
+    # Where containers and possibly VMs live
+    "/var/lib" = {
+      device = "rootpool/nixos/var/lib";
+      fsType = "zfs";
+      options = [
+        "zfsutil"
+        "X-mount.mkdir"
+      ];
+    };
 
-  # Where logs live
-  fileSystems."/var/log" = {
-    device = "rootpool/nixos/var/log";
-    fsType = "zfs";
-    options = [
-      "zfsutil"
-      "X-mount.mkdir"
-    ];
-  };
+    # Where logs live
+    "/var/log" = {
+      device = "rootpool/nixos/var/log";
+      fsType = "zfs";
+      options = [
+        "zfsutil"
+        "X-mount.mkdir"
+      ];
+    };
 
-  fileSystems."/boot" = {
-    device = "bootpool/nixos/root";
-    fsType = "zfs";
-    options = [
-      "zfsutil"
-      "X-mount.mkdir"
-    ];
-  };
+    "/boot" = {
+      device = "bootpool/nixos/root";
+      fsType = "zfs";
+      options = [
+        "zfsutil"
+        "X-mount.mkdir"
+      ];
+    };
 
-  fileSystems."/boot/efis/EFIBOOT0" = {
-    device = "/dev/disk/by-label/EFIBOOT0";
-    fsType = "vfat";
-  };
+    "/boot/efis/EFIBOOT0" = {
+      device = "/dev/disk/by-label/EFIBOOT0";
+      fsType = "vfat";
+    };
 
-  fileSystems."/boot/efis/EFIBOOT1" = {
-    device = "/dev/disk/by-label/EFIBOOT1";
-    fsType = "vfat";
+    "/boot/efis/EFIBOOT1" = {
+      device = "/dev/disk/by-label/EFIBOOT1";
+      fsType = "vfat";
+    };
   };
 
   swapDevices = [
@@ -127,38 +159,100 @@
     { label = "swappart1"; }
   ];
 
-  networking.useDHCP = lib.mkDefault false;
-  networking.interfaces.eno1 = {
-    useDHCP = lib.mkDefault false;
-    ipv4.addresses = [
-      {
-        address = "192.168.10.3";
-        prefixLength = 24;
-      }
-    ];
-  };
-
-  networking.interfaces.enp6s0f0.useDHCP = lib.mkDefault false;
-  networking.interfaces.enp6s0f1.useDHCP = lib.mkDefault false;
-
   hardware.cpu.intel.updateMicrocode = true;
 
-  services.fstrim.enable = true;
-  services.zfs.trim.enable = true;
+  services = {
+    borgbackup.jobs.borgbase = {
+      paths = [
+        "/srv/storagepool/data"
+        "/srv/storagepool/backups"
+      ];
+      repo = "mwhkrvt4@mwhkrvt4.repo.borgbase.com:repo";
+      encryption = {
+        mode = "keyfile-blake2";
+        # TODO encode this securely to not manual file placement
+        passCommand = "cat /root/keys/borg_encryption_passphrase";
+      };
+      compression = "zstd";
+      startAt = "*-*-* *:05,35:00";
+      prune.keep = {
+        hourly = 72;
+        daily = 90;
+        monthly = 36;
+      };
+    };
 
-  # Using interleaved schedule of bimonthly scrubs
-  # and long SMART tests (and weekly short SMART tests)
-  # found at https://www.truenas.com/community/threads/scrub-and-smart-testing-schedules.20108/      
-  # Scrub ZFS pools every bimonthly
-  services.zfs.autoScrub = {
-    interval = "*-*-01,15 03:00";
-    enable = true;
-  };
+    fstrim.enable = true;
 
-  services.zfs.zed = {
-    enableMail = true;
-    settings = {
-      ZED_EMAIL_ADDR = [ "gdcosta@gmail.com" ];
+    openssh.enable = true;
+
+    # Automatically snapshot ZFS volumes
+    sanoid = {
+      enable = true;
+
+      datasets = {
+        "storagepool/backups" = {
+          recursive = true;
+          daily = 90;
+          hourly = 72;
+          monthly = 36;
+          autosnap = true;
+          autoprune = true;
+        };
+        "storagepool/data" = {
+          recursive = true;
+          daily = 90;
+          hourly = 72;
+          monthly = 36;
+          autosnap = true;
+          autoprune = true;
+        };
+      };
+    };
+    # Automatically replicate data pool to onsite backup
+    syncoid = {
+      localTargetAllow = [
+        "change-key"
+        "compression"
+        "create"
+        "destroy"
+        "mount"
+        "mountpoint"
+        "receive"
+        "rollback"
+      ];
+      enable = true;
+
+      commands = {
+        "storagepool/data" = {
+          target = "backuppool/storagepool/data";
+          recursive = true;
+        };
+        "storagepool/backups" = {
+          target = "backuppool/storagepool/backups";
+          recursive = true;
+        };
+      };
+    };
+
+    zfs = {
+      # Using interleaved schedule of bimonthly scrubs
+      # and long SMART tests (and weekly short SMART tests)
+      # found at https://www.truenas.com/community/threads/scrub-and-smart-testing-schedules.20108/      
+      # Scrub ZFS pools every bimonthly
+      autoScrub = {
+        interval = "*-*-01,15 03:00";
+        enable = true;
+      };
+
+      trim.enable = true;
+
+      zed = {
+        enableMail = true;
+        settings = {
+          ZED_EMAIL_ADDR = [ "gdcosta@gmail.com" ];
+        };
+      };
     };
   };
 
@@ -186,81 +280,6 @@
     "8.8.8.8"
     "8.8.4.4"
   ];
-
-  # I don't care about specific mountpoints, so just mount the pools
-  boot.zfs.extraPools = [
-    "storagepool"
-    "backuppool"
-  ];
-
-  # Automatically snapshot ZFS volumes
-  services.sanoid = {
-    enable = true;
-
-    datasets = {
-      "storagepool/backups" = {
-        recursive = true;
-        daily = 90;
-        hourly = 72;
-        monthly = 36;
-        autosnap = true;
-        autoprune = true;
-      };
-      "storagepool/data" = {
-        recursive = true;
-        daily = 90;
-        hourly = 72;
-        monthly = 36;
-        autosnap = true;
-        autoprune = true;
-      };
-    };
-  };
-  # Automatically replicate data pool to onsite backup
-  services.syncoid = {
-    localTargetAllow = [
-      "change-key"
-      "compression"
-      "create"
-      "destroy"
-      "mount"
-      "mountpoint"
-      "receive"
-      "rollback"
-    ];
-    enable = true;
-
-    commands = {
-      "storagepool/data" = {
-        target = "backuppool/storagepool/data";
-        recursive = true;
-      };
-      "storagepool/backups" = {
-        target = "backuppool/storagepool/backups";
-        recursive = true;
-      };
-    };
-  };
-
-  services.borgbackup.jobs."borgbase" = {
-    paths = [
-      "/srv/storagepool/data"
-      "/srv/storagepool/backups"
-    ];
-    repo = "mwhkrvt4@mwhkrvt4.repo.borgbase.com:repo";
-    encryption = {
-      mode = "keyfile-blake2";
-      # TODO encode this securely to not manual file placement
-      passCommand = "cat /root/keys/borg_encryption_passphrase";
-    };
-    compression = "zstd";
-    startAt = "*-*-* *:05,35:00";
-    prune.keep = {
-      hourly = 72;
-      daily = 90;
-      monthly = 36;
-    };
-  };
 
   # I only use this for cloud services, so specify the vlan
   networking.vlans = {
@@ -548,39 +567,41 @@
     };
   };
 
-  virtualisation.podman.extraPackages = [ pkgs.zfs ];
+  virtualisation = {
+    containers.storage.settings.storage = {
+      driver = "zfs";
+      graphroot = "/var/lib/containers/storage";
+      runroot = "/run/containers/storage";
+    };
 
-  virtualisation.containers.storage.settings.storage = {
-    driver = "zfs";
-    graphroot = "/var/lib/containers/storage";
-    runroot = "/run/containers/storage";
-  };
+    oci-containers.containers = {
+      "seafile-memcached" = {
+        autoStart = true;
+        image = "memcached:1.6.18";
+        entrypoint = "memcached";
+        cmd = [
+          "-m"
+          "256"
+        ];
+        ports = [ "127.0.0.1:11211:11211" ];
+      };
+      "seafile-mc" = {
+        autoStart = true;
+        image = "seafileltd/seafile-mc:11.0-latest";
+        dependsOn = [ "seafile-memcached" ];
+        environmentFiles = [ config.age.secrets.seafile-envs.path ];
+        volumes = [ "/srv/storagepool/data/webdav/shared:/shared" ];
+        ports = [ "127.0.0.1:8001:8000" ];
+      };
+      "organice" = {
+        autoStart = true;
+        image = "twohundredok/organice:latest";
+        ports = [ "127.0.0.1:8002:5000" ];
+        environmentFiles = [ "/srv/storagepool/data/webdav/organice_env_vars" ];
+      };
+    };
 
-  virtualisation.oci-containers.containers = {
-    "seafile-memcached" = {
-      autoStart = true;
-      image = "memcached:1.6.18";
-      entrypoint = "memcached";
-      cmd = [
-        "-m"
-        "256"
-      ];
-      ports = [ "127.0.0.1:11211:11211" ];
-    };
-    "seafile-mc" = {
-      autoStart = true;
-      image = "seafileltd/seafile-mc:11.0-latest";
-      dependsOn = [ "seafile-memcached" ];
-      environmentFiles = [ config.age.secrets.seafile-envs.path ];
-      volumes = [ "/srv/storagepool/data/webdav/shared:/shared" ];
-      ports = [ "127.0.0.1:8001:8000" ];
-    };
-    "organice" = {
-      autoStart = true;
-      image = "twohundredok/organice:latest";
-      ports = [ "127.0.0.1:8002:5000" ];
-      environmentFiles = [ "/srv/storagepool/data/webdav/organice_env_vars" ];
-    };
+    podman.extraPackages = [ pkgs.zfs ];
   };
 
   services.fail2ban = {
@@ -664,9 +685,11 @@
   services.smartd = {
     enable = true;
     notifications = {
-      mail.sender = "root@robot-disco.net";
-      mail.enable = true;
-      mail.recipient = "gdcosta@gmail.com";
+      mail = {
+        enable = true;
+        recipient = "gdcosta@gmail.com";
+        sender = "root@robot-disco.net";
+      };
     };
     # weekly short tests, monthly long tests
     defaults.autodetected = "-a -o on -s (S/../../3/12|L/../01/./17)";

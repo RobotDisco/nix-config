@@ -15,6 +15,22 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    darwin.url = "github:lnl7/nix-darwin/master";
+    darwin.inputs.nixpkgs.follows = "nixpkgs-mac";
+
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
+
+    home-manager.url = "github:nix-community/home-manager/release-24.05";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
+    pre-commit-hooks.url = "github:cachix/git-hooks.nix";
+
+    robonona.url = "github:RobotDisco/robonona-clj";
+    robonona.inputs.nixpkgs.follows = "nixpkgs";
+
     # My private secrets repository.
     # use ssh protocol to authenticate via ssh-agent/ssh-key
     # and shallow clone to save time.
@@ -23,30 +39,26 @@
       url = "git+ssh://git@github.com/RobotDisco/nix-secrets.git?shallow=1";
       flake = false;
     };
-
-    darwin.url = "github:lnl7/nix-darwin/master";
-    darwin.inputs.nixpkgs.follows = "nixpkgs-mac";
-
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
-    emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
-
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-
-    home-manager.url = "github:nix-community/home-manager/release-24.05";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
-    robonona.url = "github:RobotDisco/robonona-clj";
-    robonona.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nixpkgs, darwin, emacs-overlay
-    , home-manager, nixos-hardware, ... }:
+  outputs =
+    inputs@{
+      self,
+      nixpkgs,
+      darwin,
+      home-manager,
+      nixos-hardware,
+      ...
+    }:
     let
       inherit (nixpkgs) lib;
 
       ### HERE BEGINS WHAT IS EFFECTIVELY MY CONFIGURATION SECTION
       # What platforms do I support?
-      supportedSystems = [ "x86_64-linux" "aarch64-darwin" ];
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
       #### THIS ENDS WHAT IS EFFECTIVELY MY CONFIGURATION SECTION.
 
       ### HERE BEGINS MY HELPER FUNCTION LIBRARY ###
@@ -62,21 +74,56 @@
       darwinSystem = import ./lib/darwinSystem.nix;
       # NixOS config generator
       nixosSystem = import ./lib/nixosSystem.nix (lib.attrValues self.overlays);
-      ### HERE ENDS MY HELPER FUNCTION LIBRARY ###
-    in {
+    in
+    ### HERE ENDS MY HELPER FUNCTION LIBRARY ###
+    {
+      checks = forAllSystems (system: {
+        pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
+          excludes = [ "hardware-configuration\\.nix" ];
+          hooks = {
+            # Github actions linter
+            actionlint.enable = true;
+            # Detect unused function inputs
+            deadnix = {
+              enable = true;
+            };
+            # Detect unsupported NixOS input versions
+            flake-checker = {
+              enable = true;
+            };
+            # Do something via Nix language server?
+            nil = {
+              enable = true;
+            };
+            # RFC-compliant nix format checker
+            nixfmt-rfc-style = {
+              enable = true;
+            };
+            # nix static analysis
+            statix = {
+              enable = true;
+              # For some stupid reason statix doesn't use the standard
+              # excludes flag but uses a separate "ignores" field.
+              settings.ignore = [ "hardware-configuration.nix" ];
+            };
+          };
+          src = ./.;
+        };
+      });
+
       darwinConfigurations = {
         "Fountain-of-Ahmed-III" = darwinSystem {
           inherit darwin home-manager;
           system = "aarch64-darwin";
-          darwinModules = [
-            ./machines/Fountain-of-Ahmed-III.nix
-          ];
-          darwinSpecialArgs = {};
+          darwinModules = [ ./machines/Fountain-of-Ahmed-III.nix ];
+          darwinSpecialArgs = { };
           homeModules = [
             inputs.agenix.homeManagerModules.default
             ./secrets/home-manager.nix
           ];
-          homeSpecialArgs = { inherit (inputs) agenix robotdisco-secrets; };
+          homeSpecialArgs = {
+            inherit (inputs) agenix robotdisco-secrets;
+          };
         };
       };
 
@@ -88,21 +135,25 @@
             inputs.nixos-hardware.nixosModules.framework-13-7040-amd
             ./machines/arrakis
           ];
-          nixosSpecialArgs = { inherit (inputs) agenix robotdisco-secrets; };
+          nixosSpecialArgs = {
+            inherit (inputs) agenix robotdisco-secrets;
+          };
           homeModules = [
             inputs.agenix.homeManagerModules.default
             ./secrets/home-manager.nix
           ];
-          homeSpecialArgs = { inherit (inputs) agenix robotdisco-secrets; };
+          homeSpecialArgs = {
+            inherit (inputs) agenix robotdisco-secrets;
+          };
         };
         darktower = nixosSystem {
           inherit nixpkgs home-manager;
           system = "x86_64-linux";
-          homeModules = [];
-          homeSpecialArgs = {};
+          homeModules = [ ];
+          homeSpecialArgs = { };
           nixosModules = [
             ./machines/darktower.nix
-              # Secure secret injection
+            # Secure secret injection
             inputs.agenix.nixosModules.default
             ./secrets/nixos.nix
             {
@@ -130,69 +181,76 @@
               };
             }
           ];
-          nixosSpecialArgs = { inherit (inputs) robotdisco-secrets; };
+          nixosSpecialArgs = {
+            inherit (inputs) robotdisco-secrets;
+          };
         };
       };
 
-      apps = forAllSystems (system:
-        let pkgs = nixpkgs.legacyPackages."${system}";
+      apps = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages."${system}";
         in
-        pkgs.lib.trivial.pipe [
-          # This list is honestly all I want to see here
-          # possibly, even hiding the fact that it is an
-          # application of writeShell Application.
-          #
-          # Everything else is transformation stuff that is
-          # used to minimize the amount of boilerplate written
-          # and should be encapsulated somewhere else, like in
-          # lib/
-          {
-            name = "switch";
-            text = if pkgs.stdenv.isDarwin
-              then "darwin-rebuild switch --flake ${toString ./.}#"
-              else "sudo nixos-rebuild switch --flake ${toString ./.}#";
-          }
-          {
-            name = "use-caches";
-            runtimeInputs = [ pkgs.cachix ];
-            text = ''
-              ${pkgs.cachix}/bin/cachix use -O . nix-community
-              ${pkgs.cachix}/bin/cachix use -O . robot-disco
-            '';
-          }
-        ] [
-          # Generate a derivation
-          (builtins.map pkgs.writeShellApplication)
-          # Transform derivation into flakes app item schema
-          (builtins.map (deriv: {
-            name = deriv.name;
-            value = {
-              type = "app";
-              program = "${deriv}/bin/${deriv.name}";
-            };
-          }))
-          # Convert list of app objects into attrset
-          builtins.listToAttrs
-        ]);
+        pkgs.lib.trivial.pipe
+          [
+            # This list is honestly all I want to see here
+            # possibly, even hiding the fact that it is an
+            # application of writeShell Application.
+            #
+            # Everything else is transformation stuff that is
+            # used to minimize the amount of boilerplate written
+            # and should be encapsulated somewhere else, like in
+            # lib/
+            {
+              name = "switch";
+              text =
+                if pkgs.stdenv.isDarwin then
+                  "darwin-rebuild switch --flake ${toString ./.}#"
+                else
+                  "sudo nixos-rebuild switch --flake ${toString ./.}#";
+            }
+            {
+              name = "use-caches";
+              runtimeInputs = [ pkgs.cachix ];
+              text = ''
+                ${pkgs.cachix}/bin/cachix use -O . nix-community
+                ${pkgs.cachix}/bin/cachix use -O . robot-disco
+              '';
+            }
+          ]
+          [
+            # Generate a derivation
+            (builtins.map pkgs.writeShellApplication)
+            # Transform derivation into flakes app item schema
+            (builtins.map (deriv: {
+              inherit (deriv) name;
+              value = {
+                type = "app";
+                program = "${deriv}/bin/${deriv.name}";
+              };
+            }))
+            # Convert list of app objects into attrset
+            builtins.listToAttrs
+          ]
+      );
 
-      devShells = forAllSystems (system:
-        let pkgs = nixpkgs.legacyPackages."${system}";
+      devShells = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+          preCommitCheck = self.checks.${system}.pre-commit-check;
         in
-          {
-            default = pkgs.mkShell {
-              nativeBuildInputs = with pkgs; [
-                # Linter
-                statix
-                # Check for unused imports and other dead code
-                deadnix
-                # Upcoming official nixpkgs formatter
-                nixfmt-rfc-style ];
-            };
-          });
+        {
+          default = pkgs.mkShell {
+            inherit (preCommitCheck) shellHook;
+            nativeBuildInputs = preCommitCheck.enabledPackages;
+          };
+        }
+      );
 
       # Run ~nix fmt~ to use this package to format nix files
-      formatter = forAllSystems (system:
-        nixpkgs.legacyPackages."${system}".nixfmt-rfc-style);
+      formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixfmt-rfc-style);
 
       # Conceptually it feels like I should be defining my packages
       # in the packages settings and then defining overlays that reference
@@ -202,16 +260,18 @@
       # other way around.
       overlays = {
         emacs = final: prev: import ./overlays/emacs final prev;
-        default = final: prev: {
-          sunsama = final.callPackage ./packages/sunsama.nix {};
-        };
+        default = final: _prev: { sunsama = final.callPackage ./packages/sunsama.nix { }; };
       };
 
-      packages."x86_64-linux" = let
-        pkgs = import nixpkgs { system = "x86_64-linux"; config.allowUnfree = true; };
-      in
+      packages."x86_64-linux" =
+        let
+          pkgs = import nixpkgs {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+          };
+        in
         {
-          sunsama = pkgs.callPackage ./packages/sunsama.nix {};
+          sunsama = pkgs.callPackage ./packages/sunsama.nix { };
         };
     };
 

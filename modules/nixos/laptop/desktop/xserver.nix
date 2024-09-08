@@ -5,7 +5,5 @@ in
 {
   options.robot-disco.xserver.enable = lib.mkEnableOption "X graphical environment";
 
-  config = lib.mkIf cfg.enable {
-    services.xserver.enable = true;
-  };
+  config = lib.mkIf cfg.enable { services.xserver.enable = true; };
 }

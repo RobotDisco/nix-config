@@ -1,5 +1,7 @@
 # direnv derivation caches
 /.direnv/
+# pre-commit-checks auto-generated config
+/.pre-commit-config.yaml
 # nix build and nix-build results
 /result
 # Emacs backups

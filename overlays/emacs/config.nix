@@ -1,6 +1,12 @@
 # This file follows the callPackage pattern
 # see https://nixos.org/guides/nix-pills/callpackage-design-pattern.html
-{ lib, packageRequires, stdenv, trivialBuild, version ? "dev" }:
+{
+  lib,
+  packageRequires,
+  stdenv,
+  trivialBuild,
+  version ? "dev",
+}:
 
 let
   # Nix package for emacs lisp which creates
@@ -46,7 +52,8 @@ let
       export XDG_CONFIG_HOME="$PWD/.xdg-config"
     '';
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "gaelan-emacs-config";
   inherit version;
 
@@ -55,11 +62,12 @@ in stdenv.mkDerivation {
 
   # We pass these through just in case anyone needs the derivations
   # we made to derive our combined and compiled config.
-  passthru.components = { inherit package-quickstart init; };
+  passthru.components = {
+    inherit package-quickstart init;
+  };
 
   installPhase = ''
     install -D -t $out ${package-quickstart}/share/emacs/site-lisp/*
     install -D -t $out ${init}/share/emacs/site-lisp/*
   '';
 }
-

@@ -16,34 +16,43 @@ in
   ];
 
   config = {
-    # The state version is required and should stay at the version you
-    # originally installed.
-    home.stateVersion = "22.11";
-    home.homeDirectory = "/home/${username}";
-    home.username = username;
-
-    robot-disco.development-environment = {
-      enable = true;
-      fullname = "Gaelan D'costa";
-      email = "gdcosta@gmail.com";
-      gpgKey = "A517704FBD8D1018!";
-      defaultBranch = "trunk";
-
-      signCommits = true;
+    home = {
+      inherit username;
+      homeDirectory = "/home/${username}";
+      # The state version is required and should stay at the version you
+      # originally installed.
+      stateVersion = "22.11";
     };
 
-    #robot-disco.emacs.enable = false;
-    #robot-disco.emacs.enableExwm = false;
+    robot-disco = {
+      development-environment = {
+        enable = true;
+        fullname = "Gaelan D'costa";
+        email = "gdcosta@gmail.com";
+        gpgKey = "A517704FBD8D1018!";
+        defaultBranch = "trunk";
 
-    robot-disco.gnupg.enable = true;
+        signCommits = true;
+      };
 
-    robot-disco.services.seafile-client.enable = true;
+      # emacs = {
+      #   enable = false;
+      #   enableExwm = false;
+      # };
 
-    robot-disco.laptop.bluetoothID = 15;
-    robot-disco.wayland.sway = {
-      enable = true;
+      gnupg.enable = true;
+
+      laptop.bluetoothID = 15;
+
+      services.seafile-client.enable = true;
+
+      wayland = {
+        hyprland.enable = true;
+
+        sway = {
+          enable = true;
+        };
+      };
     };
-
-    robot-disco.wayland.hyprland.enable = true;
   };
 }

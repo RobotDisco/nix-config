@@ -1,4 +1,4 @@
-{pkgs, ... }:
+{ pkgs, ... }:
 let
   swayConfig = pkgs.writeText "greet-sway-config" ''
     output * enable bg ${../../../../home-manager/modules/wayland/backgrounds/moosevalley.jpg} fill
@@ -25,10 +25,11 @@ in
   '';
 
   # Compositors I'm actively using
-  programs.sway.enable = true;
-
-  # Window managers I'm trying out
-  programs.hyprland.enable = true;
+  programs = {
+    hyprland.enable = true;
+    river.enable = true;
+    sway.enable = true;
+  };
 
   # A bunch of packages that are likely better managed via home-manager.
   environment.systemPackages = with pkgs; [
@@ -67,5 +68,4 @@ in
   # services.hypridle = true;
   # Hyprland handle locking the session
   # programs.hyprlock = true;
-  programs.river.enable = true;
 }

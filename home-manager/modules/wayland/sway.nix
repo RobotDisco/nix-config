@@ -47,25 +47,27 @@ in
         #        terminal = "${pkgs.emacs}/bin/emacsclient -c";
         #        menu = "${pkgs.dmenu}/bin/dmenu_run | ${pkgs.dmenu}/bin/dmenu | ${pkgs.fileutils}/bin/xargs swaymsg exec --";
         input."type:keyboard".xkb_options = "ctrl:nocaps";
-        output."eDP-1" = {
-          resolution = "2256x1504";
-          scale = "1.5";
-        };
-        output."*" = {
-          bg = "${./backgrounds/moosevalley.jpg} fill";
-        };
-        # Wayland, unlike autorandr, doesn't keep port names the
-        # same. Have to use monitor identifier.
-        output."Dell Inc. DELL U2412M M2GCR1CS0T1L" = {
-          resolution = "1920x1200";
-          position = "0 0";
-          scale = "1";
-        };
-        output."Dell Inc. DELL U2412M HT5N364F0GSS" = {
-          resolution = "1920x1200";
-          position = "1920 0";
-          transform = "90";
-          scale = "1";
+        output = {
+          "eDP-1" = {
+            resolution = "2256x1504";
+            scale = "1.5";
+          };
+          "*" = {
+            bg = "${./backgrounds/moosevalley.jpg} fill";
+          };
+          # Wayland, unlike autorandr, doesn't keep port names the
+          # same. Have to use monitor identifier.
+          "Dell Inc. DELL U2412M M2GCR1CS0T1L" = {
+            resolution = "1920x1200";
+            position = "0 0";
+            scale = "1";
+          };
+          "Dell Inc. DELL U2412M HT5N364F0GSS" = {
+            resolution = "1920x1200";
+            position = "1920 0";
+            transform = "90";
+            scale = "1";
+          };
         };
         keybindings =
           let

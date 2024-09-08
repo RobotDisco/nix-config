@@ -1,8 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-let cfg = config.robot-disco.development-environment;
+let
+  cfg = config.robot-disco.development-environment;
 
-in {
+in
+{
   options.robot-disco.development-environment = {
     enable = lib.mkEnableOption "Enable nix-centric developer environment";
 
@@ -27,50 +34,60 @@ in {
     };
   };
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [
-    {
-      programs.git = {
-        enable = true;
-        extraConfig = {
-          core = { autocrlf = "input"; };
-          hub = { protocol = "https"; };
-          init = { defaultBranch = cfg.defaultBranch; };
-          # Configuration for Emacs' Magit Forge package
-          # https://magit.vc/manual/forge.html
-          github = {
-            user = "RobotDisco";
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        programs.git = {
+          enable = true;
+          extraConfig = {
+            core = {
+              autocrlf = "input";
+            };
+            hub = {
+              protocol = "https";
+            };
+            init = {
+              inherit (cfg) defaultBranch;
+            };
+            # Configuration for Emacs' Magit Forge package
+            # https://magit.vc/manual/forge.html
+            github = {
+              user = "RobotDisco";
+            };
+            gitlab."git.internal.tulip.io" = {
+              user = "gaelan";
+            };
           };
-          gitlab."git.internal.tulip.io" = {
-            user = "gaelan";
+          userEmail = cfg.email;
+          userName = cfg.fullname;
+        };
+      }
+      (lib.mkIf cfg.signCommits {
+        programs.git = {
+          signing = {
+            signByDefault = true;
+            key = cfg.gpgKey;
           };
         };
-        userEmail = cfg.email;
-        userName = cfg.fullname;
-      };
-    }
-    (lib.mkIf cfg.signCommits {
-      programs.git = {
-        signing = {
-          signByDefault = true;
-          key = cfg.gpgKey;
+      })
+      {
+        programs.jq.enable = true;
+        home.packages = [
+          # Nix LSP
+          pkgs.nil
+          # Better than grep
+          pkgs.ripgrep
+        ];
+      }
+      {
+        programs.direnv = {
+          enable = true;
+          enableZshIntegration = true;
+          nix-direnv = {
+            enable = true;
+          };
         };
-      };
-    })
-    {
-      programs.jq.enable = true;
-      home.packages = [
-        # Nix LSP
-        pkgs.nil
-        # Better than grep
-        pkgs.ripgrep
-      ];
-    }
-    {
-      programs.direnv = {
-        enable = true;
-        enableZshIntegration = true;
-        nix-direnv = { enable = true; };
-      };
-    }
-  ]);
+      }
+    ]
+  );
 }

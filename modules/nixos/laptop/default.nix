@@ -1,7 +1,7 @@
 {
   imports = [
     ../common
-    
+
     ../hardware/ssd.nix
 
     ./desktop

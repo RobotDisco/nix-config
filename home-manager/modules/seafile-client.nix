@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.robot-disco.services.seafile-client;
-in {
+in
+{
   options.robot-disco.services.seafile-client = {
-    enable  = lib.mkEnableOption "Seafile Client";
+    enable = lib.mkEnableOption "Seafile Client";
   };
 
   config = lib.mkIf cfg.enable {
@@ -18,7 +24,9 @@ in {
         Environment = "PATH=${config.home.profileDirectory}/bin";
         ExecStart = "${pkgs.seafile-client}/bin/seafile-applet";
       };
-      Install = { WantedBy = [ "graphical-session.target" ]; };
+      Install = {
+        WantedBy = [ "graphical-session.target" ];
+      };
     };
   };
 }

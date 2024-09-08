@@ -1,29 +1,35 @@
-{ ... }:
-let username = "gaelan";
-in {
+_:
+let
+  username = "gaelan";
+in
+{
   imports = [ ../modules/emacs ];
 
   config = {
-    robot-disco.development-environment = {
-      enable = true;
+    robot-disco = {
+      development-environment = {
+        enable = true;
 
-      fullname = "Gaelan D'costa";
-      email = "gaelan@tulip.com";
-      gpgKey = "0x4B58E4871E1CA53A!";
+        fullname = "Gaelan D'costa";
+        email = "gaelan@tulip.com";
+        gpgKey = "0x4B58E4871E1CA53A!";
 
-      signCommits = true;
+        signCommits = true;
+      };
+
+      #emacs.enable = true;
+      gnupg.enable = true;
+
+      tulip.enable = true;
     };
 
-    #robot-disco.emacs.enable = true;
-    robot-disco.gnupg.enable = true;
-
-    robot-disco.tulip.enable = true;
-
-    # The state version is required and should stay at the version you
-    # originally installed.
-    home.stateVersion = "22.11";
-    home.homeDirectory = "/Users/${username}";
-    home.username = username;
+    home = {
+      inherit username;
+      homeDirectory = "/Users/${username}";
+      # The state version is required and should stay at the version you
+      # originally installed.
+      stateVersion = "22.11";
+    };
 
     programs.zsh.enable = true;
   };
