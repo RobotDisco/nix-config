@@ -1,12 +1,11 @@
-{ lib, pkgs, ... }:
-
 {
   imports = [
     ./development-environment.nix
     ./emacs.nix
     ./gnupg.nix
+    ./laptop.nix
     ./seafile-client.nix
-    ./sway
     ./tulip
+    ./wayland
   ];
 }

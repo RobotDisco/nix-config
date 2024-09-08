@@ -6,17 +6,13 @@
 }:
 
 let
-  cfg = config.robot-disco.sway;
+  bluetoothID = config.robot-disco.laptop.bluetoothID;
+  cfg = config.robot-disco.wayland.sway;
 in
 
 {
-  options.robot-disco.sway = {
+  options.robot-disco.wayland.sway = {
     enable = lib.mkEnableOption "Enable Sway WM";
-
-    bluetoothID = lib.mkOption {
-      type = lib.types.int;
-      description = "Bluetooth device ID to toggle via rfkill";
-    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -86,7 +82,7 @@ in
             XF86MonBrightnessUp = "exec ${brightnessctl} set 5%+";
             # TODO these values should be customizable because different laptops
             # have different device values.
-            XF86RFKill = "exec ${rfkill} toggle 0; ${rfkill} toggle ${toString cfg.bluetoothID}";
+            XF86RFKill = "exec ${rfkill} toggle 0; ${rfkill} toggle ${toString bluetoothID}";
           };
       };
     };

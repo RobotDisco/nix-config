@@ -38,9 +38,10 @@ in
 
     robot-disco.services.seafile-client.enable = true;
 
-    robot-disco.sway = {
+
+    robot-disco.laptop.bluetoothID = 15;
+    robot-disco.wayland.sway = {
       enable = true;
-      bluetoothID = 15;
     };
   };
 }
