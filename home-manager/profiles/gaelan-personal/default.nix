@@ -15,7 +15,9 @@ in
   ];
   
   config = {
-    home.stateVersion = "23.11";
+    # The state version is required and should stay at the version you
+    # originally installed.
+    home.stateVersion = "22.11";
     home.homeDirectory = "/home/${username}";
     home.username = username;
 
