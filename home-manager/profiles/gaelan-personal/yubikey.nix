@@ -15,7 +15,7 @@
   # evaluate the .path attribute including resolutions.
   #
   # So instead, use an activation hook.
-  home.activation.linkOktaYaml = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  home.activation.linkU2fKeys = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run ln -sf $VERBOSE_ARG "${config.age.secrets.u2f_keys.path}" "${config.home.homeDirectory}/.config/Yubico/u2f_keys"
   '';
 }
