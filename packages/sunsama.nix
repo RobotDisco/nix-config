@@ -15,8 +15,10 @@ let
   # To find recent versions, use the following urls
   # https://download.todesktop.com/2003096gmmnl0g1/latest-mac.yml
   # https://download.todesktop.com/2003096gmmnl0g1/latest-linux.yml
-  src = fetchurl { url = "https://download.todesktop.com/2003096gmmnl0g1/sunsama-${version}-x86_64.AppImage";
-                   hash= "sha256-OM0G8dpC9zPuQxRawqmxOq2L1lALC5dpAfEr8NS+djQ="; };
+  src = fetchurl {
+    url = "https://download.todesktop.com/2003096gmmnl0g1/sunsama-${version}-x86_64.AppImage";
+    hash = "sha256-OM0G8dpC9zPuQxRawqmxOq2L1lALC5dpAfEr8NS+djQ=";
+  };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
 in
