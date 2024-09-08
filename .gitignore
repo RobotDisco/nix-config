@@ -1,2 +1,7 @@
-/result
+# direnv derivation caches
 /.direnv/
+# nix build and nix-build results
+/result
+# Emacs backups
+*~
+\#*#
