@@ -6,7 +6,7 @@
 }:
 
 let
-  bluetoothID = config.robot-disco.laptop.bluetoothID;
+  inherit (config.robot-disco.laptop) bluetoothID;
   cfg = config.robot-disco.wayland.sway;
 in
 
@@ -69,7 +69,6 @@ in
         };
         keybindings =
           let
-            modifier = config.wayland.windowManager.sway.config.modifier;
             brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
             wpctl = "${pkgs.wireplumber}/bin/wpctl";
             rfkill = "${pkgs.util-linux}/bin/rfkill";
