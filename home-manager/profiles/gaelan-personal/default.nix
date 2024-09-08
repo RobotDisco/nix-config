@@ -1,4 +1,5 @@
-let username = "gaelan";
+let
+  username = "gaelan";
 in
 {
   imports = [
@@ -13,7 +14,7 @@ in
     ./yubikey.nix
     ./zsh.nix
   ];
-  
+
   config = {
     # The state version is required and should stay at the version you
     # originally installed.
@@ -37,7 +38,6 @@ in
     robot-disco.gnupg.enable = true;
 
     robot-disco.services.seafile-client.enable = true;
-
 
     robot-disco.laptop.bluetoothID = 15;
     robot-disco.wayland.sway = {
