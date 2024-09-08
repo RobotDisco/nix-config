@@ -43,5 +43,7 @@ in
     robot-disco.wayland.sway = {
       enable = true;
     };
+
+    robot-disco.wayland.hyprland.enable = true;
   };
 }
