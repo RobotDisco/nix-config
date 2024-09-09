@@ -13,20 +13,25 @@
     hostId = "aa3d3177";
 
     useDHCP = lib.mkDefault false;
-    interfaces.eno1 = {
-      useDHCP = lib.mkDefault false;
-      ipv4.addresses = [
-        {
-          address = "192.168.10.3";
-          prefixLength = 24;
-        }
-      ];
+    interfaces = {
+      eno1 = {
+        useDHCP = lib.mkDefault false;
+        ipv4.addresses = [
+          {
+            address = "192.168.10.3";
+            prefixLength = 24;
+          }
+        ];
+      };
       enp6s0f0.useDHCP = lib.mkDefault false;
       enp6s0f1.useDHCP = lib.mkDefault false;
     };
   };
 
   boot = {
+    # Make sure my kernel supports ZFS
+    kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+
     loader = {
       # Don't allow system to change EFI variables
       efi.canTouchEfiVariables = false;
@@ -58,23 +63,21 @@
         ];
       };
     };
+
+    # Let's lean into ZFS unless I ever need non-ZFS
+    supportedFilesystems = [ "zfs" ];
+
+    # I don't care about specific mountpoints, so just mount the pools
+    zfs = {
+      extraPools = [
+        "storagepool"
+        "backuppool"
+      ];
+      # Don't force import of root ZFS pools
+      forceImportRoot = false;
+      forceImportAll = false;
+    };
   };
-
-  # Make sure my kernel supports ZFS
-  kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
-
-  # Let's lean into ZFS unless I ever need non-ZFS
-  supportedFilesystems = [ "zfs" ];
-
-  # I don't care about specific mountpoints, so just mount the pools
-  zfs.extraPools = [
-    "storagepool"
-    "backuppool"
-  ];
-
-  # Don't force import of root ZFS pools
-  boot.zfs.forceImportRoot = false;
-  boot.zfs.forceImportAll = false;
 
   users.users.root.initialHashedPassword = "$6$rounds=2500000$NC9QlbTMMOJ8$h.coBkWCDI/epZApjonqHPvOjZ4ys8O44OERo2mK5ehB8TUgK8.FWW4tknxXYrlFKa/9t5tGWALBDoUNbCMjx1";
   time.timeZone = "America/Toronto";
