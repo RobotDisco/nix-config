@@ -1,6 +1,5 @@
+{ myLib, ... }:
+
 {
-  imports = [
-    ./wayland.nix
-    ./xserver.nix
-  ];
+  imports = myLib.scanPaths ./.;
 }

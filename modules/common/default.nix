@@ -1,5 +1,7 @@
+{ myLib, ... }:
+
 {
-  imports = [ ./nix.nix ];
+  imports = myLib.scanPaths ./.;
 
   config = {
     # Enable ZSH, my preferred shell.

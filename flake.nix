@@ -74,6 +74,8 @@
       darwinSystem = import ./lib/darwinSystem.nix;
       # NixOS config generator
       nixosSystem = import ./lib/nixosSystem.nix (lib.attrValues self.overlays);
+      # My custom functions
+      myLib = import ./lib { inherit lib; };
     in
     ### HERE ENDS MY HELPER FUNCTION LIBRARY ###
     {
@@ -116,12 +118,15 @@
           inherit darwin home-manager;
           system = "aarch64-darwin";
           darwinModules = [ ./machines/Fountain-of-Ahmed-III.nix ];
-          darwinSpecialArgs = { };
+          darwinSpecialArgs = {
+            inherit myLib;
+          };
           homeModules = [
             inputs.agenix.homeManagerModules.default
             ./secrets/home-manager.nix
           ];
           homeSpecialArgs = {
+            inherit myLib;
             inherit (inputs) agenix robotdisco-secrets;
           };
         };
@@ -136,6 +141,7 @@
             ./machines/arrakis
           ];
           nixosSpecialArgs = {
+            inherit myLib;
             inherit (inputs) agenix robotdisco-secrets;
           };
           homeModules = [
@@ -143,6 +149,7 @@
             ./secrets/home-manager.nix
           ];
           homeSpecialArgs = {
+            inherit myLib;
             inherit (inputs) agenix robotdisco-secrets;
           };
         };
@@ -182,6 +189,7 @@
             }
           ];
           nixosSpecialArgs = {
+            inherit myLib;
             inherit (inputs) robotdisco-secrets;
           };
         };

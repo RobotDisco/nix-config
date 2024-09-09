@@ -1,6 +1,5 @@
+{ myLib, ... }:
+
 {
-  imports = [
-    ./hyprland.nix
-    ./sway.nix
-  ];
+  imports = myLib.scanPaths ./.;
 }
