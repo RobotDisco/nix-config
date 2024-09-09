@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: "actions/checkout@v4"
       - uses: "DeterminateSystems/nix-installer-action@v13"
-      - uses: "DeterminateSystems/flakehub-push@v4"
+      - uses: "DeterminateSystems/flakehub-push@v5"
         with:
           name: "RobotDisco/nix-config"
           rolling: true
