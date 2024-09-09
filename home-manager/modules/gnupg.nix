@@ -19,7 +19,9 @@ in
       enable = true;
       # Required on MacOS for GPG to recognise YubiKey.
       # https://github.com/NixOS/nixpkgs/issues/155629
-      scdaemonSettings = lib.mkIf pkgs.stdenv.isDarwin { disable-ccid = true; };
+      # Required everywhere as of GnuPG 2.4
+      # https://dev.gnupg.org/rG6b93b92111cb8ce6d06c6f71bd62cfb314663b8c
+      scdaemonSettings.disable-ccid = true;
       settings = {
         personal-cipher-preferences = "AES256 AES192 AES";
         personal-digest-preferences = "SHA512 SHA384 SHA256";
