@@ -145,9 +145,9 @@ in
         # bindings that worked even when the screen is locked
         bindl = [
           # trigger when laptop lid is closed
-          '', switch:on:Lid Switch, exec, hyperctl keyword monitor "$lapMon, disable"''
+          ", switch:on:Lid Switch, exec, hyprctl keyword monitor $lapMon, disable"
           # trigger when laptop lid is closed
-          '', switch:off:Lid Switch, exec, hyperctl keyword monitor "$lapMon, preferred, auto-below, $lapMonScale"''
+          ", switch:off:Lid Switch, exec, hyprctl keyword monitor $lapMon, preferred, auto-below, $lapMonScale"
           # toggle hardware radio on/off (wifi, bluetooth)
           ", XF86RFKill , exec, ${rfkill} toggle 0 && ${rfkill} toggle ${toString bluetoothID}"
         ];
