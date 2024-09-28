@@ -1,5 +1,3 @@
-{ pkgs, ... }:
-
 {
   imports = [ ../modules/darwin/nix.nix ];
 
@@ -80,73 +78,6 @@
     # Let daemon service be managed by Nix.
     services = {
       nix-daemon.enable = true;
-
-      yabai = {
-        enable = true;
-        enableScriptingAddition = true;
-
-        config = {
-          #mouse_follows_focus = "on";
-          #focus_follows_mouse = "autofocus";
-          layout = "bsp";
-          #window_opacity = "on";
-          #active_window_opacity = "1.0";
-          #normal_window_opacity = "0.80";
-          #external_bar = "all:32:0";
-        };
-      };
-
-      spacebar = {
-        enable = false;
-        package = pkgs.spacebar;
-
-        config = {
-          clock_format = "%F%t%R";
-          space_icon_strip = "1 2 3 4 5 6 7 8 9 10";
-          text_font = "Verdana:Bold:12.0";
-          space_icon_color = "0xfffeff6e";
-        };
-      };
-
-      sketchybar = {
-        enable = false;
-        config = ''
-          ${pkgs.sketchybar}/bin/sketchybar \
-          --bar \
-          height=32 \
-          color=0xffbd00ff \
-          --default \
-          text.color=0xff3fff2d
-        '';
-      };
-
-      skhd = {
-        enable = true;
-
-        skhdConfig = ''
-          alt - f : ${pkgs.yabai}/bin/yabai -m window --focus east
-          alt + shift - f : ${pkgs.yabai}/bin/yabai -m window --swap east
-          alt - b : ${pkgs.yabai}/bin/yabai -m window --focus west
-          alt + shift - b : ${pkgs.yabai}/bin/yabai -m window --swap west
-          alt - p : ${pkgs.yabai}/bin/yabai -m window --focus north
-          alt + shift - p : ${pkgs.yabai}/bin/yabai -m window --swap north
-          alt - n : ${pkgs.yabai}/bin/yabai -m window --focus south
-          alt + shift - n : ${pkgs.yabai}/bin/yabai -m window --swap south
-
-          alt - return : open -a emacs
-
-          alt + shift - 0x18 : ${pkgs.yabai}/bin/yabai -m space --create
-          alt - 0x1B : ${pkgs.yabai}/bin/yabai -m space --destroy
-
-          alt - 0x2B : ${pkgs.yabai}/bin/yabai -m space --focus prev
-          alt - 0x2F : ${pkgs.yabai}/bin/yabai -m space --focus next
-
-          alt + shift - 0x2B : ${pkgs.yabai}/bin/yabai -m window --space prev
-          alt + shift - 0x2F : ${pkgs.yabai}/bin/yabai -m window --space next
-
-          alt + ctrl - 0x12 : ${pkgs.yabai}/bin/yabai -m window --toggle zoom-fullscreen
-        '';
-      };
     };
   };
 }
