@@ -1,3 +1,9 @@
+# Provide the overlays we always want to include.
+# Is it better to curry or use a set where I can set defaults?
+# TODO consider the readability of this.
+overlays:
+# This is our wrapper around darwin.lib.darwinSystem that includes a bunch of
+# common configuration we want.
 {
   # Our nix-darwin input
   darwin,
@@ -20,6 +26,10 @@ darwin.lib.darwinSystem {
   inherit system;
   specialArgs = darwinSpecialArgs;
   modules = [
+    # Always include the overlays we've defined in our flake, as we expect to
+    # use them if we've bothered to define them
+    { nixpkgs.overlays = overlays; }
+
     # Share the same pkgs attrset as nixos, don't create a separate one
     # for each user. If I ever define multiple users this is a potential
     # security hazard if they pull random things in via nix-env

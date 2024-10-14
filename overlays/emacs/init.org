@@ -50,9 +50,10 @@ Let's time and display the amount of time it takes to bring up my Emacs configur
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
   (add-hook 'emacs-startup-hook
 	    (lambda ()
-	      (message "Loaded GNU Emacs in %0.03fs"
+	      (message "Emacs ready in %0.03f seconds with %d garbage collections."
 		       (float-time (time-subtract after-init-time
-						  before-init-time)))))
+						  before-init-time))
+		       gcs-done)))
 #+END_SRC
 
 I saw a config where the author temporarily set garbage collection thresholds for speed during initialization, presumably to minimize GC overhead at startup.
@@ -88,8 +89,9 @@ Disable unnecessary GUI components.
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
   (setq use-dialog-box nil)
   ;; Because Emacs on OSX has a bug in it, we need the menu bar
-  (unless (eq system-type 'darwin)
-    (menu-bar-mode -1))
+  ;; (unless (eq system-type 'darwin)
+  (menu-bar-mode -1)
+  ;; )
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
 #+END_SRC
@@ -253,6 +255,7 @@ Visually separate nested delimiter pairs
 	emacs-lisp-mode-hook
 	ielm-mode-hook
 	lisp-mode-hook
+	racket-mode
 	scheme-mode-hook)
        . rainbow-delimiters-mode))
 #+END_SRC
@@ -375,6 +378,16 @@ Emacs should handle keyboard media shortcuts
     (desktop-environment-mode))
 #+END_SRC
 
+** Clipboard management
+Integrate with external programs that handle X11/Wayland clipboards
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package xclip
+    :ensure t
+    :defer 2
+    :config
+    (xclip-mode +1))
+#+END_SRC
 * Completion / Minibuffer
 ** Consult
 Enhance emacs commands based on completion
@@ -414,6 +427,29 @@ Add annotations to minibuffer completions to provide you with more information a
 Enable helm-like searching via completion frameworks, where I can filter
 candidates by multiple regex patterns separated by a space.
 
+The default completions in emacs 28 are as follows:
+
+basic :: foo|bar looks for all completions that have foo at the front, bar at
+the end. It matches "foo*bar"
+
+emacs22 :: foo|bar looks for all foo* candidates then shoves var onto the end.
+
+partial-completion can complete multiple words, which one given as a prefix. It
+will only match completions with matching prefix in the order of the prefixes
+that were given. /u/mo/s will only match phrases that look like
+"/usr/monnier/src" not "/monier/user/src".
+
+So we add orderless, which allows us to complete against multiple words, but in
+any order. For example, matching against /u/mo/s will match both
+"/usr/monier/src" and "/usr/src/monier".
+
+There are cases where orderless won't work, so we use basic as a fallback.
+
+Tramp mode doesn't handle orderless well (because it involves iterating over
+directory tree combination across the wire, so specifically for file navigation
+we try for basic first and partial-completion after so we can get partial
+intelligence without expending unnecessary effort.
+
 #+BEGIN_SRC elisp :tangle yes
   (use-package orderless
     :defer 1
@@ -431,6 +467,11 @@ Vertico adds a good minibuffer UX to Emacs' default completion framework.
 
 The defaults in Emacs 28 (~fido-mode~, ~vertical-fido-mode~) do not make it
 easy for me to see potential options in various contexts, I have found.
+
+Vertico isn't the regular tab-based completion.  It pops up a menu,
+and you can navigate up and down.  A nice thing about it is you can
+use C-p and C-n to pick the candidate you want instead of
+contorting your input to match what you want.
 
 #+BEGIN_SRC elisp :tangle yes
   (use-package vertico
@@ -480,8 +521,12 @@ Automatically revert when a file changes on disk; this happens a lot given my fi
 #+END_SRC
 ** Spellchecking
 #+BEGIN_SRC emacs-lisp :tangle yes
-    (use-package emacs
-      :bind (("C-c f" . flyspell-toggle)))
+  (use-package emacs
+    :defer 2
+    :hook ((org-mode . (lambda ()
+			 (flyspell-mode +1)))
+	   (prog-mode . (lambda ()
+			(flyspell-prog-mode)))))
 #+END_SRC
 ** Project Management
 
@@ -508,11 +553,12 @@ We use smartparens for structured editing like Ruby blocks or lisp s-expressions
 	       sp-use-paredit-bindings
 	       sp-use-smartparens-bindings)
     :hook ((clojure-mode-hook
-	     emacs-lisp-mode-hook
-	     ielm-mode-hook
-	     lisp-mode-hook
-	     scheme-mode-hook)
-	    . smartparens-strict-mode)
+	    emacs-lisp-mode-hook
+	    ielm-mode-hook
+	    lisp-mode-hook
+	    racket-mode-hook
+	    scheme-mode-hook)
+	   . smartparens-strict-mode)
     :defer 2
     :config
     (require 'smartparens-config)
@@ -560,31 +606,48 @@ A editor-agnostic way to maintain project coding styles
     (global-flycheck-mode))
 #+END_SRC
 ** Version Control
+Nicer Git support
 *** magit
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package magit
     :ensure t
-    :defer 2)
+    :bind (("C-x g" . magit-status)
+	   ("C-c g" . magit-dispatch)
+	   ("C-c f" . magit-file-dispatch))
+    :custom
+    (magit-wip-mode t))
 #+END_SRC
+
+Have nicer integrations with online git sites like gitlab and github
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package forge
+    :ensure t
+    :defer 2
+    :after magit)
+#+END_SRC
+
 ** Language Server Protocol
 IDE-like functionality such as intellisense, debugging
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package lsp-mode
-    :ensure t
-    :commands (lsp lsp-deferred)
-    :init
-    (defun gaelan/lsp-mode-setup-completion ()
-      (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-	    'orderless))
-    :custom
-    (lsp-completion-provider :none) ;; we use Corfu
-    :hook ((lsp-completion-mode . gaelan/lsp-mode-setup-completion)))
+    (use-package lsp-mode
+      :ensure t
+      :commands (lsp lsp-deferred)
+      :init
+      (defun gaelan/lsp-mode-setup-completion ()
+	;; Set LSP up to use orderless
+	(setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+	      '(orderless)))
+      :custom
+      (lsp-completion-provider :none) ;; we use Corfu
+      :hook ((lsp-completion-mode . gaelan/lsp-mode-setup-completion)
+	     (prog-mode . lsp-deferred)))
 
-  (use-package lsp-ui
-    :ensure t
-    :commands (lsp-ui-mode)
-    :after (lsp-mode))
+    (use-package lsp-ui
+      :ensure t
+      :defer 2
+      :after (lsp-mode))
 #+END_SRC
 * Programming Language support / environments
 *** Elm
@@ -614,7 +677,7 @@ Support flycheck syntax checking
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package clojure-mode
-    :mode (("\\.clj\\'" . clojure-mode)
+    :mode (("\\.\\(clj\\|bb\\)\\'" . clojure-mode)
 	   ("\\.cljs\\'" . clojurescript-mode)
 	   ("\\.cljc\\'" . clojurec-mode))
     :ensure t)
@@ -655,6 +718,11 @@ Support flycheck syntax checking
   (use-package geiser-guile
     :after (geiser)
     :ensure t)
+
+  ;; Racket language support
+  (use-package racket-mode
+    :ensure t
+    :mode "\\.rkt\\'")
 #+END_SRC
 *** Rust
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -689,6 +757,14 @@ A more performant terminal that can handle interactive programs
     :ensure t)
 #+END_SRC
 * Productivity
+Support LaTeX
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package auctex
+    :ensure t
+    :mode "\\.tex\\'")
+#+END_SRC
+
 Read PDF files and epub ebooks on Emacs
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package nov
@@ -720,36 +796,75 @@ Read PDF files and epub ebooks on Emacs
   (use-package org
     :ensure t
     :hook (org-mode-hook . (lambda ()
-			     (visual-line-mode +1)))
+                             (setq-local fill-column 80)
+                             (visual-line-mode +1)))
     :mode ("\\.org\\'" . org-mode)
-    :bind (("C-c l" . org-store-link)
-	   ("C-c a" . org-agenda)
-	   ("C-c c" . org-capture))
+    :bind (("C-c a" . org-agenda)
+           ("C-c c" . org-capture)
+           ("C-c l" . org-store-link))
     :init
-    (setq org-ellipsis " ▾"
-	  org-agenda-files (list
-			    (expand-file-name "gtd.org" gaelan/gtd-dir)
-			    (expand-file-name "tickler.org" gaelan/gtd-dir))
-	  org-capture-templates
-	  '(("t" "Todo" entry (file "~/Documents/brain/gtd/inbox.org")
-	     "* TODO %?"))
-	  org-refile-targets
-	  '(("~/Documents/brain/gtd/gtd.org" . (:level . 1))
-	    ("~/Documents/brain/gtd/gtd.org" . (:tag . "PROJECT"))
-	    ("~/Documents/brain/gtd/someday.org" . (:level . 1))
-	    ("~/Documents/brain/gtd/tickler.org" . (:level . 1)))
-	  ;; Handy search views for agenda mode
-	  org-agenda-custom-commands
-	  '(("n" "Current Actions"
-	     ((todo "NEXT")
-	      (todo "STARTED")
-	      (todo "WAITING")))
-	    ("u" "Unplanned Projects"
-	     ((tags-todo "PROJECT/PLAN"))))
-	  org-stuck-projects
-	  '("+PROJECT+LEVEL=2/-COMPLETED-ABANDONED-PAUSED"
-	    ("TODO" "NEXT" "STARTED") nil ""))
+    (defun gaelan-org-agenda ()
+      (interactive)
+      (require 'org-roam)
+      (org-agenda))
+    :custom
+    ;; Handy search views for agenda mode
+    (org-agenda-custom-commands
+     '(("pc" "Active Projects" tags-todo "project/ACTIVE")
+       ("pl" "All Projects" tags-todo "project")
+       ("pp" "Unplanned Projects" tags-todo "project/PLAN")
+       ("n" "Active tasks" tags-todo "/DOING")
+       ("s" "Someday" tags-todo "SOMEDAY")
+       ("i" "Unprocessed" tags-todo "journal|fleeting")
+       ("c" "The Panopticon" ((tags-todo "GTD")
+                              (agenda ""
+                                      ;; Don't need daily repeated tasks for every
+                                      ;; day, just the one I currently care about.
+                                      ((org-agenda-show-future-repeats nil)))
+                              (tags-todo "project/ACTIVE")
+                              (tags-todo "fleeting|journal")))))
+    (org-agenda-prefix-format
+     '((agenda . " %i %(gaelan-agenda-category 12)%?-12t% s")
+       (todo . " %i %(gaelan-agenda-category 12)")
+       (tags . " %i %(gaelan-agenda-category 12)")
+       (search . " %i %(gaelan-agenda-category 12)")))
+    (org-archive-location "~/Documents/brain/gtd/archive/archive.org::datetree/")
+    (org-ellipsis " ▾")
+    (org-enforce-todo-checkbox dependencies t)
+    (org-enforce-todo-dependencies t)
+    (org-global-properties
+     '(("EFFORT_ALL" . "0 0:05 0:15 0:30 1:00 2:00 4:00 8:00")
+       ("ORDERED" . "t")))
+    ;; Count task statistics recursively, not just for child tasks
+    (org-hierarchical-todo-statistics nil)
+    (org-log-done 'time)
+    (org-log-into-drawer t)
+    (org-priority-highest ?A)
+    (org-priority-default ?D)
+    (org-priority-lowest ?D)
+    (org-refile-targets '((org-agenda-files . (:tag . "GTD"))
+                          (org-agenda-files . (:tag . "SOMEDAY"))
+                          (org-agenda-files . (:tag . "TICKLER"))))
+    (org-stuck-projects '("project" ("TODO" "NEXT" "DOING") nil ""))
+    (org-tag-alist '((:startgroup)
+                     ("DEEP")
+                     ("SHALLOW")
+                     ("RELAX")
+                     (:endgroup)
+                     ("tulip")
+                     ("@lappy")
+                     ("@online")
+                     ("@phone")
+                     ("@brain")))
+    (org-tags-exclude-from-inheritance '("project" "TODOS" "area" "resource"))
+    (org-todo-keywords
+     '((sequence
+        "TODO(w)" "DOING(e!/!)" "WAITING(r@/@)" "|" "DONE(t!)" "CANCELLED(y@)")
+       (sequence
+        "PLAN(q)" "ACTIVE(z!/!)" "RETRO(x)" "PAUSED(c@/!)" "|" "COMPLETED(v!)" "ABANDONED(b@)")))
     :config
+    ;; Enable org habits
+    (add-to-list 'org-modules 'org-habit t)
     ;; Save Org buffers after refiling!
     (advice-add 'org-refile :after 'org-save-all-org-buffers))
 #+END_SRC
@@ -759,108 +874,207 @@ An implementation of Zettelkasten for org, inspired by org-roam
   (use-package org-roam
     :ensure t
     :defer 2
-    :bind (("C-c j d" . org-roam-dailies-goto-date)
-	   ("C-c j D" . org-roam-dailies-capture-date)
-	   ("C-c j t" . org-roam-dailies-goto-today)
-	   ("C-c j T" . org-roam-dailies-capture-today)
+    :bind (("C-c j d" . (lambda ()
+                            (interactive)
+                            (org-roam-dailies-goto-date nil "j")))
+           ("C-c j D" . org-roam-dailies-capture-date)
+           ("C-c j t" . (lambda ()
+                          (interactive)
+                          (org-roam-dailies-goto-today "j")))
+           ("C-c j T" . org-roam-dailies-capture-today)
 
-	   ;; Buttonmash combo for logging something
-	   ;; doesn't match my mnenomic scheme otherwise.
-	   ;; TODO define a function to pass nil "j" so I don't
-	   ;; have to choose a selector
-	   ("C-c j j" . org-roam-dailies-capture-today)
+           ;; Buttonmash combo for logging something
+           ;; doesn't match my mnenomic scheme otherwise.
+           ("C-c j j" . (lambda ()
+                          (interactive)
+                          (org-roam-dailies-capture-today nil "j")))
 
-	   ("C-c j y" . org-roam-dailies-goto-yesterday)
-	   ("C-c j Y" . org-roam-dailies-capture-yesterday)
-	   ("C-c j r" . org-roam-dailies-goto-tomorrow)
-	   ("C-c j R" . org-roam-dailies-capture-tomorrow)
-	   ("C-c j n" . org-roam-dailies-goto-next-note)
-	   ("C-c j p" . org-roam-dailies-goto-previous-note)
-	   ("C-c n b" . org-roam-buffer-toggle)
-	   ("C-c n c" . org-id-get-create)
-	   ("C-c n f" . org-roam-node-find)
-	   ("C-c n i" . org-roam-node-insert))
+           ("C-c j y" . (lambda (n)
+                          (interactive "p")
+                          (org-roam-dailies-goto-yesterday n "j")))
+           ("C-c j Y" . org-roam-dailies-capture-yesterday)
+           ("C-c j r" . (lambda (n)
+                          (interactive "p")
+                          (org-roam-dailies-goto-tomorrow n "j")))
+           ("C-c j R" . org-roam-dailies-capture-tomorrow)
+           ("C-c j n" . org-roam-dailies-goto-next-note)
+           ("C-c j p" . org-roam-dailies-goto-previous-note)
+           ("C-c n b" . org-roam-buffer-toggle)
+           ("C-c n c" . org-id-get-create)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n i" . org-roam-node-insert)
+           ("C-c n F" . (lambda ()
+                          (interactive)
+                          (org-roam-node-random nil (lambda (node)
+                                                      (member "fleeting"
+                                                              (org-roam-node-tags mode))))))
+           ("C-c n R" . (lambda ()
+                          (interactive)
+                          (org-roam-node-random nil (lambda (node)
+                                                      (and
+                                                       (member "journal" (org-roam-node-tags node))
+                                                       (> (org-roam-node-level node) 0)))))))
+
+    :hook ((find-file . gaelan-roam-todos-update-file)
+           (before-save . gaelan-roam-todos-update-file))
     :custom
     (org-tags-exclude-from-inheritance '(area resource))
     (org-roam-capture-templates
-     '(("l" "literature" plain
-	(file "~/Documents/brain/templates/literature.org")
-	:target (file+head "literature/${citar-citekey}.org" "#+TITLE: ${citar-author} (${citar-date}) - ${citar-title}\n#+FILETAGS: literature fleeting\n")
-	:unnarrowed t)
+     '(("b" "business" plain "%?"
+          :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                             "#+TITLE: ${title}\n#+FILETAGS: :fleeting:business:"))
+       ("l" "literature" plain
+        (file "~/Documents/brain/templates/literature.org")
+        :target (file "${citar-citekey}.org")      
+        :unnarrowed t)
        ("p" "permanent" plain "%?"
-	:target (file+head "permanent/%<%Y%m%d%H%M%S>-${slug}.org"
-			   "#+TITLE: ${title}")
-	:unnarrowed t)
-       ("r" "rolodex" plain "%?"
-	:target (file+head "rolodex/%<%Y%m%d%H%M%S>-${slug}.org"
-			   "#+TITLE: ${title}"))
-       ("j" "project" plain
-	(file "~/Documents/brain/templates/project.org")
-	:target (file+head "project/%<%Y%m%d%H%M%S>-${slug}.org"
-			   "#+TITLE: #{title}"))))
+        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                           "#+TITLE: ${title}\n#+FILETAGS: :fleeting:\n- previous :: ")
+        :unnarrowed t)
+       ("r" "person" plain "%?"
+        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg"
+                           "#+TITLE: ${title}\n#+FILETAGS: :fleeting:person:"))
+       ("j" "project" entry
+        (file "~/Documents/brain/templates/project.org")
+        :target (file "%<%Y%m%d%H%M%S>-${slug}.org"))))
     (org-roam-directory "~/Documents/brain")
     (org-roam-dailies-directory "journal/")
     (org-roam-dailies-capture-templates
-     '(("j" "daily log entry" entry
-	"* %<%0H:%M> %?"
-	:target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: fleeting" ("Log"))
-	:unnarrowed t)
+     '(("j" "Daily Log Entry" entry
+        "* %<%0H:%M> %?"
+        :target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:" ("Log"))
+        :unnarrowed t)
        ("d" "Daily Morning Reflection" entry
-	(file "~/Documents/brain/templates/daily.org")
-	:jump-to-captured t
-	:prepend t
-	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: fleeting"))
+        (file "~/Documents/brain/templates/daily.org")
+        :jump-to-captured t
+        :prepend t
+        :target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:"))
        ("e" "Daily Evening Reflection" entry
-	(file "~/Documents/brain/templates/evening.org")
-	:target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: fleeting")
-	:unnarrowed t)
+        (file "~/Documents/brain/templates/evening.org")
+        :target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
+        :unnarrowed t)
        ("w" "Weekly Reflection" entry
-	(file "~/Documents/brain/templates/weekly.org")
-	:target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: fleeting")
-	:unnarrowed t)
+        (file "~/Documents/brain/templates/weekly.org")
+        :target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
+        :unnarrowed t)
        ("m" "Monthly Reflection" entry
-	(file "~/Documents/brain/templates/monthly.org")
-	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: fleeting")
-	:unnarrowed t)
+        (file "~/Documents/brain/templates/monthly.org")
+        :target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
+        :unnarrowed t)
        ("y" "Yearly Reflection" entry
-	(file "~/Documents/brain/templates/yearly.org")
-	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+SETUPFILE: ../../settings.org\n#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: fleeting")
-	:unnarrowed t)))
+        (file "~/Documents/brain/templates/yearly.org")
+        :target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
+        :unnarrowed t)))
     (org-roam-mode-sections '(
-			      ; orb-section-reference
-			      ; orb-section-file
-			      org-roam-backlinks-section
-			      org-roam-reflinks-section
-			      org-roam-unlinked-references-section))
+                                          ; orb-section-reference
+                                          ; orb-section-file
+                              org-roam-backlinks-section
+                              org-roam-reflinks-section
+                              org-roam-unlinked-references-section))
     (org-roam-node-display-template
-     "${slipbox:10} ${title:*} ${tags}")
+     ;; Concatting allows vertico to separate fields out
+     ;; in a nice column-based way
+     (concat "${title:*} "
+             (propertize "${tags:20}" 'face 'org-tag)))
     :config
-    ;; I use the first directory level in my org-roam directory to distinguish
-    ;; which slipbox a note is in.
-    ;; current slipboxes
-    ;; - journal :: my daily notes
-    ;; - literature :: notes on things I have read, watched, researched, etc...
-    ;; - permanent :: where my own ideas live
-    ;;
-    ;; This is inspired by Jethro Kuan's org-roam guide
-    ;; https://jethrokuan.github.io/org-roam-guide/
-    (cl-defmethod org-roam-node-slipbox ((node org-roam-node))
-      "Return the SLIPBOX of org-roam NODE.
-      The slipbox is defined as the top-level directory name relative to the value
-  of org-roam-directory."
-      (car (split-string (file-relative-name (org-roam-node-file node)
-					     org-roam-directory)
-			 "/")))
+    (defun gaelan-agenda-files ()
+      "Dynamically list every org-roam node that we expect TODOs in.
+
+  Currently this is just any node that is tagged as an :area:."
+      (append
+       ;; Fixed files
+       '("~/Documents/brain/gtd/gcal/personal.org"
+         "~/Documents/brain/gtd/gcal/tulip.org")
+       ;; Get the string out of each one-item list.
+       (mapcar #'car
+               ;; join nodes to tags table to get files of all nodes that have area tag.
+               (org-roam-db-query [:select [nodes:file]
+                                           :from tags
+                                           :left-join nodes
+                                           :on (= tags:node-id nodes:id)
+                                           :where (= tag "TODOS")]))))
+
+    ;; Functions I've written for custom behaviour. Stolen/inspired from a bunch of sources:
+    ;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html
+    ;; https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol5.html
+    (defun gaelan-agenda-files-update (&rest _)
+      "Hook that dynamically sets org-agenda-files list based on org-roam query."
+      (setq org-agenda-files (gaelan-agenda-files)))
+
+    (defun gaelan-agenda-category (&optional len)
+      "Return the title of the org file.
+
+  If LEN is supplied, truncate the string to those many characters."
+      ;; If there are subheadings in an org file, we want the first/root
+      ;; heading anyway.
+      (org-with-point-at (point-min)
+        (if-let* ((str (or
+                        (gaelan-org-buffer-keyword-get "TITLE")
+                        (org-get-heading t t t t)
+                        (if-let (filename (buffer-file-name))
+                            (file-name-base filename))))
+                  (sstr (if len
+                            (substring str 0 (min len (length str)))
+                          str))
+                  (cstr (concat sstr ":")))
+            (if len
+                (string-pad cstr len)
+              cstr))))
+
+    (defun gaelan-org-buffer-keyword-get (name)
+      "Get a buffer keyword called NAME as a string.
+
+  Note that this will obey inheritance from a keyword like #+SETUPFILE:"
+      (when-let* ((namelist (list name))
+                  (alist (assoc name
+                                (org-collect-keywords namelist))))
+        (cdr (assoc name (org-collect-keywords (list name) (list name))))))
+
+    (defun gaelan-has-todos-p ()
+      "Return non-nil if current-buffer contains uncompleted todo entries.
+
+  Note that we are explicitly ignoring headlines that are in a completed state
+  (i.e. have a :todo-type value of 'done) and entries that aren't todos at all
+  (i.e. are missing a :todo-type property).
+
+  This function only cares about the presence of even a single qualifying todo."
+      (org-element-map
+          (org-element-parse-buffer 'headline)
+          'headline
+        (lambda (h)
+          (eq (org-element-property :todo-type h)
+              'todo))
+        nil 'first-match))
+
+    (defun gaelan-roam-todos-update-file ()
+      "If current buffer is an org-roam file, tag it based on presence of todos.
+
+  If any uncompleted todos are found, add a :todos: tag if not present.
+  If there are no uncompleted todos in the file, remove any :todos: tag."
+      (unless (or (not (org-roam-file-p))
+                  (active-minibuffer-window))
+        (save-excursion
+          ;; Go to the beginning of the file to insert any tags as a FILETAG.
+          (goto-char (point-min))
+          (when-let* ((node (org-roam-node-at-point))
+                      (tags (org-roam-node-tags node)))
+            (if (gaelan-has-todos-p)
+                (unless (member "TODOS" tags)
+                  (org-roam-tag-add '("TODOS")))
+              (when (member "TODOS" tags)
+                (org-roam-tag-remove '("TODOS"))))))))
+    ;; We use a dynamic hook to populate org-agenda-files whenever we view our org-agenda.
+    (advice-add 'org-agenda :before #'gaelan-agenda-files-update)
     ;; Scan for org-roam changes and rebuild database opportunistically
     (org-roam-db-autosync-mode)
     ;; Ensure the *org-roam* buffer comes up to the right of the frame,
     ;; 1/3rd of the size
     (add-to-list 'display-buffer-alist
-		 '("\\*org-roam\\*"
-		   (display-buffer-in-direction)
-		   (direction . right)
-		   (window-width . 0.33)
-		   (window-height . fit-window-to-buffer))))
+                 '("\\*org-roam\\*"
+                   (display-buffer-in-direction)
+                   (direction . right)
+                   (window-width . 0.33)
+                   (window-height . fit-window-to-buffer))))
 #+END_SRC
 
 Also enable a UI that makes overseeing my knowledge base easier.
@@ -874,9 +1088,9 @@ Also enable a UI that makes overseeing my knowledge base easier.
     :after org-roam
     :init
     (setq org-roam-ui-sync-theme t
-	  org-roam-ui-follow t
-	  org-roam-ui-update-on-save t
-	  org-roam-ui-open-on-start t))
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
 #+END_SRC
 
 navigating my org-roam corpus will involve me clicking through a bunch of links and then realizing I need to back-track. =winner-mode= is a simple way of implementing browser-like history, by allowing me to keep track of and navigate backwards and forwards through a history of what buffers were shown in each window.
@@ -886,8 +1100,8 @@ navigating my org-roam corpus will involve me clicking through a bunch of links 
     :defines (winner-mode-map)
     :demand 0
     :bind (:map winner-mode-map
-		("C-c w p" . winner-undo)
-		("C-c w n" . winner-redo))
+                ("C-c C-w C-p" . winner-undo)
+                ("C-c C-w C-n" . winner-redo))
     :config
     (winner-mode +1))
 #+END_SRC
@@ -899,11 +1113,33 @@ Use deft for full-text search
     :ensure t
     :after (org-roam)
     :bind ("C-c n d" . deft)
+    :init
+    (defun gaelan/deft-parse-title (file contents)
+      (let ((re (concat
+                 ;; Match text of first headline found, strip away tags and
+                 ;; trailing whitespace
+                 "^\\*+\\s-+\\(.*?\\)\\s-*\\(?:\\s-:.*\\)?$"
+                 ;; or
+                 "\\|"
+                 ;; Match text of first #+TITLE: found
+                 "^\\s-*#\\+[Tt][Ii][Tt][Ll][Ee]:\\s-*\\(.*\\)$")))
+        (when (string-match re contents)
+          (or (match-string 1 contents)
+              (match-string 2 contents)))))
+    :config
+    (advice-add 'deft-parse-title :override #'gaelan/deft-parse-title)
     :custom
-    (deft-recursive t)
-    (deft-use-filename-as-title t)
     (deft-default-extension "org")
-    (deft-directory org-roam-directory))
+    (deft-directory org-roam-directory)
+    (deft-recursive t)
+    (deft-strip-summary-regexp (concat
+                                ;; Strip anything that looks like org property.
+                                "^\\s-*:.*:\\s-*.*$"
+                                ;; Or
+                                "\\|"
+                                ;; Strip anything that looks like #+KEYWORD
+                                "^\\s-*#\\+.*:.*$"))
+    (deft-use-filename-as-title t))
 #+END_SRC
 *** org-noter
 A way to annotate PDF/ePubs using org mode
@@ -922,7 +1158,7 @@ Block-level editing/embedding, approximating the way Roam/logseq do it
     :after org
     :ensure t
     :bind (("C-c n a" . org-transclusion-add)
-	   ("C-c n t" . org-transclusion-mode)))
+           ("C-c n t" . org-transclusion-mode)))
 #+END_SRC
 ** Citations
 I am using the new [[https://orgmode.org/manual/Citations.html][org-cite]] system for working with bibliographic information
@@ -936,9 +1172,47 @@ Allow citar to work with org-roam particulars, including the ability to work at 
     :defer 2
     :diminish nil
     :custom
-    (citar-bibliography '("~/Documents/brain/literature/REFERENCES.bib"))
+    (citar-bibliography '("~/Documents/brain/REFERENCES.bib"))
     (citar-org-roam-note-title-template "${author} (${date}) - ${title}")
     (citar-org-roam-capture-template-key "l")
     :config
     (citar-org-roam-mode))
+#+END_SRC
+** Google Calendar Integration
+Be able to fetch (and even set) events in my google calendar.
+
+Because org-gcal is stupid and because work is paranoid, I can only control one calendar at a time. As such I've set my work calendar to control my personal one.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package plstore
+    :ensure nil
+    :defer 2
+    :custom
+    (plstore-encrypt-to '("A815AC9D526EE85A")))
+
+  (use-package org-gcal
+    :ensure t
+    :after plstore
+    :defer 2
+    :init
+    (require 'auth-source)
+    (when-let* ((credential (car (auth-source-search :host "gcal-oauth-service"
+						     :type 'netrc
+						     :max 1)))
+		(id (plist-get credential :client-id))
+		(secret (plist-get credential :client-secret)))
+      (setq org-gcal-client-id id
+	    org-gcal-client-secret secret
+	    org-gcal-fetch-file-alist
+	    '(("gdcosta@gmail.com" .  "~/Documents/brain/gtd/gcal/personal.org")
+	      ("gaelan@tulip.com" . "~/Documents/brain/gtd/gcal/tulip.org")))))
+#+END_SRC
+* Encryption
+We only have one key, use it to encrypt files
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package emacs
+    :ensure nil
+    :custom
+    ;; This ID corresponds to my key for gdcosta@gmail.com
+    (epa-file-encrypt-to '("A815AC9D526EE85A")))
 #+END_SRC

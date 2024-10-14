@@ -72,6 +72,30 @@ in
 
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
+      # Hack to make launching emacs less irritating.
+      (lib.mkIf pkgs.stdenv.isDarwin {
+        programs.zsh.shellAliases.emacs = "${cfg.pkg}/Applications/Emacs.app/Contents/MacOS/Emacs";
+      })
+      {
+        # Temporary place to install packages I know we need with our emacs
+        # config.
+        # TODO this probably should be coupled with the emacs config somehow.
+        home.packages = with pkgs; [
+          # Dictionary support
+          aspell
+          aspellDicts.en
+          aspellDicts.en-science
+          aspellDicts.en-computers
+          # org-roam graph support
+          graphviz
+          # Graphics support
+          imagemagick
+          # LaTeX support
+          texlive.combined.scheme-full
+          # ePub support
+          unzip
+        ];
+      }
       {
         services.emacs = {
           enable = cfg.enableServer;
@@ -227,16 +251,6 @@ in
           # Fonts
           anonymousPro
           camingo-code
-
-          # nov.el
-          unzip
-
-          # org-roam graph generation
-          graphviz
-
-          # Display images
-          imagemagick
-          image_optim
 
           # System widgets
           pavucontrol

@@ -4,7 +4,7 @@ in
 {
   imports = [
     ./bitwarden.nix
-    ../../modules/emacs
+    ./emacs.nix
     ./games.nix
     ./gammastep.nix
     ./keyboard.nix
@@ -34,11 +34,6 @@ in
 
         signCommits = true;
       };
-
-      # emacs = {
-      #   enable = false;
-      #   enableExwm = false;
-      # };
 
       gnupg.enable = true;
 

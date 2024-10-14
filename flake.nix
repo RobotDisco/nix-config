@@ -46,6 +46,7 @@
       self,
       nixpkgs,
       darwin,
+      emacs-overlay,
       home-manager,
       nixos-hardware,
       ...
@@ -71,9 +72,14 @@
       # argument to return a function that only needs the second.
       forAllSystems = forEachSystem supportedSystems;
       # Darwin config generator
-      darwinSystem = import ./lib/darwinSystem.nix;
+      darwinSystem = import ./lib/darwinSystem.nix [
+        emacs-overlay.overlays.default
+        self.overlays.emacs
+      ];
       # NixOS config generator
-      nixosSystem = import ./lib/nixosSystem.nix (lib.attrValues self.overlays);
+      nixosSystem = import ./lib/nixosSystem.nix (
+        (lib.attrValues self.overlays) ++ [ emacs-overlay.overlays.default ]
+      );
       # My custom functions
       myLib = import ./lib { inherit lib; };
     in
@@ -267,7 +273,7 @@
       # my emacs packages introduced by overlay, it was easier to define it the
       # other way around.
       overlays = {
-        emacs = final: prev: import ./overlays/emacs final prev;
+        emacs = import ./overlays/emacs;
         default = final: _prev: { sunsama = final.callPackage ./packages/sunsama.nix { }; };
       };
 
