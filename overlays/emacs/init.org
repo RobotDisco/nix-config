@@ -263,7 +263,7 @@ Visually separate nested delimiter pairs
 I love Emacs so much, I use it as my primary computing environment :)
 ** Window Manager
 *** exwm
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   ;; Assume that if exwm is installed, then we want emacs to handle all
   ;; pinentry input
   (use-package pinentry
@@ -358,7 +358,7 @@ I love Emacs so much, I use it as my primary computing environment :)
 *** ediff workaround
 ediff doesn't render correctly in exwm; fix by creating "Ediff Control Panel"
 in a floating frame rather than an Emacs window.
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (with-eval-after-load 'ediff-wind
     (eval-when-compile
       (require 'ediff-wind))
@@ -367,7 +367,7 @@ in a floating frame rather than an Emacs window.
 #+END_SRC
 ** Multimedia keys
 Emacs should handle keyboard media shortcuts
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package desktop-environment
     :ensure t
     :defer 1
