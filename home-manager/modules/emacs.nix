@@ -74,7 +74,7 @@ in
     lib.mkMerge [
       # Hack to make launching emacs less irritating.
       (lib.mkIf pkgs.stdenv.isDarwin {
-        programs.zsh.shellAliases.emacs = "${cfg.pkg}/Applications/Emacs.app/Contents/MacOS/Emacs";
+        programs.zsh.shellAliases.emacs = "${cfg.package}/Applications/Emacs.app/Contents/MacOS/Emacs";
       })
       {
         # Temporary place to install packages I know we need with our emacs
