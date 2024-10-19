@@ -1,7 +1,7 @@
 {
   imports = [
     ./development-environment.nix
-    ./emacs.nix
+    ./emacs
     ./gnupg.nix
     ./laptop.nix
     ./seafile-client.nix
