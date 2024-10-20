@@ -543,6 +543,34 @@ Projectile is a framework for managing (usually) software development projects i
 		("C-c p" . projectile-command-map)))
 #+END_SRC
 
+** File Browsing
+A tree-based file browser for file navigation.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package treemacs
+    :ensure t
+    :commands treemacs)
+#+END_SRC
+
+Handle projects managed by projectile as well.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package treemacs-projectile
+    :ensure t
+    :after (treemacs projectile)
+    :commands treemacs-projectile)
+#+END_SRC
+
+Use treemacs for code navigation as well.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package lsp-treemacs
+    :after (treemacs lsp)
+    :ensure t
+    :defer 2
+    :config
+    (lsp-treemacs-sync-mode 1))
+#+END_SRC
 ** Structured Editing
 We use smartparens for structured editing like Ruby blocks or lisp s-expressions
 
