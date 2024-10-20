@@ -732,6 +732,12 @@ Support flycheck syntax checking
       :ensure t
       :mode "\\.idr\\'")
 #+END_SRC
+*** PHP
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package php-mode
+    :ensure t
+    :mode "\\.php\\'")
+#+END_SRC
 *** Racket / Scheme
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; Core REPL environment
