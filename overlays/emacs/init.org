@@ -647,28 +647,6 @@ Like Make, but less warts
     :ensure t
     :commands (justl))
 #+END_SRC
-** Version Control
-Nicer Git support
-*** magit
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package magit
-    :ensure t
-    :bind (("C-x g" . magit-status)
-	   ("C-c g" . magit-dispatch)
-	   ("C-c f" . magit-file-dispatch))
-    :custom
-    (magit-wip-mode t))
-#+END_SRC
-
-Have nicer integrations with online git sites like gitlab and github
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package forge
-    :ensure t
-    :defer 2
-    :after magit)
-#+END_SRC
-
 ** Language Server Protocol
 IDE-like functionality such as intellisense, debugging
 
@@ -690,6 +668,27 @@ IDE-like functionality such as intellisense, debugging
       :ensure t
       :defer 2
       :after (lsp-mode))
+#+END_SRC
+** Version Control
+Nicer Git support
+*** magit
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package magit
+    :ensure t
+    :bind (("C-x g" . magit-status)
+	   ("C-c g" . magit-dispatch)
+	   ("C-c f" . magit-file-dispatch))
+    :custom
+    (magit-wip-mode t))
+#+END_SRC
+
+Have nicer integrations with online git sites like gitlab and github
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package forge
+    :ensure t
+    :defer 2
+    :after magit)
 #+END_SRC
 * Programming Language support / environments
 *** Elm
