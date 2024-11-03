@@ -633,6 +633,20 @@ A editor-agnostic way to maintain project coding styles
     :config
     (global-flycheck-mode))
 #+END_SRC
+** Just task runner
+Like Make, but less warts
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Language support
+  (use-package just-mode
+    :ensure t
+    :mode "\\[Jj\\]ustfile")
+
+  ;; Run targets from within Emacs
+  (use-package justl
+    :ensure t
+    :commands (justl))
+#+END_SRC
 ** Version Control
 Nicer Git support
 *** magit
@@ -749,6 +763,12 @@ Support flycheck syntax checking
   (use-package geiser-racket
     :after (geiser)
     :ensure t)
+
+  ;; Used by Lisp in Small Pieces textbook
+  (use-package geiser-gambit
+    :after (geiser)
+    :ensure t)
+
   (use-package geiser-guile
     :after (geiser)
     :ensure t)
