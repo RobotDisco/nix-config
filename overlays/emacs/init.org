@@ -698,6 +698,14 @@ Have nicer integrations with online git sites like gitlab and github
     :mode "\\.elm\\'")
 #+END_SRC
 
+*** Java
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package lsp-java
+    :ensure t
+    :mode "\\.java\\'"
+    :after lsp)
+#+END_SRC
+
 *** Nix
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package nix-mode
