@@ -692,7 +692,7 @@ Have nicer integrations with online git sites like gitlab and github
 #+END_SRC
 * Programming Language support / environments
 *** Elm
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package elm-mode
     :ensure t
     :mode "\\.elm\\'")
