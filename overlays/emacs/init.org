@@ -691,14 +691,24 @@ Have nicer integrations with online git sites like gitlab and github
     :after magit)
 #+END_SRC
 * Programming Language support / environments
-*** Elm
+** C/C++
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ccls
+    :ensure t
+    :after lsp
+    :hook ((c-mode c++-mode objc-mode cuda-mode) . (lambda ()
+  						    (require 'ccls)
+  						    (lsp-deferred))))
+#+END_SRC
+
+** Elm
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package elm-mode
     :ensure t
     :mode "\\.elm\\'")
 #+END_SRC
 
-*** Java
+** Java
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package lsp-java
     :ensure t
@@ -706,13 +716,13 @@ Have nicer integrations with online git sites like gitlab and github
     :after lsp)
 #+END_SRC
 
-*** Nix
+** Nix
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package nix-mode
     :ensure t
     :mode "\\.nix\\'")
 #+END_SRC
-*** Clojure
+** Clojure
 
 Support flycheck syntax checking
 
@@ -746,20 +756,20 @@ Support flycheck syntax checking
 			  (clj-refactor-mode 1)))
     :ensure t)
 #+END_SRC
-*** Idris
+** Idris
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; The book "Type-Driven Development with Idris" still uses Idris 1
   (use-package idris-mode
       :ensure t
       :mode "\\.idr\\'")
 #+END_SRC
-*** PHP
+** PHP
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package php-mode
     :ensure t
     :mode "\\.php\\'")
 #+END_SRC
-*** Racket / Scheme
+** Racket / Scheme
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;; Core REPL environment
   (use-package geiser
@@ -785,19 +795,19 @@ Support flycheck syntax checking
     :ensure t
     :mode "\\.rkt\\'")
 #+END_SRC
-*** Rust
+** Rust
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package rustic
     :ensure t
     :mode (("\\.rs\\'" . rustic-mode)))
 #+END_SRC
-*** Terraform
+** Terraform
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package terraform-mode
       :ensure t
       :mode "\\.tf\\'")
 #+END_SRC
-*** YAML
+** YAML
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yaml-mode
     :ensure t
