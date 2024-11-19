@@ -57,8 +57,8 @@ in
       enable = pkgs.stdenv.isLinux;
       enableExtraSocket = true;
       enableSshSupport = true;
-      defaultCacheTtl = 60;
-      maxCacheTtl = 120;
+      defaultCacheTtl = 3600;
+      maxCacheTtl = 86400;
       pinentryPackage = pkgs.pinentry-gtk2;
     };
   };
