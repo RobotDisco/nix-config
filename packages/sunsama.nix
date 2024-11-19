@@ -5,7 +5,7 @@
 }:
 let
   pname = "sunsama";
-  version = "sunsama-3.0.2-build-241119l6gcco3ir";
+  version = "3.0.2-build-241119l6gcco3ir";
 
   # Sunsama's URL is annoying and requires unknown implicit magic to getch the
   # appropriate binary for the appropriate platform.
