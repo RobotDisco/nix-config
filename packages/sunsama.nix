@@ -5,7 +5,7 @@
 }:
 let
   pname = "sunsama";
-  version = "2.3.5-build-2407084nf0ym0kn";
+  version = "sunsama-3.0.2-build-241119l6gcco3ir";
 
   # Sunsama's URL is annoying and requires unknown implicit magic to getch the
   # appropriate binary for the appropriate platform.
@@ -17,7 +17,7 @@ let
   # https://download.todesktop.com/2003096gmmnl0g1/latest-linux.yml
   src = fetchurl {
     url = "https://download.todesktop.com/2003096gmmnl0g1/sunsama-${version}-x86_64.AppImage";
-    hash = "sha256-OM0G8dpC9zPuQxRawqmxOq2L1lALC5dpAfEr8NS+djQ=";
+    hash = "sha512-NbnNVbPUwo4NsALuYnhDzkZulT9HgQ8QGmg1D5oV4cY2DXd+sUZS//HKxn7QlppXiri4DmC2Ky+TBuKQZG4RUw==";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
