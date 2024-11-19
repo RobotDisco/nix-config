@@ -1,9 +1,16 @@
 { pkgs, ... }:
 let
+  gtkGreetStyleSheet = pkgs.writeText "gtkgreet.css" ''
+    window {
+      background-image: url("file://${../../../../home-manager/modules/wayland/backgrounds/moosevalley.jpg}");
+      background-size: cover;
+      background-position: center;
+    }
+  '';
   swayConfig = pkgs.writeText "greet-sway-config" ''
-    output * enable bg ${../../../../home-manager/modules/wayland/backgrounds/moosevalley.jpg} fill
+    output * enable
     # `-l` activates layer-shell mode. Notice that `swaymsg exit` will run after gtkgreet.
-    exec "${pkgs.greetd.gtkgreet}/bin/gtkgreet -l; swaymsg exit"
+    exec "${pkgs.greetd.gtkgreet}/bin/gtkgreet -l -s ${gtkGreetStyleSheet}; swaymsg exit"
     bindsym Mod4+shift+e exec swaynag \
       -t warning \
       -m 'Perform an action:' \
