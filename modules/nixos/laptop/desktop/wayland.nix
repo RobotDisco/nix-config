@@ -25,18 +25,12 @@ in
   };
 
   environment.etc."greetd/environments".text = ''
-    sway
     hyprland
-    river
     zsh
   '';
 
   # Compositors I'm actively using
-  programs = {
-    hyprland.enable = true;
-    river.enable = true;
-    sway.enable = true;
-  };
+  programs.hyprland.enable = true;
 
   # A bunch of packages that are likely better managed via home-manager.
   environment.systemPackages = with pkgs; [
@@ -72,7 +66,7 @@ in
     pkgs.hyprpicker
   ];
   # Hyprland's manager for idle inactivity
-  # services.hypridle = true;
+  services.hypridle.enable = true;
   # Hyprland handle locking the session
-  # programs.hyprlock = true;
+  programs.hyprlock.enable = true;
 }
