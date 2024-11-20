@@ -172,7 +172,7 @@ in
           "${waybar} &"
 
           # We almost always want to run Emacs from the get-go
-          "emacs"
+          "emacsclient -c"
         ];
 
         # Window Management triggers
