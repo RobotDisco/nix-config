@@ -17,7 +17,7 @@ in
         before_sleep_cmd = "loginctl lock-session";
         # Signal DPMS to avoid having to tap keyboard multiple times
         # to activate display.
-        # unlock_cmd = "${pkgs.hyprland}/bin/hyprctl dispatch dpms on";
+        unlock_cmd = "${hyprctl}  dispatch dpms on";
       };
 
       listener = [

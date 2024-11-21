@@ -8,10 +8,10 @@ let
     }
   '';
   swayConfig = pkgs.writeText "greet-sway-config" ''
-    output * enable
+    monitor * enable
     # `-l` activates layer-shell mode. Notice that `swaymsg exit` will run after gtkgreet.
-    exec "${pkgs.greetd.gtkgreet}/bin/gtkgreet -l -s ${gtkGreetStyleSheet}; swaymsg exit"
-    bindsym Mod4+shift+e exec swaynag \
+    exec "${pkgs.greetd.gtkgreet}/bin/gtkgreet -l -s ${gtkGreetStyleSheet}; ${pkgs.sway}/bin/swaymsg exit"
+    bindsym Mod4+shift+e exec ${pkgs.sway}/bin/swaynag \
       -t warning \
       -m 'Perform an action:' \
       -b 'Power Down' 'systemctl poweroff' \
