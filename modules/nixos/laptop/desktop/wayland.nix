@@ -2,7 +2,7 @@
 let
   gtkGreetStyleSheet = pkgs.writeText "gtkgreet.css" ''
     window {
-      background-image: url("file://${../../../../home-manager/modules/wayland/backgrounds/moosevalley.jpg}");
+      background-image: url("file://${../../../../backgrounds/yotsugi_hat.jpg}");
       background-size: cover;
       background-position: center;
     }
