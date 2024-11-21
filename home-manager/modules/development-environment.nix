@@ -74,8 +74,12 @@ in
       {
         programs.jq.enable = true;
         home.packages = [
+          # Nix-based development-environment manager
+          pkgs.devenv
           # Nix LSP
           pkgs.nil
+          # Nix linter
+          pkgs.nixfmt-rfc-style
           # Better than grep
           pkgs.ripgrep
         ];
