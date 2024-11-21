@@ -175,6 +175,8 @@ in
           "emacsclient -c"
         ];
 
+        misc.disable_hyprland_logo = true;
+
         # Window Management triggers
         windowrulev2 = [
           # Ensure you have a floating class for clipse"

@@ -53,7 +53,7 @@ in
             scale = "1.5";
           };
           "*" = {
-            bg = "${./backgrounds/moosevalley.jpg} fill";
+            bg = "${../../../backgrounds/moosevalley.jpg} fill";
           };
           # Wayland, unlike autorandr, doesn't keep port names the
           # same. Have to use monitor identifier.
