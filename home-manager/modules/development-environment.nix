@@ -58,6 +58,7 @@ in
               user = "gaelan";
             };
           };
+          lfs.enable = true;
           userEmail = cfg.email;
           userName = cfg.fullname;
         };
