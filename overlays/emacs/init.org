@@ -716,6 +716,13 @@ Have nicer integrations with online git sites like gitlab and github
     :after lsp)
 #+END_SRC
 
+** Kotlin
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package kotlin-mode
+    :ensure t
+    :mode "\\.kts?\\'")
+#+END_SRC
+
 ** Nix
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package nix-mode

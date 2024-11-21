@@ -19,6 +19,8 @@ let
       epkgs.use-package
       # use-package has some dependencies
       epkgs.diminish
+      # Include tree-sitter grammars
+      epkgs.treesit-grammars.with-all-grammars
     ];
   };
 in
