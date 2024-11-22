@@ -24,8 +24,8 @@ let
     bindsym Mod4+shift+e exec ${pkgs.sway}/bin/swaynag \
       -t warning \
       -m 'Perform an action:' \
-      -b 'Power Down' 'systemctl poweroff' \
-      -b 'Reboot' 'systemctl reboot'
+      -b 'Power Down' '${pkgs.systemd}/bin/systemctl poweroff' \
+      -b 'Reboot' '${pkgs.systemd}/bin/systemctl reboot'
   '';
 in
 {
