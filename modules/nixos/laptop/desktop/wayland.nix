@@ -6,6 +6,16 @@ let
       background-size: cover;
       background-position: center;
     }
+
+    box {
+      /*
+       * Rebecca Purple - https://medium.com/@valgaze/the-hidden-purple-memorial-in-your-web-browser-7d84813bb416
+       * This mostly translucent box is being added to give the text readability
+       */
+      background-color: rgba(66,33,99,0.30);
+
+      color: gold;
+    }
   '';
   swayConfig = pkgs.writeText "greet-sway-config" ''
     monitor * enable
