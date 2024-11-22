@@ -34,14 +34,14 @@ let
   # Status Bar
   waybar = "${pkgs.waybar}/bin/waybar";
 
-  # Emacs
-  # emacs = "${pkgs.emacs}/bin/emacs";
-
   # Brightness control
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
 
   # rfkill
   rfkill = "${pkgs.util-linux}/bin/rfkill";
+
+  # Discord
+  discord = "${pkgs.webcord}/bin/webcord";
 in
 {
   options.robot-disco.wayland.hyprland.enable = lib.mkEnableOption "Hyprland graphical environment";
@@ -162,20 +162,39 @@ in
           "$mainMod, mouse:273, resizewindow"
         ];
 
-        exec-once = lib.concatStringsSep " " [
+        env = [
+          # Use wayland for GTK apps.
+          "GDK_BACKEND,wayland"
+          # Get Chromium and Electron-based apps to use wayland directly without
+          # X.
+          "NIXOS_OZONE_WL,1"
+          # QT apps need to be configured to use wayland as their rendering
+          # system
+          "QT_QPA_PLATFORM,wayland"
+          # Java needs to be told when it is using tiling window managers.
+          "_JAVA_AWT_WM_NONREPARENTING,1"
+        ];
+
+        exec-once = [
           # Try out cliphist
-          "${wl-paste} --watch ${cliphist} store &"
+          "${wl-paste} --watch ${cliphist} store"
           # Try out clipse
           # "${clipse} -listen & "
 
           # Notification Messages
-          "${mako} &"
+          "${mako}"
 
           # Launch a status bar
-          "${waybar} &"
+          "${waybar}"
 
-          # We almost always want to run Emacs from the get-go
-          "emacsclient -c"
+          # Launch immediate applications
+          "[workspace 2 silent] ${pkgs.brave}/bin/brave"
+          "[workspace 1 silent] emacsclient -c"
+          "[workspace 4 silent] ${pkgs.slack}/bin/slack"
+          "[workspace 4 silent] ${discord}"
+
+          # Run Background apps
+          "[workspace name:UHK silent] ${pkgs.uhk-agent}/bin/uhk-agent"
         ];
 
         misc.disable_hyprland_logo = true;

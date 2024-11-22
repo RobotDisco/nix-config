@@ -43,10 +43,6 @@ in
 
       wayland = {
         hyprland.enable = true;
-
-        sway = {
-          enable = true;
-        };
       };
     };
   };
