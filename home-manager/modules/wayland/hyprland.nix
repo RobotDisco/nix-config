@@ -129,6 +129,9 @@ in
           "$mainMod, V, exec, ${cliphist} list | ${wofi} -S dmenu | ${cliphist} decode | ${wl-copy}"
           # clipse
           # ''$mainMod, V, exec, $terminal --class clipse -e 'clipse'''
+
+          # Lock Screen
+          "$mainMod, L, exec, loginctl lock-session"
         ];
 
         # Bindings that will repeat when held, and work when locked

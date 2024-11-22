@@ -5,7 +5,36 @@ let
   hyprctl = "${pkgs.hyprland}/bin/hyprctl";
 in
 {
-  # Automatically lock the display when idle
+  # Lock screen; when session is locked, require your password be typed in.
+  programs.hyprlock = {
+    enable = true;
+
+    # Ugh, We have to declare the layout of the lock screen in a declarative
+    # way.
+    settings = {
+      background = {
+        path = toString ../../../backgrounds/yotsugi_eyes.png;
+      };
+
+      label = {
+        text = ''"Yay, peace peace."'';
+        color = "rgba(0, 230, 0, 1.0)";
+        font_size = 72;
+        position = "500, 210";
+        halign = "center";
+        valign = "bottom";
+      };
+
+      input-field = {
+        hide_input = true;
+        size = "600, 140";
+        position = "-15, 0";
+        outline_thickness = 8;
+      };
+    };
+  };
+
+  # Software to automatically lock screen when laptop is idle and unlocked.
   services.hypridle = {
     enable = true;
 
@@ -15,9 +44,9 @@ in
         lock_cmd = "pidof hyprlock || hyprlock";
         # Lock session before going to sleep
         before_sleep_cmd = "loginctl lock-session";
-        # Signal DPMS to avoid having to tap keyboard multiple times
-        # to activate display.
-        unlock_cmd = "${hyprctl}  dispatch dpms on";
+        # Turn on monitor to avoid having to tap keyboard multiple times to
+        # activate display.
+        unlock_cmd = "${hyprctl} dispatch dpms on";
       };
 
       listener = [
@@ -40,27 +69,14 @@ in
           # On trigger, disable monitors
           on-timeout = "${hyprctl} dispatch dpms off";
           # On resumption, enable monitors
-          on-resume = "${hyprctl} displatch dpms on";
+          on-resume = "${hyprctl} dispatch dpms on";
         }
-        # Turn off screen after fifteen minutes of idleness
+        # Suspend/hibernate after thirty minutes of idleness.
         {
           timeout = 1800;
-          on-resume = "systemctl suspend";
+          on-timeout = "systemctl suspend";
         }
       ];
-    };
-  };
-
-  # Setup the command that locks the screens
-  programs.hyprlock = {
-    enable = true;
-
-    # Ugh, We have to declare the layout of the lock screen in a declarative
-    # way.
-    settings = {
-      label = {
-        text = "Hello!";
-      };
     };
   };
 }
