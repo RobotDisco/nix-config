@@ -132,7 +132,7 @@ in
           # ''$mainMod, V, exec, $terminal --class clipse -e 'clipse'''
 
           # Lock Screen
-          "$mainMod, L, exec, loginctl lock-session"
+          "$mainMod, L, exec, ${pkgs.systemd}/bin/loginctl lock-session"
         ];
 
         # Bindings that will repeat when held, and work when locked
