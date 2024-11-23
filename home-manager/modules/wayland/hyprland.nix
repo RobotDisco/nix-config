@@ -197,14 +197,9 @@ in
 
         misc.disable_hyprland_logo = true;
 
-        # Window Management triggers
+        # Window management rules
         windowrulev2 = [
-          # Ensure you have a floating class for clipse"
-          "float,class:(clipse)"
-          # Set the window size of a clipse buffer
-          "size 622 652,class:(clipse)"
-          # You'll probably like this (why?)
-          "suppressevent maximize, class:.*"
+          "opacity 0.93 0.81, class:.*"
         ];
       };
     };
