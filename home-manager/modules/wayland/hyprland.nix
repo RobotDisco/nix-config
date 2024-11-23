@@ -21,10 +21,6 @@ let
 
   # Application Launcher
   wofi = "${pkgs.wofi}/bin/wofi";
-
-  # Notifications
-  mako = "${pkgs.mako}/bin/mako";
-
   # File Manager
   thunar = "${pkgs.xfce.thunar}/bin/thunar";
 
@@ -46,6 +42,11 @@ in
 {
   options.robot-disco.wayland.hyprland.enable = lib.mkEnableOption "Hyprland graphical environment";
   config = {
+    services = {
+      # Notification popup messages
+      mako.enable = true;
+    };
+
     wayland.windowManager.hyprland = {
       inherit (cfg) enable;
 
@@ -180,9 +181,6 @@ in
           "${wl-paste} --watch ${cliphist} store"
           # Try out clipse
           # "${clipse} -listen & "
-
-          # Notification Messages
-          "${mako}"
 
           # Launch a status bar
           "${waybar}"
