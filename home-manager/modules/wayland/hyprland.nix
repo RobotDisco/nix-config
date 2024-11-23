@@ -9,12 +9,10 @@ let
   inherit (config.robot-disco.laptop) bluetoothID;
   cfg = config.robot-disco.wayland.hyprland;
 
-  # Clipboard managers I'm evaluating
-  # clipse = "${pkgs.clipse}/bin/clipse";
-  cliphist = "${pkgs.cliphist}/bin/cliphist";
+  cliphist = "${config.services.cliphist.package}/bin/cliphist";
   # Standard clipboard tooling
   wl-copy = "${pkgs.wl-clipboard}/bin/wl-copy";
-  wl-paste = "${pkgs.wl-clipboard}/bin/wl-paste";
+  # wl-paste = "${pkgs.wl-clipboard}/bin/wl-paste";
 
   # Wireplumber for volume control
   wpctl = "${pkgs.wireplumber}/bin/wpctl";
@@ -43,6 +41,8 @@ in
   options.robot-disco.wayland.hyprland.enable = lib.mkEnableOption "Hyprland graphical environment";
   config = {
     services = {
+      # Clipboard history
+      cliphist.enable = true;
       # Notification popup messages
       mako.enable = true;
     };
@@ -125,12 +125,8 @@ in
           "$mainMod, mouse_down, workspace, e+1"
           "$mainMod, mouse_up, workspace, e-1"
 
-          # Clipboard management
-          # cliphist
+          # Clipboard management via cliphist
           "$mainMod, V, exec, ${cliphist} list | ${wofi} -S dmenu | ${cliphist} decode | ${wl-copy}"
-          # clipse
-          # ''$mainMod, V, exec, $terminal --class clipse -e 'clipse'''
-
           # Lock Screen
           "$mainMod, L, exec, ${pkgs.systemd}/bin/loginctl lock-session"
         ];
@@ -177,11 +173,6 @@ in
         ];
 
         exec-once = [
-          # Try out cliphist
-          "${wl-paste} --watch ${cliphist} store"
-          # Try out clipse
-          # "${clipse} -listen & "
-
           # Launch a status bar
           "${waybar}"
 
