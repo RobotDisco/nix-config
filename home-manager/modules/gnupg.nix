@@ -50,6 +50,10 @@ in
         # I almost always want to encrypt files for myself, so mark myself as recipient
         # unless I explicitly specify another.
         default-recipient-self = true;
+        default-recipient = [
+          "gaelan@tulip.com"
+          "gdcosta@gmail.com"
+        ];
       };
     };
 
