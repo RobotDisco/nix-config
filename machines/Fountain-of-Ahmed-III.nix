@@ -70,6 +70,11 @@
         "yubico-yubikey-manager"
       ];
 
+      # Upgrade brew packages whenever we run `darwin switch`
+      # Note that this makes the operation non-idempotent, but it
+      # keeps brew packages up-to-date.
+      global.autoUpdate = true;
+
       masApps = {
         "WireGuard" = 1451685025;
       };
