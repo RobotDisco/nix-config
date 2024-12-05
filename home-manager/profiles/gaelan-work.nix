@@ -9,7 +9,7 @@ in
 
       fullname = "Gaelan D'costa";
       email = "gaelan@tulip.com";
-      gpgKey = "0x4B58E4871E1CA53A!";
+      gpgKey = "0x00729AD1F1840227!";
 
       signCommits = true;
     };
