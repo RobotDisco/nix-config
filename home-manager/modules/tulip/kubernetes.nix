@@ -27,8 +27,13 @@ in
       kubectl
       istioctl
 
+      # Nice tool for viewing kubectl requests/limits
+      kube-capacity
+
       # Deployment/rollout tooling
+      argocd
       argo-rollouts
+      kubernetes-helm
 
       # Infra as code
       terraform-ls
