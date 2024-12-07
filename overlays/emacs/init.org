@@ -1285,12 +1285,3 @@ Because org-gcal is stupid and because work is paranoid, I can only control one 
 	    '(("gdcosta@gmail.com" .  "~/Documents/brain/gtd/gcal/personal.org")
 	      ("gaelan@tulip.com" . "~/Documents/brain/gtd/gcal/tulip.org")))))
 #+END_SRC
-* Encryption
-We only have one key, use it to encrypt files
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package emacs
-    :ensure nil
-    :custom
-    ;; This ID corresponds to my key for gdcosta@gmail.com
-    (epa-file-encrypt-to '("A815AC9D526EE85A")))
-#+END_SRC
