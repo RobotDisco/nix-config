@@ -40,6 +40,10 @@ in
 {
   options.robot-disco.wayland.hyprland.enable = lib.mkEnableOption "Hyprland graphical environment";
   config = lib.mkIf cfg.enable {
+    # Enable other wayland environmental features
+    robot-disco.wayland.wallpaper.enable = true;
+    robot-disco.wayland.lock-screen.enable = true;
+
     services = {
       # Clipboard history
       cliphist.enable = true;
