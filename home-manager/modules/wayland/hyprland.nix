@@ -39,7 +39,7 @@ let
 in
 {
   options.robot-disco.wayland.hyprland.enable = lib.mkEnableOption "Hyprland graphical environment";
-  config = {
+  config = lib.mkIf cfg.enable {
     services = {
       # Clipboard history
       cliphist.enable = true;
