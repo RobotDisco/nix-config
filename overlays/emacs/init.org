@@ -223,9 +223,11 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
   (line-number-mode 1)
 #+END_SRC
 ** Margins
-Set the line length to 80 characters
+Set the line length to 80 characters. This has to be set via customize rather than seq for reasons I don't understand.
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (setq fill-column 80)
+  (use-package emacs
+    :custom
+    (fill-column 80))
 #+END_SRC
 
 Show a line indicating the end of the page, as it were
