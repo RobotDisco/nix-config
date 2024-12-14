@@ -187,6 +187,7 @@ in
           "[workspace 4 silent] ${discord}"
 
           # Run Background apps
+          "[workspace name:Sunsama silent] ${pkgs.sunsama}/bin/sunsama"
           "[workspace name:UHK silent] ${pkgs.uhk-agent}/bin/uhk-agent"
         ];
 
