@@ -66,10 +66,6 @@ in
     pkgs.wl-clipboard
     # Clip managers to try out
     pkgs.cliphist
-    pkgs.clipse
-    # Session management. Handle idle sessions, locking sessions
-    pkgs.hypridle
-    pkgs.hyprlock
     # Background management
     pkgs.hyprpaper
     # Colour picker
