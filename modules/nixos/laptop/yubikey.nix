@@ -26,7 +26,7 @@
     u2f = {
       enable = true;
       # Prompt for the u2f device.
-      cue = true;
+      settings.cue = true;
       # Require yubikey auth as well as passwords
       # control = "required";
     };

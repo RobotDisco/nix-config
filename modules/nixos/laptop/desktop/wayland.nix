@@ -35,7 +35,7 @@ in
   };
 
   environment.etc."greetd/environments".text = ''
-    hyprland
+    Hyprland
     zsh
   '';
 
