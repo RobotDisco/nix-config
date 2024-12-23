@@ -1002,18 +1002,18 @@ An implementation of Zettelkasten for org, inspired by org-roam
     (org-roam-capture-templates
      '(("b" "business" plain "%?"
           :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                             "#+TITLE: ${title}\n#+FILETAGS: :fleeting:business:"))
+                             "#+TITLE: ${title}\n#+FILETAGS: :business:"))
        ("l" "literature" plain
         (file "~/Documents/brain/templates/literature.org")
         :target (file "${citar-citekey}.org")      
         :unnarrowed t)
        ("p" "permanent" plain "%?"
         :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-                           "#+TITLE: ${title}\n#+FILETAGS: :fleeting:\n- previous :: ")
+                           "#+TITLE: ${title}\n- previous :: ")
         :unnarrowed t)
        ("r" "person" plain "%?"
         :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg"
-                           "#+TITLE: ${title}\n#+FILETAGS: :fleeting:person:"))
+                           "#+TITLE: ${title}\n#+FILETAGS: :person:"))
        ("j" "project" entry
         (file "~/Documents/brain/templates/project.org")
         :target (file "%<%Y%m%d%H%M%S>-${slug}.org"))))
