@@ -58,12 +58,12 @@ in
     };
 
     services.gpg-agent = {
-      enable = pkgs.stdenv.isLinux;
+      enable = true;
       enableExtraSocket = true;
       enableSshSupport = true;
       defaultCacheTtl = 3600;
       maxCacheTtl = 86400;
-      pinentryPackage = pkgs.pinentry-gtk2;
+      pinentryPackage = if pkgs.stdenv.isDarwin then pkgs.pinentry_mac else pkgs.pinentry-gtk2;
     };
   };
 }
