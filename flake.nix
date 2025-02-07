@@ -26,9 +26,6 @@
 
     pre-commit-hooks.url = "github:cachix/git-hooks.nix";
 
-    robonona.url = "github:RobotDisco/robonona-clj";
-    robonona.inputs.nixpkgs.follows = "nixpkgs";
-
     # My private secrets repository.
     # use ssh protocol to authenticate via ssh-agent/ssh-key
     # and shallow clone to save time.
@@ -167,30 +164,6 @@
             # Secure secret injection
             inputs.agenix.nixosModules.default
             ./secrets/nixos.nix
-            {
-              systemd.timers."robonona" = {
-                enable = true;
-                wantedBy = [ "timers.target" ];
-                timerConfig = {
-                  OnCalendar = "Mon *-*-* 08:30";
-                  RandomizedDelaySec = "300";
-                  Unit = "robonona.service";
-                };
-              };
-
-              systemd.services."robonona" = {
-                enable = true;
-                wants = [ "network-online.target" ];
-                script = ''
-                  set -eu
-                  ${inputs.robonona.packages.x86_64-linux.default}/bin/robonona prod
-                '';
-                serviceConfig = {
-                  Type = "oneshot";
-                  User = "gaelan";
-                };
-              };
-            }
           ];
           nixosSpecialArgs = {
             inherit myLib;
