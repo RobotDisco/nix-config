@@ -43,7 +43,7 @@
       options = [ "subvol=@varlog" "compress=zstd" "noatime" ];
     };
 
-  fileSystems."/var/mail" =
+  fileSystems."/var/spool/mail" =
     { device = "/dev/disk/by-label/rootpool";
       fsType = "btrfs";
       options = [ "subvol=@varmail" "compress=zstd" "relatime" ];

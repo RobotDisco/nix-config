@@ -26,7 +26,7 @@
         # For upgrading
         # see https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading
         environment.systemPackages = [
-          # pkgs.postgresql_14
+          pkgs.postgresql_16
         ];
       };
     };

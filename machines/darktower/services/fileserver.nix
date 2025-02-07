@@ -35,20 +35,22 @@
           enable = true;
           # Remember to run `smbpasswd -a <user>` to get samba to pick up
           # necessary user passwords
-          securityType = "user";
+          settings = {
+            global = {
+              security = "user";
 
-          extraConfig = ''
-            workgroup = ROBOT-DISCO
-            server string = chapterhouse
-            netbios name = chapterhouse
-            security = user
-            hosts allow = 192.168.20. 127.0.0.1
-            hosts deny 0.0.0.0/0
-            guest account = nobody
-            map to guest = bad user
-          '';
+              "hosts allow" = "192.168.20. 127.0.0.1";
+              "hosts deny" = "0.0.0.0/0";
 
-          shares = {
+              "netbios name" = "chapterhouse";
+
+              "guest account" = "nobody";
+              "map to guest" = "bad user";
+
+              "server string" = "chapterhouse";
+              workgroup = "ROBOT-DISCO";
+            };
+
             archive = {
               path = "/srv/archive";
               "read only" = "no";

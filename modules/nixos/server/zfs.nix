@@ -1,9 +1,4 @@
-{ config, ... }:
-
 {
-  # Ensure that the kernel installed supports ZFS
-  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
-
   # Support ZFS filesystems
   boot.supportedFilesystems = [ "zfs" ];
 
