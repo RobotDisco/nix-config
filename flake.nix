@@ -24,7 +24,10 @@
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    pre-commit-hooks.url = "github:cachix/git-hooks.nix";
+    pre-commit-hooks = {
+      url = "github:cachix/git-hooks.nix/master";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
 
     # My private secrets repository.
     # use ssh protocol to authenticate via ssh-agent/ssh-key
@@ -101,7 +104,7 @@
             # Detect unsupported NixOS input versions
             flake-checker = {
               # Enable when they finally upgrade flake-checker to work with 24.11
-              #enable = true;
+              enable = true;
             };
             # Do something via Nix language server?
             nil = {
