@@ -73,7 +73,15 @@
       ];
       # NixOS config generator
       nixosSystem = import ./lib/nixosSystem.nix (
-        (lib.attrValues self.overlays) ++ [ emacs-overlay.overlays.default ]
+        [
+          (_final: prev: {
+            emacsPackages = prev.emacsPackages // {
+              inherit (inputs.nixpkgs-unstable.legacyPackages."${prev.system}".emacsPackages) dap-mode;
+            };
+          })
+          emacs-overlay.overlays.default
+        ]
+        ++ (lib.attrValues self.overlays)
       );
       # My custom functions
       myLib = import ./lib { inherit lib; };

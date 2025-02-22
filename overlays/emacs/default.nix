@@ -1,6 +1,6 @@
 # Use final for referencing dependencies
 # Use prev for overriding package definitions
-final: _prev:
+final: prev:
 
 let
   # Emacs package generated from use-package s-expressions in our emacs
@@ -22,6 +22,19 @@ let
       # Include tree-sitter grammars
       epkgs.treesit-grammars.with-all-grammars
     ];
+
+    override =
+      epkgs:
+      epkgs
+      // {
+        lsp-java = epkgs.lsp-java.override (
+          epkgs:
+          epkgs
+          // {
+            inherit (prev.emacsPackages) dap-mode;
+          }
+        );
+      };
   };
 in
 {
