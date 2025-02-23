@@ -1022,7 +1022,7 @@ Because org-gcal is stupid and because work is paranoid, I can only control one 
     :ensure nil
     :defer 2
     :custom
-    (plstore-encrypt-to '("A815AC9D526EE85A")))
+    (plstore-encrypt-to '("A815AC9D526EE85A" "E3E3EFF879DB7DF6")))
 
   (use-package org-gcal
     :ensure t
@@ -1031,13 +1031,13 @@ Because org-gcal is stupid and because work is paranoid, I can only control one 
     :init
     (require 'auth-source)
     (when-let* ((credential (car (auth-source-search :host "gcal-oauth-service"
-						     :type 'netrc
-						     :max 1)))
-		(id (plist-get credential :client-id))
-		(secret (plist-get credential :client-secret)))
+  						   :type 'netrc
+  						   :max 1)))
+  	      (id (plist-get credential :client-id))
+  	      (secret (plist-get credential :client-secret)))
       (setq org-gcal-client-id id
-	    org-gcal-client-secret secret
-	    org-gcal-fetch-file-alist
-	    '(("gdcosta@gmail.com" .  "~/Documents/brain/gtd/gcal/personal.org")
-	      ("gaelan@tulip.com" . "~/Documents/brain/gtd/gcal/tulip.org")))))
+  	  org-gcal-client-secret secret
+  	  org-gcal-fetch-file-alist
+  	  '(("gdcosta@gmail.com" .  "~/Documents/brain/gtd/gcal/personal.org")
+  	    ("gaelan@tulip.com" . "~/Documents/brain/gtd/gcal/tulip.org")))))
 #+END_SRC
