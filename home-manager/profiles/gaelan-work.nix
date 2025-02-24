@@ -1,4 +1,4 @@
-_:
+{ pkgs, ... }:
 let
   username = "gaelan";
 in
@@ -14,7 +14,11 @@ in
       signCommits = true;
     };
 
-    emacs.enable = true;
+    emacs = {
+      enable = true;
+      package = pkgs.gaelan-emacs-macport;
+    };
+
     gnupg.enable = true;
 
     tulip.enable = true;
