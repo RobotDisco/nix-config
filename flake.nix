@@ -71,6 +71,11 @@
       forAllSystems = forEachSystem supportedSystems;
       # Darwin config generator
       darwinSystem = import ./lib/darwinSystem.nix [
+        (_final: prev: {
+          emacsPackages = prev.emacsPackages // {
+            inherit (inputs.nixpkgs-unstable.legacyPackages."${prev.system}".emacsPackages) dap-mode;
+          };
+        })
         emacs-overlay.overlays.default
         self.overlays.emacs
       ];
