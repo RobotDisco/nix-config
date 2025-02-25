@@ -12,7 +12,7 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 ** Inspirations
 - [[https://github.com/daviwil/emacs-from-scratch/][Emacs from Scratch]] is a great series of youtube videos where the author clearly puts a lot of thoughts and well-principled thought into his configuration principles.
 
-- I am super indebted to whoever [[http://github.com/terlar/emacs-config][Terlar]] is, their nix package and structure is one I found a lot of insight about how to write nix packages from. 
+- I am super indebted to whoever [[http://github.com/terlar/emacs-config][Terlar]] is, their nix package and structure is one I found a lot of insight about how to write nix packages from.
 
 ** Key package choices
 - package management :: [[https://github.com/jwiegley/use-package][use-package]]
@@ -32,7 +32,7 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
   ;;; early-init.el --- Early Initialization -*- lexical-binding: t; -*-
 #+END_SRC
-  
+
 ** Version Sentinal
 
 I am not sure if this config will work with older versions of emacs, so I'll abort if the running version of emacs is older than a known good version.
@@ -57,9 +57,9 @@ Let's time and display the amount of time it takes to bring up my Emacs configur
 #+END_SRC
 
 I saw a config where the author temporarily set garbage collection thresholds for speed during initialization, presumably to minimize GC overhead at startup.
-   
+
 When emacs has finished initalizing, it runs a hook we've set up to restore a more aggressive threshold.
-   
+
 This is a pattern I have seen various people use, so it seems like a good idea.
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
   (let ((normal-gc-cons-threshold gc-cons-threshold)
@@ -111,7 +111,7 @@ Private an easy way to toggle debug mode which will set certain variables to pro
     (when (getenv "DEBUG") (setq init-file-debug t))
     (setq debug-on-error (and (not noninteractive) init-file-debug)))
 #+END_SRC
-   
+
 Provide XDG-compliant locations for Emacs to store and cache data.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -699,8 +699,8 @@ Have nicer integrations with online git sites like gitlab and github
     :ensure t
     :after lsp
     :hook ((c-mode c++-mode objc-mode cuda-mode) . (lambda ()
-  						    (require 'ccls)
-  						    (lsp-deferred))))
+						      (require 'ccls)
+						      (lsp-deferred))))
 #+END_SRC
 
 ** Elm
@@ -861,12 +861,12 @@ Read PDF files and epub ebooks on Emacs
   (use-package org
     :ensure t
     :hook (org-mode-hook . (lambda ()
-                             (setq-local fill-column 80)
-                             (visual-line-mode +1)))
+			     (setq-local fill-column 80)
+			     (visual-line-mode +1)))
     :mode ("\\.org\\'" . org-mode)
     :bind (("C-c a" . org-agenda)
-           ("C-c c" . org-capture)
-           ("C-c l" . org-store-link))
+	   ("C-c c" . org-capture)
+	   ("C-c l" . org-store-link))
     :config
     ;; Enable org habits
     (add-to-list 'org-modules 'org-habit t))
@@ -877,35 +877,74 @@ An implementation of Zettelkasten for org, inspired by org-roam
   (use-package org-roam
     :ensure t
     :defer 2
+    :bind (("C-c j d" . org-roam-dailies-capture-date)
+	   ("C-c j t" . org-roam-dailies-capture-today)
+	   ;; Buttonmash combo for logging something
+	   ;; doesn't match my mnenomic scheme otherwise.
+	   ("C-c j j" . (lambda ()
+			  (interactive)
+			  (org-roam-dailies-capture-today nil "j")))
+	   ("C-c j y" . org-roam-dailies-capture-yesterday)
+	   ("C-c j r" . org-roam-dailies-capture-tomorrow)
+	   ("C-c j n" . org-roam-dailies-goto-next-note)
+	   ("C-c j p" . org-roam-dailies-goto-previous-note)
+	   ("C-c n b" . org-roam-buffer-toggle)
+	   ("C-c n c" . org-id-get-create)
+	   ("C-c n f" . org-roam-node-find)
+	   ("C-c n i" . org-roam-node-insert)
+	   ("C-c n r" . (lambda ()
+			  (interactive)
+			  (org-roam-node-random nil (lambda (node)
+						      (and
+						       (member "journal" (org-roam-node-tags node))
+						       (not (member "literature" (org-roam-node-tags-node)))))))))
     :custom
     (org-roam-directory "~/Documents/brain")
     (org-roam-dailies-directory "journal/")
+	(org-roam-capture-templates
+     '(("b" "business" plain "%?"
+	  :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+			     "#+TITLE: ${title}\n#+FILETAGS: :business:"))
+       ("l" "literature" plain
+	(file "~/Documents/brain/templates/literature.org")
+	:target (file "${citar-citekey}.org")
+	:unnarrowed t)
+       ("p" "permanent" plain "%?"
+	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+			   "#+TITLE: ${title}\n- previous :: ")
+	:unnarrowed t)
+       ("r" "person" plain "%?"
+	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg"
+			   "#+TITLE: ${title}\n#+FILETAGS: :person:"))
+       ("j" "project" entry
+	(file "~/Documents/brain/templates/project.org")
+	:target (file "%<%Y%m%d%H%M%S>-${slug}.org"))))
     (org-roam-dailies-capture-templates
      '(("j" "Daily Log Entry" entry
-        "* %<%0H:%M> %?"
-        :target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:" ("Log"))
-        :unnarrowed t)
+	"* %<%0H:%M> %?"
+	:target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:" ("Log"))
+	:unnarrowed t)
        ("d" "Daily Morning Reflection" entry
-        (file "~/Documents/brain/templates/daily.org")
-        :jump-to-captured t
-        :prepend t
-        :target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:"))
+	(file "~/Documents/brain/templates/daily.org")
+	:jump-to-captured t
+	:prepend t
+	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:"))
        ("e" "Daily Evening Reflection" entry
-        (file "~/Documents/brain/templates/evening.org")
-        :target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
-        :unnarrowed t)
+	(file "~/Documents/brain/templates/evening.org")
+	:target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
+	:unnarrowed t)
        ("w" "Weekly Reflection" entry
-        (file "~/Documents/brain/templates/weekly.org")
-        :target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
-        :unnarrowed t)
+	(file "~/Documents/brain/templates/weekly.org")
+	:target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
+	:unnarrowed t)
        ("m" "Monthly Reflection" entry
-        (file "~/Documents/brain/templates/monthly.org")
-        :target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
-        :unnarrowed t)
+	(file "~/Documents/brain/templates/monthly.org")
+	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
+	:unnarrowed t)
        ("y" "Yearly Reflection" entry
-        (file "~/Documents/brain/templates/yearly.org")
-        :target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
-        :unnarrowed t)))
+	(file "~/Documents/brain/templates/yearly.org")
+	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
+	:unnarrowed t)))
     :config
     ;; Scan for org-roam changes and rebuild database opportunistically
     (org-roam-db-autosync-mode))
@@ -922,9 +961,9 @@ Also enable a UI that makes overseeing my knowledge base easier.
     :after org-roam
     :init
     (setq org-roam-ui-sync-theme t
-          org-roam-ui-follow t
-          org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start t))
+	  org-roam-ui-follow t
+	  org-roam-ui-update-on-save t
+	  org-roam-ui-open-on-start t))
 #+END_SRC
 
 navigating my org-roam corpus will involve me clicking through a bunch of links and then realizing I need to back-track. =winner-mode= is a simple way of implementing browser-like history, by allowing me to keep track of and navigate backwards and forwards through a history of what buffers were shown in each window.
@@ -934,8 +973,8 @@ navigating my org-roam corpus will involve me clicking through a bunch of links 
     :defines (winner-mode-map)
     :demand 0
     :bind (:map winner-mode-map
-                ("C-c C-w C-p" . winner-undo)
-                ("C-c C-w C-n" . winner-redo))
+		("C-c C-w C-p" . winner-undo)
+		("C-c C-w C-n" . winner-redo))
     :config
     (winner-mode +1))
 #+END_SRC
@@ -950,16 +989,16 @@ Use deft for full-text search
     :init
     (defun gaelan/deft-parse-title (file contents)
       (let ((re (concat
-                 ;; Match text of first headline found, strip away tags and
-                 ;; trailing whitespace
-                 "^\\*+\\s-+\\(.*?\\)\\s-*\\(?:\\s-:.*\\)?$"
-                 ;; or
-                 "\\|"
-                 ;; Match text of first #+TITLE: found
-                 "^\\s-*#\\+[Tt][Ii][Tt][Ll][Ee]:\\s-*\\(.*\\)$")))
-        (when (string-match re contents)
-          (or (match-string 1 contents)
-              (match-string 2 contents)))))
+		 ;; Match text of first headline found, strip away tags and
+		 ;; trailing whitespace
+		 "^\\*+\\s-+\\(.*?\\)\\s-*\\(?:\\s-:.*\\)?$"
+		 ;; or
+		 "\\|"
+		 ;; Match text of first #+TITLE: found
+		 "^\\s-*#\\+[Tt][Ii][Tt][Ll][Ee]:\\s-*\\(.*\\)$")))
+	(when (string-match re contents)
+	  (or (match-string 1 contents)
+	      (match-string 2 contents)))))
     :config
     (advice-add 'deft-parse-title :override #'gaelan/deft-parse-title)
     :custom
@@ -967,12 +1006,12 @@ Use deft for full-text search
     (deft-directory org-roam-directory)
     (deft-recursive t)
     (deft-strip-summary-regexp (concat
-                                ;; Strip anything that looks like org property.
-                                "^\\s-*:.*:\\s-*.*$"
-                                ;; Or
-                                "\\|"
-                                ;; Strip anything that looks like #+KEYWORD
-                                "^\\s-*#\\+.*:.*$"))
+				;; Strip anything that looks like org property.
+				"^\\s-*:.*:\\s-*.*$"
+				;; Or
+				"\\|"
+				;; Strip anything that looks like #+KEYWORD
+				"^\\s-*#\\+.*:.*$"))
     (deft-use-filename-as-title t))
 #+END_SRC
 *** org-noter
@@ -992,7 +1031,7 @@ Block-level editing/embedding, approximating the way Roam/logseq do it
     :after org
     :ensure t
     :bind (("C-c n a" . org-transclusion-add)
-           ("C-c n t" . org-transclusion-mode)))
+	   ("C-c n t" . org-transclusion-mode)))
 #+END_SRC
 ** Citations
 I am using the new [[https://orgmode.org/manual/Citations.html][org-cite]] system for working with bibliographic information
@@ -1031,13 +1070,13 @@ Because org-gcal is stupid and because work is paranoid, I can only control one 
     :init
     (require 'auth-source)
     (when-let* ((credential (car (auth-source-search :host "gcal-oauth-service"
-  						   :type 'netrc
-  						   :max 1)))
-  	      (id (plist-get credential :client-id))
-  	      (secret (plist-get credential :client-secret)))
+						     :type 'netrc
+						     :max 1)))
+	        (id (plist-get credential :client-id))
+	        (secret (plist-get credential :client-secret)))
       (setq org-gcal-client-id id
-  	  org-gcal-client-secret secret
-  	  org-gcal-fetch-file-alist
-  	  '(("gdcosta@gmail.com" .  "~/Documents/brain/gtd/gcal/personal.org")
-  	    ("gaelan@tulip.com" . "~/Documents/brain/gtd/gcal/tulip.org")))))
+	    org-gcal-client-secret secret
+	    org-gcal-fetch-file-alist
+	    '(("gdcosta@gmail.com" .  "~/Documents/brain/gtd/gcal/personal.org")
+	      ("gaelan@tulip.com" . "~/Documents/brain/gtd/gcal/tulip.org")))))
 #+END_SRC
