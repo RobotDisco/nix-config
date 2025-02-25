@@ -1,19 +1,23 @@
-{ emacs, stdenv }:
+{
+  emacs,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation {
   name = "gaelan-emacs-config";
-  src = ./init.org;
+  src = lib.sourceByRegex ./. [ "^init.org$" ];
   nativeBuildInputs = [ emacs ];
 
   dontUnpack = true;
 
   buildPhase = ''
-    emacs --batch --eval "(require 'org)" \
-          --eval "(org-babel-tangle-file \"$src\" \"init.el\" \"emacs-lisp\")"
+    cp $src/*.org .
+    emacs --quick --batch --load org \
+          *.org --funcall org-babel-tangle 
   '';
 
   installPhase = ''
-    mkdir -p $out/share/emacs/site-lisp
-    cp $src $out/share/emacs/site-lisp/init.el
+    install -D -m 644 -t $out *.el
   '';
 }
