@@ -897,7 +897,7 @@ An implementation of Zettelkasten for org, inspired by org-roam
 			  (org-roam-node-random nil (lambda (node)
 						      (and
 						       (member "journal" (org-roam-node-tags node))
-						       (not (member "literature" (org-roam-node-tags-node)))))))))
+						       (not (member "literature" (org-roam-node-tags node)))))))))
     :custom
     (org-roam-directory "~/Documents/brain")
     (org-roam-dailies-directory "journal/")
