@@ -1080,3 +1080,18 @@ Because org-gcal is stupid and because work is paranoid, I can only control one 
 	    '(("gdcosta@gmail.com" .  "~/Documents/brain/gtd/gcal/personal.org")
 	      ("gaelan@tulip.com" . "~/Documents/brain/gtd/gcal/tulip.org")))))
 #+END_SRC
+** Tulip work tracking integration
+I use JIRA at work; let's see if I can feed these into my task management flow
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; This apparently doesn't live in melpa
+  ;; (use-package ejira
+  ;;   :ensure t)
+
+  (use-package org-jira
+    :ensure t
+    :defer 2
+    :custom
+    (jiralib-url "https://tulipio.atlassian.net")
+    (org-jira-update-issue-details-include-reporter nil))
+#+END_SRC
