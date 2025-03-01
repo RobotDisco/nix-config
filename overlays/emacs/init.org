@@ -921,7 +921,7 @@ An implementation of Zettelkasten for org, inspired by org-roam
     :custom
     (org-roam-directory "~/Documents/brain")
     (org-roam-dailies-directory "journal/")
-    (org-roam-node-display-display-template
+    (org-roam-node-display-template
      (concat
       ;; Org-roam template format
       ;; ${title:*} -- print the title, using up as much free space as possible
