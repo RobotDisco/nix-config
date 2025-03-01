@@ -931,7 +931,7 @@ An implementation of Zettelkasten for org, inspired by org-roam
      (concat
       ;; Org-roam template format
       ;; ${title:*} -- print the title, using up as much free space as possible
-      "${title}"
+      "${title:*}"
       ;; We use emacs properties to attach font colouring to our tag list
       ;; We give a fixed amount of width to our node's tag list.
       (propertize "${tags:20}" 'face 'org-tag)))
