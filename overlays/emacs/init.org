@@ -678,8 +678,14 @@ Nicer Git support
   (use-package magit
     :ensure t
     :bind (("C-x g" . magit-status)
-	   ("C-c g" . magit-dispatch)
-	   ("C-c f" . magit-file-dispatch))
+  	 ("C-c g" . magit-dispatch)
+  	 ("C-c f" . magit-file-dispatch))
+    :config
+    ;; We need to set some environment variables so that git will work properly
+    ;; with yubikeys. We also have to strip extra whitespace.
+    (setenv "SSH_AUTH_SOCK" (string-chop-newline
+  			   (shell-command-to-string
+  			    "gpgconf --list-dirs agent-ssh-socket")))
     :custom
     (magit-wip-mode t))
 #+END_SRC
