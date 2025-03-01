@@ -877,27 +877,47 @@ An implementation of Zettelkasten for org, inspired by org-roam
   (use-package org-roam
     :ensure t
     :defer 2
-    :bind (("C-c j d" . org-roam-dailies-capture-date)
-	   ("C-c j t" . org-roam-dailies-capture-today)
-	   ;; Buttonmash combo for logging something
-	   ;; doesn't match my mnenomic scheme otherwise.
-	   ("C-c j j" . (lambda ()
-			  (interactive)
-			  (org-roam-dailies-capture-today nil "j")))
-	   ("C-c j y" . org-roam-dailies-capture-yesterday)
-	   ("C-c j r" . org-roam-dailies-capture-tomorrow)
-	   ("C-c j n" . org-roam-dailies-goto-next-note)
-	   ("C-c j p" . org-roam-dailies-goto-previous-note)
-	   ("C-c n b" . org-roam-buffer-toggle)
-	   ("C-c n c" . org-id-get-create)
-	   ("C-c n f" . org-roam-node-find)
-	   ("C-c n i" . org-roam-node-insert)
-	   ("C-c n r" . (lambda ()
-			  (interactive)
-			  (org-roam-node-random nil (lambda (node)
-						      (and
-						       (member "journal" (org-roam-node-tags node))
-						       (not (member "literature" (org-roam-node-tags node)))))))))
+    ;; Use capital letters to create new log entries
+    :bind (("C-c j D" . org-roam-dailies-capture-date)
+  	 ;; Yesterday and today can be provided prefix numbers to move N days
+  	 ;; ahead or behind, including days that don't currently have an entry.
+  	 ("C-c j Y" . org-roam-dailies-capture-yesterday)
+  	 ("C-c j R" . org-roam-dailies-capture-tomorrow)
+  	 ("C-c j T" . org-roam-dailies-capture-today)
+  	 ;; We use lower-case to only view records, but each function is slightly different.
+  	 ;; We also always go to the log, because selecting a section is usually too much blockage.
+  	 ("C-c j d" . (lambda ()
+  			(interactive)
+  			(org-roam-dailies-goto-date nil "j")))
+  	 ("C-c j y" . (lambda ()
+  			(interactive "p")
+  			(org-roam-dailies-goto-yesterday n "j")))
+  	 ("C-c j r" . (lambda ()
+  			(interactive "p")
+  			(org-roam-dailies-goto-tomorrow n "j")))
+  	 ("C-c j t" . (lambda ()
+  			(interactive)
+  			(org-roam-dailies-goto-today "j")))
+  	 ;; Buttonmash combo for logging something
+  	 ;; doesn't match my mnenomic scheme otherwise.
+  	 ("C-c j j" . (lambda ()
+  			(interactive)
+  			(org-roam-dailies-capture-today nil "j")))
+  	 ;; These combos find the N next or previous notes, regardless of
+  	 ;; whether days are skipped.
+  	 ("C-c j n" . org-roam-dailies-goto-next-note)
+  	 ("C-c j p" . org-roam-dailies-goto-previous-note)
+
+  	 ("C-c n b" . org-roam-buffer-toggle)
+  	 ("C-c n c" . org-id-get-create)
+  	 ("C-c n f" . org-roam-node-find)
+  	 ("C-c n i" . org-roam-node-insert)
+  	 ("C-c n r" . (lambda ()
+  			(interactive)
+  			(org-roam-node-random nil (lambda (node)
+  						    (and
+  						     (member "journal" (org-roam-node-tags node))
+  						     (not (member "literature" (org-roam-node-tags node)))))))))
     :custom
     (org-roam-directory "~/Documents/brain")
     (org-roam-dailies-directory "journal/")
