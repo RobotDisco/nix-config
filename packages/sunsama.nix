@@ -5,7 +5,7 @@
 }:
 let
   pname = "sunsama";
-  version = "3.0.2-build-241119l6gcco3ir";
+  version = "3.0.8-build-250227nscg4ey0r";
 
   # Sunsama's URL is annoying and requires unknown implicit magic to getch the
   # appropriate binary for the appropriate platform.
@@ -17,7 +17,7 @@ let
   # https://download.todesktop.com/2003096gmmnl0g1/latest-linux.yml
   src = fetchurl {
     url = "https://download.todesktop.com/2003096gmmnl0g1/sunsama-${version}-x86_64.AppImage";
-    hash = "sha512-NbnNVbPUwo4NsALuYnhDzkZulT9HgQ8QGmg1D5oV4cY2DXd+sUZS//HKxn7QlppXiri4DmC2Ky+TBuKQZG4RUw==";
+    hash = "sha512-0wFdaGXZNbffFDcxROuMh28rFWt+qF9OG+FT1ZdyT7khQoLVt+79IDGudQmQLbLNHeRd+iN2Sw1fuoBm8z9DQA==";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -35,7 +35,7 @@ appimageTools.wrapType2 {
   meta = with lib; {
     homepage = "https://sunsama.com";
     description = "The digital daily planner that helps you feel calm and stay focused.";
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
     maintainers = [
       {

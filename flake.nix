@@ -271,9 +271,7 @@
             config.allowUnfree = true;
           };
         in
-        {
-          sunsama = pkgs.callPackage ./packages/sunsama.nix { };
-        };
+        import ./packages/default.nix { inherit pkgs; };
     };
 
   # Supply a project-specific attribute set of nix configuration
