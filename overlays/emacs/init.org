@@ -1075,8 +1075,7 @@ Allow citar to work with org-roam particulars, including the ability to work at 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package citar-org-roam
     :ensure t
-    :after (org-roam)
-    :defer 2
+    :bind (("C-c n n" . citar-create-note))
     :diminish nil
     :custom
     (citar-bibliography '("~/Documents/brain/REFERENCES.bib"))
