@@ -19,18 +19,25 @@ _:
 
   boot = {
     # Simple password-based Full Disk Encryption
-    initrd.luks.devices = {
-      nixoscrypt = {
-        device = "/dev/nvme0n1p2";
+    initrd = {
+      luks = {
+        devices.nixoscrypt = {
+          device = "/dev/nvme0n1p2";
 
-        # I'd rather have TRIM support than perfect security
-        allowDiscards = true;
-        # increase performance on SSDs
-        bypassWorkqueues = true;
+          # I'd rather have TRIM support than perfect security
+          allowDiscards = true;
+          # increase performance on SSDs
+          bypassWorkqueues = true;
 
-        # Set to false if you need things like networking to happen first
-        preLVM = true;
+          # Use any FIDO device that's been plugged in.
+          crypttabExtraOpts = [ "fido2-device=auto" ];
+
+          # Set to false if you need things like networking to happen first
+          preLVM = true;
+        };
       };
+      # Proactively enable systemd as it has better FIDO2+LUKS support.
+      systemd.enable = true;
     };
 
     loader = {
