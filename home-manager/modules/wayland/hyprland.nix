@@ -73,9 +73,8 @@ in
         monitor = [
           # Framework 1.5x builtin monitor
           "$lapMon, preferred, auto, $lapMonScale"
-          "desc:Dell Inc. DELL U2412M M2GCR1CS0T1L, preferred, auto, auto"
-          "desc:Dell Inc. DELL U2412M HT5N364F0GSS, preferred, auto, auto"
-          "desc:Dell Inc. DELL U2412M HT5N364F0GSS, transform, 3"
+          "desc:Dell Inc. DELL U2412M M2GCR1CS0T1L, preferred, auto, 1"
+          "desc:Dell Inc. DELL U2412M HT5N364F0GSS, preferred, auto, 1, transform, 3"
           # Render by default on any other monitor that's connected.
           ",preferred,auto,auto"
         ];
