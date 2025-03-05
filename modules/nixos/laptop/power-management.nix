@@ -31,8 +31,8 @@ in
     })
     (mkIf cfg.enableIntel {
       services = {
-        # TLP is more featureful than TLP, so prefer it for Intel.
-        tlp.enable = false;
+        # TLP is more featureful than PPD, so prefer it for Intel.
+        tlp.enable = true;
         # Temperature management for Intel systems
         thermald.enable = true;
 
@@ -48,7 +48,7 @@ in
           # critically low.
           # By default it requests hybrid sleep on critical power actions. By the
           # time we hit critical power I want the machine to hibernate and stay
-          # off.          
+          # off.
           enable = true;
 
           criticalPowerAction = "Hibernate";
