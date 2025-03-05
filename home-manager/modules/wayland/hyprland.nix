@@ -55,9 +55,6 @@ in
       inherit (cfg) enable;
 
       settings = {
-        "$lapMon" = "eDP-1";
-        "$lapMonScale" = "1.566667";
-
         "$terminal" = kitty;
         "$fileManager" = thunar;
         "$menu" = "${wofi} --show drun";
@@ -69,15 +66,6 @@ in
           kb_layout = "us";
           kb_options = "ctrl:nocaps";
         };
-
-        monitor = [
-          # Framework 1.5x builtin monitor
-          "$lapMon, preferred, auto, $lapMonScale"
-          "desc:Dell Inc. DELL U2412M M2GCR1CS0T1L, preferred, auto, 1"
-          "desc:Dell Inc. DELL U2412M HT5N364F0GSS, preferred, auto, 1, transform, 3"
-          # Render by default on any other monitor that's connected.
-          ",preferred,auto,auto"
-        ];
 
         # vanilla bindings
         bind = [
@@ -149,9 +137,9 @@ in
         # bindings that worked even when the screen is locked
         bindl = [
           # trigger when laptop lid is closed
-          ", switch:on:Lid Switch, exec, hyprctl keyword monitor $lapMon, disable"
+          ", switch:on:Lid Switch, exec, ${pkgs.kanshi}/bin/kanshictl switch docked"
           # trigger when laptop lid is closed
-          ", switch:off:Lid Switch, exec, hyprctl keyword monitor $lapMon, preferred, auto-below, $lapMonScale"
+          ", switch:off:Lid Switch, exec, ${pkgs.kanshi}/bin/kanshictl switch roaming"
           # toggle hardware radio on/off (wifi, bluetooth)
           ", XF86RFKill , exec, ${rfkill} toggle 0 && ${rfkill} toggle ${toString bluetoothID}"
         ];
