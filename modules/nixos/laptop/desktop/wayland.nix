@@ -66,35 +66,6 @@ in
   # Compositors I'm actively using
   programs.hyprland.enable = true;
 
-  # A bunch of packages that are likely better managed via home-manager.
-  environment.systemPackages = with pkgs; [
-    # Handle monitor brightness
-    pkgs.brightnessctl
-    # Handle wireless/bluetooth toggling (rfkill)
-    pkgs.util-linux
-    # Handle volume management
-    pkgs.wireplumber
-    # Pretty application launcher
-    pkgs.wofi
-    # TODO Decide on one of these file managers
-    pkgs.pcmanfm
-    pkgs.xfce.thunar
-    # TODO Decide on one of these fancy terminals
-    pkgs.kitty
-    pkgs.alacritty
-    # Handle notifications
-    pkgs.mako
-    # Status Bar
-    pkgs.waybar
-    # Tools clipboard managers need.
-    pkgs.wl-clipboard
-    # Clip managers to try out
-    pkgs.cliphist
-    # Background management
-    pkgs.hyprpaper
-    # Colour picker
-    pkgs.hyprpicker
-  ];
   # Hyprland's manager for idle inactivity
   services.hypridle.enable = true;
   # Hyprland handle locking the session
