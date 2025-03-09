@@ -50,11 +50,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1739553546,
-        "narHash": "sha256-L4ou3xfOr17EAe836djRoQ7auVkYOREMtiQa82wVGqU=",
+        "lastModified": 1741126078,
+        "narHash": "sha256-ng0a4cIq3c9E3iGKomlwqKzVYs2RLOzQho2U1Mc2sqU=",
         "owner": "lnl7",
         "repo": "nix-darwin",
-        "rev": "353846417f985e74fdc060555f17939e4472ea2c",
+        "rev": "c172f50b55b087f8e7801631de977461603bb976",
         "type": "github"
       },
       "original": {
@@ -72,11 +72,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1740850895,
-        "narHash": "sha256-hAP2ruVUWv38yy1eGd7yrcEuqlRtIMzA6ZcheN9n7qM=",
+        "lastModified": 1741462424,
+        "narHash": "sha256-nZVbxj4JRfjaCwdvzHpmo8LfSX+roUuAs7A8o5cJ5hU=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "317e9986ebfbcdccfe2c105557c8d724c394843a",
+        "rev": "6e4d92e5c26dc81241d4c800531ad1f8ee68f213",
         "type": "github"
       },
       "original": {
@@ -166,11 +166,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1740646007,
-        "narHash": "sha256-dMReDQobS3kqoiUCQIYI9c0imPXRZnBubX20yX/G5LE=",
+        "lastModified": 1741325094,
+        "narHash": "sha256-RUAdT8dZ6k/486vnu3tiNRrNW6+Q8uSD2Mq7gTX4jlo=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "009b764ac98a3602d41fc68072eeec5d24fc0e49",
+        "rev": "b48cc4dab0f9711af296fc367b6108cf7b8ccb16",
         "type": "github"
       },
       "original": {
@@ -198,11 +198,11 @@
     },
     "nixpkgs-stable": {
       "locked": {
-        "lastModified": 1740743217,
-        "narHash": "sha256-brsCRzLqimpyhORma84c3W2xPbIidZlIc3JGIuQVSNI=",
+        "lastModified": 1741332913,
+        "narHash": "sha256-ri1e8ZliWS3Jnp9yqpKApHaOo7KBN33W8ECAKA4teAQ=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "b27ba4eb322d9d2bf2dc9ada9fd59442f50c8d7c",
+        "rev": "20755fa05115c84be00b04690630cb38f0a203ad",
         "type": "github"
       },
       "original": {
@@ -214,11 +214,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1740791350,
-        "narHash": "sha256-igS2Z4tVw5W/x3lCZeeadt0vcU9fxtetZ/RyrqsCRQ0=",
+        "lastModified": 1741310760,
+        "narHash": "sha256-aizILFrPgq/W53Jw8i0a1h1GZAAKtlYOrG/A5r46gVM=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "199169a2135e6b864a888e89a2ace345703c025d",
+        "rev": "de0fe301211c267807afd11b12613f5511ff7433",
         "type": "github"
       },
       "original": {
@@ -230,11 +230,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1740743217,
-        "narHash": "sha256-brsCRzLqimpyhORma84c3W2xPbIidZlIc3JGIuQVSNI=",
+        "lastModified": 1741332913,
+        "narHash": "sha256-ri1e8ZliWS3Jnp9yqpKApHaOo7KBN33W8ECAKA4teAQ=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "b27ba4eb322d9d2bf2dc9ada9fd59442f50c8d7c",
+        "rev": "20755fa05115c84be00b04690630cb38f0a203ad",
         "type": "github"
       },
       "original": {
@@ -253,11 +253,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1740915799,
-        "narHash": "sha256-JvQvtaphZNmeeV+IpHgNdiNePsIpHD5U/7QN5AeY44A=",
+        "lastModified": 1741379162,
+        "narHash": "sha256-srpAbmJapkaqGRE3ytf3bj4XshspVR5964OX5LfjDWc=",
         "owner": "cachix",
         "repo": "git-hooks.nix",
-        "rev": "42b1ba089d2034d910566bf6b40830af6b8ec732",
+        "rev": "b5a62751225b2f62ff3147d0a334055ebadcd5cc",
         "type": "github"
       },
       "original": {
@@ -270,10 +270,10 @@
     "robotdisco-secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1740933290,
-        "narHash": "sha256-BPnyyv7ZQpZR50b6oc7W6y/LyJmy2b2z5FQdMHmafoo=",
+        "lastModified": 1723479175,
+        "narHash": "sha256-/RbLI4t/kUoqauAEXJkXyUL5grMmdXf8ZadOU5sP6fc=",
         "ref": "refs/heads/trunk",
-        "rev": "b2114e3fb932a225801d05e17ef73131a4284a22",
+        "rev": "0cab00d52ec2421561deff5fa943b3d6c43d7277",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/RobotDisco/nix-secrets.git"
