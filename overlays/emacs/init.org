@@ -842,7 +842,15 @@ A more performant terminal that can handle interactive programs
     :commands (vterm vterm-other-window)
     :ensure t)
 #+END_SRC
-* Productivity
+* Document editing and viewing
+** EPUB books
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package nov
+    :ensure t
+    :mode ("\\.epub\\'" . nov-mode))
+#+END_SRC
+
+** LaTeX
 Support LaTeX
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -850,18 +858,26 @@ Support LaTeX
     :ensure t
     :mode "\\.tex\\'")
 #+END_SRC
-
-Read PDF files and epub ebooks on Emacs
+** PDF  documents
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package nov
-    :ensure t
-    :mode ("\\.epub\\'" . nov-mode))
-
   (use-package pdf-tools
     :ensure t
     :mode ("\\.pdf\\'" . pdf-view-mode))
 #+END_SRC
+* Productivity
+** Email handling
+Let's try out two different mail clients and see how I like them.
 
+Note: These don't fetch mail from remote mail hosts like gmail. Instead, they browse and view mail from a local mail store.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package notmuch
+    :ensure t
+    :commands (notmuch))
+
+  (use-package mu4e
+    :ensure t
+    :commands (mu4e))
+#+END_SRC
 ** Org
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org
