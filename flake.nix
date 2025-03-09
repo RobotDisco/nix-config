@@ -71,23 +71,33 @@
       forAllSystems = forEachSystem supportedSystems;
       # Darwin config generator
       darwinSystem = import ./lib/darwinSystem.nix [
-        (_final: prev: {
-          emacsPackages = prev.emacsPackages // {
-            inherit (inputs.nixpkgs-unstable.legacyPackages."${prev.system}".emacsPackages) dap-mode;
-          };
-        })
-        emacs-overlay.overlays.default
+        (
+          final: prev:
+          let
+            orig = emacs-overlay.overlays.default final prev;
+          in
+          {
+            inherit (orig) emacsWithPackagesFromUsePackage;
+
+            emacs-ptk = prev.emacs-gtk;
+          }
+        )
         self.overlays.emacs
       ];
       # NixOS config generator
       nixosSystem = import ./lib/nixosSystem.nix (
         [
-          (_final: prev: {
-            emacsPackages = prev.emacsPackages // {
-              inherit (inputs.nixpkgs-unstable.legacyPackages."${prev.system}".emacsPackages) dap-mode;
-            };
-          })
-          emacs-overlay.overlays.default
+          (
+            final: prev:
+            let
+              orig = emacs-overlay.overlays.default final prev;
+            in
+            {
+              inherit (orig) emacsWithPackagesFromUsePackage;
+
+              emacs-ptk = prev.emacs-gtk;
+            }
+          )
         ]
         ++ (lib.attrValues self.overlays)
       );

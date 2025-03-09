@@ -1,7 +1,6 @@
 {
   emacsWithPackagesFromUsePackage,
   baseEmacs,
-  emacsPackages,
 }:
 
 emacsWithPackagesFromUsePackage {
@@ -21,17 +20,4 @@ emacsWithPackagesFromUsePackage {
     # Include tree-sitter grammars
     epkgs.treesit-grammars.with-all-grammars
   ];
-
-  override =
-    epkgs:
-    epkgs
-    // {
-      lsp-java = epkgs.lsp-java.override (
-        epkgs:
-        epkgs
-        // {
-          inherit (emacsPackages) dap-mode;
-        }
-      );
-    };
 }
