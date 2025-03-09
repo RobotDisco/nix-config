@@ -37,6 +37,14 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
+        # Let's create a user directory for my helper scripts
+        home.sessionPath = [ "~/bin" ];
+
+        home.file."/bin/.keep" = {
+          text = "This file intentionally left blank";
+        };
+      }
+      {
         programs.git = {
           enable = true;
           extraConfig = {
