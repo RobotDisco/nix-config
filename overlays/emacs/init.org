@@ -891,7 +891,11 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
   	 ("C-c l" . org-store-link))
     :config
     ;; Enable org habits
-    (add-to-list 'org-modules 'org-habit t))
+    (add-to-list 'org-modules 'org-habit t)
+    :custom
+    (org-agenda-files '("~/Documents/gtd/gtd.org"))
+    (org-agenda-skip-function-global
+     '(org-agenda-skip-entry-if 'todo '("ACTIVE" "WAITING"))))
 #+END_SRC
 *** org-roam
 An implementation of Zettelkasten for org, inspired by org-roam
@@ -1126,8 +1130,8 @@ Because org-gcal is stupid and because work is paranoid, I can only control one 
       (setq org-gcal-client-id id
 	    org-gcal-client-secret secret
 	    org-gcal-fetch-file-alist
-	    '(("gdcosta@gmail.com" .  "~/Documents/brain/gtd/gcal/personal.org")
-	      ("gaelan@tulip.com" . "~/Documents/brain/gtd/gcal/tulip.org")))))
+	    '(("gdcosta@gmail.com" .  "~/Documents/gtd/gcal/personal.org")
+	      ("gaelan@tulip.com" . "~/Documents/gtd/gcal/tulip.org")))))
 #+END_SRC
 ** Tulip work tracking integration
 I use JIRA at work; let's see if I can feed these into my task management flow
