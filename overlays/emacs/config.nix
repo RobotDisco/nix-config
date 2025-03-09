@@ -1,5 +1,5 @@
 {
-  emacs,
+  emacs-nox,
   lib,
   stdenv,
 }:
@@ -7,7 +7,7 @@
 stdenv.mkDerivation {
   name = "gaelan-emacs-config";
   src = lib.sourceByRegex ./. [ "^init.org$" ];
-  nativeBuildInputs = [ emacs ];
+  nativeBuildInputs = [ emacs-nox ];
 
   dontUnpack = true;
 
