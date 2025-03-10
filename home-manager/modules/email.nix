@@ -6,9 +6,9 @@
       maildir.path = "personal";
       mbsync = {
         enable = true;
-        create = "maildir";
-        expunge = "maildir";
-        remove = "maildir";
+        create = "both";
+        expunge = "both";
+        remove = "both";
       };
       mu.enable = true;
       notmuch.enable = true;
@@ -33,9 +33,9 @@
       maildir.path = "work";
       mbsync = {
         enable = true;
-        create = "maildir";
-        expunge = "maildir";
-        remove = "maildir";
+        create = "both";
+        expunge = "both";
+        remove = "both";
       };
       mu.enable = true;
       notmuch.enable = true;
@@ -61,7 +61,14 @@
   # into their respective `services` sections.
   programs = {
     # IMAP mail fetcher
-    mbsync.enable = true;
+    mbsync = {
+      enable = true;
+
+      groups.inboxes = {
+        personal = [ "INBOX" ];
+        work = [ "INBOX" ];
+      };
+    };
     # Two alternative mail databases for quick searching that I need to evaluate
     # and see which one I prefer.
     mu.enable = true;
