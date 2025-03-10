@@ -931,7 +931,9 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
     ;; Enable org habits
     (add-to-list 'org-modules 'org-habit t)
     :custom
-    (org-agenda-files '("~/Documents/gtd/gtd.org"))
+    (org-agenda-files '("~/Documents/gtd/gtd.org"
+  		      "~/Documents/gtd/gcal/personal.org"
+  		      "~/Documents/gtd/gcal/work.org"))
     (org-agenda-skip-function-global
      '(org-agenda-skip-entry-if 'todo '("ACTIVE" "WAITING"))))
 #+END_SRC
@@ -1169,7 +1171,7 @@ Because org-gcal is stupid and because work is paranoid, I can only control one 
 	    org-gcal-client-secret secret
 	    org-gcal-fetch-file-alist
 	    '(("gdcosta@gmail.com" .  "~/Documents/gtd/gcal/personal.org")
-	      ("gaelan@tulip.com" . "~/Documents/gtd/gcal/tulip.org")))))
+	      ("gaelan@tulip.com" . "~/Documents/gtd/gcal/work.org")))))
 #+END_SRC
 ** Tulip work tracking integration
 I use JIRA at work; let's see if I can feed these into my task management flow
