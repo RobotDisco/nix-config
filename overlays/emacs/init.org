@@ -876,8 +876,25 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
     ;; Send SMTP directly, we don't have a OS-wide MTA running.
     (send-mail-function 'smtpmail-send-it)
     (smtpmail-smtp-server "smtp.gmail.com")
-    ;; Use TLS, explicit TLS, most secure encrypted SMTP protocol
-    (smtpmail-smtp-service 587)
+    ;; TL;DR Use "Implicit TLS", most secure encrypted SMTP protocol
+    ;; Port 587 - connection starts unencrypted, client requests encrypted
+    ;; traffic. Called Explicit TLS. Auth happens after encryption established.
+    ;; Port 465 - connection must be encrypted via TLS from the get-go, there
+    ;; is no unencrypted traffic. Called Implicit TLS.
+    ;;
+    ;; The history of which port to use is convoluted, and a lot of advice on
+    ;; the internet is outdated or misinformed. For example, a lot of advice
+    ;; claims that port 465 is for an older encryption protocol, SSL, and 587 is
+    ;; for TLS. This does not appear to be true.
+    ;; As long as the server is configured properly, both 587 (STARTTLS) and
+    ;; port 465 (Implicit TLS) are secure. The problem is a 587-based SMTP
+    ;; server _could_ disallow encrypted traffic, and the client could allow
+    ;; unencrypted traffic. That is a risk.
+    ;; See: https://mailtrap.io/blog/starttls-ssl-tls/
+    ;;
+    ;; We are choosing the protocol which require TLS from the start.
+    (smtpmail-smtp-service 465)
+    ;; This actually means TLS, if the remote server supports it.
     (smtpmail-stream-type 'ssl))
 
   (use-package notmuch
