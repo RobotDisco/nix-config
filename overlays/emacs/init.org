@@ -913,6 +913,12 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
     ;; Ask for context if it cannot be inferred from the message
     (mu4e-compose-context-policy 'ask)
     (mu4e-context-policy 'ask)
+    ;; You would think the `mu4e-context-policy' would apply here, but apparently not
+    ;; So let's assume a context by default.
+    (mu4e-drafts-folder "/personal/[Gmail]/Drafts")
+    (mu4e-refile-folder "/personal/[Gmail]/All Mail")
+    (mu4e-sent-folder "/personal/[Gmail]/Sent Mail")
+    (mu4e-trash-folder "/personal/[Gmail]/Trash")
     (mu4e-contexts
      (list (make-mu4e-context
     	  :name "personal"
