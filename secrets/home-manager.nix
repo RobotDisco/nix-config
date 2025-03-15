@@ -39,6 +39,9 @@ lib.mkMerge [
         # };
         # in
         {
+          google-oauth = {
+            file = "${s}/google-credentials.json.age";
+          };
           okta-yaml = {
             file = "${s}/okta-aws-cli.yaml.age";
           };
