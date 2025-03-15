@@ -29,6 +29,10 @@
     };
     accounts.work = {
       address = "gaelan@tulip.com";
+      aliases = [
+        "gaelan@tulip.io"
+        "gaelan.dcosta@tulip.com"
+      ];
       flavor = "gmail.com";
       maildir.path = "work";
       mbsync = {
