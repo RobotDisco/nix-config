@@ -913,6 +913,9 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
     ;; Ask for context if it cannot be inferred from the message
     (mu4e-compose-context-policy 'ask)
     (mu4e-context-policy 'ask)
+    ;; Run this command when fetching mail
+    ;; To start, for speed, just get inbox messages
+    (mu4e-get-mail-command "mbsync inboxes")
     ;; You would think the `mu4e-context-policy' would apply here, but apparently not
     ;; So let's assume a context by default.
     (mu4e-drafts-folder "/personal/[Gmail]/Drafts")
