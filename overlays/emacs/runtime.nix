@@ -1,6 +1,7 @@
 {
-  emacsWithPackagesFromUsePackage,
   baseEmacs,
+  emacsPackages,
+  emacsWithPackagesFromUsePackage,
 }:
 
 emacsWithPackagesFromUsePackage {
@@ -20,4 +21,13 @@ emacsWithPackagesFromUsePackage {
     # Include tree-sitter grammars
     epkgs.treesit-grammars.with-all-grammars
   ];
+
+  override =
+    epkgs:
+    epkgs
+    // {
+      # Override from-melpa dap-mode with nixpkgs dap-mode, because newer
+      # version is broken under current version of NixOS.
+      inherit (emacsPackages) dap-mode;
+    };
 }
