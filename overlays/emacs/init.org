@@ -910,6 +910,8 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
     ;; https://www.djcbsoftware.nl/code/mu/mu4e/Retrieving-mail.html#IMAP_002dsynchronization
     ;; and https://pragmaticemacs.wordpress.com/2016/03/22/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
     (mu4e-change-filenames-when-moving t)
+    ;; Use standard emacs completion function (i.e. vertico)
+    (mu4e-completing-read-function 'completing-read)
     ;; Ask for context if it cannot be inferred from the message
     (mu4e-compose-context-policy 'ask)
     (mu4e-context-policy 'ask)
