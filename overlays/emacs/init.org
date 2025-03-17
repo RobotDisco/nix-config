@@ -977,9 +977,7 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
     :custom
     (org-agenda-files '("~/Documents/gtd/gtd.org"
   		      "~/Documents/gtd/gcal/personal.org"
-  		      "~/Documents/gtd/gcal/work.org"))
-    (org-agenda-skip-function-global
-     '(org-agenda-skip-entry-if 'todo '("ACTIVE" "WAITING"))))
+  		      "~/Documents/gtd/gcal/work.org")))
 #+END_SRC
 *** org-roam
 An implementation of Zettelkasten for org, inspired by org-roam
