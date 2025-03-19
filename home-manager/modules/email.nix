@@ -33,7 +33,7 @@ in
         # Since I'm authing two different accounts, different cache for each line
         "--cache ~/.oauth2l-personal.cache"
         # Use refresh token if I can.
-        # "--refresh"
+        "--refresh"
       ];
       primary = true;
       realName = "Gaelan D'costa";
@@ -69,7 +69,7 @@ in
         # Since I'm authing two different accounts, different cache for each line
         "--cache ~/.oauth2l-work.cache"
         # Use refresh token if I can.
-        # "--refresh"
+        "--refresh"
       ];
       realName = "Gaelan D'costa";
       #signature = {};
