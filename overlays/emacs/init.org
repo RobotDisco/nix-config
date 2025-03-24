@@ -977,7 +977,9 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
     :custom
     (org-agenda-files '("~/Documents/gtd/gtd.org"
   		      "~/Documents/gtd/gcal/personal.org"
-  		      "~/Documents/gtd/gcal/work.org")))
+  		      "~/Documents/gtd/gcal/work.org"))
+    (org-capture-templates
+     '(("t" "Task" entry (file+headline "~/Documents/gtd/gtd.org" "Inbox") "* TODO %?"))))
 #+END_SRC
 *** org-roam
 An implementation of Zettelkasten for org, inspired by org-roam
