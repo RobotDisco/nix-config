@@ -1217,7 +1217,7 @@ Because org-gcal is stupid and because work is paranoid, I can only control one 
 	    '(("gdcosta@gmail.com" .  "~/Documents/gtd/gcal/personal.org")
 	      ("gaelan@tulip.com" . "~/Documents/gtd/gcal/work.org")))))
 #+END_SRC
-** Tulip work tracking integration
+** Tulip work integration
 I use JIRA at work; let's see if I can feed these into my task management flow
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -1232,4 +1232,21 @@ I use JIRA at work; let's see if I can feed these into my task management flow
     (jiralib-url "https://tulipio.atlassian.net")
     (org-jira-update-issue-details-include-reporter nil)
     (org-jira-working-dir "~/Documents/gtd/jira"))
+#+END_SRC
+
+Also, I use slack; get at least important messages
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package slack
+    :ensure t
+    :config
+    (slack-register-team :name "tulip"
+  		       :default t
+  		       :token (auth-source-pick-first-password
+  			       :host "tulip.slack.com"
+  			       :user "gaelan@tulip.com")
+  		       :cookie (auth-source-pick-first-password
+  				:host "tulip.slack.com"
+  				:user "gaelan@tulip.com^cookie")
+  		       :subscribed-channels '(war-room peace-room)))
 #+END_SRC
