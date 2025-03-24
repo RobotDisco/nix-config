@@ -390,6 +390,17 @@ Integrate with external programs that handle X11/Wayland clipboards
     :config
     (xclip-mode +1))
 #+END_SRC
+** System messeger
+Sometimes emacs wants to tell us something; we can integrate this with Linux'
+DBUS or OSX' notifier framework
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package alert
+    :ensure t
+    :custom (alert-default-style (if (eq system-type 'darwin)
+  				   'osx-notifier
+  				 'notifications)))
+#+END_SRC
 * Completion / Minibuffer
 ** Consult
 Enhance emacs commands based on completion
