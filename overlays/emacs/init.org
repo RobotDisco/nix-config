@@ -986,6 +986,10 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
     ;; Enable org habits
     (add-to-list 'org-modules 'org-habit t)
     :custom
+    (org-agenda-custom-commands
+     '(("i" "Unprocessed tasks" tags-todo "+INBOX")
+       ("n" "Personal Kanban" ((agenda "")
+  			     (todo "NEXT")))))
     (org-agenda-files '("~/Documents/gtd/gtd.org"
   		      "~/Documents/gtd/gcal/personal.org"
   		      "~/Documents/gtd/gcal/work.org"))
