@@ -1241,6 +1241,8 @@ I use JIRA at work; let's see if I can feed these into my task management flow
     :defer 2
     :custom
     (jiralib-url "https://tulipio.atlassian.net")
+    (org-jira-custom-jqls
+     '((:jql " project = CLOUD AND type = epic" :filename "CLOUD-epics")))
     (org-jira-update-issue-details-include-reporter nil)
     (org-jira-working-dir "~/Documents/gtd/jira"))
 #+END_SRC
