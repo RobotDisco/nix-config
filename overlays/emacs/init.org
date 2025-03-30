@@ -881,6 +881,30 @@ Let's try out two different mail clients and see how I like them.
 
 Note: These don't fetch mail from remote mail hosts like gmail. Instead, they browse and view mail from a local mail store.
 #+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Google requires us to use XOAUTH2 for logging into IMAP and SMTP
+  ;;
+  ;; I use SMTP directly in emacs, so I will have to configure this.
+  ;;
+  ;; Some useful debugging tools
+  ;;
+  ;; credentails file in isolation
+  ;; (auth-source-xoauth2-search "smtp.gmail.com" "gdcosta@gmail.com" "465")
+  ;;
+  ;; whole auth-source / smtp mail logic
+  ;; (auth-source-search :max 1 :host "smtp.gmail.com" :port 465
+  ;;   :user "gdcosta@gmail.com"
+  ;;   :require '(:user :secret) :create t)
+  ;; Remember to clear the cache if mucking around with stuff
+  ;; (auth-source-forget-all-cached)
+
+  (use-package auth-source-xoauth2
+    :ensure t
+    :config
+    ;; Where I store my xoauth credentials.
+    (setq auth-source-xoauth2-creds "~/.config/emacs/xoauth2.el.gpg")
+    ;; Enables xoauth2 source in smtpmail and auth-source
+    (auth-source-xoauth2-enable))
+
   (use-package smtpmail
     :ensure nil
     :custom
@@ -916,6 +940,8 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
     :ensure t
     :commands (mu4e)
     :custom
+    ;; Set mu4e as my mail user agent.
+    (mail-user-agent 'mu4e-user-agent)
     (user-full-name "Gaelan D'costa")
     ;; Apparently needed when using mbsync; see
     ;; https://www.djcbsoftware.nl/code/mu/mu4e/Retrieving-mail.html#IMAP_002dsynchronization
@@ -929,47 +955,44 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
     ;; Run this command when fetching mail
     ;; To start, for speed, just get inbox messages
     (mu4e-get-mail-command "mbsync inboxes")
-    ;; You would think the `mu4e-context-policy' would apply here, but apparently not
-    ;; So let's assume a context by default.
-    (mu4e-drafts-folder "/personal/[Gmail]/Drafts")
-    (mu4e-refile-folder "/personal/[Gmail]/All Mail")
-    (mu4e-sent-folder "/personal/[Gmail]/Sent Mail")
-    (mu4e-trash-folder "/personal/[Gmail]/Trash")
-    (mu4e-contexts
-     (list (make-mu4e-context
-    	  :name "personal"
-    	  ;; match-func is used to inspect the message in question and infer the
-    	  ;; string name of the mu4e context from it. We do this now by looking
-    	  ;; at the first-level directory in my maildir, since mbsync sets that
-    	  ;; up.
-    	  :match-func (lambda (msg)
-    			(when msg
-    			  (string-prefix-p "/personal"
-    					   (mu4e-message-field msg :maildir))))
-    	  :vars '(;; What is my email address in this context?
-  		  (user-mail-address . "gdcosta@gmail.com")
-  		  ;; What username to use when sending mail
-  		  (smtpmail-smtp-user . "gdcosta@gmail.com")
-    		  (mu4e-drafts-folder . "/personal/[Gmail]/Drafts")
-    		  (mu4e-refile-folder . "/personal/[Gmail]/All Mail")
-    		  (mu4e-sent-folder . "/personal/[Gmail]/Sent Mail")
-    		  (mu4e-trash-folder . "/personal/[Gmail]/Trash")))
-    	 (make-mu4e-context
-    	  :name "work"
-    	  :match-func (lambda (msg)
-    			(when msg
-    			  (string-prefix-p "/work"
-    					   (mu4e-message-field msg :maildir))))
-    	  :vars '(;; What is my email address in this context?
-  		  (user-mail-address . "gaelan@tulip.com")
-  		  ;; What username to use when sending mail
-  		  (smtpmail-smtp-user . "gaelan@tulip.com")
-    		  (mu4e-drafts-folder . "/work/[Gmail]/Drafts")
-    		  (mu4e-refile-folder . "/work/[Gmail]/All Mail")
-    		  (mu4e-sent-folder . "/work/[Gmail]/Sent Mail")
-    		  (mu4e-trash-folder . "/work/[Gmail]/Trash")))))
     ;; Gmail already saves sent messages, so don't bother.
-    (mu4e-sent-messages-behavior 'delete))
+    (mu4e-sent-messages-behavior 'delete)
+    :config
+    ;; For whatever reason, this variable isn't customizable.
+    (setq mu4e-contexts
+  	(list
+  	 (make-mu4e-context
+      	  :name "personal"
+      	  ;; match-func is used to inspect the message in question and infer the
+      	  ;; string name of the mu4e context from it. We do this now by looking
+      	  ;; at the first-level directory in my maildir, since mbsync sets that
+      	  ;; up.
+      	  :match-func (lambda (msg)
+      			(when msg
+      			  (string-prefix-p "/personal"
+      					   (mu4e-message-field msg :maildir))))
+      	  :vars '(;; What is my email address in this context?
+    		  (user-mail-address . "gdcosta@gmail.com")
+  		  ;; SMTP username
+  		  (smtpmail-smtp-user . "gdcosta@gmail.com")
+      		  (mu4e-drafts-folder . "/personal/[Gmail]/Drafts")
+      		  (mu4e-refile-folder . "/personal/[Gmail]/All Mail")
+      		  (mu4e-sent-folder . "/personal/[Gmail]/Sent Mail")
+      		  (mu4e-trash-folder . "/personal/[Gmail]/Trash")))
+    	 (make-mu4e-context
+      	  :name "work"
+      	  :match-func (lambda (msg)
+      			(when msg
+      			  (string-prefix-p "/work"
+      					   (mu4e-message-field msg :maildir))))
+      	  :vars '(;; What is my email address in this context?
+    		  (user-mail-address . "gaelan@tulip.com")
+  		  ;; SMTP username
+  		  (smtpmail-smtp-user . "gaelan@tulip.com")
+      		  (mu4e-drafts-folder . "/work/[Gmail]/Drafts")
+      		  (mu4e-refile-folder . "/work/[Gmail]/All Mail")
+      		  (mu4e-sent-folder . "/work/[Gmail]/Sent Mail")
+      		  (mu4e-trash-folder . "/work/[Gmail]/Trash"))))))
 #+END_SRC
 ** Org
 #+BEGIN_SRC emacs-lisp :tangle yes
