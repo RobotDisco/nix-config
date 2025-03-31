@@ -324,8 +324,6 @@ I love Emacs so much, I use it as my primary computing environment :)
        ([?\C-w] . [?\C-x])
        ([?\M-w] . [?\C-c])
        ([?\C-y] . [?\C-v])))
-    ;; Let emacs handle GnuPG prompts
-    (epg-pinentry-mode 'loopback)
     ;; Start with four workspaces on start
     (exwm-workspace-number 4)
     ;; Handle specific apps in particular window management ways.
@@ -614,6 +612,23 @@ We use smartparens for structured editing like Ruby blocks or lisp s-expressions
   (use-package rg
     :bind (("C-c s" . rg-menu))
     :ensure t)
+#+END_SRC
+** Encryption
+Support encryption as the basis of a number of functions
+
+- encrypting and decrypting entire files
+- supporting encryption in other packages
+- supporting direct GnuPG pinentryin emacs
+
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package emacs
+    :ensure nil
+    ;; :custom
+    ;; (epg-pinentry-mode 'loopback)
+    :config
+    (setq epg-file-encrypt-to '("gdcosta@gmail.com"
+  				"gaelan@tulip.com")))
 #+END_SRC
 * Software Development
 ** envrc
@@ -1018,6 +1033,17 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
   		      "~/Documents/gtd/gcal/work.org"))
     (org-capture-templates
      '(("t" "Task" entry (file+headline "~/Documents/gtd/gtd.org" "Inbox") "* TODO %?"))))
+#+END_SRC
+*** org-crypt
+Allow for partial encryption of org files (i.e. specific headers), using a special tag.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-crypt
+    :ensure nil
+    :after (org)
+    :custom
+    (org-crypt-key '("A815AC9D526EE85A" "E3E3EFF879DB7DF6"))
+    :config
+    (org-crypt-use-before-save-magic))
 #+END_SRC
 *** org-roam
 An implementation of Zettelkasten for org, inspired by org-roam
