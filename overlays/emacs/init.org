@@ -1119,8 +1119,8 @@ An implementation of Zettelkasten for org, inspired by org-roam
   	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg"
   			   "#+TITLE: ${title}\n#+FILETAGS: :person:"))
        ("j" "project" entry
-  	(file "~/Documents/brain/templates/project.org")
-  	:target (file "%<%Y%m%d%H%M%S>-${slug}.org"))))
+        (file "~/Documents/brain/templates/project.org")
+        :target (file+olp "%<%Y%m%d%H%M%S>-${slug}.org" ("PLAN [/] ${title} :PROJECT:")))))
     (org-roam-dailies-capture-templates
      '(("j" "Daily Log Entry" entry
   	"* %<%0H:%M> %?"
