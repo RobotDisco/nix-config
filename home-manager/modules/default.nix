@@ -9,5 +9,6 @@
     ./seafile-client.nix
     ./tulip
     ./wayland
+    ./shells.nix
   ];
 }

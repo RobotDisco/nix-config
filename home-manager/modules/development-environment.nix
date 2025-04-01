@@ -191,6 +191,18 @@ in
           };
         };
       }
+      (lib.mkIf config.programs.zsh.enable {
+        programs.zsh.initExtra = ''
+          # Put useful git repo information into my prompt
+          autoload -Uz vcs_info
+          # We use only git, so enable only that.
+          zstyle ':vcs_info:*' enable git
+          # Code style when just inside a git repo
+          zstyle ':vcs_info:*' formats
+          # Poll for git info whenever we run a command
+          precmd() { vcs_info }
+        '';
+      })
     ]
   );
 }
