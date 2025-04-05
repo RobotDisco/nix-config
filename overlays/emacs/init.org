@@ -1005,6 +1005,24 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
       		  (mu4e-sent-folder . "/work/[Gmail]/Sent Mail")
       		  (mu4e-trash-folder . "/work/[Gmail]/Trash"))))))
 #+END_SRC
+** Large Language Models
+If you can't beat them; join them. Lean on the stochastic parrot when I want to generate text without caring aout whatever I am crafting, or when I want something good enough because I don't know how to craft it myself.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ellama
+    :ensure t
+    :commands ellama-transient-main-menu)
+
+  (use-package gptel
+    :ensure t
+    :commands gptel
+    :custom
+    (gptel-model "llama3.1")
+    (gptel-backend (gptel-make-ollama "Ollama"
+  		   :host "localhost:11434"
+  		   :stream t
+  		   :models '(mistral:latest codellama:latest llama3.1))))
+#+END_SRC
 ** Org
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org
