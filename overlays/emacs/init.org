@@ -947,10 +947,6 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
     ;; This actually means TLS, if the remote server supports it.
     (smtpmail-stream-type 'ssl))
 
-  (use-package notmuch
-    :ensure t
-    :commands (notmuch))
-
   (use-package mu4e
     :ensure t
     :commands (mu4e)

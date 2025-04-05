@@ -25,7 +25,6 @@ in
         };
       };
       mu.enable = true;
-      notmuch.enable = true;
       passwordCommand = [
         "${oauth2l} fetch"
         "--credentials ${config.age.secrets.google-oauth.path}"
@@ -61,7 +60,6 @@ in
         };
       };
       mu.enable = true;
-      notmuch.enable = true;
       passwordCommand = [
         "${oauth2l} fetch"
         "--credentials ${config.age.secrets.google-oauth.path}"
@@ -95,9 +93,8 @@ in
         work = [ "INBOX" ];
       };
     };
-    # Two alternative mail databases for quick searching that I need to evaluate
-    # and see which one I prefer.
+
+    # Mail indexer for local mail processing.
     mu.enable = true;
-    notmuch.enable = true;
   };
 }
