@@ -957,6 +957,10 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
     ;; Apparently needed when using mbsync; see
     ;; https://www.djcbsoftware.nl/code/mu/mu4e/Retrieving-mail.html#IMAP_002dsynchronization
     ;; and https://pragmaticemacs.wordpress.com/2016/03/22/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
+    ;; Commonly used queries
+    (mu4e-bookmarks '(( :name "Inboxes" :query "maildir:/personal/Inbox OR maildir:/work/Inbox" :key 105)
+  		    (:name "Unread" :query "flag:unread AND (maildir:/personal/Inbox OR maildir:/work/Inbox)" :key 117 :favorite t :hide t)
+  		    (:name "Followup" :query "flag:flagged" :key 113)))
     (mu4e-change-filenames-when-moving t)
     ;; Use standard emacs completion function (i.e. vertico)
     (mu4e-completing-read-function 'completing-read)
