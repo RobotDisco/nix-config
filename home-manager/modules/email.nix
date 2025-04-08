@@ -89,12 +89,23 @@ in
       package = gs_mbsync;
 
       groups.inboxes = {
-        personal = [ "INBOX" ];
-        work = [ "INBOX" ];
+        personal = [
+          "INBOX"
+          "[Gmail]/Starred"
+        ];
+        work = [
+          "INBOX"
+          "[Gmail]/Starred"
+        ];
       };
     };
 
     # Mail indexer for local mail processing.
     mu.enable = true;
+  };
+
+  home.shellAliases = {
+    "mbsa" = "mbsync -a && mu index";
+    "mbsi" = "mbsync inboxes && mu index";
   };
 }
