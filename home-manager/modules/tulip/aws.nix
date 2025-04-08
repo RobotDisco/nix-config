@@ -50,8 +50,8 @@ in
       }
       {
         home.shellAliases = {
-          awscn = "${okta}/bin/okta-aws-cli --profile us";
-          awsus = "${okta}/bin/okta-aws-cli --profile cn";
+          awscn = "${okta}/bin/okta-aws-cli -p awscn -z";
+          awsus = "${okta}/bin/okta-aws-cli -p awsusa -z";
         };
       }
     ]
