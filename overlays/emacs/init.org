@@ -1332,5 +1332,6 @@ Also, I use slack; get at least important messages
   		       :cookie (auth-source-pick-first-password
   				:host "tulip.slack.com"
   				:user "gaelan@tulip.com^cookie")
-  		       :subscribed-channels '(war-room peace-room)))
+  		       :subscribed-channels '(war-room peace-room))
+    (slack-start))
 #+END_SRC
