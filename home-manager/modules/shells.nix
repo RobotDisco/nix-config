@@ -51,7 +51,10 @@
       # %h - number to reference this command in history
       # %~2 - working directory, collapsed if tilde, max two trailing components
       initExtra = ''
+        # Hostname, pwd, $
         export PS1="!%h %2~ $ "
+        # If last command succeeded, checkmark. else, X.
+        export RPS1=%0(?,$'\U2713',$'\U2717')
       '';
     };
   };

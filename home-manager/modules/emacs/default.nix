@@ -127,6 +127,9 @@ in
       })
       (lib.mkIf cfg.defaultEditor { home.sessionVariables.EDITOR = emacsBin; })
       (lib.mkIf cfg.enableGitDiff { programs.git.extraConfig.diff.tool = "ediff"; })
+      {
+        home.shellAliases.conflicts = "find ~/Documents/brain -name '*SFConflict*' -print";
+      }
     ]
   );
 }
