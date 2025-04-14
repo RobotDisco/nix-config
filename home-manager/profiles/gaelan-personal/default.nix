@@ -25,6 +25,8 @@ in
     };
 
     robot-disco = {
+      cdrip.enable = true;
+
       development-environment = {
         enable = true;
         fullname = "Gaelan D'costa";
