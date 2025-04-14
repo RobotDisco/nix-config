@@ -960,7 +960,7 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
     ;; Commonly used queries
     (mu4e-bookmarks '(( :name "Inboxes" :query "maildir:/personal/Inbox OR maildir:/work/Inbox" :key 105)
   		    (:name "Unread" :query "flag:unread AND (maildir:/personal/Inbox OR maildir:/work/Inbox)" :key 117 :favorite t :hide t)
-  		    (:name "Followup" :query "flag:flagged" :key 113)))
+  		    (:name "Followup" :query "flag:flagged" :key 109)))
     (mu4e-change-filenames-when-moving t)
     ;; Use standard emacs completion function (i.e. vertico)
     (mu4e-completing-read-function 'completing-read)
