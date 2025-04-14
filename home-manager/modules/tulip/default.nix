@@ -8,6 +8,15 @@
 let
   cfg = config.robot-disco.tulip;
 
+  kubeclusters = [
+    "infra"
+    "playground"
+    "develop"
+    "staging"
+    "prod-de"
+    "prod-eu"
+    "prod-na"
+  ];
 in
 {
   imports = [
@@ -45,9 +54,22 @@ in
         (pkgs.writeShellScriptBin "kubesetup" (builtins.readFile ./kubesetup.sh))
       ];
 
-      shellAliases = {
-        local-tf = "docker run -it -v $HOME/.aws:/root/.aws -v $PWD:/app -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK -v $HOME/.config/gcloud:/root/.config/gcloud gcr.io/tulip-infra/terraform:0.4.0 bash";
-      };
+      shellAliases =
+        {
+          local-tf = "docker run -it -v $HOME/.aws:/root/.aws -v $PWD:/app -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK -v $HOME/.config/gcloud:/root/.config/gcloud gcr.io/tulip-infra/terraform:0.4.0 bash";
+        }
+        // (builtins.listToAttrs (
+          map (
+            name:
+            let
+              full = "tulip-${name}";
+            in
+            {
+              name = full;
+              value = "kubectl config use-context ${full}";
+            }
+          ) kubeclusters
+        ));
     };
   };
 }
