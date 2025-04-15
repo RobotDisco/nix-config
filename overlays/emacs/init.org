@@ -1044,7 +1044,9 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
     :custom
     (org-agenda-custom-commands
      '(("i" "Unprocessed tasks" tags-todo "+INBOX")
-       ("n" "Personal Kanban" ((agenda "")
+       ("n" "Personal Kanban" ((todo "DOING")
+  			     (agenda "")
+  			     (todo "WAITING")
   			     (todo "NEXT")))))
     (org-agenda-files '("~/Documents/gtd/gtd.org"
   		      "~/Documents/gtd/gcal/personal.org"
