@@ -54,6 +54,7 @@ in
           "gaelan@tulip.com"
           "gdcosta@gmail.com"
         ];
+        default-key = if pkgs.stdenv.isDarwin then "gaelan@tulip.com" else "gdcosta@gmail.com";
       };
     };
 
