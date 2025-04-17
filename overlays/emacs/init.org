@@ -421,6 +421,19 @@ Completion popups in the regular buffer
     :config
     (global-corfu-mode))
 #+END_SRC
+** Embark
+Run commands based on selections in the completion buffer.
+
+This is part of the vertico stack.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package embark
+    :ensure t
+    :bind (("C-." . emback-act)
+  	 ("C-;" . embark-dwim)
+  	 ;; A better describe-bindings
+  	 ("C-h B" . embark-bindings)))
+#+END_SRC
 ** Marginalia
 Add annotations to minibuffer completions to provide you with more information about the displayed options
 
@@ -506,7 +519,7 @@ contorting your input to match what you want.
     ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
     ;; Vertico commands are hidden in normal buffers.
     (setq read-extended-command-predicate
-	  #'command-completion-default-include-p))
+  	  #'command-completion-default-include-p))
 
 #+END_SRC
 ** which-key
@@ -679,23 +692,24 @@ Like Make, but less warts
 IDE-like functionality such as intellisense, debugging
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-    (use-package lsp-mode
-      :ensure t
-      :commands (lsp lsp-deferred)
-      :init
-      (defun gaelan/lsp-mode-setup-completion ()
-	;; Set LSP up to use orderless
-	(setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-	      '(orderless)))
-      :custom
-      (lsp-completion-provider :none) ;; we use Corfu
-      :hook ((lsp-completion-mode . gaelan/lsp-mode-setup-completion)
-	     (prog-mode . lsp-deferred)))
+  (use-package lsp-mode
+    :ensure t
+    :commands (lsp lsp-deferred)
+    :init
+    (defun gaelan/lsp-mode-setup-completion ()
+  	;; Set LSP up to use orderless
+  	(setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+  	      '(orderless)))
+    :custom
+    (lsp-completion-provider :none) ;; we use Corfu
+    :hook ((lsp-completion-mode . gaelan/lsp-mode-setup-completion)
+  	 (lsp-mode . lsp-enable-which-key-integration)
+  	 (prog-mode . lsp-deferred)))
 
-    (use-package lsp-ui
-      :ensure t
-      :defer 2
-      :after (lsp-mode))
+  (use-package lsp-ui
+    :ensure t
+    :defer 2
+    :after (lsp-mode))
 #+END_SRC
 ** Version Control
 Nicer Git support
