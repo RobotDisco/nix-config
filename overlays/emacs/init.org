@@ -1329,7 +1329,10 @@ I use JIRA at work; let's see if I can feed these into my task management flow
     :custom
     (jiralib-url "https://tulipio.atlassian.net")
     (org-jira-custom-jqls
-     '((:jql " project = CLOUD AND type = epic" :filename "CLOUD-epics")))
+     '((:jql " project = CLOUD AND sprint in opensprints() AND (assignee = currentuser() OR assignee is EMPTY)" :filename "Sprint")
+       (:jql " project = CLOUD AND type = epic" :filename "Epics")
+       (:jql " project = CLOUD AND type IN (\"Service Request\", \"Access Request\") AND statusCategory != Done" :filename "Interrupts")
+       (:jql " project = SI" :filename "ShapeUp")))
     (org-jira-update-issue-details-include-reporter nil)
     (org-jira-working-dir "~/Documents/gtd/jira"))
 #+END_SRC
