@@ -51,10 +51,23 @@
       # %h - number to reference this command in history
       # %~2 - working directory, collapsed if tilde, max two trailing components
       initExtra = ''
+        # Put useful git repo information into my prompt
+        autoload -Uz vcs_info
+        # Without doing more work, we have to enable PROMPT_SUBST
+        # Don't know what this means and it might complicate future prompts
+        setopt PROMPT_SUBST
+
+        # We use only git, so enable only that.
+        zstyle ':vcs_info:*' enable git
+        # Code style when just inside a git repo
+        # zstyle ':vcs_info:*' formats
+        # Poll for git info whenever we run a command
+        precmd() { vcs_info }
+
         # Hostname, pwd, $
         export PS1="!%h %2~ $ "
         # If last command succeeded, checkmark. else, X.
-        export RPS1=%0(?,$'\U2713',$'\U2717')
+        export RPS1=$' ''${vcs_info_msg_0_} %0(?,\U2713,\U2717)'
       '';
     };
   };
