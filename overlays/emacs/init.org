@@ -502,6 +502,10 @@ contorting your input to match what you want.
     :commands vertico-mode
     :defer 1
     :ensure t
+    :custom
+    ;; I find it annoying I try to create a new file and the vertico prompt
+    ;; chooses the first existing selection; prefer the prompt value isntead.
+    (vertico-preselect 'prompt)
     :config
     (vertico-mode +1))
 
