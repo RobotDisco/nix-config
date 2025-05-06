@@ -90,11 +90,11 @@
               domain = "https://vaultwarden.robot-disco.net/raziel";
               invitation_org_name = "Robot Disco";
 
-              smtp_host = "out.teksavvy.com";
+              smtp_host = "smtp.teksavvy.com";
               smtp_from = "gdcosta@gmail.com";
               smtp_from_name = "Vaultwarden";
 
-              require_device_email = true;
+              require_device_email = false;
             };
           };
         };
