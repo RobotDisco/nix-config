@@ -28,5 +28,9 @@ in
         WantedBy = [ "graphical-session.target" ];
       };
     };
+
+    home.shellAliases = {
+      conflicts = "find ~/Documents/brain -name '*SFConflict*' -print";
+    };
   };
 }
