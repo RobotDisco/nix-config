@@ -67,7 +67,7 @@
         # Hostname, pwd, $
         export PS1="!%h %2~ $ "
         # If last command succeeded, checkmark. else, X.
-        export RPS1=$' ''${vcs_info_msg_0_} %0(?,\U2713,\U2717)'
+        export RPS1=$'$(kubectl config current-context 2>/dev/null) ''${vcs_info_msg_0_} %0(?,\U2713,\U2717)'
       '';
     };
   };
