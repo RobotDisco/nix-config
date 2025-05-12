@@ -53,7 +53,7 @@ in
             # as my starting point of understanding git settings.
             branch = {
               # Sort by most recent commit date
-              sort = "-comitterdate";
+              sort = "-committerdate";
             };
             column = {
               # Put branch names in a column format to save space
