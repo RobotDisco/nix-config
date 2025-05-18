@@ -742,6 +742,24 @@ Have nicer integrations with online git sites like gitlab and github
     :defer 2
     :after magit)
 #+END_SRC
+** Vibe Coding
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package aidermacs
+    :ensure t
+    :bind ("C-c v" . aidermacs-transient-menu))
+
+  (use-package aider
+    :ensure t
+    :bind ("C-c z" . aider-transient-menu))
+
+  (use-package ob-aider
+    :ensure t
+    :after (org)
+    :config
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     (append org-babel-load-languages '((aider . t)))))
+#+END_SRC
 * Programming Language support / environments
 ** C/C++
 #+BEGIN_SRC emacs-lisp :tangle yes

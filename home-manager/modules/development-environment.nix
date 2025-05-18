@@ -172,6 +172,8 @@ in
       {
         programs.jq.enable = true;
         home.packages = [
+          # Vibe coding
+          pkgs.aider-chat
           # Nix-based development-environment manager
           pkgs.devenv
           # Nix LSP
