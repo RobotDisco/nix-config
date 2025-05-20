@@ -1086,7 +1086,9 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
   			     (todo "NEXT")))))
     (org-agenda-files '("~/Documents/gtd/gtd.org"
   		      "~/Documents/gtd/gcal/personal.org"
-  		      "~/Documents/gtd/gcal/work.org"))
+  		      "~/Documents/gtd/gcal/work.org"
+  		      "~/Documents/gtd/jira/Interrupts.org"
+  		      "~/Documents/gtd/jira/Sprint.org"))
     (org-capture-templates
      '(("t" "Task" entry (file+headline "~/Documents/gtd/gtd.org" "Inbox") "* TODO %?"))))
 #+END_SRC
@@ -1355,6 +1357,13 @@ I use JIRA at work; let's see if I can feed these into my task management flow
        (:jql " project = CLOUD AND type = epic" :filename "Epics")
        (:jql " project = CLOUD AND type IN (\"Service Request\", \"Access Request\") AND statusCategory != Done" :filename "Interrupts")
        (:jql " project = SI" :filename "ShapeUp")))
+    (org-jira-jira-status-to-org-keyword-alist '(("To Do" . "TODO")
+  					       ("Open" . "TODO")
+  					       ("To Groom" . "TODO")
+  					       ("Ready For Work" . "TODO")
+  					       ("In Progress" . "DOING")
+  					       ("Canceled" . "DONE")
+  					       ("Done" . "DONE")))
     (org-jira-update-issue-details-include-reporter nil)
     (org-jira-working-dir "~/Documents/gtd/jira"))
 #+END_SRC
