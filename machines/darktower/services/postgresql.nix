@@ -13,7 +13,7 @@
       config = {
         system.stateVersion = "21.05";
         services.postgresql = {
-          package = pkgs.postgresql_15;
+          package = pkgs.postgresql_17;
           enable = true;
           enableTCPIP = false;
           settings.password_encryption = "scram-sha-256";
@@ -26,7 +26,7 @@
         # For upgrading
         # see https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading
         environment.systemPackages = [
-          pkgs.postgresql_16
+          # pkgs.postgresql_18
         ];
       };
     };
