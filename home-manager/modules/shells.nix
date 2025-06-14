@@ -50,7 +50,7 @@
 
       # %h - number to reference this command in history
       # %~2 - working directory, collapsed if tilde, max two trailing components
-      initExtra = ''
+      initContent = ''
         # Put useful git repo information into my prompt
         autoload -Uz vcs_info
         # Without doing more work, we have to enable PROMPT_SUBST

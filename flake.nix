@@ -72,14 +72,6 @@
       # Darwin config generator
       darwinSystem = import ./lib/darwinSystem.nix [
         emacs-overlay.overlays.default
-        (_final: prev: {
-          inherit (nixpkgs.legacyPackages."${prev.system}") emacs-pgtk;
-          aider-chat = inputs.nixpkgs-unstable.legacyPackages."${prev.system}".aider-chat-full;
-
-          emacsPackages = prev.emacsPackages // {
-            inherit (nixpkgs.legacyPackages."${prev.system}".emacsPackages) dap-mode;
-          };
-        })
         self.overlays.emacs
       ];
       # NixOS config generator
@@ -90,13 +82,6 @@
             # Overlay has overridden nixpkgs file with from-source file.
             # I don't want that. Explicitly use nixpkgs version
             inherit (nixpkgs.legacyPackages."${prev.system}") emacs-pgtk;
-            aider-chat = inputs.nixpkgs-unstable.legacyPackages."${prev.system}".aider-chat-full;
-
-            # The nix derivation source breaks with never versions of dap-mode;
-            # pin us to an older dap-mode until nixpkgs code changes.
-            emacsPackages = prev.emacsPackages // {
-              inherit (nixpkgs.legacyPackages."${prev.system}".emacsPackages) dap-mode;
-            };
           })
         ]
         ++ (lib.attrValues self.overlays)

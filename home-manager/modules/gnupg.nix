@@ -64,7 +64,7 @@ in
       enableSshSupport = true;
       defaultCacheTtl = 3600;
       maxCacheTtl = 86400;
-      pinentryPackage = if pkgs.stdenv.isDarwin then pkgs.pinentry_mac else pkgs.pinentry-gtk2;
+      pinentry.package = if pkgs.stdenv.isDarwin then pkgs.pinentry_mac else pkgs.pinentry-gtk2;
     };
   };
 }
