@@ -1,6 +1,6 @@
 {
   fileSystems."/home/gaelan/fileserver" = {
-    device = "//192.168.50.99/archive";
+    device = "//192.168.20.2/archive";
     fsType = "cifs";
     options = [
       # Prevent hanging on network split

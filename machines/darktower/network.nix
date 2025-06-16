@@ -1,5 +1,8 @@
 {
   networking = {
+    # Create a private subnet for all my home network services.
+    bridges.br20.interfaces = [ "vlan20" ];
+
     # Use control plane interface for outbound traffic by default.
     defaultGateway = {
       address = "192.168.10.1";
@@ -23,7 +26,7 @@
         # I currently do port forwarding which requires a static IP
         ipv4.addresses = [
           {
-            address = "192.168.50.99";
+            address = "192.168.50.2";
             prefixLength = 24;
           }
         ];
@@ -38,6 +41,11 @@
     useDHCP = false;
 
     vlans = {
+      # Specify the VLAN for home services
+      vlan20 = {
+        id = 20;
+        interface = "enp6s0f1";
+      };
       # Specify the VLAN for cloud services
       vlan50 = {
         id = 50;

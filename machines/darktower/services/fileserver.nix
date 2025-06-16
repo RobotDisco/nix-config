@@ -1,7 +1,7 @@
 { pkgs, ... }:
 
 {
-  networking.firewall.interfaces.vlan50.allowedTCPPorts = [
+  networking.firewall.interfaces.br20.allowedTCPPorts = [
     139
     445
   ];
@@ -9,6 +9,9 @@
   containers = {
     fileserver = {
       autoStart = true;
+      privateNetwork = true;
+      hostBridge = "br20";
+      localAddress = "192.168.20.2/24";
       bindMounts = {
         "/srv/archive" = {
           hostPath = "/srv/storagepool/archive";
@@ -20,6 +23,13 @@
         system.stateVersion = "22.05";
 
         programs.zsh.enable = true;
+
+        # Sadly we need firewall access both inside the container and on the
+        # host system.
+        networking.firewall.allowedTCPPorts = [
+          139
+          445
+        ];
 
         users.users.gaelan = {
           shell = pkgs.zsh;
