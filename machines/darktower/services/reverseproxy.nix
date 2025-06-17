@@ -2,8 +2,22 @@
   containers = {
     reverseproxy = {
       autoStart = true;
+      privateNetwork = true;
+      hostBridge = "br50";
+      localAddress = "192.168.50.99/24";
       config = {
         system.stateVersion = "21.05";
+
+        networking = {
+          defaultGateway = "192.168.50.1";
+          firewall = {
+            allowedTCPPorts = [
+              80
+              443
+            ];
+          };
+          nameservers = [ "192.168.50.1" ];
+        };
 
         security.acme = {
           acceptTerms = true;
@@ -32,9 +46,7 @@
   };
 
   networking.firewall = {
-    checkReversePath = "loose";
-
-    interfaces.vlan50.allowedTCPPorts = [
+    interfaces.br50.allowedTCPPorts = [
       80
       443
     ];
