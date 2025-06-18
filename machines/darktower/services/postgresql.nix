@@ -12,10 +12,13 @@
       };
       config = {
         system.stateVersion = "21.05";
+
+        networking.firewall.allowedTCPPorts = [ 5432 ];
+
         services.postgresql = {
           package = pkgs.postgresql_17;
           enable = true;
-          enableTCPIP = false;
+          enableTCPIP = true;
           settings.password_encryption = "scram-sha-256";
         };
         services.postgresqlBackup = {
@@ -31,4 +34,5 @@
       };
     };
   };
+  networking.firewall.allowedTCPPorts = [ 5432 ];
 }

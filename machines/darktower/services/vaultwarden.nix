@@ -2,14 +2,14 @@
   containers = {
     postgresql.config.services.postgresql = {
       authentication = ''
-        host vaultwarden vaultwarden samehost scram-sha-256
+        host vaultwarden vaultwarden 192.168.50.2/32 scram-sha-256
       '';
       ensureDatabases = [ "vaultwarden" ];
     };
 
     reverseproxy.config.services.nginx.virtualHosts."vaultwarden.robot-disco.net" = {
       locations."/raziel/" = {
-        proxyPass = "http://localhost:8000";
+        proxyPass = "http://192.168.50.2:8000";
       };
       forceSSL = true;
       enableACME = true;
@@ -17,6 +17,9 @@
 
     vaultwarden = {
       autoStart = true;
+      privateNetwork = true;
+      hostBridge = "br50";
+      localAddress = "192.168.50.2/24";
       bindMounts = {
         "/var/lib/bitwarden_rs" = {
           hostPath = "/srv/storagepool/data/vaultwarden";
@@ -25,6 +28,12 @@
       };
       config = {
         system.stateVersion = "21.05";
+
+        networking = {
+          defaultGateway = "192.168.50.1";
+          firewall.allowedTCPPorts = [ 8000 ];
+          nameservers = [ "192.168.50.1" ];
+        };
 
         environment.etc = {
           "fail2ban/filter.d/vaultwarden.conf".text = ''
@@ -83,6 +92,8 @@
             dbBackend = "postgresql";
             environmentFile = "/var/lib/bitwarden_rs/vaultwarden_secrets";
             config = {
+              rocket_address = "192.168.50.2";
+
               signups_allowed = false;
               signups_verify = true;
               show_password_hint = false;
