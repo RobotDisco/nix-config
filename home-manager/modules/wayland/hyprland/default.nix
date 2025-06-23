@@ -51,10 +51,6 @@ in
       mako.enable = true;
     };
 
-    home.file.".config/hypr/scripts/display_handler.sh" = {
-      source = ./display_handler.sh;
-    };
-
     wayland.windowManager.hyprland = {
       inherit (cfg) enable;
 
@@ -140,8 +136,6 @@ in
 
         # bindings that worked even when the screen is locked
         bindl = [
-          # trigger when laptop lid is opened or closed
-          ", switch:Lid Switch, exec, ~/.config/hypr/scripts/display_handler.sh"
           # toggle hardware radio on/off (wifi, bluetooth)
           ", XF86RFKill , exec, ${rfkill} toggle 0 && ${rfkill} toggle ${toString bluetoothID}"
         ];
@@ -167,9 +161,6 @@ in
         ];
 
         exec-once = [
-          # What should my monitor configuration be on startup?
-          "~/.config/hypr/scripts/display_handler.sh"
-
           # Launch a status bar
           "${waybar}"
 
