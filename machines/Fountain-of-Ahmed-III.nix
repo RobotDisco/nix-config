@@ -21,12 +21,15 @@
     # Allow Gaelan to set up caches.
     nix.settings.trusted-users = [ "gaelan" ];
 
-    system.keyboard = {
-      enableKeyMapping = true;
-      remapCapsLockToControl = true;
-      # I want this to not affect internal keyboard, but this flag impacts all
-      # keyboards.
-      # swapLeftCommandAndLeftAlt = true;
+    system = {
+      keyboard = {
+        enableKeyMapping = true;
+        remapCapsLockToControl = true;
+        # I want this to not affect internal keyboard, but this flag impacts all
+        # keyboards.
+        # swapLeftCommandAndLeftAlt = true;
+      };
+      primaryUser = "gaelan";
     };
 
     programs = {
@@ -78,11 +81,6 @@
       masApps = {
         "WireGuard" = 1451685025;
       };
-    };
-
-    # Let daemon service be managed by Nix.
-    services = {
-      nix-daemon.enable = true;
     };
   };
 }

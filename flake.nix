@@ -224,7 +224,7 @@
               name = "switch";
               text =
                 if pkgs.stdenv.isDarwin then
-                  "darwin-rebuild switch --flake ${toString ./.}#"
+                  "sudo darwin-rebuild switch --flake ${toString ./.}#"
                 else
                   "sudo nixos-rebuild switch --flake ${toString ./.}#";
             }

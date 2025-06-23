@@ -1,4 +1,3 @@
-{ pkgs, ... }:
 let
   username = "gaelan";
 in
@@ -16,7 +15,8 @@ in
 
     emacs = {
       enable = true;
-      package = pkgs.gaelan-emacs-macport;
+      # With Emacs 29+ there's no need for a custom macport.
+      #package = pkgs.gaelan-emacs-macport;
     };
 
     gnupg.enable = true;
