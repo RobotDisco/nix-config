@@ -72,6 +72,11 @@
       # Darwin config generator
       darwinSystem = import ./lib/darwinSystem.nix [
         emacs-overlay.overlays.default
+        (_final: prev: {
+          # Overlay has overridden nixpkgs file with from-source file.
+          # I don't want that. Explicitly use nixpkgs version
+          inherit (nixpkgs.legacyPackages."${prev.system}") emacs-pgtk;
+        })
         self.overlays.emacs
       ];
       # NixOS config generator
