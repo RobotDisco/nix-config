@@ -16,6 +16,7 @@
     ./services/reverseproxy.nix
     ./services/vaultwarden.nix
     ./services/webdav.nix
+    ./services/unifi.nix
 
     ./boot.nix
     ./network.nix
