@@ -17,7 +17,7 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v19
       - name: Update flake.lock
-        uses: DeterminateSystems/update-flake-lock@v26
+        uses: DeterminateSystems/update-flake-lock@v27
         with:
           commit-msg: "chore: Update flake.lock to latest inputs"
           pr-title: "chore: Update flake.lock to latest inputs" # Title of PR to be created.
