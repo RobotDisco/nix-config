@@ -31,6 +31,21 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
   ;;; early-init.el --- Early Initialization -*- lexical-binding: t; -*-
+
+  ;; Author: Gaelan D'costa <gdcosta@gmail.com>
+  ;; Version: 2.0
+  ;; Package-Requires: ((emacs "29.1"))
+  ;; Keywords: configuration
+  ;; URL: https://github.com/RobotDisco/nix-config/packages/emacs
+
+  ;;; Commentary:
+
+  ;; This file contains early initialization settings for Emacs.
+  ;; These configurations are designed to optimize performance and
+  ;; minimize load time, and are run before our main configuration logic.
+
+  ;;; Code:
+
 #+END_SRC
 
 ** Version Sentinal
@@ -38,13 +53,114 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 I am not sure if this config will work with older versions of emacs, so I'll abort if the running version of emacs is older than a known good version.
 
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
-  (let ((minver "28.1"))
+  (let ((minver "29.1"))
     (when (version< emacs-version minver)
       (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
 #+END_SRC
 
-** Startup
+** Startup Performance
+*** Garbage Collection speedup
+I saw a config where the author temporarily set garbage collection thresholds for speed during initialization, presumably to minimize GC overhead at startup.
 
+When emacs has finished initalizing, it runs a hook we've set up to restore a more aggressive threshold.
+
+This is a pattern I have seen various people use, so it seems like a good idea.
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (let (;; We will restore these values eventually.
+        (normal-gc-cons-threshold gc-cons-threshold)
+        (normal-gc-cons-percentage gc-cons-percentage)
+        ;; Set garbage collection threshold to infinity bytes during startup, to
+        ;; maximize performance and minimize collection freezes.
+        (init-gc-cons-threshold most-positive-fixnum)
+        (init-gc-cons-percentage 1.0))
+    (setq gc-cons-threshold init-gc-cons-threshold
+  	gc-cons-percentage init-gc-cons-percentage)
+    (add-hook 'startup-mode-hook
+  	    (lambda ()
+  	      (setq gc-cons-threshold normal-gc-cons-threshold
+  		    gc-cons-percentage normal-gc-cons-percentage))))
+#+END_SRC
+** Regex-based file logic
+In a similar way, let's temporarily disable emacs' builtin regex-based handler so we can lost files easier during configuration.
+
+We will have to restore it afterwards, otherwise we will lose core functionality.
+
+This is apparently the second-most impactful startup performance hack.
+
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (let (;; Normally, when emacs loads a file, it runs some regexes on the file
+        ;; name to figure out what filename-based logic applies to the file being
+        ;; loaded. During startup, let's disable that, but we'll have to preserve
+        ;; the original hook otherwise we'll permanently break functionality.
+        (normal-file-name-handler-alist file-name-handler-alist))
+    (setq file-name-handler-alist nil)
+    (add-hook 'startup-mode-hook
+  	    (lambda ()
+  	      (setq file-name-handler-alist normal-file-name-handler-alist))))
+#+END_SRC
+
+** Inhibit startup screen and messages.
+Let's keep our startup clean by not displaying our startup message.
+
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (setq inhibit-startup-screen t)
+#+END_SRC
+
+** UI speedups
+Disable implicit window resizing, that should only happen when the user explicitly resizes things
+
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (setq frame-inhibit-implied-resize nil)
+#+END_SRC
+
+Disable unnecessary GUI components on startup.
+
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (setq
+   ;; Disable GUI elements
+   menu-bar-mode nil
+   scroll-bar-mode nil
+   tool-bar-mode nil)
+#+END_SRC
+
+Also, temporarily disable font cache compaction if triggered by garbage collection.
+
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (setq inhibit-compacting-font-caches nil)
+  (add-hook 'emacs-startup-hook
+  	  (lambda ()
+  	    (setq inhibit-compacting-font-caches t)))
+#+END_SRC
+
+** Disable popup dialogs
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (setq use-dialog-box nil)
+#+END_SRC
+
+** Temporarily disable autosave and backups
+While we're starting up, don't autosave or backup files.
+
+We will restore it after we finish loading configuration.
+
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (setq auto-save-default nil
+        make-backup-files nil)
+
+  (add-hook 'emacs-startup-hook
+  	  (lambda ()
+  	    (setq auto-save-default t
+  		  make-backup-files t)))
+#+END_SRC
+
+** Set location of custom file
+Emacs by default manages some forms for variables and faces and places them at the end of =init.el=. Since my =init.el= is generated, this would be difficult to manage.
+
+Why do I write to the null device? This keeps my config immutable.
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  (setq custom-file null-device)
+#+END_SRC
+
+** Startup time profiling.
 Let's time and display the amount of time it takes to bring up my Emacs configuration
 
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
@@ -54,46 +170,6 @@ Let's time and display the amount of time it takes to bring up my Emacs configur
 		       (float-time (time-subtract after-init-time
 						  before-init-time))
 		       gcs-done)))
-#+END_SRC
-
-I saw a config where the author temporarily set garbage collection thresholds for speed during initialization, presumably to minimize GC overhead at startup.
-
-When emacs has finished initalizing, it runs a hook we've set up to restore a more aggressive threshold.
-
-This is a pattern I have seen various people use, so it seems like a good idea.
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
-  (let ((normal-gc-cons-threshold gc-cons-threshold)
-	(normal-gc-cons-percentage gc-cons-percentage)
-	(normal-file-name-handler-alist file-name-handler-alist)
-	(init-gc-cons-threshold most-positive-fixnum)
-	(init-gc-cons-percentage 0.6))
-    (setq gc-cons-threshold init-gc-cons-threshold
-	  gc-cons-percentage init-gc-cons-percentage
-	  file-name-handler-alist nil)
-    (add-hook 'after-init-hook
-	      `(lambda ()
-		 (setq gc-cons-threshold ,normal-gc-cons-threshold
-		       gc-cons-percentage ,normal-gc-cons-percentage
-		       file-name-handler-alist ',normal-file-name-handler-alist))))
-#+END_SRC
-Inhibit startup screen and messages.
-
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
-  (setq inhibit-startup-screen t)
-#+END_SRC
-
-** UI speedups
-
-Disable unnecessary GUI components.
-
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
-  (setq use-dialog-box nil)
-  ;; Because Emacs on OSX has a bug in it, we need the menu bar
-  ;; (unless (eq system-type 'darwin)
-  (menu-bar-mode -1)
-  ;; )
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
 #+END_SRC
 
 * Base settings
@@ -143,15 +219,6 @@ Add local and private libraries to ~load-path~.
 	  (append (delete-dups load-path)
 		  (list (expand-file-name "lisp" user-emacs-directory)
 			(expand-file-name "private" user-emacs-directory)))))
-#+END_SRC
-
-*** Set location of custom file
-Emacs by default manages some forms for variables and faces and places them at the end of =init.el=. Since my =init.el= is generated, this would be difficult to manage.
-I can tell Emacs to use a different location for these, which will not be checked into source control or regenerated and Emacs can manage it to its heart's content.
-
-Why is it in a temporary file directory? This keeps my config immutable (or at least deliberate.)
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (setq custom-file (expand-file-name "custom.el" temporary-file-directory))
 #+END_SRC
 
 *** use-package
