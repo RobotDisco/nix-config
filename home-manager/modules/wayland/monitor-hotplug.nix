@@ -1,8 +1,13 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 lib.mkMerge [
   {
     services.kanshi = {
-      enable = true;
+      enable = pkgs.stdenv.isLinux;
       systemdTarget = "hyprland-session.target";
       settings = [
         {
