@@ -1,3 +1,5 @@
+{ robotdisco-secrets, ... }:
+
 let
   username = "gaelan";
 in
@@ -16,6 +18,8 @@ in
   ];
 
   config = {
+    age.rekey.hostPubkey = "${robotdisco-secrets}/users/gaelan-personal.pub";
+
     home = {
       inherit username;
       homeDirectory = "/home/${username}";

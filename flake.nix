@@ -6,11 +6,12 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     # Secrets management
-    # Using a fork of flake-nix as I wait for
-    # https://github.com/ryantm/agenix/pull/273
-    # to get in.
     agenix = {
-      url = "github:RobotDisco/agenix";
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    agenix-rekey = {
+      url = "github:oddlama/agenix-rekey";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -35,6 +36,7 @@
     # Idea from https://github.com/ryan4yin/nix-config
     robotdisco-secrets = {
       url = "git+ssh://git@github.com/RobotDisco/nix-secrets.git?shallow=1";
+      #url = "path:/Users/gaelan/code/nix-secrets";
       flake = false;
     };
   };
@@ -134,13 +136,18 @@
         "Fountain-of-Ahmed-III" = darwinSystem {
           inherit darwin home-manager;
           system = "aarch64-darwin";
-          darwinModules = [ ./machines/Fountain-of-Ahmed-III.nix ];
+          darwinModules = [
+            ./machines/Fountain-of-Ahmed-III.nix
+            inputs.agenix.darwinModules.default
+            inputs.agenix-rekey.nixosModules.default
+          ];
           darwinSpecialArgs = {
             inherit myLib;
+            inherit (inputs) robotdisco-secrets;
           };
           homeModules = [
             inputs.agenix.homeManagerModules.default
-            ./secrets/home-manager.nix
+            inputs.agenix-rekey.homeManagerModules.default
           ];
           homeSpecialArgs = {
             inherit myLib;
@@ -156,6 +163,8 @@
           nixosModules = [
             inputs.nixos-hardware.nixosModules.framework-13-7040-amd
             ./machines/arrakis
+            inputs.agenix.nixosModules.default
+            inputs.agenix-rekey.nixosModules.default
             (
               {
                 pkgs,
@@ -180,7 +189,7 @@
           };
           homeModules = [
             inputs.agenix.homeManagerModules.default
-            ./secrets/home-manager.nix
+            inputs.agenix-rekey.homeManagerModules.default
           ];
           homeSpecialArgs = {
             inherit myLib;
@@ -191,18 +200,29 @@
           inherit nixpkgs home-manager;
           system = "x86_64-linux";
           homeModules = [ ];
-          homeSpecialArgs = { };
+          homeSpecialArgs = { inherit inputs; };
           nixosModules = [
             ./machines/darktower
             # Secure secret injection
             inputs.agenix.nixosModules.default
-            ./secrets/nixos.nix
+            inputs.agenix-rekey.nixosModules.default
           ];
           nixosSpecialArgs = {
             inherit myLib;
             inherit (inputs) agenix robotdisco-secrets;
           };
         };
+      };
+
+      # Expose the necessary information in your flake as an output so
+      # agenix-rekey knows where it has to look for secrets and paths.
+      #
+      # Make sure that the pkgs passed here comes from the same nixpkgs version
+      # as the pkgs used on your hosts in `nixosConfigurations`, otherwise the
+      # rekeyed derivations will not be found!
+      agenix-rekey = inputs.agenix-rekey.configure {
+        userFlake = self;
+        nixosConfigurations = self.nixosConfigurations // self.darwinConfigurations;
       };
 
       apps = forAllSystems (
@@ -256,13 +276,17 @@
       devShells = forAllSystems (
         system:
         let
-          pkgs = nixpkgs.legacyPackages.${system};
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = [ inputs.agenix-rekey.overlays.default ];
+          };
           preCommitCheck = self.checks.${system}.pre-commit-check;
         in
         {
           default = pkgs.mkShell {
             inherit (preCommitCheck) shellHook;
             nativeBuildInputs = preCommitCheck.enabledPackages;
+            packages = [ pkgs.agenix-rekey ];
           };
         }
       );

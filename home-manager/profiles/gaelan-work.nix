@@ -1,7 +1,11 @@
+{ robotdisco-secrets, ... }:
+
 let
   username = "gaelan";
 in
 {
+  age.rekey.hostPubkey = "${robotdisco-secrets}/users/gaelan-work.pub";
+
   robot-disco = {
     development-environment = {
       enable = true;

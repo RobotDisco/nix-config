@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  robotdisco-secrets,
+  ...
+}:
 
 let
   # Google demands I use XOAUTH, and this means I have to configure a convoluted
@@ -10,6 +15,8 @@ let
   oauth2l = "${pkgs.oauth2l}/bin/oauth2l";
 in
 {
+  age.secrets.google-oauth.rekeyFile = "${robotdisco-secrets}/google-credentials.json.age";
+
   accounts.email = {
     accounts.personal = {
       address = "gdcosta@gmail.com";

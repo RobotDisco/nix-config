@@ -1,5 +1,8 @@
 { myLib, ... }:
 
 {
-  imports = myLib.scanPaths ./.;
+  imports = [
+    ../../secrets/agenix-rekey.nix
+  ]
+  ++ myLib.scanPaths ./.;
 }

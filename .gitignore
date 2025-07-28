@@ -1,3 +1,5 @@
+# age-regex local keys
+/secrets/rekeyed/
 # direnv derivation caches
 /.direnv/
 # pre-commit-checks auto-generated config

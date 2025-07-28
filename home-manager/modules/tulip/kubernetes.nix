@@ -5,45 +5,30 @@
   ...
 }:
 let
-  inherit (lib) types;
   cfg = config.robot-disco.tulip;
 in
-{
-  options.robot-disco.tulip.kubernetes = {
-    enable = lib.mkOption {
-      default = cfg.enable;
-      description = "Whether to enable Tulip kubernetes tools (for Tulip 7.0)";
-      type = types.bool;
-    };
-  };
+lib.mkIf cfg.enable {
+  home.packages = with pkgs; [
+    # Core infra
+    kubectl
+    istioctl
 
-  config = lib.mkIf (cfg.enable && cfg.kubernetes.enable) {
+    # Nice tool for viewing kubectl requests/limits
+    kube-capacity
 
-    # We need docker here
-    robot-disco.tulip.docker.enable = true;
+    # Deployment/rollout tooling
+    argocd
+    argo-rollouts
+    kubernetes-helm
 
-    home.packages = with pkgs; [
-      # Core infra
-      kubectl
-      istioctl
+    # Infra as code
+    terraform-ls
+    terraform-lsp
+  ];
 
-      # Nice tool for viewing kubectl requests/limits
-      kube-capacity
-
-      # Deployment/rollout tooling
-      argocd
-      argo-rollouts
-      kubernetes-helm
-
-      # Infra as code
-      terraform-ls
-      terraform-lsp
-    ];
-
-    # useful shell aliases that are simple enough to apply to all shells
-    home.shellAliases = {
-      k = "kubectl";
-      kar = "kubectl-argo-rollouts";
-    };
+  # useful shell aliases that are simple enough to apply to all shells
+  home.shellAliases = {
+    k = "kubectl";
+    kar = "kubectl-argo-rollouts";
   };
 }

@@ -25,6 +25,8 @@
 
   networking.hostName = "darktower"; # Define your hostname.
 
+  age.rekey.hostPubkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPBl/lCjnpsuivXrmLLpfn3aBb8G/tdNfQxJz22jOOGL root@darktower";
+
   # This option defines the first version of NixOS you have installed on this particular machine,
   # and is used to maintain compatibility with application data (e.g. databases) created on older NixOS versions.
   #

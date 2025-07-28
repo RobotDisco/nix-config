@@ -2,12 +2,14 @@
   config,
   lib,
   pkgs,
+  robotdisco-secrets,
   ...
 }:
 
 {
   home.packages = [ pkgs.yubioath-flutter ];
 
+  age.secrets.u2f_keys.rekeyFile = "${robotdisco-secrets}/u2f_keys.age";
   # In home-manager, the .path attribute relies on the nix config
   # eventually resolving environment variables and command subshells.
   #
