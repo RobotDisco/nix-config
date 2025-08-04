@@ -133,11 +133,11 @@
         };
       });
       darwinConfigurations = {
-        "Fountain-of-Ahmed-III" = darwinSystem {
+        fountain-of-ahmed-iii = darwinSystem {
           inherit darwin home-manager;
           system = "aarch64-darwin";
           darwinModules = [
-            ./machines/Fountain-of-Ahmed-III.nix
+            ./machines/fountain-of-ahmed-iii.nix
             inputs.agenix.darwinModules.default
             inputs.agenix-rekey.nixosModules.default
           ];
