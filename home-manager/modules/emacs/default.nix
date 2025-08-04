@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  robotdisco-secrets,
   ...
 }:
 
@@ -116,7 +117,8 @@ in
         # Install our emacs package, as well as the emacs config package if XDG config mangement was enabled.
         home.packages = [
           cfg.package
-        ] ++ lib.optionals cfg.enableUserDirectory cfg.configPackage.buildInputs;
+        ]
+        ++ lib.optionals cfg.enableUserDirectory cfg.configPackage.buildInputs;
 
       }
       (lib.mkIf cfg.enableUserDirectory {
@@ -127,6 +129,15 @@ in
       })
       (lib.mkIf cfg.defaultEditor { home.sessionVariables.EDITOR = emacsBin; })
       (lib.mkIf cfg.enableGitDiff { programs.git.extraConfig.diff.tool = "ediff"; })
+      {
+        age.secrets.emacs-authinfo.rekeyFile = "${robotdisco-secrets}/emacs-authinfo.age";
+
+        home = {
+          activation.linkEmacsAuthinfo = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+            run ln -sf $VERBOSE_ARG "${config.age.secrets.emacs-authinfo.path}" "${config.home.homeDirectory}/.authinfo";
+          '';
+        };
+      }
       {
         home.shellAliases = {
           erecovers = "find ~/Documents/brain -name '#*#' -print";

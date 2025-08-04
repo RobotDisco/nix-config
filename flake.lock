@@ -117,11 +117,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1754240942,
-        "narHash": "sha256-d/ADJhgx5poFnpvPCYiFS/SRSwSmNJV+d7K0luZFTgs=",
+        "lastModified": 1754298892,
+        "narHash": "sha256-Z6t6/fwkoF4+vJx0En1a6rQ3c+m+EEocEH8stKzP5DU=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "2df87ae7b3909cd4c3e0c8269989599f100a0f30",
+        "rev": "dc8f6950b1d59a7275b7ab3a275ca43cf8632a2e",
         "type": "github"
       },
       "original": {
@@ -318,11 +318,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1754217164,
-        "narHash": "sha256-7zupXwqbChmsEyOCUzUbrWVwnUxPc6ExBajgk/Y1oeU=",
+        "lastModified": 1754278406,
+        "narHash": "sha256-jvIQTMN5EzoOP5RaGztpVese8a3wqy0M/h6tNzycW28=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "94bcd9f5bcc94c0a1451ea873e38dddea7360bdc",
+        "rev": "6a489c9482ca676ce23c0bcd7f2e1795383325fa",
         "type": "github"
       },
       "original": {
@@ -397,10 +397,10 @@
     "robotdisco-secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1754146516,
-        "narHash": "sha256-77uRU+vASB1LFDU6v8qJNsUdKVU5xeCglxpjv64Mzws=",
+        "lastModified": 1754313188,
+        "narHash": "sha256-iLXRa1T6vfNe6vfRRffuZSe18s0VpjopDDLHg9dNHkM=",
         "ref": "refs/heads/trunk",
-        "rev": "17b6aae67d62ec65700879e71d3f2590c777bdbf",
+        "rev": "10f8dbf75f9f51c1bc013c3d5158695879fd0458",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/RobotDisco/nix-secrets.git"
