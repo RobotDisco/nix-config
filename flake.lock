@@ -10,11 +10,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1750173260,
-        "narHash": "sha256-9P1FziAwl5+3edkfFcr5HeGtQUtrSdk/MksX39GieoA=",
+        "lastModified": 1754323089,
+        "narHash": "sha256-qpmyMBMyksBbyXkc9kSIkY2zIuPRixQZDorec216FfM=",
         "owner": "ryantm",
         "repo": "agenix",
-        "rev": "531beac616433bac6f9e2a19feb8e99a22a66baf",
+        "rev": "6d194f7522b9ed8aadb0856f1316f6d660ceb42a",
         "type": "github"
       },
       "original": {
@@ -117,11 +117,11 @@
         "nixpkgs-stable": "nixpkgs-stable"
       },
       "locked": {
-        "lastModified": 1754298892,
-        "narHash": "sha256-Z6t6/fwkoF4+vJx0En1a6rQ3c+m+EEocEH8stKzP5DU=",
+        "lastModified": 1754327615,
+        "narHash": "sha256-zpPBpej/a35gRFNQoynRuO96MOhL84/7/zIMHYTUGMM=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "dc8f6950b1d59a7275b7ab3a275ca43cf8632a2e",
+        "rev": "ea37d7305404538ce26f1dbf26c32f32678a9e7c",
         "type": "github"
       },
       "original": {
@@ -270,11 +270,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1754229794,
-        "narHash": "sha256-yOl7REX6O/1mh+tpscJPKgjK6nmXSMOB1xhmDNAMUZM=",
+        "lastModified": 1754316476,
+        "narHash": "sha256-Ry1gd1BQrNVJJfT11cpVP0FY8XFMx4DJV2IDp01CH9w=",
         "owner": "NixOS",
         "repo": "nixos-hardware",
-        "rev": "a872d985392ee5b19d8409bfcc3f106de2070070",
+        "rev": "9368056b73efb46eb14fd4667b99e0f81b805f28",
         "type": "github"
       },
       "original": {
@@ -397,10 +397,10 @@
     "robotdisco-secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1754313188,
-        "narHash": "sha256-iLXRa1T6vfNe6vfRRffuZSe18s0VpjopDDLHg9dNHkM=",
+        "lastModified": 1754329515,
+        "narHash": "sha256-5RHWpAfvRDh7hixN534If4d4yy8wbMbi/uj5di0arJU=",
         "ref": "refs/heads/trunk",
-        "rev": "10f8dbf75f9f51c1bc013c3d5158695879fd0458",
+        "rev": "29a20170027524b6b1ff7e869f1f66d6a52cfa00",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/RobotDisco/nix-secrets.git"
