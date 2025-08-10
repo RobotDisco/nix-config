@@ -702,15 +702,16 @@ Support encryption as the basis of a number of functions
 
 - encrypting and decrypting entire files
 - supporting encryption in other packages
-- supporting direct GnuPG pinentryin emacs
+- supporting direct GnuPG pinentry in emacs
 
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package emacs
     :ensure nil
-    ;; :custom
-    ;; (epg-pinentry-mode 'loopback)
+    :custom
+    (epg-pinentry-mode 'loopback)
     :config
+    (epa-file-enable)
     (setq epg-file-encrypt-to '("gdcosta@gmail.com"
   				"gaelan@tulip.com")))
 #+END_SRC
