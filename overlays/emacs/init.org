@@ -1155,8 +1155,7 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
     (org-agenda-files '("~/Documents/gtd/gtd.org"
   		      "~/Documents/gtd/gcal/personal.org"
   		      "~/Documents/gtd/gcal/work.org"
-  		      "~/Documents/gtd/jira/Interrupts.org"
-  		      "~/Documents/gtd/jira/Sprint.org"))
+  		      "~/Documents/gtd/jira/CLOUD.org"))
     (org-capture-templates
      '(("t" "Task" entry (file+headline "~/Documents/gtd/gtd.org" "Inbox") "* TODO %?"))))
 #+END_SRC
@@ -1420,10 +1419,6 @@ I use JIRA at work; let's see if I can feed these into my task management flow
     :defer 2
     :custom
     (jiralib-url "https://tulipio.atlassian.net")
-    (org-jira-custom-jqls
-     '((:jql " project = CLOUD AND sprint in opensprints() AND assignee = currentuser()" :filename "Sprint")
-       (:jql " project = CLOUD AND type = epic" :filename "Epics")
-       (:jql " project = CLOUD AND assignee = currentuser() AND type IN (\"Service Request\", \"Access Request\") AND statusCategory != Done" :filename "Interrupts")))
     (org-jira-jira-status-to-org-keyword-alist '(("To Do" . "TODO")
   					       ("Open" . "TODO")
   					       ("To Groom" . "TODO")
