@@ -165,7 +165,7 @@ in
           "${waybar}"
 
           # Launch immediate applications
-          "[workspace 2 silent] ${pkgs.brave}/bin/brave"
+          "[workspace 2 silent] ${pkgs.vivaldi}/bin/vivaldi"
           "[workspace 1 silent] emacsclient -c"
           "[workspace 4 silent] ${pkgs.slack}/bin/slack"
           "[workspace 4 silent] ${discord}"

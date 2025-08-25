@@ -4,6 +4,7 @@
   home.packages = [
     # Browser
     pkgs.brave
+    pkgs.vivaldi
 
     # Chat / Messaging
     pkgs.discord

@@ -57,7 +57,6 @@
 
       casks = [
         "bitwarden"
-        "brave-browser"
         "calibre"
         "chef-workstation"
         "discord"
@@ -69,6 +68,7 @@
         "slack"
         "sunsama"
         "tidal"
+        "vivaldi"
         "whatsapp"
         "zotero"
         # Work already installs/updates these packages
