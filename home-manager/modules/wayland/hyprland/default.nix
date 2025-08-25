@@ -35,7 +35,7 @@ let
   rfkill = "${pkgs.util-linux}/bin/rfkill";
 
   # Discord
-  discord = "${pkgs.webcord}/bin/webcord";
+  discord = "${pkgs.discord}/bin/discord";
 in
 {
   options.robot-disco.wayland.hyprland.enable = lib.mkEnableOption "Hyprland graphical environment";

@@ -6,7 +6,7 @@
     pkgs.brave
 
     # Chat / Messaging
-    pkgs.webcord
+    pkgs.discord
     pkgs.signal-desktop
     pkgs.slack
     pkgs.whatsapp-for-linux
