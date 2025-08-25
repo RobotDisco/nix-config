@@ -808,7 +808,10 @@ Have nicer integrations with online git sites like gitlab and github
   (use-package forge
     :ensure t
     :defer 2
-    :after magit)
+    :after magit
+    :config
+    ;; Tulip's gitlab instance
+    (add-to-list 'forge-alist '("git.internal.tulip.io" "git.internal.tulip.io/api/v4" "git.internal.tulip.io" forge-gitlab-repository)))
 #+END_SRC
 ** Vibe Coding
 #+BEGIN_SRC emacs-lisp :tangle yes
