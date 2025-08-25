@@ -62,6 +62,9 @@ in
       enable = true;
       enableExtraSocket = true;
       enableSshSupport = true;
+      extraConfig = ''
+        allow-loopback-pinentry
+      '';
       defaultCacheTtl = 3600;
       maxCacheTtl = 86400;
       pinentry.package = if pkgs.stdenv.isDarwin then pkgs.pinentry_mac else pkgs.pinentry-gtk2;
