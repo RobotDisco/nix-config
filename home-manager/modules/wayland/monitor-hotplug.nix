@@ -12,7 +12,7 @@ lib.mkMerge [
       settings = [
         {
           profile = {
-            name = "docked";
+            name = "clamshell";
             outputs = [
               {
                 criteria = "eDP-1";
@@ -42,6 +42,14 @@ lib.mkMerge [
                 # enable when I want it back.
                 status = "enable";
                 scale = 1.566667;
+              }
+              {
+                criteria = "Dell Inc. DELL U2412M M2GCR1CS0T1L";
+                status = "disable";
+              }
+              {
+                criteria = "Dell Inc. DELL U2412M HT5N364F0GSS";
+                status = "disable";
               }
             ];
           };
