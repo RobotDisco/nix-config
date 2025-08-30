@@ -54,6 +54,11 @@ in
     wayland.windowManager.hyprland = {
       inherit (cfg) enable;
 
+      # Since we're using NixOS' packages and modules,
+      # we set these to nil to not reimport.
+      package = null;
+      portalPackage = null;
+
       settings = {
         "$terminal" = kitty;
         "$fileManager" = thunar;

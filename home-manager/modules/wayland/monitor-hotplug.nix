@@ -8,7 +8,6 @@ lib.mkMerge [
   {
     services.kanshi = {
       enable = pkgs.stdenv.isLinux;
-      systemdTarget = "hyprland-session.target";
       settings = [
         {
           profile = {
@@ -57,7 +56,7 @@ lib.mkMerge [
       ];
     };
   }
-  (lib.mkIf config.wayland.windowManager.hyprland.enable {
+  (lib.mkIf config.wayland.windowManager.hyprland.systemd.enable {
     services.kanshi.systemdTarget = "hyprland-session.target";
   })
 ]
