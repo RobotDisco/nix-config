@@ -42,7 +42,13 @@ let
       enabled = false
     }
 
-    # `-l` activates layer-shell mode. Notice that `swaymsg exit` will run after gtkgreet.
+    # Remove caps-lock
+    input = {
+      kb_layout = "us";
+      kb_options = "ctrl:nocaps";
+    };
+
+    # `-l` activates layer-shell mode. Notice that `hyprctl exit` will run after gtkgreet exits.
     exec-once = ${pkgs.greetd.gtkgreet}/bin/gtkgreet -l -s ${gtkGreetStyleSheet}; ${cmpstr}/bin/hyprctl exit
   '';
 in
