@@ -1136,31 +1136,31 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
 #+END_SRC
 ** Org
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package org
-    :ensure t
-    :hook (org-mode-hook . (lambda ()
-  			   (setq-local fill-column 80)
-  			   (visual-line-mode +1)))
-    :mode ("\\.org\\'" . org-mode)
-    :bind (("C-c a" . org-agenda)
-  	 ("C-c c" . org-capture)
-  	 ("C-c l" . org-store-link))
-    :config
-    ;; Enable org habits
-    (add-to-list 'org-modules 'org-habit t)
-    :custom
-    (org-agenda-custom-commands
-     '(("i" "Unprocessed tasks" tags-todo "+INBOX")
-       ("n" "Personal Kanban" ((todo "DOING")
-  			     (agenda "")
-  			     (todo "WAITING")
-  			     (todo "NEXT")))))
-    (org-agenda-files '("~/Documents/gtd/gtd.org"
-  		      "~/Documents/gtd/gcal/personal.org"
-  		      "~/Documents/gtd/gcal/work.org"
-  		      "~/Documents/gtd/jira/CLOUD.org"))
-    (org-capture-templates
-     '(("t" "Task" entry (file+headline "~/Documents/gtd/gtd.org" "Inbox") "* TODO %?"))))
+    (use-package org
+      :ensure t
+      :hook (org-mode-hook . (lambda ()
+    			   (setq-local fill-column 80)
+    			   (visual-line-mode +1)))
+      :mode ("\\.org\\'" . org-mode)
+      :bind (("C-c a" . org-agenda)
+    	 ("C-c c" . org-capture)
+    	 ("C-c l" . org-store-link))
+      :config
+      ;; Enable org habits
+      (add-to-list 'org-modules 'org-habit t)
+      :custom
+      (org-agenda-custom-commands
+       '(("i" "Unprocessed tasks" tags-todo "+INBOX")
+         ("n" "Personal Kanban" ((todo "DOING")
+    			     (agenda "")
+    			     (todo "WAITING")
+    			     (todo "NEXT")))))
+      (org-agenda-files '("~/Documents/gtd/gtd.org"
+    		      "~/Documents/gtd/gcal/personal.org"
+    		      "~/Documents/gtd/gcal/work.org"
+    		      "~/Documents/gtd/jira/CLOUD.org"))
+      (org-capture-templates
+       '(("t" "Task" entry (file "~/Documents/gtd/inbox.org") "* TODO %?"))))
 #+END_SRC
 *** org-crypt
 Allow for partial encryption of org files (i.e. specific headers), using a special tag.
