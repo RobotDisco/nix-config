@@ -83,10 +83,13 @@ in
         # TODO this probably should be coupled with the emacs config somehow.
         home.packages = with pkgs; [
           # Dictionary support
-          aspell
-          aspellDicts.en
-          aspellDicts.en-science
-          aspellDicts.en-computers
+          (aspellWithDicts (
+            dicts: with dicts; [
+              en
+              en-science
+              en-computers
+            ]
+          ))
           # org-roam graph support
           graphviz
           # Graphics support
