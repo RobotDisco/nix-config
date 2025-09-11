@@ -997,6 +997,13 @@ Support LaTeX
     :ensure t
     :mode ("\\.pdf\\'" . pdf-view-mode))
 #+END_SRC
+* Finance?
+Let's use Emacs for accounting now. Let's try Ledget
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package ledger-mode
+    :ensure t)
+#+END_SRC
 * Productivity
 ** Email handling
 Let's try out two different mail clients and see how I like them.
