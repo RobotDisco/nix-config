@@ -1241,7 +1241,7 @@ An implementation of Zettelkasten for org, inspired by org-roam
   	:unnarrowed t)
        ("p" "permanent" plain "%?"
   	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-  			   "#+TITLE: ${title}\n- previous :: ")
+  			   "#+TITLE: ${title}\n")
   	:unnarrowed t)
        ("r" "person" plain "%?"
   	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg"
