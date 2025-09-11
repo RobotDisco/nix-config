@@ -157,7 +157,7 @@ Emacs by default manages some forms for variables and faces and places them at t
 
 Why do I write to the null device? This keeps my config immutable.
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
-  (setq custom-file null-device)
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 #+END_SRC
 
 ** Startup time profiling.
