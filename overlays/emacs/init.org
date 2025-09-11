@@ -1143,31 +1143,36 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
 #+END_SRC
 ** Org
 #+BEGIN_SRC emacs-lisp :tangle yes
-    (use-package org
-      :ensure t
-      :hook (org-mode-hook . (lambda ()
-    			   (setq-local fill-column 80)
-    			   (visual-line-mode +1)))
-      :mode ("\\.org\\'" . org-mode)
-      :bind (("C-c a" . org-agenda)
-    	 ("C-c c" . org-capture)
-    	 ("C-c l" . org-store-link))
-      :config
-      ;; Enable org habits
-      (add-to-list 'org-modules 'org-habit t)
-      :custom
-      (org-agenda-custom-commands
-       '(("i" "Unprocessed tasks" tags-todo "+INBOX")
-         ("n" "Personal Kanban" ((todo "DOING")
-    			     (agenda "")
-    			     (todo "WAITING")
-    			     (todo "NEXT")))))
-      (org-agenda-files '("~/Documents/gtd/gtd.org"
-    		      "~/Documents/gtd/gcal/personal.org"
-    		      "~/Documents/gtd/gcal/work.org"
-    		      "~/Documents/gtd/jira/CLOUD.org"))
-      (org-capture-templates
-       '(("t" "Task" entry (file "~/Documents/gtd/inbox.org") "* TODO %?"))))
+  (use-package org
+    :ensure t
+    :hook (org-mode-hook . (lambda ()
+     			   (setq-local fill-column 80)
+     			   (visual-line-mode +1)))
+    :mode ("\\.org\\'" . org-mode)
+    :bind (("C-c a" . org-agenda)
+     	 ("C-c c" . org-capture)
+     	 ("C-c l" . org-store-link))
+    :config
+    ;; Enable org habits
+    (add-to-list 'org-modules 'org-habit t)
+    :custom
+    (org-agenda-custom-commands
+     '(("i" "Unprocessed tasks" tags-todo "+INBOX")
+       ("n" "Personal Kanban" ((todo "DOING")
+     			     (agenda "")
+     			     (todo "WAITING")
+     			     (todo "NEXT")))))
+    (org-agenda-files '("~/Documents/gtd/gtd.org"
+     		      "~/Documents/gtd/gcal/personal.org"
+     		      "~/Documents/gtd/gcal/work.org"
+     		      "~/Documents/gtd/jira/CLOUD.org"))
+    (org-capture-templates
+     '(("t" "Task" entry (file "~/Documents/gtd/inbox.org") "* TODO %?")))
+    (org-todo-keywords
+     ;; Sequence for individual items, extended for work jira workflow.
+     '((sequence "TODO(q)" "GROOM" "NEXT(w)" "DOING(e)" "WAIT(r@/!)" "|" "DONE(t!)" "HALTED(y@)")
+       ;; Sequence for personal projects.
+       (sequence "PLAN(a)" "READY(s)" "ACTIVE(d)" "PAUSED(f@/!)" "RETRO(g)" "|" "DONE!" "HALTED@"))))
 #+END_SRC
 *** org-crypt
 Allow for partial encryption of org files (i.e. specific headers), using a special tag.
@@ -1420,10 +1425,6 @@ Because org-gcal is stupid and because work is paranoid, I can only control one 
 I use JIRA at work; let's see if I can feed these into my task management flow
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;; This apparently doesn't live in melpa
-  ;; (use-package ejira
-  ;;   :ensure t)
-
   (use-package org-jira
     :ensure t
     :defer 2
@@ -1431,10 +1432,10 @@ I use JIRA at work; let's see if I can feed these into my task management flow
     (jiralib-url "https://tulipio.atlassian.net")
     (org-jira-jira-status-to-org-keyword-alist '(("To Do" . "TODO")
   					       ("Open" . "TODO")
-  					       ("To Groom" . "TODO")
-  					       ("Ready For Work" . "TODO")
+  					       ("To Groom" . "GROOM")
+  					       ("Ready For Work" . "NEXT")
   					       ("In Progress" . "DOING")
-  					       ("Canceled" . "DONE")
+  					       ("Canceled" . "HALTED")
   					       ("Done" . "DONE")))
     (org-jira-update-issue-details-include-reporter nil)
     (org-jira-working-dir "~/Documents/gtd/jira"))
