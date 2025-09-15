@@ -1438,7 +1438,9 @@ I use JIRA at work; let's see if I can feed these into my task management flow
   					       ("Canceled" . "HALTED")
   					       ("Done" . "DONE")))
     (org-jira-update-issue-details-include-reporter nil)
-    (org-jira-working-dir "~/Documents/gtd/jira"))
+    (org-jira-working-dir "~/Documents/gtd/jira")
+    ;; Work doesn't use Jira's time tracker, so don't clobber my local clocking.
+    (org-jira-worklog-sync-p nil))
 #+END_SRC
 
 Also, I use slack; get at least important messages
