@@ -84,7 +84,10 @@
       # Upgrade brew packages whenever we run `darwin switch`
       # Note that this makes the operation non-idempotent, but it
       # keeps brew packages up-to-date.
-      global.autoUpdate = true;
+      onActivation = {
+        autoUpdate = true;
+        upgrade = true;
+      };
 
       masApps = {
         "WireGuard" = 1451685025;
