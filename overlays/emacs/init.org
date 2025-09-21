@@ -1002,7 +1002,10 @@ Let's use Emacs for accounting now. Let's try Ledget
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ledger-mode
-    :ensure t)
+    :ensure t
+    :mode ("\\.ledger\\'" . ledger-mode)
+    :custom
+    (ledger-binary-path "hledger"))
 #+END_SRC
 * Productivity
 ** Email handling
