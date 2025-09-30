@@ -1171,6 +1171,9 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
      		      "~/Documents/gtd/jira/CLOUD.org"))
     (org-capture-templates
      '(("t" "Task" entry (file "~/Documents/gtd/inbox.org") "* TODO %?")))
+    (org-refile-targets
+     '((("~/Documents/gtd/gtd.org") . (:maxlevel . 2))
+       (("~/Documents/gtd/inbox.org") . (:level . 1))))
     (org-todo-keywords
      ;; Sequence for individual items, extended for work jira workflow.
      '((sequence "TODO(q)" "GROOM" "NEXT(w)" "DOING(e)" "WAIT(r@/!)" "|" "DONE(t!)" "HALTED(y@)")
@@ -1315,11 +1318,7 @@ navigating my org-roam corpus will involve me clicking through a bunch of links 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package emacs
     :ensure nil
-    :defines (winner-mode-map)
-    :demand 0
-    :bind (:map winner-mode-map
-		("C-c C-w C-p" . winner-undo)
-		("C-c C-w C-n" . winner-redo))
+    :demand 2
     :config
     (winner-mode +1))
 #+END_SRC
