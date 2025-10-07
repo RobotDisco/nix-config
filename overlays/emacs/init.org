@@ -1166,6 +1166,7 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
      			     (todo "WAITING")
      			     (todo "NEXT")))))
     (org-agenda-files '("~/Documents/gtd/gtd.org"
+  		      "~/Documents/gtd/tickler.org"
      		      "~/Documents/gtd/gcal/personal.org"
      		      "~/Documents/gtd/gcal/work.org"
      		      "~/Documents/gtd/jira/CLOUD.org"))
