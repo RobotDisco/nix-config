@@ -1003,9 +1003,14 @@ Let's use Emacs for accounting now. Let's try Ledget
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ledger-mode
     :ensure t
-    :mode ("\\.ledger\\'" . ledger-mode)
+    :mode ("\\.\\(h?ledger\\|journal\\)\\'" . ledger-mode)
     :custom
-    (ledger-binary-path "hledger"))
+    (ledger-binary-path "hledger-emacs.sh")
+    (ledger-default-date-format "%Y-%m-%d")
+    (ledger-mode-should-check-version nil)
+    (ledger-report-auto-width nil)
+    (ledger-report-links-in-register nil)
+    (ledger-report-native-highlighting-arguments '("--color=always")))
 #+END_SRC
 * Productivity
 ** Email handling
