@@ -1160,11 +1160,16 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
     (add-to-list 'org-modules 'org-habit t)
     :custom
     (org-agenda-custom-commands
-     '(("i" "Unprocessed tasks" tags-todo "+INBOX")
-       ("n" "Personal Kanban" ((todo "DOING")
-     			     (agenda "")
-     			     (todo "WAITING")
-     			     (todo "NEXT")))))
+     '(("i" "Unprocessed tasks" todo "" ((org-agenda-files '("~/Documents/gtd/inbox.org"))))
+       ("n" "PersoNal Kanban" ((todo "DOING"
+  				   ((org-agenda-overriding-header "Currently doing")))
+  			     (agenda "")
+  			     (todo "WAITING"
+  				   ((org-agenda-overriding-header "Waiting for")))
+  			     (todo "NEXT"
+  				   ((org-agenda-overriding-header "On Deck")))
+  			     (tags-todo "TODO=\"ACTIVE\"&LEVEL=2"
+  					((org-agenda-overriding-header "Active Projects")))))))
     (org-agenda-files '("~/Documents/gtd/gtd.org"
   		      "~/Documents/gtd/tickler.org"
      		      "~/Documents/gtd/gcal/personal.org"
