@@ -14,14 +14,20 @@ env:
 
 jobs:
   build-systems:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
-        system:
-          - arrakis
-          - fountain-of-ahmed-iii
-          - darktower
+        include:
+          - system: arrakis
+            runner: ubuntu-latest
+            target: .#nixosConfigurations.arrakis.config.system.build.toplevel
+          - system: fountain-of-ahmed-iii
+            runner: macos-latest
+            target: .#darwinConfigurations.fountain-of-ahmed-iii.system
+          - system: darktower
+            runner: ubuntu-latest
+            target: .#nixosConfigurations.darktower.config.system.build.toplevel
       fail-fast: false
+    runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -44,11 +50,7 @@ jobs:
       
       - name: Build system configuration for ${{ matrix.system }}
         run: |
-          if [[ "${{ matrix.system }}" == "fountain-of-ahmed-iii" ]]; then
-            nix build .#darwinConfigurations.${{ matrix.system }}.system --print-build-logs
-          else
-            nix build .#nixosConfigurations.${{ matrix.system }}.config.system.build.toplevel --print-build-logs
-          fi
+          nix build ${{ matrix.target }} --print-build-logs
 
   build-packages:
     runs-on: ubuntu-latest
