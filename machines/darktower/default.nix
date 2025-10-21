@@ -8,6 +8,7 @@
     ./hardware-configuration.nix
 
     ../../modules/nixos/server
+    ../../secrets/nixos.nix
 
     ./services/fileserver.nix
     ./services/mysql.nix
