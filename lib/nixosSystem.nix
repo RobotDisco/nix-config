@@ -52,5 +52,6 @@ nixpkgs.lib.nixosSystem {
       # Supply home-manager with special arguments
       home-manager.extraSpecialArgs = homeSpecialArgs;
     }
-  ] ++ nixosModules;
+  ]
+  ++ nixosModules;
 }

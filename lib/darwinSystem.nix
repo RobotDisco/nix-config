@@ -52,5 +52,6 @@ darwin.lib.darwinSystem {
       # Supply home-manager with special arguments
       home-manager.extraSpecialArgs = homeSpecialArgs;
     }
-  ] ++ darwinModules;
+  ]
+  ++ darwinModules;
 }

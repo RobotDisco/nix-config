@@ -5,5 +5,6 @@
     ../common
 
     ../hardware/ssd.nix
-  ] ++ myLib.scanPaths ./.;
+  ]
+  ++ myLib.scanPaths ./.;
 }
