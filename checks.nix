@@ -29,26 +29,25 @@ forAllSystems (
         ''
           cd ${./.}
 
-          # GitHub Actions linting
-          echo "Running actionlint..."
-          ${lintTools.actionlint} .github/workflows/*.yaml
-
-          # Check for unused function inputs
-          echo "Running deadnix..."
-          ${lintTools.deadnix} --exclude $(find . -name "hardware-configuration.nix") --fail
-
-          # Check flake compatibility
-          echo "Running flake-checker..."
-          ${lintTools.flake-checker} flake.lock
-
-          # Nix formatting check
-          echo "Running nixfmt check..."
+          # 1. Format check first (fastest, most likely to fail)
+          echo "📝 Checking Nix formatting..."
           ${lintTools.nixfmt} --check $(find . -name "*.nix" ! -name "hardware-configuration.nix")
 
-          # Nix static analysis
-          echo "Running statix..."
+          # 2. Syntax/structure checks (fast)
+          echo "⚡ Checking GitHub Actions syntax..."
+          ${lintTools.actionlint} .github/workflows/*.yaml
+
+          echo "🔒 Checking flake compatibility..."
+          ${lintTools.flake-checker} flake.lock
+
+          # 3. Static analysis (slower but thorough)
+          echo "🔍 Checking for unused Nix inputs..."
+          ${lintTools.deadnix} --exclude $(find . -name "hardware-configuration.nix") --fail
+
+          echo "🛡️  Running Nix static analysis..."
           ${lintTools.statix} check . --ignore hardware-configuration.nix
 
+          echo "✅ All lint checks passed!"
           touch $out
         '';
   }

@@ -1,51 +1,124 @@
 #+TITLE: Gaelan's Nix config
 #+AUTHOR: Gaelan D'costa <gdcosta@gmail.com>
 
-This is the configuration for my NixOS installations and also my user dot files, as laid down by nix. It is structured as a Nix flake.
+This is a NixOS/nix-darwin flake configuration for managing multiple systems (NixOS on x86_64-linux and macOS via nix-darwin on aarch64-darwin). It uses home-manager for user-level configuration and agenix-rekey for secrets management.
 
-This flake includes the following components:
+* Quick Start
 
-- apps :: commands which this flake provides, and commands for development workflow. Use with =nix run .#<command>=
-  - ~switch~ :: run =darwin-rebuild --switch= or =nixos-rebuild --switch= for this flake, platform depending..
-  - ~use-caches~ :: add caches to the project's =nix.conf=. This is only needed when modifying cache sources.
-- devShell :: a shell environment with tools used for development. Run using =nix develop=
-- lib :: library functions used within this flake
-  - pkgsForSystem :: provide, for all supported systems, an imported =nixpkgs= with additional overlays I wish to include.
-  - forAllSystem~ :: given a function that takes in a system, produced an attribute set containing nix evaluations for every supported system. It contains a local binding called =supportedSystems= which lists the targets I expect this flake to build for.
+Enter the development shell to access all tools and helper commands:
+#+BEGIN_SRC sh
+nix develop
+#+END_SRC
 
-* Installation (MacOS)
+Once in the dev shell, use these commands for daily development:
+
+#+BEGIN_SRC sh
+# Format all nix files
+fmt
+
+# Run all linting and static analysis
+lint
+
+# Run flake checks (build tests)
+check
+
+# Test switch (build without applying)
+build-test
+
+# Test switch to new configuration
+test-switch
+
+# Apply system configuration (with confirmation)
+apply
+
+# Update flake inputs
+update
+
+# Show all available commands
+dev-help
+#+END_SRC
+
+* Installation
+
+** MacOS
 1. Install nix
 2. Install nix-darwin
 3. Install homebrew
-4. set hostname (via control panel) to "Fountain-of-Ahmed-III"
-5. Configure keyboards to remap modifier keys (don't know how to do this keyboard-by-keyboard)
-6. ~nix run .#darwin-switch~
+4. Set hostname to "fountain-of-ahmed-iii"
+5. Configure keyboard modifier key remapping
+6. Run initial setup: ~nix run .#switch~
 
-* Usage
-Show what this flake provides
+** NixOS
+1. Install NixOS
+2. Clone this repository
+3. Run: ~nix run .#switch~
+
+* Development Workflow
+
+** Setup Development Environment
 #+BEGIN_SRC sh
-nix flake show
+# Enter development shell with all tools
+nix develop
+
+# Add project caches (first time only)
+nix run .#use-caches
 #+END_SRC
 
-Switch to flake's NixOS configuration (and through embedding, home-manager configuration)
+** Daily Development Commands
+All commands below should be run from within ~nix develop~:
+
 #+BEGIN_SRC sh
-nix run .#switch
+# Format code before committing
+fmt
+
+# Check code quality
+lint
+
+# Run comprehensive checks
+check
+
+# Test configuration without applying
+build-test
+
+# Test switch to verify configuration
+test-switch
+
+# Apply changes to system (with safety prompt)
+apply
 #+END_SRC
 
-Update all flake inputs and generate a commit
+** Updating Dependencies
 #+BEGIN_SRC sh
-nix flake update --commit-lock-file
-#+END_SRC
+# Update all flake inputs and commit
+update
 
-Update a particular input and generate a commit
-#+BEGIN_SRC sh
+# Update specific input
 nix flake lock --update-input <input> --commit-lock-file
+
+# Use local development version of input
+nix flake lock --override-input <input> path:../<input-path>
 #+END_SRC
 
-* Development flow
-Use a local input during development, instead of a remote one.
+** Pre-commit Hooks
+Pre-commit hooks run automatically and include:
+- Format checking with nixfmt-rfc-style
+- Dead code detection with deadnix
+- Static analysis with statix
+- Nix language server checks with nil
+- GitHub Actions linting with actionlint
+- Flake compatibility checking
+
+** Manual Commands (if needed)
 #+BEGIN_SRC sh
-nix flake lock --override-input <input> path:../<input-path>
+# Show flake structure
+nix flake show
+
+# Direct system switch (auto-detects platform)
+nix run .#switch
+
+# Run specific checks
+nix build .#checks.x86_64-linux.lint-check --no-link
+nix flake check
 #+END_SRC
 
 * Nix Notes and primers
