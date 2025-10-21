@@ -1,0 +1,93 @@
+name: Build and Cache
+
+on:
+  push:
+    branches: [trunk]
+  pull_request:
+    branches: [trunk]
+  workflow_dispatch:
+
+env:
+  NIX_EXTRA_CONF: |
+    substituters = https://cache.nixos.org/ https://nix-community.cachix.org https://robot-disco.cachix.org
+    trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= robot-disco.cachix.org-1:UOaR4+SF1stx8O/Z+bJD9ENNjumfabRNRvCnjwct0sg=
+
+jobs:
+  build-systems:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        system:
+          - arrakis
+          - fountain-of-ahmed-iii
+          - darktower
+      fail-fast: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v20
+        with:
+          extra-conf: ${{ env.NIX_EXTRA_CONF }}
+      
+      - name: Setup Cachix
+        uses: cachix/cachix-action@v15
+        with:
+          name: robot-disco
+          authToken: '${{ secrets.CACHIX_KEY }}'
+      
+      - name: Build system configuration for ${{ matrix.system }}
+        run: |
+          if [[ "${{ matrix.system }}" == "fountain-of-ahmed-iii" ]]; then
+            nix build .#darwinConfigurations.${{ matrix.system }}.system --print-build-logs
+          else
+            nix build .#nixosConfigurations.${{ matrix.system }}.config.system.build.toplevel --print-build-logs
+          fi
+
+  build-packages:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package:
+          - sunsama
+      fail-fast: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v20
+        with:
+          extra-conf: ${{ env.NIX_EXTRA_CONF }}
+      
+      - name: Setup Cachix
+        uses: cachix/cachix-action@v15
+        with:
+          name: robot-disco
+          authToken: '${{ secrets.CACHIX_KEY }}'
+      
+      - name: Build package ${{ matrix.package }}
+        run: |
+          nix build .#packages.x86_64-linux.${{ matrix.package }} --print-build-logs
+
+  build-dev-shells:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+      
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@v20
+        with:
+          extra-conf: ${{ env.NIX_EXTRA_CONF }}
+      
+      - name: Setup Cachix
+        uses: cachix/cachix-action@v15
+        with:
+          name: robot-disco
+          authToken: '${{ secrets.CACHIX_KEY }}'
+      
+      - name: Build development shell
+        run: |
+          nix develop --command echo "Development shell built successfully"
