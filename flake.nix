@@ -49,61 +49,30 @@
     let
       inherit (nixpkgs) lib;
 
-      ### HERE BEGINS WHAT IS EFFECTIVELY MY CONFIGURATION SECTION
-      # What platforms do I support?
-      supportedSystems = [
-        "x86_64-linux"
-        "aarch64-darwin"
-      ];
-      #### THIS ENDS WHAT IS EFFECTIVELY MY CONFIGURATION SECTION.
-
-      ### HERE BEGINS MY HELPER FUNCTION LIBRARY ###
-      # for a list of system strings, and a function which takes a string argument,
-      # for each system string list, produce an attribute set where the key is
-      # the string and the value is the result of applying that function to the string.
-      forEachSystem = systems: func: lib.genAttrs systems func;
-      # Like the above but with our supportedSystems list partially applied.
-      # remember that nix functions can be curried, so we can pre-supply the first
-      # argument to return a function that only needs the second.
-      forAllSystems = forEachSystem supportedSystems;
-      # Darwin config generator
-      darwinSystem = import ./lib/darwinSystem.nix [
-        emacs-overlay.overlays.default
-        (_final: prev: {
-          # Overlay has overridden nixpkgs file with from-source file.
-          # I don't want that. Explicitly use nixpkgs version
-          inherit (nixpkgs.legacyPackages."${prev.system}") emacs-pgtk;
-        })
-        self.overlays.emacs
-      ];
-      # NixOS config generator
-      nixosSystem = import ./lib/nixosSystem.nix (
-        [
-          emacs-overlay.overlays.default
-          (_final: prev: {
-            # Overlay has overridden nixpkgs file with from-source file.
-            # I don't want that. Explicitly use nixpkgs version
-            inherit (nixpkgs.legacyPackages."${prev.system}") emacs-pgtk;
-          })
-        ]
-        ++ (lib.attrValues self.overlays)
-      );
-      # My custom functions
-      myLib = import ./lib { inherit lib; };
+      # My custom functions with all required inputs
+      myLib = import ./lib {
+        inherit
+          lib
+          nixpkgs
+          emacs-overlay
+          home-manager
+          ;
+        inherit (inputs) darwin nixpkgs-unstable;
+      };
+      inherit (myLib) forAllSystems darwinSystem nixosSystem;
     in
     ### HERE ENDS MY HELPER FUNCTION LIBRARY ###
     {
       checks = import ./checks.nix { inherit nixpkgs forAllSystems; };
       darwinConfigurations = {
         fountain-of-ahmed-iii = darwinSystem {
-          inherit darwin home-manager;
           system = "aarch64-darwin";
-          darwinModules = [
+          modules = [
             ./machines/fountain-of-ahmed-iii.nix
             inputs.agenix.darwinModules.default
             inputs.agenix-rekey.nixosModules.default
           ];
-          darwinSpecialArgs = {
+          specialArgs = {
             inherit myLib;
             inherit (inputs) robotdisco-secrets;
           };
@@ -120,9 +89,8 @@
 
       nixosConfigurations = {
         arrakis = nixosSystem {
-          inherit nixpkgs home-manager;
           system = "x86_64-linux";
-          nixosModules = [
+          modules = [
             inputs.nixos-hardware.nixosModules.framework-13-7040-amd
             ./machines/arrakis
             inputs.agenix.nixosModules.default
@@ -145,7 +113,7 @@
               }
             )
           ];
-          nixosSpecialArgs = {
+          specialArgs = {
             inherit myLib;
             inherit (inputs) agenix robotdisco-secrets;
           };
@@ -159,20 +127,19 @@
           };
         };
         darktower = nixosSystem {
-          inherit nixpkgs home-manager;
           system = "x86_64-linux";
-          homeModules = [ ];
-          homeSpecialArgs = { inherit inputs; };
-          nixosModules = [
+          modules = [
             ./machines/darktower
             # Secure secret injection
             inputs.agenix.nixosModules.default
             inputs.agenix-rekey.nixosModules.default
           ];
-          nixosSpecialArgs = {
+          specialArgs = {
             inherit myLib;
             inherit (inputs) agenix robotdisco-secrets;
           };
+          homeModules = [ ];
+          homeSpecialArgs = { inherit inputs; };
         };
       };
 
@@ -191,17 +158,6 @@
 
       # Run ~nix fmt~ to use this package to format nix files
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixfmt-rfc-style);
-
-      # Conceptually it feels like I should be defining my packages
-      # in the packages settings and then defining overlays that reference
-      # my flake packages. However, since I'm using the emacs overlay to
-      # derive my configs and need my packages in almost every flake item to have
-      # my emacs packages introduced by overlay, it was easier to define it the
-      # other way around.
-      overlays = {
-        emacs = import ./overlays/emacs;
-        default = final: _prev: { sunsama = final.callPackage ./packages/sunsama.nix { }; };
-      };
 
       packages."x86_64-linux" =
         let

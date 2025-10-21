@@ -4,7 +4,7 @@ set -e
 echo "🔍 Running pre-commit checks and fixes..."
 
 # Get staged files by type
-staged_nix_files=$(git diff --cached --name-only --diff-filter=ACM | grep '\.nix$' | grep -v hardware-configuration.nix || true)
+staged_nix_files=$(git diff --cached --name-only --diff-filter=ACM | grep '\.nix$' | grep -v hardware-configuration.nix | grep -v -v emacs-overrides.nix || true)
 staged_yaml_files=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(yml|yaml)$' | grep '\.github/workflows/' || true)
 staged_flake_files=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^flake\.(nix|lock)$' || true)
 

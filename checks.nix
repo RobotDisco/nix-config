@@ -42,7 +42,7 @@ forAllSystems (
 
           # 3. Static analysis (slower but thorough)
           echo "🔍 Checking for unused Nix inputs..."
-          ${lintTools.deadnix} --exclude $(find . -name "hardware-configuration.nix") --fail
+          ${lintTools.deadnix} --exclude $(find . -name "hardware-configuration.nix" -o -name "emacs-overrides.nix") --fail
 
           echo "🛡️  Running Nix static analysis..."
           ${lintTools.statix} check . --ignore hardware-configuration.nix

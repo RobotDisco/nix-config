@@ -3,6 +3,8 @@
 
 This is a NixOS/nix-darwin flake configuration for managing multiple systems (NixOS on x86_64-linux and macOS via nix-darwin on aarch64-darwin). It uses home-manager for user-level configuration and agenix-rekey for secrets management.
 
+The configuration features self-contained system builders with automatic overlay composition, emacs package override management, and a clean library structure that avoids external dependencies where possible.
+
 * Quick Start
 
 Enter the development shell to access all tools and helper commands:
@@ -121,6 +123,34 @@ nix develop --command apply
 nix build .#checks.x86_64-linux.lint-check --no-link
 nix flake check
 #+END_SRC
+
+* Architecture and Design
+
+** Library Structure (~lib/~)
+The ~lib/~ directory contains self-contained helper functions and system builders:
+
+- ~default.nix~ - Main library entry point that re-exports all functions
+- ~nixosSystem.nix~ - Self-contained NixOS system builder with automatic overlay composition
+- ~darwinSystem.nix~ - Self-contained macOS system builder with automatic overlay composition  
+- ~emacs-overrides.nix~ - Handles broken emacs-overlay packages by overriding with stable versions
+- ~systems.nix~ - Cross-platform helper functions (~forEachSystem~, ~forAllSystems~)
+- ~scanPaths.nix~ - Auto-imports all ~.nix~ files and directories from a path
+
+** System Builder Design
+The system builders (~nixosSystem.nix~ and ~darwinSystem.nix~) are designed to be self-contained and handle all complexity automatically:
+
+- **Overlay composition**: Automatically composes emacs-overlay, emacs-overrides, custom packages, and emacs configuration
+- **Emacs package management**: Handles broken emacs-overlay packages by overriding with stable nixpkgs versions
+- **Home-manager integration**: Configures home-manager with sensible defaults and shared modules
+- **Argument forwarding**: Uses the common Nix pattern of accepting more arguments than needed and forwarding the complete set
+
+** Library Argument Forwarding Pattern
+The library uses a common Nix pattern where ~lib/default.nix~ accepts more arguments than it uses (~nixpkgs~, ~emacs-overlay~, etc.) and forwards the complete argument set to system builders. This allows:
+
+- Consistent argument passing without manual filtering
+- Each function extracts only the parameters it declares
+- Extra arguments are safely ignored due to the ~...~ parameter
+- Maintainable code that doesn't require argument restructuring
 
 * Nix Notes and primers
 ** Read the Nix Pills. Over and over and over.

@@ -1,30 +1,50 @@
-# Provide the overlays we always want to include.
-# Is it better to curry or use a set where I can set defaults?
-# TODO consider the readability of this.
-overlays:
-# This is our wrapper around nixpkgs.lib.nixosSystem that includes a bunch of
-# common configuration we want.
+# Self-contained NixOS system builder with overlay composition
+#
+# This function handles all the complex overlay composition, home-manager
+# integration, and module setup automatically. You just provide the basic
+# system configuration.
 {
-  # Our nix input
+  lib,
   nixpkgs,
-  # user-specific management input
+  nixpkgs-unstable,
+  emacs-overlay,
   home-manager,
-  # user-supplied NixOS modules or inline configuration
-  nixosModules,
-  # user-supplied home-mamager modules
-  homeModules,
-  # Include additional parameters that are handled as part of the imports
-  # section of a NixOS module
-  nixosSpecialArgs,
-  # Include additional parameters that are handled as part of the imports
-  # section of a NixOS module
-  homeSpecialArgs,
-  # The nix-defined CPU architecture of the host being generated
-  system,
+  ...
 }:
+
+{
+  # Core system configuration
+  system,
+  modules,
+  # Optional parameters with sensible defaults
+  specialArgs ? { },
+  homeModules ? [ ],
+  homeSpecialArgs ? { },
+}:
+
+let
+  # Load emacs package overrides for when emacs-overlay breaks
+  emacsOverrides = (import ./emacs-overrides.nix { inherit nixpkgs nixpkgs-unstable; }) system;
+
+  # Compose all overlays with overrides for broken packages
+  overlays = [
+    # Include the community emacs overlay for latest packages
+    emacs-overlay.overlays.default
+
+    # Override any broken emacs packages with working versions
+    (_final: _prev: emacsOverrides)
+
+    # Add our custom packages
+    (final: _prev: {
+      sunsama = final.callPackage ../packages/sunsama.nix { };
+    })
+
+    # Include our custom emacs configuration overlay
+    (import ../overlays/emacs)
+  ];
+in
 nixpkgs.lib.nixosSystem {
-  inherit system;
-  specialArgs = nixosSpecialArgs;
+  inherit system specialArgs;
   modules = [
     # Always include the overlays we've defined in our flake, as we expect to
     # use them if we've bothered to define them
@@ -53,5 +73,5 @@ nixpkgs.lib.nixosSystem {
       home-manager.extraSpecialArgs = homeSpecialArgs;
     }
   ]
-  ++ nixosModules;
+  ++ modules;
 }

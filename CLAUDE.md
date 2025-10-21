@@ -94,9 +94,12 @@ The flake defines configurations for three hosts:
   - Automatically imported for all users via `myLib.scanPaths`
   - Major modules: `wayland/`, `emacs/`, `budget/`, `development-environment.nix`, `shells.nix`
 
-- **lib/**: Helper functions
-  - `darwinSystem.nix`: Wrapper around `darwin.lib.darwinSystem` with common config
-  - `nixosSystem.nix`: Wrapper around `nixpkgs.lib.nixosSystem` with common config
+- **lib/**: Helper functions and system builders
+  - `default.nix`: Main library entry point that re-exports all helper functions
+  - `nixosSystem.nix`: Self-contained NixOS system builder with overlay composition
+  - `darwinSystem.nix`: Self-contained macOS system builder with overlay composition
+  - `emacs-overrides.nix`: Handles broken emacs-overlay packages by overriding with stable versions
+  - `systems.nix`: Cross-platform helper functions (`forEachSystem`, `forAllSystems`)
   - `scanPaths.nix`: Auto-imports all `.nix` files (except `default.nix`) and directories from a path
 
 - **overlays/**: Nixpkgs overlays
@@ -118,13 +121,20 @@ imports = [
 ] ++ myLib.scanPaths ./.;
 ```
 
-**System wrappers**: `lib/darwinSystem.nix` and `lib/nixosSystem.nix` are curried functions that provide consistent configuration across all hosts. They:
-- Apply overlays automatically
+**System builders**: `lib/nixosSystem.nix` and `lib/darwinSystem.nix` are self-contained system builders that handle all configuration complexity. They:
+- Compose overlays automatically (emacs-overlay + emacs-overrides + custom packages)
+- Apply emacs package overrides for broken upstream packages
 - Configure home-manager with `useGlobalPkgs` and `useUserPackages`
 - Make home-manager modules available to all users
 - Pass through `specialArgs` for accessing custom libraries and secrets
 
-**Overlays pattern**: The flake defines overlays that are automatically applied to all configurations via the system wrappers. The emacs-overlay is included from upstream and customized with additional overrides.
+**Library argument forwarding**: The lib system uses a common Nix pattern where `lib/default.nix` accepts more arguments than it uses and forwards the complete argument set to system builders. This allows consistent argument passing without manual filtering and lets each function extract only what it needs.
+
+**Emacs package management**: The system handles emacs packages through multiple layers:
+- `emacs-overlay` provides the latest emacs packages and builds
+- `lib/emacs-overrides.nix` overrides broken packages with stable nixpkgs versions
+- `overlays/emacs/` contains custom emacs configuration overlays
+- All layers are composed automatically in the system builders
 
 **Secrets**: Uses agenix-rekey for age-encrypted secrets. Secrets are defined in `secrets/agenix-rekey.nix` and stored encrypted in `secrets/rekeyed/`. The `agenix-rekey` output in the flake provides tooling for rekeying.
 
@@ -163,5 +173,7 @@ Development configuration is split across files:
 - **`checks.nix`** - Linting and validation derivations
 - **`pre-commit-hook.sh`** - Git pre-commit hook script
 
-# Development style
+# Agentic code hygeine
 - after generating content, ensure that new content does not have trailing whitespace or non-empty lines that are purely whitespace.
+- after generating content, always run nixfmt on .nix files as a last step.
+- Text lines should be no more than 80 characters long unless unavoidable.
