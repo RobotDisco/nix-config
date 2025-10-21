@@ -120,9 +120,9 @@ imports = [
 3. Pass the new machine module path in `nixosModules` or `darwinModules`
 4. Include necessary `specialArgs` (typically `myLib`, `agenix`, and `robotdisco-secrets`)
 
-## Pre-commit Hooks
+## Development Tools and Linting
 
-Pre-commit hooks are configured via `pre-commit-hooks.nix` and run automatically in the dev shell. Active hooks:
+The development environment includes local linting and formatting tools (no external pre-commit-hooks dependency):
 - **actionlint**: GitHub Actions linting
 - **deadnix**: Detect unused function inputs
 - **flake-checker**: Detect unsupported NixOS versions
@@ -130,4 +130,4 @@ Pre-commit hooks are configured via `pre-commit-hooks.nix` and run automatically
 - **nixfmt-rfc-style**: RFC-compliant formatting
 - **statix**: Nix static analysis
 
-Hardware configuration files are excluded from checks.
+All tools are available in the dev shell (`nix develop`) and run via `nix flake check`. Hardware configuration files are excluded from checks.

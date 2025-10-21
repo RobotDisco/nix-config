@@ -25,11 +25,6 @@
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    pre-commit-hooks = {
-      url = "github:cachix/git-hooks.nix/master";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
-
     # My private secrets repository.
     # use ssh protocol to authenticate via ssh-agent/ssh-key
     # and shallow clone to save time.
@@ -98,40 +93,7 @@
     in
     ### HERE ENDS MY HELPER FUNCTION LIBRARY ###
     {
-      checks = forAllSystems (system: {
-        pre-commit-check = inputs.pre-commit-hooks.lib.${system}.run {
-          excludes = [ "hardware-configuration\\.nix" ];
-          hooks = {
-            # Github actions linter
-            actionlint.enable = true;
-            # Detect unused function inputs
-            deadnix = {
-              enable = true;
-            };
-            # Detect unsupported NixOS input versions
-            flake-checker = {
-              # Enable when they finally upgrade flake-checker to work with 24.11
-              enable = true;
-            };
-            # Do something via Nix language server?
-            nil = {
-              enable = true;
-            };
-            # RFC-compliant nix format checker
-            nixfmt-rfc-style = {
-              enable = true;
-            };
-            # nix static analysis
-            statix = {
-              enable = true;
-              # For some stupid reason statix doesn't use the standard
-              # excludes flag but uses a separate "ignores" field.
-              settings.ignore = [ "hardware-configuration.nix" ];
-            };
-          };
-          src = ./.;
-        };
-      });
+      checks = import ./checks.nix { inherit nixpkgs forAllSystems; };
       darwinConfigurations = {
         fountain-of-ahmed-iii = darwinSystem {
           inherit darwin home-manager;
@@ -273,23 +235,7 @@
           ]
       );
 
-      devShells = forAllSystems (
-        system:
-        let
-          pkgs = import nixpkgs {
-            inherit system;
-            overlays = [ inputs.agenix-rekey.overlays.default ];
-          };
-          preCommitCheck = self.checks.${system}.pre-commit-check;
-        in
-        {
-          default = pkgs.mkShell {
-            inherit (preCommitCheck) shellHook;
-            nativeBuildInputs = preCommitCheck.enabledPackages;
-            packages = [ pkgs.agenix-rekey ];
-          };
-        }
-      );
+      devShells = import ./devshells.nix { inherit nixpkgs inputs forAllSystems; };
 
       # Run ~nix fmt~ to use this package to format nix files
       formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixfmt-rfc-style);
