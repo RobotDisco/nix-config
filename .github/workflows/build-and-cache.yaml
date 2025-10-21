@@ -25,12 +25,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
-      
+
+      - name: Setup SSH key
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v20
         with:
           extra-conf: ${{ env.NIX_EXTRA_CONF }}
-      
+
       - name: Setup Cachix
         uses: cachix/cachix-action@v16
         with:
