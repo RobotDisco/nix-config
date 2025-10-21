@@ -36,8 +36,6 @@ jobs:
           sudo rm -rf /opt/ghc
           sudo rm -rf /usr/local/share/boost
           sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-          docker system prune -af
-          df -h
 
       - name: Checkout repository
         uses: actions/checkout@v5
