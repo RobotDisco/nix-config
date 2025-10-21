@@ -29,6 +29,16 @@ jobs:
       fail-fast: false
     runs-on: ${{ matrix.runner }}
     steps:
+      # See https://dev.to/mathio/squeezing-disk-space-from-github-actions-runners-an-engineers-guide-3pjg
+      - name: Free up disk space by removing unnecessary tooling
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/share/boost
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          docker system prune -af
+          df -h
+
       - name: Checkout repository
         uses: actions/checkout@v5
 
