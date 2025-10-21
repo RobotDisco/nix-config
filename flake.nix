@@ -187,54 +187,6 @@
         nixosConfigurations = self.nixosConfigurations // self.darwinConfigurations;
       };
 
-      apps = forAllSystems (
-        system:
-        let
-          pkgs = nixpkgs.legacyPackages."${system}";
-        in
-        pkgs.lib.trivial.pipe
-          [
-            # This list is honestly all I want to see here
-            # possibly, even hiding the fact that it is an
-            # application of writeShell Application.
-            #
-            # Everything else is transformation stuff that is
-            # used to minimize the amount of boilerplate written
-            # and should be encapsulated somewhere else, like in
-            # lib/
-            {
-              name = "switch";
-              text =
-                if pkgs.stdenv.isDarwin then
-                  "sudo darwin-rebuild switch --flake ${toString ./.}#"
-                else
-                  "sudo nixos-rebuild switch --flake ${toString ./.}#";
-            }
-            {
-              name = "use-caches";
-              runtimeInputs = [ pkgs.cachix ];
-              text = ''
-                ${pkgs.cachix}/bin/cachix use -O . nix-community
-                ${pkgs.cachix}/bin/cachix use -O . robot-disco
-              '';
-            }
-          ]
-          [
-            # Generate a derivation
-            (builtins.map pkgs.writeShellApplication)
-            # Transform derivation into flakes app item schema
-            (builtins.map (deriv: {
-              inherit (deriv) name;
-              value = {
-                type = "app";
-                program = "${deriv}/bin/${deriv.name}";
-              };
-            }))
-            # Convert list of app objects into attrset
-            builtins.listToAttrs
-          ]
-      );
-
       devShells = import ./devshells.nix { inherit nixpkgs inputs forAllSystems; };
 
       # Run ~nix fmt~ to use this package to format nix files

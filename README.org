@@ -46,12 +46,12 @@ dev-help
 3. Install homebrew
 4. Set hostname to "fountain-of-ahmed-iii"
 5. Configure keyboard modifier key remapping
-6. Run initial setup: ~nix run .#switch~
+6. Run initial setup: ~nix develop --command apply~
 
 ** NixOS
 1. Install NixOS
 2. Clone this repository
-3. Run: ~nix run .#switch~
+3. Run: ~nix develop --command apply~
 
 * Development Workflow
 
@@ -61,7 +61,8 @@ dev-help
 nix develop
 
 # Add project caches (first time only)
-nix run .#use-caches
+cachix use nix-community
+cachix use robot-disco
 #+END_SRC
 
 ** Daily Development Commands
@@ -114,7 +115,7 @@ Pre-commit hooks run automatically and include:
 nix flake show
 
 # Direct system switch (auto-detects platform)
-nix run .#switch
+nix develop --command apply
 
 # Run specific checks
 nix build .#checks.x86_64-linux.lint-check --no-link
