@@ -7,7 +7,7 @@ updates:
     assignees:
       - "RobotDisco"
     commit-message:
-      prefix: "chore"
+      prefix: "chore(deps)"
     labels:
       - dependencies
       - automated
