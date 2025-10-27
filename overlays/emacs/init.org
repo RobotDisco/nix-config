@@ -1151,45 +1151,46 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
 #+END_SRC
 ** Org
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package org
-    :ensure t
-    :hook (org-mode-hook . (lambda ()
-     			   (setq-local fill-column 80)
-     			   (visual-line-mode +1)))
-    :mode ("\\.org\\'" . org-mode)
-    :bind (("C-c a" . org-agenda)
-     	 ("C-c c" . org-capture)
-     	 ("C-c l" . org-store-link))
-    :config
-    ;; Enable org habits
-    (add-to-list 'org-modules 'org-habit t)
-    :custom
-    (org-agenda-custom-commands
-     '(("i" "Unprocessed tasks" todo "" ((org-agenda-files '("~/Documents/gtd/inbox.org"))))
-       ("n" "PersoNal Kanban" ((todo "DOING"
-  				   ((org-agenda-overriding-header "Currently doing")))
-  			     (agenda "")
-  			     (todo "WAITING"
-  				   ((org-agenda-overriding-header "Waiting for")))
-  			     (todo "NEXT"
-  				   ((org-agenda-overriding-header "On Deck")))
-  			     (tags-todo "TODO=\"ACTIVE\"&LEVEL=2"
-  					((org-agenda-overriding-header "Active Projects")))))))
-    (org-agenda-files '("~/Documents/gtd/gtd.org"
-  		      "~/Documents/gtd/tickler.org"
-     		      "~/Documents/gtd/gcal/personal.org"
-     		      "~/Documents/gtd/gcal/work.org"
-     		      "~/Documents/gtd/jira/CLOUD.org"))
-    (org-capture-templates
-     '(("t" "Task" entry (file "~/Documents/gtd/inbox.org") "* TODO %?")))
-    (org-refile-targets
-     '((("~/Documents/gtd/gtd.org") . (:maxlevel . 2))
-       (("~/Documents/gtd/inbox.org") . (:level . 1))))
-    (org-todo-keywords
-     ;; Sequence for individual items, extended for work jira workflow.
-     '((sequence "TODO(q)" "GROOM" "NEXT(w)" "DOING(e)" "WAIT(r@/!)" "|" "DONE(t!)" "HALTED(y@)")
-       ;; Sequence for personal projects.
-       (sequence "PLAN(a)" "READY(s)" "ACTIVE(d)" "PAUSED(f@/!)" "RETRO(g)" "|" "DONE(!)" "HALTED(@)"))))
+      (use-package org
+        :ensure t
+        :hook (org-mode-hook . (lambda ()
+         			   (setq-local fill-column 80)
+         			   (visual-line-mode +1)))
+        :mode ("\\.org\\'" . org-mode)
+        :bind (("C-c a" . org-agenda)
+         	 ("C-c c" . org-capture)
+         	 ("C-c l" . org-store-link))
+        :config
+        ;; Enable org habits
+        (add-to-list 'org-modules 'org-habit t)
+        :custom
+        (org-agenda-custom-commands
+         '(("i" "Unprocessed tasks" todo "" ((org-agenda-files '("~/Documents/gtd/inbox.org"))))
+           ("n" "PersoNal Kanban" ((todo "DOING"
+      				   ((org-agenda-overriding-header "Currently doing")))
+      			     (agenda "")
+      			     (todo "WAITING"
+      				   ((org-agenda-overriding-header "Waiting for")))
+      			     (todo "NEXT"
+      				   ((org-agenda-overriding-header "On Deck")))
+      			     (tags-todo "TODO=\"ACTIVE\"&LEVEL=2"
+      					((org-agenda-overriding-header "Active Projects")))))
+           ("p" "Projects")))
+        (org-agenda-files '("~/Documents/gtd/gtd.org"
+      		      "~/Documents/gtd/tickler.org"
+         		      "~/Documents/gtd/gcal/personal.org"
+         		      "~/Documents/gtd/gcal/work.org"
+         		      "~/Documents/gtd/jira/CLOUD.org"))
+        (org-capture-templates
+         '(("t" "Task" entry (file "~/Documents/gtd/inbox.org") "* TODO %?")))
+        (org-refile-targets
+         '((("~/Documents/gtd/gtd.org") . (:maxlevel . 2))
+           (("~/Documents/gtd/inbox.org") . (:level . 1))))
+        (org-todo-keywords
+         ;; Sequence for individual items, extended for work jira workflow.
+         '((sequence "TODO(q)" "GROOM" "NEXT(w)" "DOING(e)" "WAIT(r@/!)" "|" "DONE(t!)" "HALTED(y@)")
+           ;; Sequence for personal projects.
+           (sequence "PLAN(a)" "READY(s)" "ACTIVE(d)" "PAUSED(f@/!)" "RETRO(g)" "|" "DONE(!)" "HALTED(@)"))))
 #+END_SRC
 *** org-crypt
 Allow for partial encryption of org files (i.e. specific headers), using a special tag.
@@ -1219,21 +1220,27 @@ An implementation of Zettelkasten for org, inspired by org-roam
   	 ;; We also always go to the log, because selecting a section is usually too much blockage.
   	 ("C-c j d" . (lambda ()
   			(interactive)
-  			(org-roam-dailies-goto-date nil "j")))
+  			(org-roam-dailies-capture-date t "j")))
   	 ("C-c j y" . (lambda (n)
   			(interactive "p")
-  			(org-roam-dailies-goto-yesterday n "j")))
+  			(org-roam-dailies-capture-yesterday n t "j")))
   	 ("C-c j r" . (lambda (n)
   			(interactive "p")
-  			(org-roam-dailies-goto-tomorrow n "j")))
+  			(org-roam-dailies-capture-tomorrow n t "j")))
   	 ("C-c j t" . (lambda ()
   			(interactive)
-  			(org-roam-dailies-goto-today "j")))
-  	 ;; Buttonmash combo for logging something
+  			(org-roam-dailies-capture-today t "j")))
+  	 ;; Buttonmash combo for bullet journalling
   	 ;; doesn't match my mnenomic scheme otherwise.
   	 ("C-c j j" . (lambda ()
   			(interactive)
   			(org-roam-dailies-capture-today nil "j")))
+  	 ("C-c j k" . (lambda ()
+  			(interactive)
+  			(org-roam-dailies-capture-today nil "k")))
+  	 ("C-c j l" . (lambda ()
+  			(interactive)
+  			(org-roam-dailies-capture-today nil "l")))
   	 ;; These combos find the N next or previous notes, regardless of
   	 ;; whether days are skipped.
   	 ("C-c j n" . org-roam-dailies-goto-next-note)
@@ -1262,48 +1269,51 @@ An implementation of Zettelkasten for org, inspired by org-roam
       (propertize "${tags:20}" 'face 'org-tag)))
     (org-roam-capture-templates
      '(("b" "business" plain "%?"
-  	  :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-  			     "#+TITLE: ${title}\n#+FILETAGS: :business:"))
+        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+  			 "#+TITLE: ${title}\n#+FILETAGS: :business:"))
        ("l" "literature" plain
-  	(file "~/Documents/brain/templates/literature.org")
-  	:target (file "${citar-citekey}.org")
-  	:unnarrowed t)
+        (file "~/Documents/brain/templates/literature.org")
+        :target (file "${citar-citekey}.org")
+        :unnarrowed t)
        ("p" "permanent" plain "%?"
-  	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-  			   "#+TITLE: ${title}\n")
-  	:unnarrowed t)
+        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+  			 "#+TITLE: ${title}\n")
+        :unnarrowed t)
        ("r" "person" plain "%?"
-  	:target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg"
-  			   "#+TITLE: ${title}\n#+FILETAGS: :person:"))
+        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg"
+  			 "#+TITLE: ${title}\n#+FILETAGS: :person:"))
        ("j" "project" entry
         (file "~/Documents/brain/templates/project.org")
         :target (file+olp "%<%Y%m%d%H%M%S>-${slug}.org" ("PLAN [/] ${title} :PROJECT:")))))
     (org-roam-dailies-capture-templates
-     '(("j" "Daily Log Entry" entry
-  	"* %<%0H:%M> %?"
-  	:target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:" ("Log"))
-  	:unnarrowed t)
-       ("d" "Daily Morning Reflection" entry
-  	(file "~/Documents/brain/templates/daily.org")
-  	:jump-to-captured t
-  	:prepend t
-  	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:"))
-       ("e" "Daily Evening Reflection" entry
-  	(file "~/Documents/brain/templates/evening.org")
-  	:target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
-  	:unnarrowed t)
-       ("w" "Weekly Reflection" entry
-  	(file "~/Documents/brain/templates/weekly.org")
-  	:target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
-  	:unnarrowed t)
-       ("m" "Monthly Reflection" entry
-  	(file "~/Documents/brain/templates/monthly.org")
-  	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
-  	:unnarrowed t)
-       ("y" "Yearly Reflection" entry
-  	(file "~/Documents/brain/templates/yearly.org")
-  	:target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:")
-  	:unnarrowed t)))
+     '(("j" "Regular Daily Bullet" plain
+        "** %<%0H:%M> %?"
+        :target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:" ("Log"))
+        :unnarrowed t)
+       ("l" "Knowledge Daily Bullet" plain
+        "** %<%0H:%M> %? :fleeting:"
+        :target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:" ("Log"))
+        :unnarrowed t)
+       ("k" "Tension Daily Bullet" plain
+        "** %<%0H:%M> %? :tension:"
+        :target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:" ("Log"))
+        :unnarrowed t)
+       ("d" "Morning Planning" plain
+        "* Morning Reflection\n** What are my most important tasks today?\n- %?\n"
+        :target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:")
+        :unnarrowed t)
+       ("w" "Weekly Reflection" plain
+        "* Weekly Reflection\n** What were my biggest wins this week?\n- %?\n** What did I learn this week?\n- \n** What unresolved tensions am I feeling this week? What is causing these tensions?\n- \n** What was I most grateful for this week? (Pick one thing and go deep.)\n- \n** How did I grow this week?\n- \n** What important things should I prioritize doing or learning this upcoming week?\n- \n** What are ADHD temptations I should timebox?\n- \n"
+        :target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:")
+        :unnarrowed t)
+       ("m" "Monthly Reflection" plain
+        "* Monthly Reflection\n** What were my biggest wins this month?\n- %?\n** What did I learn this month?\n- \n** What tensions did I remove this month?\n- \n** What was I most grateful for this month?\n- \n** How have I grown this month?\n- \n"
+        :target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:")
+        :unnarrowed t)
+       ("y" "Yearly Reflection" plain
+        "* Yearly Reflection\n** What were my biggest wins this year?\n- %?\n** What did I learn this year?\n- \n** What tensions did I remove this year?\n- \n** What was I most grateful for this year?\n- \n** How have I grown this year?\n- \n"
+        :target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:")
+        :unnarrowed t)))
     :config
     ;; Scan for org-roam changes and rebuild database opportunistically
     (org-roam-db-autosync-mode))
