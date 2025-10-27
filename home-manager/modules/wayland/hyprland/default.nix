@@ -141,6 +141,8 @@ in
 
         # bindings that worked even when the screen is locked
         bindl = [
+          ", switch:lid:on, exec, hyprctl keyword monitor eDP-1, disable"
+          ", switch:lid:off, exec, hyprctl keyword monitor eDP-1, preferred, preferred, 0x0, 1.566667"
           # toggle hardware radio on/off (wifi, bluetooth)
           ", XF86RFKill , exec, ${rfkill} toggle 0 && ${rfkill} toggle ${toString bluetoothID}"
         ];

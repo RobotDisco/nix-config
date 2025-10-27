@@ -15,17 +15,22 @@ lib.mkMerge [
             outputs = [
               {
                 criteria = "eDP-1";
-                status = "disable";
+                status = "enable";
+                mode = "2256x1504";
+                position = "0,0";
+                scale = 1.566667;
               }
               {
                 criteria = "Dell Inc. DELL U2412M M2GCR1CS0T1L";
+                status = "enable";
                 mode = "1920x1200";
-                position = "0,0";
+                position = "0,1504";
               }
               {
                 criteria = "Dell Inc. DELL U2412M HT5N364F0GSS";
+                status = "enable";
                 mode = "1920x1200";
-                position = "1920,0";
+                position = "1920,1504";
                 transform = "270";
               }
             ];
@@ -37,18 +42,10 @@ lib.mkMerge [
             outputs = [
               {
                 criteria = "eDP-1";
-                # Because I explicitly disable in some configurations, I have to
-                # enable when I want it back.
                 status = "enable";
+                mode = "2256x1504";
+                position = "0,0";
                 scale = 1.566667;
-              }
-              {
-                criteria = "Dell Inc. DELL U2412M M2GCR1CS0T1L";
-                status = "disable";
-              }
-              {
-                criteria = "Dell Inc. DELL U2412M HT5N364F0GSS";
-                status = "disable";
               }
             ];
           };
