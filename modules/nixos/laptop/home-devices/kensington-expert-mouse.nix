@@ -14,4 +14,14 @@
       Option "ButtonMapping" "1 2 8 4 5 6 7 3 9"
     EndSection
   '';
+
+  # Bus 0x3
+  # Vendor 0x47d
+  # Product 0x1020
+  # Version 0x111
+  services.udev.extraHwdb = ''
+    evdev:input:b0003v047Dp1020*
+      KEYBOARD_KEY_90004=btn_right
+      KEYBOARD_KEY_90002=btn_side
+  '';
 }
