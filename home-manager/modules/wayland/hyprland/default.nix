@@ -22,6 +22,8 @@ let
   # File Manager
   thunar = "${pkgs.xfce.thunar}/bin/thunar";
 
+  kanshictl = "${pkgs.kanshi}/bin/kanshictl";
+
   # Terminal
   kitty = "${pkgs.kitty}/bin/kitty";
 
@@ -141,8 +143,8 @@ in
 
         # bindings that worked even when the screen is locked
         bindl = [
-          ", switch:lid:on, exec, hyprctl keyword monitor eDP-1, disable"
-          ", switch:lid:off, exec, hyprctl keyword monitor eDP-1, preferred, preferred, 0x0, 1.566667"
+          ", switch:Lid Switch:on, exec, ${kanshictl} switch clamshell"
+          ", switch:Lid Switch:off, exec, ${kanshictl} switch docked"
           # toggle hardware radio on/off (wifi, bluetooth)
           ", XF86RFKill , exec, ${rfkill} toggle 0 && ${rfkill} toggle ${toString bluetoothID}"
         ];
