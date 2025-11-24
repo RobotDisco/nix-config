@@ -38,7 +38,7 @@ jobs:
           sudo rm -rf "$AGENT_TOOLSDIRECTORY"
 
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup SSH key
         uses: webfactory/ssh-agent@v0.9.1
@@ -69,7 +69,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v20
@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@v20
