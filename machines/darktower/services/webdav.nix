@@ -28,7 +28,7 @@
   virtualisation.oci-containers.containers = {
     "seafile-memcached" = {
       autoStart = true;
-      image = "memcached:1.6.18";
+      image = "memcached:1.6.29";
       entrypoint = "memcached";
       # In theory we can isolate our seafile pods into a seafile network.
       # However, in practice, these don't allow for access to localhost ports
@@ -41,45 +41,12 @@
     };
     "seafile-mc" = {
       autoStart = true;
-      image = "seafileltd/seafile-mc:11.0-latest";
+      image = "seafileltd/seafile-mc:12.0-latest";
       dependsOn = [ "seafile-memcached" ];
       environmentFiles = [ config.age.secrets.seafile-envs.path ];
       #networks = [ "seafile" ];
       volumes = [ "/srv/storagepool/data/webdav/shared:/shared" ];
       ports = [ "192.168.10.3:8001:8000" ];
-    };
-  };
-
-  environment.etc = {
-    "fail2ban/filter.d/seafile-auth.conf".text = ''
-      [INCLUDES]
-      before = common.conf
-
-      [Definition]
-
-      _daemon = seaf-server
-      failregex = Login attempt limit reached.*, ip: <HOST>
-      ignoreregex =
-    '';
-  };
-
-  services.fail2ban = {
-    banaction-allports = "iptables-allports";
-    enable = true;
-    ignoreIP = [
-      "192.168.0.0/16"
-    ];
-    jails = {
-      seafile = ''
-        enabled = true
-        port = http, https
-        filter = seafile-auth
-        logpath = /srv/storagepool/data/webdav/shared/seafile/logs/seahub.log
-        banaction = %(banaction_allports)s
-        maxretry = 3
-        bantime = 14400
-        findtime = 14400
-      '';
     };
   };
 }
