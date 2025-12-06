@@ -1,6 +1,11 @@
-{ config, ... }:
+{ config, robotdisco-secrets, ... }:
 
 {
+  age.secrets = {
+    upsmon-primary.rekeyFile = "${robotdisco-secrets}/ups-user-primary.age";
+    upsmon-secondary.rekeyFile = "${robotdisco-secrets}/ups-user-secondary.age";
+  };
+
   power.ups = {
     enable = true;
     mode = "netserver";

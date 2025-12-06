@@ -1,6 +1,8 @@
-{ config, ... }:
+{ config, robotdisco-secrets, ... }:
 
 {
+  age.secrets.seafile-envs.rekeyFile = "${robotdisco-secrets}/seafile-envs.age";
+
   # Needed while I keep stuff in the default podman network
   virtualisation.podman.defaultNetwork.settings.dns_enabled = true;
 
