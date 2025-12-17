@@ -23,8 +23,6 @@
     enableACME = true;
   };
 
-  networking.firewall.interfaces.eno1.allowedTCPPorts = [ 8001 ];
-
   virtualisation.oci-containers.containers = {
     "seafile-memcached" = {
       autoStart = true;
