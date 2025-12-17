@@ -1257,7 +1257,7 @@ An implementation of Zettelkasten for org, inspired by org-roam
   						     (member "journal" (org-roam-node-tags node))
   						     (not (member "literature" (org-roam-node-tags node)))))))))
     :custom
-    (org-roam-directory "~/Documents/brain")
+    (org-roam-directory "~/Documents/brain/notes")
     (org-roam-dailies-directory "journal/")
     (org-roam-node-display-template
      (concat
