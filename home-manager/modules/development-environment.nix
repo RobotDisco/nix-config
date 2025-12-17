@@ -156,7 +156,7 @@ in
               sort = "version:refname";
             };
             user = {
-              email = cfg.email;
+              inherit (cfg) email;
               name = cfg.fullname;
             };
           };

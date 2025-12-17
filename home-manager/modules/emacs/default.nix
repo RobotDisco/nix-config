@@ -111,7 +111,6 @@ in
           difftool.diff.cmd = ''
             ${emacsBin} --eval '(ediff-files "'$LOCAL'" "'$REMOTE'")'
           '';
-
           mergetool.ediff.cmd = ''
             ${emacsBin} --eval '(ediff-merge-files-with-ancestor "'$LOCAL'" "'$REMOTE'" '"$BASE'" nil "'$MERGED'")'
           '';
