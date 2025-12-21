@@ -2,7 +2,7 @@
   description = "Gaelan's nix-based systems configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     # Secrets management
@@ -15,12 +15,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    darwin.url = "github:lnl7/nix-darwin/nix-darwin-25.05";
+    darwin.url = "github:lnl7/nix-darwin/nix-darwin-25.11";
 
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
 
-    home-manager.url = "github:nix-community/home-manager/release-25.05";
+    home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -43,7 +43,6 @@
       darwin,
       emacs-overlay,
       home-manager,
-      nixos-hardware,
       ...
     }:
     let
@@ -63,7 +62,10 @@
     in
     ### HERE ENDS MY HELPER FUNCTION LIBRARY ###
     {
-      checks = import ./checks.nix { inherit nixpkgs forAllSystems; };
+      checks = import ./checks.nix {
+        inherit forAllSystems;
+        nixpkgs = inputs.nixpkgs-unstable;
+      };
       darwinConfigurations = {
         fountain-of-ahmed-iii = darwinSystem {
           system = "aarch64-darwin";

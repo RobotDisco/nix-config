@@ -9,6 +9,6 @@
     pkgs.discord
     pkgs.signal-desktop
     pkgs.slack
-    pkgs.whatsapp-for-linux
+    pkgs.wasistlos
   ];
 }

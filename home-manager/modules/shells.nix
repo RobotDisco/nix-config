@@ -1,3 +1,5 @@
+{ config, ... }:
+
 {
   programs = {
     dircolors.enable = true;
@@ -6,7 +8,7 @@
       enableCompletion = true;
       enableVteIntegration = true;
 
-      dotDir = ".config/zsh";
+      dotDir = "${config.xdg.configHome}/zsh";
 
       syntaxHighlighting = {
         enable = true;

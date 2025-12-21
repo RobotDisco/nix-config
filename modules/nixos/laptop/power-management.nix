@@ -66,9 +66,7 @@ in
         # suspend-then-hibernate sleeps until a timer runs out and then
         # hibernates. This allows for a window of waking quickly before preferring
         # maximum power savings.
-        logind = {
-          lidSwitch = "suspend-then-hibernate";
-        };
+        logind.settings.Login.HandleLidSwitch = "suspend-then-hibernate";
       };
 
       # Sleep for 20 minutes, then hibernate.

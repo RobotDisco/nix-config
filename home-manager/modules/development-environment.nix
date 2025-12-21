@@ -47,7 +47,7 @@ in
       {
         programs.git = {
           enable = true;
-          extraConfig = {
+          settings = {
             # A lot of these are coming from
             # https://blog.gitbutler.com/how-git-core-devs-configure-git/
             # as my starting point of understanding git settings.
@@ -155,10 +155,12 @@ in
               # Don't sort lexically, understand dot versions.
               sort = "version:refname";
             };
+            user = {
+              email = cfg.email;
+              name = cfg.fullname;
+            };
           };
           lfs.enable = true;
-          userEmail = cfg.email;
-          userName = cfg.fullname;
         };
       }
       (lib.mkIf cfg.signCommits {

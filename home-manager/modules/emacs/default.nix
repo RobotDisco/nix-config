@@ -107,7 +107,7 @@ in
           socketActivation.enable = true;
         };
 
-        programs.git.extraConfig = {
+        programs.git.settings = {
           difftool.diff.cmd = ''
             ${emacsBin} --eval '(ediff-files "'$LOCAL'" "'$REMOTE'")'
           '';
@@ -145,7 +145,7 @@ in
         };
       })
       (lib.mkIf cfg.defaultEditor { home.sessionVariables.EDITOR = emacsBin; })
-      (lib.mkIf cfg.enableGitDiff { programs.git.extraConfig.diff.tool = "ediff"; })
+      (lib.mkIf cfg.enableGitDiff { programs.git.settings.diff.tool = "ediff"; })
       {
         home.shellAliases = {
           erecovers = "find ~/Documents/brain -name '#*#' -print";
