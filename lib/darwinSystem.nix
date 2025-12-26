@@ -22,21 +22,9 @@
 }:
 
 let
-  # Load emacs package overrides for when emacs-overlay breaks
-  emacsOverrides =
-    (import ./emacs-overrides.nix { inherit (inputs) nixpkgs nixpkgs-unstable; })
-      system;
-
-  # Compose all overlays with overrides for broken packages
   overlays = [
     # Include the community emacs overlay for latest packages
     emacs-overlay.overlays.default
-
-    # Override any broken emacs packages with working versions
-    (_final: _prev: emacsOverrides)
-
-    # Include our custom emacs configuration overlay
-    (import ../overlays/emacs)
   ];
 in
 darwin.lib.darwinSystem {

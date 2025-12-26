@@ -5,7 +5,6 @@
 # system configuration.
 {
   nixpkgs,
-  nixpkgs-unstable,
   emacs-overlay,
   home-manager,
   inputs,
@@ -23,10 +22,6 @@
 }:
 
 let
-  # Load emacs package overrides for when emacs-overlay breaks
-  emacsOverrides = (import ./emacs-overrides.nix { inherit nixpkgs nixpkgs-unstable; }) system;
-
-  # Compose all overlays with overrides for broken packages
   overlays = [
     # Include the community emacs overlay for latest packages
     emacs-overlay.overlays.default

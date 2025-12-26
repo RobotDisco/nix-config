@@ -23,12 +23,6 @@ in
         signCommits = true;
       };
 
-      emacs = {
-        enable = true;
-        # With Emacs 29+ there's no need for a custom macport.
-        #package = pkgs.gaelan-emacs-macport;
-      };
-
       gnupg.enable = true;
 
       tulip.enable = true;
