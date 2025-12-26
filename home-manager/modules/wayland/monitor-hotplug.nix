@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   pkgs,
   ...
@@ -80,7 +79,4 @@ lib.mkMerge [
       ];
     };
   }
-  (lib.mkIf config.wayland.windowManager.hyprland.systemd.enable {
-    services.kanshi.systemdTarget = "hyprland-session.target";
-  })
 ]

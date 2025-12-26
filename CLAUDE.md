@@ -138,6 +138,15 @@ imports = [
 
 **Secrets**: Uses agenix-rekey for age-encrypted secrets. Secrets are defined in `secrets/agenix-rekey.nix` and stored encrypted in `secrets/rekeyed/`. The `agenix-rekey` output in the flake provides tooling for rekeying.
 
+**Package reference convention**: How binaries are referenced depends on who
+provides the package:
+- System-provided packages (NixOS modules, e.g. `hyprland`, `sway`, `uwsm`)
+  → bare commands, since NixOS puts them in `$PATH`
+- Home-manager managed packages (e.g. `brightnessctl`) → store paths
+  (`${pkgs.brightnessctl}/bin/brightnessctl`) in service/daemon configs where
+  `$PATH` may not be fully initialized; bare commands are acceptable in
+  contexts where home-manager guarantees `$PATH` (e.g. compositor keybindings)
+
 # Adding a New Host
 
 1. Create `machines/<hostname>/` directory with `hardware-configuration.nix` and `default.nix`

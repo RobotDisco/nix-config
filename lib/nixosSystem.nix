@@ -22,6 +22,7 @@
 }:
 
 let
+  # Compose all overlays with overrides for broken packages
   overlays = [
     # Include the community emacs overlay for latest packages
     emacs-overlay.overlays.default

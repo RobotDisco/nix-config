@@ -30,6 +30,7 @@ let
       })
     ];
   });
+
 in
 emacsWithPackagesFromUsePackage {
   package = if stdenv.isLinux then emacs-pgtk else macEmacs;

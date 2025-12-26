@@ -43,12 +43,14 @@ in
 
       gnupg.enable = true;
 
-      laptop.bluetoothID = 15;
-
       services.seafile-client.enable = true;
 
       wayland = {
         hyprland.enable = true;
+        sway = {
+          enable = true;
+          lock-screen.enable = true;
+        };
       };
     };
   };

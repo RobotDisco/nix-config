@@ -7,12 +7,18 @@
 
 let
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
-  hyprctl = "${pkgs.hyprland}/bin/hyprctl";
-
-  cfg = config.robot-disco.wayland.lock-screen;
+  cfg = config.robot-disco.wayland.hyprland.lock-screen;
 in
+
 {
-  options.robot-disco.wayland.lock-screen.enable = lib.mkEnableOption "lock screen";
+  # TODO: Expose timeout values (dim, lock, screen-off, suspend) as module
+  # options for reuse across machines with different idle preferences.
+  #
+  # Note: intentionally not auto-enabled by the hyprland module — both sway
+  # and hyprland may be active simultaneously, and only one idle daemon should
+  # run at a time.
+  options.robot-disco.wayland.hyprland.lock-screen.enable =
+    lib.mkEnableOption "Enable Hypridle + Hyprlock.";
 
   config = lib.mkIf cfg.enable {
     # Lock screen; when session is locked, require your password be typed in.
@@ -23,7 +29,7 @@ in
       # way.
       settings = {
         background = {
-          path = toString ../../../backgrounds/yotsugi_eyes.png;
+          path = toString ../../../../backgrounds/yotsugi_eyes.png;
         };
 
         label = {
@@ -56,7 +62,7 @@ in
           before_sleep_cmd = "loginctl lock-session";
           # Turn on monitor to avoid having to tap keyboard multiple times to
           # activate display.
-          unlock_cmd = "${hyprctl} dispatch dpms on";
+          unlock_cmd = "hyprctl dispatch dpms on";
         };
 
         listener = [
@@ -64,7 +70,7 @@ in
           {
             timeout = 120;
             # On lock, set brightness to minimum.
-            on-timeout = "${brightnessctl} -s set 10}";
+            on-timeout = "${brightnessctl} -s set 10";
             # On unlock, set background back to previous setting
             on-resume = "${brightnessctl} -r";
           }
@@ -77,9 +83,9 @@ in
           {
             timeout = 900;
             # On trigger, disable monitors
-            on-timeout = "${hyprctl} dispatch dpms off";
+            on-timeout = "hyprctl dispatch dpms off";
             # On resumption, enable monitors
-            on-resume = "${hyprctl} dispatch dpms on";
+            on-resume = "hyprctl dispatch dpms on";
           }
           # Suspend/hibernate after thirty minutes of idleness.
           {
