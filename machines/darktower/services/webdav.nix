@@ -44,7 +44,7 @@
       environmentFiles = [ config.age.secrets.seafile-envs.path ];
       #networks = [ "seafile" ];
       volumes = [ "/srv/storagepool/data/webdav/shared:/shared" ];
-      ports = [ "192.168.10.3:8001:8000" ];
+      ports = [ "192.168.10.3:8001:80" ];
     };
   };
 }
