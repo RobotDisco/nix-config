@@ -2,7 +2,6 @@
   services.postfix = {
     enable = true;
     rootAlias = "gdcosta@gmail.com";
-    relayHost = "out.teksavvy.com";
-    relayPort = 587;
+    settings.main.relayhost = [ "out.teksavvy.com:587" ];
   };
 }
