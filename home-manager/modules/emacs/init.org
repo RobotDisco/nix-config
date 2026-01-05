@@ -16,7 +16,6 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 
 ** Key package choices
 - package management :: [[https://github.com/jwiegley/use-package][use-package]]
-- X Window Managemer :: [[https://github.com/ch11ng/exwm][exwm]]
 - completion
   - Completion-in-buffer :: [[https://github.com/minad/corfu][corfu]]
   - Completion-in-minibuffer :: [[https://github.com/minad/vertico][vertico]]
@@ -27,9 +26,36 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 - citation Management :: [[https://github.com/emacs-citar/citar][citar]]
 - knowledge/idea management :: [[https://www.orgroam.com/][org-roam]]
 
+#+BEGIN_SRC emacs-lisp :tangle early-init.el
+  ;; Disable unnecessary GUI chrome.
+  (setq
+   inhibit-startup-screen t)
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+
+  ;; Startup profiling
+  (add-hook 'emacs-startup-hook
+      	  (lambda ()
+      	    (message
+      	     "Emacs ready in %0.03f seconds with %d garbage collections"
+      	     (float-time (time-subtract after-init-time before-init-time))
+      	     gcs-done)))
+
+  (column-number-mode t)
+
+  (add-hook 'org-mode-hook
+  	  (lambda ()
+  	    (visual-line-mode +1)))
+
+  ;; Because we use NixOS' emacs overlay to install packages, don't configure
+  ;; any package sources
+  (setq package-archives nil)
+#+END_SRC
+
 * Early Initialization
 
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
+#+BEGIN_SRC emacs-lisp :tangle no
   ;;; early-init.el --- Early Initialization -*- lexical-binding: t; -*-
 
   ;; Author: Gaelan D'costa <gdcosta@gmail.com>
@@ -52,7 +78,7 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 
 I am not sure if this config will work with older versions of emacs, so I'll abort if the running version of emacs is older than a known good version.
 
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
+#+BEGIN_SRC emacs-lisp :tangle no
   (let ((minver "29.1"))
     (when (version< emacs-version minver)
       (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
@@ -65,7 +91,7 @@ I saw a config where the author temporarily set garbage collection thresholds fo
 When emacs has finished initalizing, it runs a hook we've set up to restore a more aggressive threshold.
 
 This is a pattern I have seen various people use, so it seems like a good idea.
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
+#+BEGIN_SRC emacs-lisp :tangle no
   (let (;; We will restore these values eventually.
         (normal-gc-cons-threshold gc-cons-threshold)
         (normal-gc-cons-percentage gc-cons-percentage)
@@ -87,7 +113,7 @@ We will have to restore it afterwards, otherwise we will lose core functionality
 
 This is apparently the second-most impactful startup performance hack.
 
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
+#+BEGIN_SRC emacs-lisp :tangle no
   (let (;; Normally, when emacs loads a file, it runs some regexes on the file
         ;; name to figure out what filename-based logic applies to the file being
         ;; loaded. During startup, let's disable that, but we'll have to preserve
@@ -102,20 +128,20 @@ This is apparently the second-most impactful startup performance hack.
 ** Inhibit startup screen and messages.
 Let's keep our startup clean by not displaying our startup message.
 
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq inhibit-startup-screen t)
 #+END_SRC
 
 ** UI speedups
 Disable implicit window resizing, that should only happen when the user explicitly resizes things
 
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq frame-inhibit-implied-resize nil)
 #+END_SRC
 
 Disable unnecessary GUI components on startup.
 
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq
    ;; Disable GUI elements
    menu-bar-mode nil
@@ -125,7 +151,7 @@ Disable unnecessary GUI components on startup.
 
 Also, temporarily disable font cache compaction if triggered by garbage collection.
 
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq inhibit-compacting-font-caches nil)
   (add-hook 'emacs-startup-hook
   	  (lambda ()
@@ -133,7 +159,7 @@ Also, temporarily disable font cache compaction if triggered by garbage collecti
 #+END_SRC
 
 ** Disable popup dialogs
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq use-dialog-box nil)
 #+END_SRC
 
@@ -142,7 +168,7 @@ While we're starting up, don't autosave or backup files.
 
 We will restore it after we finish loading configuration.
 
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq auto-save-default nil
         make-backup-files nil)
 
@@ -156,14 +182,14 @@ We will restore it after we finish loading configuration.
 Emacs by default manages some forms for variables and faces and places them at the end of =init.el=. Since my =init.el= is generated, this would be difficult to manage.
 
 Why do I write to the null device? This keeps my config immutable.
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 #+END_SRC
 
 ** Startup time profiling.
 Let's time and display the amount of time it takes to bring up my Emacs configuration
 
-#+BEGIN_SRC emacs-lisp :tangle early-init.el
+#+BEGIN_SRC emacs-lisp :tangle no
   (add-hook 'emacs-startup-hook
 	    (lambda ()
 	      (message "Emacs ready in %0.03f seconds with %d garbage collections."
@@ -174,7 +200,7 @@ Let's time and display the amount of time it takes to bring up my Emacs configur
 
 * Base settings
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   ;;; init.el --- Initialization -*- lexical-binding: t; -*-
 #+END_SRC
 
@@ -182,7 +208,7 @@ Let's time and display the amount of time it takes to bring up my Emacs configur
 
 Private an easy way to toggle debug mode which will set certain variables to produce each informative output. It can be set either by providing the environment variable =DEBUG= or start Emacs with =--debug-init=.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (eval-and-compile
     (when (getenv "DEBUG") (setq init-file-debug t))
     (setq debug-on-error (and (not noninteractive) init-file-debug)))
@@ -190,7 +216,7 @@ Private an easy way to toggle debug mode which will set certain variables to pro
 
 Provide XDG-compliant locations for Emacs to store and cache data.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (eval-and-compile
     (defvar gaelan/data-dir
       (if (getenv "XDG_DATA_HOME")
@@ -207,13 +233,13 @@ Provide XDG-compliant locations for Emacs to store and cache data.
 
 ** Package management
 Use generated package autoloads via package-quickstart. The actual packages are provided via the nix package this file is contained in.
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (defvar package-quickstart t)
 #+END_SRC
 
 *** Load path
 Add local and private libraries to ~load-path~.
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (eval-and-compile
     (setq load-path
 	  (append (delete-dups load-path)
@@ -225,13 +251,13 @@ Add local and private libraries to ~load-path~.
 [[https://github.com/jwiegley/use-package][use-package]] is a wonderful package from John Wiegley which makes downloading and loading and configuring emacs packaging a much more structured affair. It can optionally download missing packages and uses a single macro to load configuration and set up bindings, regular hooks, extension associations, etc... in a consistent way.
 
 The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix package also leverages use-package to know what packages it needs to download when generating an emacs package from this file.
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
      ;; Since (use-package) is a macro, we don't actually need to load it except
      ;; when we compile a new bytecode version of our emacs file.
      (eval-when-compile
        (require 'use-package))
-     (require 'diminish)                ;; if you use :diminish
-     (require 'bind-key)                ;; if you use :bind
+     ;; (require 'diminish)                ;; if you use :diminish
+     ;; (require 'bind-key)                ;; if you use :bind
 
      (eval-and-compile
        ;; By default if :ensure is non-nil it will use package.el to download the
@@ -256,7 +282,7 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
 #+END_SRC
 
 *** Keep ~user-emacs-directory~ clean.
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package no-littering
     :defer 1
     :ensure t
@@ -267,17 +293,17 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
 
 ** UX
    Always request confirmation before quitting emacs
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
      (setq confirm-kill-emacs #'y-or-n-p)
    #+END_SRC
 
    Use =y= and =n= for prompts instead of =yes= and =no=
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
      (fset #'yes-or-no-p #'y-or-n-p)
    #+END_SRC
 
    Set the default Mac modifier bindings to mirror Linux bindings
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle no
      (when (eq system-type 'darwin)
        (setq mac-option-modifier 'super
 	     mac-command-modifier 'meta))
@@ -285,24 +311,24 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
 * Appearance
 ** Mode line
 *** Position
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (column-number-mode 1)
   (line-number-mode 1)
 #+END_SRC
 ** Margins
 Set the line length to 80 characters. This has to be set via customize rather than seq for reasons I don't understand.
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package emacs
     :custom
     (fill-column 80))
 #+END_SRC
 
 Show a line indicating the end of the page, as it were
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (global-display-fill-column-indicator-mode +1)
 #+END_SRC
 ** Colour Theme
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package rebecca-theme
     :ensure t
     :demand t
@@ -316,7 +342,7 @@ Show a line indicating the end of the page, as it were
 #+END_SRC
 ** Highlight parentheses
 Visually separate nested delimiter pairs
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package rainbow-delimiters
     :ensure t
       :hook
@@ -448,7 +474,7 @@ Emacs should handle keyboard media shortcuts
 ** Clipboard management
 Integrate with external programs that handle X11/Wayland clipboards
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package xclip
     :ensure t
     :defer 2
@@ -459,7 +485,7 @@ Integrate with external programs that handle X11/Wayland clipboards
 Sometimes emacs wants to tell us something; we can integrate this with Linux'
 DBUS or OSX' notifier framework
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package alert
     :ensure t
     :custom (alert-default-style (if (eq system-type 'darwin)
@@ -469,7 +495,7 @@ DBUS or OSX' notifier framework
 * Completion / Minibuffer
 ** Consult
 Enhance emacs commands based on completion
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package consult
     :demand t
     :ensure t)
@@ -477,7 +503,7 @@ Enhance emacs commands based on completion
 ** Corfu
 Completion popups in the regular buffer
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package corfu
     :defer 1
     :commands (corfu-mode global-corfu-mode)
@@ -493,7 +519,7 @@ Run commands based on selections in the completion buffer.
 
 This is part of the vertico stack.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package embark
     :ensure t
     :bind (("C-." . emback-act)
@@ -504,7 +530,7 @@ This is part of the vertico stack.
 ** Marginalia
 Add annotations to minibuffer completions to provide you with more information about the displayed options
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package marginalia
     :demand t
     :ensure t
@@ -541,7 +567,7 @@ directory tree combination across the wire, so specifically for file navigation
 we try for basic first and partial-completion after so we can get partial
 intelligence without expending unnecessary effort.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC elisp :tangle no
   (use-package orderless
     :defer 1
     :ensure t
@@ -564,7 +590,7 @@ and you can navigate up and down.  A nice thing about it is you can
 use C-p and C-n to pick the candidate you want instead of
 contorting your input to match what you want.
 
-#+BEGIN_SRC elisp :tangle yes
+#+BEGIN_SRC elisp :tangle no
   (use-package vertico
     :commands vertico-mode
     :defer 1
@@ -595,7 +621,7 @@ contorting your input to match what you want.
 #+END_SRC
 ** which-key
 When you start a keybinding, list possible completions are and what they do
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package which-key
     :ensure t
     :defer 1
@@ -607,7 +633,7 @@ When you start a keybinding, list possible completions are and what they do
 ** Reverting
 Automatically revert when a file changes on disk; this happens a lot given my files are managed in Seafile
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package emacs
     :bind (("s-u" . revert-buffer))
     :ensure nil
@@ -615,7 +641,7 @@ Automatically revert when a file changes on disk; this happens a lot given my fi
 				(global-auto-revert-mode +1)))))
 #+END_SRC
 ** Spellchecking
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package emacs
     :defer 2
     :hook ((org-mode . (lambda ()
@@ -627,7 +653,7 @@ Automatically revert when a file changes on disk; this happens a lot given my fi
 
 Projectile is a framework for managing (usually) software development projects in a standard way, so that the same keybindings can be used to test projects, compile them, etc...
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package projectile
     :ensure t
     :defer 2
@@ -641,7 +667,7 @@ Projectile is a framework for managing (usually) software development projects i
 ** File Browsing
 A tree-based file browser for file navigation.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package treemacs
     :ensure t
     :commands treemacs)
@@ -649,7 +675,7 @@ A tree-based file browser for file navigation.
 
 Handle projects managed by projectile as well.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package treemacs-projectile
     :ensure t
     :after (treemacs projectile)
@@ -658,7 +684,7 @@ Handle projects managed by projectile as well.
 
 Use treemacs for code navigation as well.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package lsp-treemacs
     :after (treemacs lsp)
     :ensure t
@@ -669,7 +695,7 @@ Use treemacs for code navigation as well.
 ** Structured Editing
 We use smartparens for structured editing like Ruby blocks or lisp s-expressions
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package smartparens
     :ensure t
     :commands (smartparens-global-mode
@@ -692,7 +718,7 @@ We use smartparens for structured editing like Ruby blocks or lisp s-expressions
 ** grepping
 [[https://blog.burntsushi.net/ripgrep/][ripgrep]] is a grep replacement written in Rust. It is more performant and more powertful than grep.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package rg
     :bind (("C-c s" . rg-menu))
     :ensure t)
@@ -705,7 +731,7 @@ Support encryption as the basis of a number of functions
 - supporting direct GnuPG pinentry in emacs
 
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package emacs
     :ensure nil
     :custom
@@ -718,7 +744,7 @@ Support encryption as the basis of a number of functions
 * Software Development
 ** envrc
 Project-specific environment variables via =direnv=
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package direnv
     :ensure t
     :defer 1
@@ -729,7 +755,7 @@ Project-specific environment variables via =direnv=
 
 ** editorconfig
 A editor-agnostic way to maintain project coding styles
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package editorconfig
     :ensure t
     :defer 1
@@ -738,7 +764,7 @@ A editor-agnostic way to maintain project coding styles
 #+END_SRC
 
 ** flycheck
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package flycheck
     :ensure t
     :defer 2
@@ -749,7 +775,7 @@ A editor-agnostic way to maintain project coding styles
 ** Just task runner
 Like Make, but less warts
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   ;; Language support
   (use-package just-mode
     :ensure t
@@ -763,7 +789,7 @@ Like Make, but less warts
 ** Language Server Protocol
 IDE-like functionality such as intellisense, debugging
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package lsp-mode
     :ensure t
     :commands (lsp lsp-deferred)
@@ -786,7 +812,7 @@ IDE-like functionality such as intellisense, debugging
 ** Version Control
 Nicer Git support
 *** magit
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package magit
     :ensure t
     :bind (("C-x g" . magit-status)
@@ -804,7 +830,7 @@ Nicer Git support
 
 Have nicer integrations with online git sites like gitlab and github
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package forge
     :ensure t
     :defer 2
@@ -814,7 +840,7 @@ Have nicer integrations with online git sites like gitlab and github
     (add-to-list 'forge-alist '("git.internal.tulip.io" "git.internal.tulip.io/api/v4" "git.internal.tulip.io" forge-gitlab-repository)))
 #+END_SRC
 ** Vibe Coding
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package aidermacs
     :ensure t
     :bind ("C-c v" . aidermacs-transient-menu))
@@ -833,7 +859,7 @@ Have nicer integrations with online git sites like gitlab and github
 #+END_SRC
 * Programming Language support / environments
 ** C/C++
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package ccls
     :ensure t
     :after lsp
@@ -843,14 +869,14 @@ Have nicer integrations with online git sites like gitlab and github
 #+END_SRC
 
 ** Elm
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package elm-mode
     :ensure t
     :mode "\\.elm\\'")
 #+END_SRC
 
 ** Java
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package lsp-java
     :ensure t
     :mode "\\.java\\'"
@@ -858,14 +884,14 @@ Have nicer integrations with online git sites like gitlab and github
 #+END_SRC
 
 ** Kotlin
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package kotlin-mode
     :ensure t
     :mode "\\.kts?\\'")
 #+END_SRC
 
 ** Nix
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package nix-mode
     :ensure t
     :mode "\\.nix\\'")
@@ -874,7 +900,7 @@ Have nicer integrations with online git sites like gitlab and github
 
 Support flycheck syntax checking
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package flycheck-clj-kondo
     :after (clojure-mode flycheck)
     :hook (clojure-mode-hook . (lambda ()
@@ -882,7 +908,7 @@ Support flycheck syntax checking
     :ensure t)
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package clojure-mode
     :mode (("\\.\\(clj\\|bb\\)\\'" . clojure-mode)
 	   ("\\.cljs\\'" . clojurescript-mode)
@@ -890,7 +916,7 @@ Support flycheck syntax checking
     :ensure t)
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package cider
     :ensure t
     :bind ("C-c C-x C-j C-j" . cider-jack-in))
@@ -905,20 +931,20 @@ Support flycheck syntax checking
     :ensure t)
 #+END_SRC
 ** Idris
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   ;; The book "Type-Driven Development with Idris" still uses Idris 1
   (use-package idris-mode
       :ensure t
       :mode "\\.idr\\'")
 #+END_SRC
 ** PHP
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package php-mode
     :ensure t
     :mode "\\.php\\'")
 #+END_SRC
 ** Racket / Scheme
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   ;; Core REPL environment
   (use-package geiser
     :commands (run-geiser)
@@ -950,34 +976,34 @@ Support flycheck syntax checking
     :mode (("\\.rs\\'" . rustic-mode)))
 #+END_SRC
 ** Terraform
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package terraform-mode
       :ensure t
       :mode "\\.tf\\'")
 #+END_SRC
 ** YAML
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package yaml-mode
     :ensure t
     :mode "\\.ya?ml\\'")
 #+END_SRC
 * SRE / Devops
 ** Kubernetes
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package kubernetes
     :ensure t
     :commands kubernetes-overview)
 #+END_SRC
 ** VTerm
 A more performant terminal that can handle interactive programs
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package vterm
     :commands (vterm vterm-other-window)
     :ensure t)
 #+END_SRC
 * Document editing and viewing
 ** EPUB books
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package nov
     :ensure t
     :mode ("\\.epub\\'" . nov-mode))
@@ -986,13 +1012,13 @@ A more performant terminal that can handle interactive programs
 ** LaTeX
 Support LaTeX
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package auctex
     :ensure t
     :mode "\\.tex\\'")
 #+END_SRC
 ** PDF  documents
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package pdf-tools
     :ensure t
     :mode ("\\.pdf\\'" . pdf-view-mode))
@@ -1000,7 +1026,7 @@ Support LaTeX
 * Finance?
 Let's use Emacs for accounting now. Let's try Ledget
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package ledger-mode
     :ensure t
     :mode ("\\.\\(h?ledger\\|journal\\)\\'" . ledger-mode)
@@ -1017,7 +1043,7 @@ Let's use Emacs for accounting now. Let's try Ledget
 Let's try out two different mail clients and see how I like them.
 
 Note: These don't fetch mail from remote mail hosts like gmail. Instead, they browse and view mail from a local mail store.
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   ;; Google requires us to use XOAUTH2 for logging into IMAP and SMTP
   ;;
   ;; I use SMTP directly in emacs, so I will have to configure this.
@@ -1134,7 +1160,7 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
 ** Large Language Models
 If you can't beat them; join them. Lean on the stochastic parrot when I want to generate text without caring aout whatever I am crafting, or when I want something good enough because I don't know how to craft it myself.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package ellama
     :ensure t
     :commands ellama-transient-main-menu)
@@ -1150,7 +1176,7 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
   		   :models '(mistral:latest codellama:latest llama3.1))))
 #+END_SRC
 ** Org
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
       (use-package org
         :ensure t
         :hook (org-mode-hook . (lambda ()
@@ -1194,7 +1220,7 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
 #+END_SRC
 *** org-crypt
 Allow for partial encryption of org files (i.e. specific headers), using a special tag.
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package org-crypt
     :ensure nil
     :after (org)
@@ -1235,12 +1261,6 @@ An implementation of Zettelkasten for org, inspired by org-roam
   	 ("C-c j j" . (lambda ()
   			(interactive)
   			(org-roam-dailies-capture-today nil "j")))
-  	 ("C-c j k" . (lambda ()
-  			(interactive)
-  			(org-roam-dailies-capture-today nil "k")))
-  	 ("C-c j l" . (lambda ()
-  			(interactive)
-  			(org-roam-dailies-capture-today nil "l")))
   	 ;; These combos find the N next or previous notes, regardless of
   	 ;; whether days are skipped.
   	 ("C-c j n" . org-roam-dailies-goto-next-note)
@@ -1259,18 +1279,27 @@ An implementation of Zettelkasten for org, inspired by org-roam
     :custom
     (org-roam-directory "~/Documents/brain/notes")
     (org-roam-dailies-directory "journal/")
-    (org-roam-node-display-template
-     (concat
-      ;; Org-roam template format
-      ;; ${title:*} -- print the title, using up as much free space as possible
-      "${title:*}"
-      ;; We use emacs properties to attach font colouring to our tag list
-      ;; We give a fixed amount of width to our node's tag list.
-      (propertize "${tags:20}" 'face 'org-tag)))
+    ;; (org-roam-node-display-template
+    ;;  (concat
+    ;; Org-roam template format
+    ;; ${title:*} -- print the title, using up as much free space as possible
+    ;;  "${title:*}"
+    ;; We use emacs properties to attach font colouring to our tag list
+    ;; We give a fixed amount of width to our node's tag list.
+    ;;  (propertize "${tags:20}" 'face 'org-tag)))
     (org-roam-capture-templates
-     '(("b" "business" plain "%?"
+     '(("a" "author" plain "%?"
         :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-  			 "#+TITLE: ${title}\n#+FILETAGS: :business:"))
+  			 "#+TITLE: ${title}\n#+FILETAGS: :author:")
+        :unnarrowed t)
+       ("b" "business" plain "%?"
+        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+  			 "#+TITLE: ${title}\n#+FILETAGS: :business:")
+        :unnarrowed t)
+       ("f" "fleeting" plain "%?"
+        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+  			 "#+TITLE: ${title}\n#+FILETAGS: :fleeting:")
+        :unnarrowed t)     
        ("l" "literature" plain
         (file "~/Documents/brain/templates/literature.org")
         :target (file "${citar-citekey}.org")
@@ -1286,16 +1315,8 @@ An implementation of Zettelkasten for org, inspired by org-roam
         (file "~/Documents/brain/templates/project.org")
         :target (file+olp "%<%Y%m%d%H%M%S>-${slug}.org" ("PLAN [/] ${title} :PROJECT:")))))
     (org-roam-dailies-capture-templates
-     '(("j" "Regular Daily Bullet" plain
+     '(("j" "Daily Bullet" plain
         "** %<%0H:%M> %?"
-        :target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:" ("Log"))
-        :unnarrowed t)
-       ("l" "Knowledge Daily Bullet" plain
-        "** %<%0H:%M> %? :fleeting:"
-        :target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:" ("Log"))
-        :unnarrowed t)
-       ("k" "Tension Daily Bullet" plain
-        "** %<%0H:%M> %? :tension:"
         :target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:" ("Log"))
         :unnarrowed t)
        ("d" "Morning Planning" plain
@@ -1320,7 +1341,7 @@ An implementation of Zettelkasten for org, inspired by org-roam
 #+END_SRC
 
 Also enable a UI that makes overseeing my knowledge base easier.
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package websocket
     :after org-roam)
 
@@ -1336,7 +1357,7 @@ Also enable a UI that makes overseeing my knowledge base easier.
 #+END_SRC
 
 navigating my org-roam corpus will involve me clicking through a bunch of links and then realizing I need to back-track. =winner-mode= is a simple way of implementing browser-like history, by allowing me to keep track of and navigate backwards and forwards through a history of what buffers were shown in each window.
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package emacs
     :ensure nil
     :demand 2
@@ -1346,7 +1367,7 @@ navigating my org-roam corpus will involve me clicking through a bunch of links 
 
 
 Use deft for full-text search
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package deft
     :ensure t
     :after (org-roam)
@@ -1381,7 +1402,7 @@ Use deft for full-text search
 #+END_SRC
 *** org-noter
 A way to annotate PDF/ePubs using org mode
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package org-noter
     :ensure t
     :after (nov pdf-tools)
@@ -1391,7 +1412,7 @@ A way to annotate PDF/ePubs using org mode
 *** org-transclusion
 Block-level editing/embedding, approximating the way Roam/logseq do it
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package org-transclusion
     :after org
     :ensure t
@@ -1403,7 +1424,7 @@ I am using the new [[https://orgmode.org/manual/Citations.html][org-cite]] syste
 
 Allow citar to work with org-roam particulars, including the ability to work at org-roam node levels (file or header IDs)
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package citar-org-roam
     :ensure t
     :bind (("C-c n n" . citar-create-note))
@@ -1420,7 +1441,7 @@ Be able to fetch (and even set) events in my google calendar.
 
 Because org-gcal is stupid and because work is paranoid, I can only control one calendar at a time. As such I've set my work calendar to control my personal one.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package plstore
     :ensure nil
     :defer 2
@@ -1447,7 +1468,7 @@ Because org-gcal is stupid and because work is paranoid, I can only control one 
 ** Tulip work integration
 I use JIRA at work; let's see if I can feed these into my task management flow
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package org-jira
     :ensure t
     :defer 2
@@ -1468,7 +1489,7 @@ I use JIRA at work; let's see if I can feed these into my task management flow
 
 Also, I use slack; get at least important messages
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package slack
     :ensure t
     :config
