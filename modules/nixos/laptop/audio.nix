@@ -1,3 +1,5 @@
+{ pkgs, ... }:
+
 {
   # pipewire is the new pulseaudio
   # rtkit is optional for sound but recommended for some reason
@@ -9,4 +11,9 @@
     # Enable PulseAudio compatibility
     pulse.enable = true;
   };
+
+  # I always need a graphical volume controller, so install it
+  environment.systemPackages = [
+    pkgs.pavucontrol
+  ];
 }
