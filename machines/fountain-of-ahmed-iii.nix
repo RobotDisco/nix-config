@@ -60,6 +60,7 @@
         "calibre"
         "chef-workstation"
         "discord"
+        "fujitsu-scansnap-home"
         "kobo"
         "orbstack"
         "seadrive"
@@ -68,17 +69,12 @@
         "slack"
         "sunsama"
         "tidal"
+        "uhk-agent"
         "vivaldi"
         "whatsapp"
-        "zotero"
-        # Work already installs/updates these packages
-        "mattermost"
-        # Stuff from drivers tap
-        "fujitsu-scansnap-home"
-        "RobotDisco/cask/kensingtonworks"
-        "uhk-agent"
         "yubico-authenticator"
         "yubico-yubikey-manager"
+        "zotero"
       ];
 
       # Upgrade brew packages whenever we run `darwin switch`
