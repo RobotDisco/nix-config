@@ -28,8 +28,7 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
   ;; Disable unnecessary GUI chrome.
-  (setq
-   inhibit-startup-screen t)
+  (setq inhibit-startup-screen t)
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
@@ -182,7 +181,7 @@ We will restore it after we finish loading configuration.
 Emacs by default manages some forms for variables and faces and places them at the end of =init.el=. Since my =init.el= is generated, this would be difficult to manage.
 
 Why do I write to the null device? This keeps my config immutable.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 #+END_SRC
 
@@ -303,10 +302,10 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
    #+END_SRC
 
    Set the default Mac modifier bindings to mirror Linux bindings
-   #+BEGIN_SRC emacs-lisp :tangle no
+   #+BEGIN_SRC emacs-lisp :tangle yes
      (when (eq system-type 'darwin)
        (setq mac-option-modifier 'super
-	     mac-command-modifier 'meta))
+             mac-command-modifier 'meta))
    #+END_SRC
 * Appearance
 ** Mode line
@@ -891,7 +890,7 @@ Have nicer integrations with online git sites like gitlab and github
 #+END_SRC
 
 ** Nix
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package nix-mode
     :ensure t
     :mode "\\.nix\\'")
