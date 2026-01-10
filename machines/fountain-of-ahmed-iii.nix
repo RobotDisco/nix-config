@@ -23,7 +23,7 @@
     };
 
     home-manager = {
-      users."gaelan" = import ../home-manager/profiles/gaelan-work.nix;
+      users."gaelan" = import ../home-manager/profiles/gaelan-work;
     };
 
     # Allow Gaelan to set up caches.
