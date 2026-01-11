@@ -165,16 +165,16 @@ Also, temporarily disable font cache compaction if triggered by garbage collecti
 ** Temporarily disable autosave and backups
 While we're starting up, don't autosave or backup files.
 
-We will restore it after we finish loading configuration.
+We will restore autosaves after we finish loading configuration.  We won't restore backup files as they have currently proven to be more trouble than it's worth; where it matters, seafile handles the edit history.
 
 #+BEGIN_SRC emacs-lisp :tangle no
   (setq auto-save-default nil
         make-backup-files nil)
 
   (add-hook 'emacs-startup-hook
-  	  (lambda ()
-  	    (setq auto-save-default t
-  		  make-backup-files t)))
+            (lambda ()
+              (setq auto-save-default t
+                    make-backup-files nil)))
 #+END_SRC
 
 ** Set location of custom file
