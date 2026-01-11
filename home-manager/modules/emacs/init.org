@@ -41,8 +41,6 @@ This configuration is built as a nix package; as such, it assumes that nix has p
       	     (float-time (time-subtract after-init-time before-init-time))
       	     gcs-done)))
 
-  (column-number-mode t)
-
   (add-hook 'org-mode-hook
   	  (lambda ()
   	    (visual-line-mode +1)))
@@ -302,7 +300,7 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
    #+END_SRC
 
    Set the default Mac modifier bindings to mirror Linux bindings
-   #+BEGIN_SRC emacs-lisp :tangle yes
+   #+BEGIN_SRC emacs-lisp :tangle early-init.el
      (when (eq system-type 'darwin)
        (setq mac-option-modifier 'super
              mac-command-modifier 'meta))
@@ -310,7 +308,7 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
 * Appearance
 ** Mode line
 *** Position
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (column-number-mode 1)
   (line-number-mode 1)
 #+END_SRC
@@ -566,7 +564,7 @@ directory tree combination across the wire, so specifically for file navigation
 we try for basic first and partial-completion after so we can get partial
 intelligence without expending unnecessary effort.
 
-#+BEGIN_SRC elisp :tangle no
+#+BEGIN_SRC elisp :tangle yes
   (use-package orderless
     :defer 1
     :ensure t
@@ -576,7 +574,7 @@ intelligence without expending unnecessary effort.
     (completion-styles '(orderless basic))
     ;; TRAMP can't use orderless at all, so override it to use basic and
     ;; partial completion (like /u/s/l for /usr/share/local)
-    (completion-category-overrides '((file (styles basic partial-completion)))))
+    (completion-category-overrides '((file (styles partial-completion)))))
 #+END_SRC
 ** Vertico
 Vertico adds a good minibuffer UX to Emacs' default completion framework.
@@ -589,7 +587,7 @@ and you can navigate up and down.  A nice thing about it is you can
 use C-p and C-n to pick the candidate you want instead of
 contorting your input to match what you want.
 
-#+BEGIN_SRC elisp :tangle no
+#+BEGIN_SRC elisp :tangle yes
   (use-package vertico
     :commands vertico-mode
     :defer 1
