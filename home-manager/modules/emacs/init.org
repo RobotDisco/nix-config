@@ -1421,7 +1421,7 @@ I am using the new [[https://orgmode.org/manual/Citations.html][org-cite]] syste
 
 Allow citar to work with org-roam particulars, including the ability to work at org-roam node levels (file or header IDs)
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package citar-org-roam
     :ensure t
     :bind (("C-c n n" . citar-create-note))
