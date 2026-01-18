@@ -1338,7 +1338,7 @@ An implementation of Zettelkasten for org, inspired by org-roam
 #+END_SRC
 
 Also enable a UI that makes overseeing my knowledge base easier.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package websocket
     :after org-roam)
 
