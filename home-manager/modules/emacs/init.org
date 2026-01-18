@@ -1000,7 +1000,7 @@ A more performant terminal that can handle interactive programs
 #+END_SRC
 * Document editing and viewing
 ** EPUB books
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package nov
     :ensure t
     :mode ("\\.epub\\'" . nov-mode))
@@ -1015,7 +1015,7 @@ Support LaTeX
     :mode "\\.tex\\'")
 #+END_SRC
 ** PDF  documents
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package pdf-tools
     :ensure t
     :mode ("\\.pdf\\'" . pdf-view-mode))
@@ -1399,7 +1399,7 @@ Use deft for full-text search
 #+END_SRC
 *** org-noter
 A way to annotate PDF/ePubs using org mode
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-noter
     :ensure t
     :after (nov pdf-tools)
