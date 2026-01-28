@@ -52,11 +52,12 @@
       myLib = import ./lib {
         inherit
           lib
+          darwin
           nixpkgs
           emacs-overlay
           home-manager
+          inputs
           ;
-        inherit (inputs) darwin nixpkgs-unstable;
       };
       inherit (myLib) forAllSystems darwinSystem nixosSystem;
     in
@@ -124,7 +125,6 @@
             inherit (inputs) agenix robotdisco-secrets;
           };
           homeModules = [ ];
-          homeSpecialArgs = { inherit inputs; };
         };
       };
 

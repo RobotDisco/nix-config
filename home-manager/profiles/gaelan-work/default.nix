@@ -6,6 +6,7 @@ in
 {
   imports = [
     ./aerospace.nix
+    ./claude.nix
   ];
 
   config = {

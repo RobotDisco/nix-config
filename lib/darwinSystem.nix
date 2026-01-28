@@ -4,12 +4,10 @@
 # integration, and module setup automatically. You just provide the basic
 # system configuration.
 {
-  lib,
-  nixpkgs,
-  nixpkgs-unstable,
-  emacs-overlay,
   darwin,
+  emacs-overlay,
   home-manager,
+  inputs,
   ...
 }:
 
@@ -25,7 +23,9 @@
 
 let
   # Load emacs package overrides for when emacs-overlay breaks
-  emacsOverrides = (import ./emacs-overrides.nix { inherit nixpkgs nixpkgs-unstable; }) system;
+  emacsOverrides =
+    (import ./emacs-overrides.nix { inherit (inputs) nixpkgs nixpkgs-unstable; })
+      system;
 
   # Compose all overlays with overrides for broken packages
   overlays = [
@@ -40,7 +40,7 @@ let
   ];
 in
 darwin.lib.darwinSystem {
-  inherit system specialArgs;
+  inherit system;
   modules = [
     # Always include the overlays we've defined in our flake, as we expect to
     # use them if we've bothered to define them
@@ -65,9 +65,10 @@ darwin.lib.darwinSystem {
       home-manager.sharedModules = [ ../home-manager/modules ] ++ homeModules;
     }
     {
-      # Supply home-manager with special arguments
-      home-manager.extraSpecialArgs = homeSpecialArgs;
+      # Supply home-manager with special arguments. Always include flake inputs.
+      home-manager.extraSpecialArgs = inputs // homeSpecialArgs;
     }
   ]
   ++ modules;
+  specialArgs = inputs // specialArgs;
 }

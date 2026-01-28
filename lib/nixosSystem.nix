@@ -4,11 +4,11 @@
 # integration, and module setup automatically. You just provide the basic
 # system configuration.
 {
-  lib,
   nixpkgs,
   nixpkgs-unstable,
   emacs-overlay,
   home-manager,
+  inputs,
   ...
 }:
 
@@ -31,20 +31,14 @@ let
     # Include the community emacs overlay for latest packages
     emacs-overlay.overlays.default
 
-    # Override any broken emacs packages with working versions
-    (_final: _prev: emacsOverrides)
-
     # Add our custom packages
     (final: _prev: {
       sunsama = final.callPackage ../packages/sunsama.nix { };
     })
-
-    # Include our custom emacs configuration overlay
-    (import ../overlays/emacs)
   ];
 in
 nixpkgs.lib.nixosSystem {
-  inherit system specialArgs;
+  inherit system;
   modules = [
     # Always include the overlays we've defined in our flake, as we expect to
     # use them if we've bothered to define them
@@ -69,9 +63,10 @@ nixpkgs.lib.nixosSystem {
       home-manager.sharedModules = [ ../home-manager/modules ] ++ homeModules;
     }
     {
-      # Supply home-manager with special arguments
-      home-manager.extraSpecialArgs = homeSpecialArgs;
+      # Supply home-manager with special arguments. Always include flake inputs.
+      home-manager.extraSpecialArgs = inputs // homeSpecialArgs;
     }
   ]
   ++ modules;
+  specialArgs = inputs // specialArgs;
 }
