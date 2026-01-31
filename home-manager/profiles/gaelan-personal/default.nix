@@ -7,6 +7,7 @@ in
   imports = [
     ./bitwarden.nix
     ./emacs.nix
+    ./claude.nix
     ./games.nix
     ./gammastep.nix
     ./keyboard.nix
