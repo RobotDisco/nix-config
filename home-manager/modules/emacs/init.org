@@ -809,7 +809,7 @@ IDE-like functionality such as intellisense, debugging
 ** Version Control
 Nicer Git support
 *** magit
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package magit
     :ensure t
     :bind (("C-x g" . magit-status)
@@ -827,7 +827,7 @@ Nicer Git support
 
 Have nicer integrations with online git sites like gitlab and github
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package forge
     :ensure t
     :defer 2
