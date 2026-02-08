@@ -741,7 +741,7 @@ Support encryption as the basis of a number of functions
 * Software Development
 ** envrc
 Project-specific environment variables via =direnv=
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package direnv
     :ensure t
     :defer 1
