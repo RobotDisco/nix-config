@@ -57,7 +57,6 @@ in
       unzip
     ];
     shellAliases = {
-      emacs = "${emacsPackage}/Applications/Emacs.app/Contents/MacOS/Emacs";
       erecovers = "find ~/Documents/brain -name '#*#' -print";
     };
   };
