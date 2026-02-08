@@ -1464,7 +1464,7 @@ Because org-gcal is stupid and because work is paranoid, I can only control one 
 ** Tulip work integration
 I use JIRA at work; let's see if I can feed these into my task management flow
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-jira
     :ensure t
     :defer 2
