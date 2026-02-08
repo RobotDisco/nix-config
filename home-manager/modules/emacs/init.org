@@ -1207,13 +1207,12 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
         (org-capture-templates
          '(("t" "Task" entry (file "~/Documents/gtd/inbox.org") "* TODO %?")))
         (org-refile-targets
-         '((("~/Documents/gtd/gtd.org") . (:maxlevel . 2))
-           (("~/Documents/gtd/inbox.org") . (:level . 1))))
+         '((("~/Documents/gtd/gtd.org") . (:level . 1))))
         (org-todo-keywords
          ;; Sequence for individual items, extended for work jira workflow.
          '((sequence "TODO(q)" "GROOM" "NEXT(w)" "DOING(e)" "WAIT(r@/!)" "|" "DONE(t!)" "HALTED(y@)")
            ;; Sequence for personal projects.
-           (sequence "PLAN(a)" "READY(s)" "ACTIVE(d)" "PAUSED(f@/!)" "RETRO(g)" "|" "DONE(!)" "HALTED(@)"))))
+           (sequence "PROJECT(p) PLAN(a)" "READY(s)" "ACTIVE(d)" "PAUSED(f@/!)" "RETRO(g)" "|" "DONE(!)" "HALTED(@)"))))
 #+END_SRC
 *** org-crypt
 Allow for partial encryption of org files (i.e. specific headers), using a special tag.
