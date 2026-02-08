@@ -993,7 +993,7 @@ Support flycheck syntax checking
 #+END_SRC
 ** VTerm
 A more performant terminal that can handle interactive programs
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package vterm
     :commands (vterm vterm-other-window)
     :ensure t)
