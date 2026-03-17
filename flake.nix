@@ -142,7 +142,7 @@
       devShells = import ./devshells.nix { inherit nixpkgs inputs forAllSystems; };
 
       # Run ~nix fmt~ to use this package to format nix files
-      formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixfmt-rfc-style);
+      formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixfmt);
 
       packages."x86_64-linux" =
         let

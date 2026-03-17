@@ -104,7 +104,7 @@ nix flake lock --override-input <input> path:../<input-path>
 
 ** Pre-commit Hooks
 Pre-commit hooks run automatically and include:
-- Format checking with nixfmt-rfc-style
+- Format checking with nixfmt
 - Dead code detection with deadnix
 - Static analysis with statix
 - Nix language server checks with nil

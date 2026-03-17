@@ -155,7 +155,7 @@ The development environment includes local linting and formatting tools (no exte
 - **deadnix**: Detect unused function inputs
 - **flake-checker**: Detect unsupported NixOS versions
 - **nil**: Nix language server checks
-- **nixfmt-rfc-style**: RFC-compliant formatting
+- **nixfmt**: RFC-compliant formatting
 - **statix**: Nix static analysis
 
 ## Pre-commit Hooks

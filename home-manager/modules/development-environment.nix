@@ -181,7 +181,7 @@ in
           # Nix LSP
           pkgs.nil
           # Nix linter
-          pkgs.nixfmt-rfc-style
+          pkgs.nixfmt
           # Better than grep
           pkgs.ripgrep
         ];

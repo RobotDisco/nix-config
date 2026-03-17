@@ -23,7 +23,7 @@ forAllSystems (
         deadnix
         flake-checker
         nil
-        nixfmt-rfc-style
+        nixfmt
         statix
 
         # Development helper scripts

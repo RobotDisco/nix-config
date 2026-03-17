@@ -9,7 +9,7 @@ forAllSystems (
       deadnix = "${pkgs.deadnix}/bin/deadnix";
       flake-checker = "${pkgs.flake-checker}/bin/flake-checker";
       nil = "${pkgs.nil}/bin/nil";
-      nixfmt = "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
+      nixfmt = "${pkgs.nixfmt}/bin/nixfmt";
       statix = "${pkgs.statix}/bin/statix";
     };
   in
@@ -22,7 +22,7 @@ forAllSystems (
             deadnix
             flake-checker
             nil
-            nixfmt-rfc-style
+            nixfmt
             statix
           ];
         }
