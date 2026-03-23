@@ -165,180 +165,148 @@ nix build .#checks.x86_64-linux.lint-check --no-link
 nix flake check
 #+END_SRC
 
-* Architecture and Design
+* Getting Into Nix
 
-** Library Structure (~lib/~)
-The ~lib/~ directory contains self-contained helper functions and system builders:
+Nix has a reputation for poor documentation and a steep learning curve.
+This section maps out what to learn, in what order, and where to find
+the resources that actually helped. The goal is to save you the
+flailing.
 
-- ~default.nix~ - Main library entry point that re-exports all functions
-- ~nixosSystem.nix~ - Self-contained NixOS system builder with automatic overlay composition
-- ~darwinSystem.nix~ - Self-contained macOS system builder with automatic overlay composition  
-- ~emacs-overrides.nix~ - Handles broken emacs-overlay packages by overriding with stable versions
-- ~scanPaths.nix~ - Auto-imports all ~.nix~ files and directories from a path
+** The Nix Language First
 
-** System Builder Design
-The system builders (~nixosSystem.nix~ and ~darwinSystem.nix~) are designed to be self-contained and handle all complexity automatically:
+Before anything else: Nix is a programming language. Not a config
+format. A small, pure, lazy, functional language where everything
+evaluates to a value and nothing has side effects. The "configuration"
+you write is really just data — the Nix package manager interprets it
+later.
 
-- **Overlay composition**: Automatically composes emacs-overlay, emacs-overrides, custom packages, and emacs configuration
-- **Emacs package management**: Handles broken emacs-overlay packages by overriding with stable nixpkgs versions
-- **Home-manager integration**: Configures home-manager with sensible defaults and shared modules
-- **Argument forwarding**: Uses the common Nix pattern of accepting more arguments than needed and forwarding the complete set
+Three things to internalise early:
 
-** Library Argument Forwarding Pattern
-The library uses a common Nix pattern where ~lib/default.nix~ accepts more arguments than it uses (~nixpkgs~, ~emacs-overlay~, etc.) and forwards the complete argument set to system builders. This allows:
+1. *Attribute sets are just dictionaries.* ~{ foo = 1; bar = 2; }~ is a
+   record. ~{ inherit foo; }~ is shorthand for ~{ foo = foo; }~ where
+   ~foo~ is already in scope.
 
-- Consistent argument passing without manual filtering
-- Each function extracts only the parameters it declares
-- Extra arguments are safely ignored due to the ~...~ parameter
-- Maintainable code that doesn't require argument restructuring
+2. *Functions always take one argument.* ~{ a, b, c, ... }:~ is
+   destructuring a single attrset argument — not three arguments. The
+   ~...~ means "accept extra keys without error." ~lib.foo a b c~ is
+   currying: each application returns a new function until all arguments
+   are satisfied.
 
-* Nix Notes and primers
-** Read the Nix Pills. Over and over and over.
-   https://nixos.org/guides/nix-pills/ is the best resource I have found for learning the Nix language.
+3. *~import~ is not magic.* ~import ./foo.nix { bar = baz; }~ loads the
+   file as a function and calls it with that argument. A directory
+   import loads ~default.nix~ inside it. Nothing is special — it is
+   just code.
 
-   I still find it difficult to comprehend because it's not always clear to me what the point of certain concepts are.
+Best resources for the language:
 
-   For example, the override pattern, the call pattern, etc... are patterns that seem to have been developed /organically/. There's nothing special in in the language about them, they're simply a best practice in defining and calling functions in a way other people can assume, or a field in an attribute that is idiomatic.
+- [[https://nixos.org/guides/nix-pills/][Nix Pills]] — the classic deep-dive, written as a series of
+  experiments. Dense but worth re-reading as your understanding grows.
+  Patterns like ~callPackage~, ~override~, and ~overrideAttrs~ are not
+  language keywords — they are conventions that emerged organically and
+  Nix Pills explains where they come from.
+- [[https://nix.dev/][nix.dev]] — best-practices-oriented tutorials and reference.
+  Good complement to Nix Pills.
+- [[https://zero-to-nix.com/][Zero to Nix]] — gentler on-ramp from Determinate Systems, good
+  if Nix Pills feels too steep at first.
 
-   I like to browse over the documents every so often as my gradual exposure to these concepts become more clear as I finally digest the earlier bits.
-** Nix is a pure functional language
-   The system is often written in a weird way, but ultimately, Nix is a pure functional language in the style of Haskell.
+** The NixOS Module System
 
-   What this means is that everything is evaluated top-down, and that everything returned is a data structure. If something looks like it does something imperative (contains shell script text, for example, it is likely a data structure that describes something that will actually get performed later, in a layer way above what I likely will ever be exposed to.
-** Nix attribute sets are dictionaries
-   A lot of what I write are basically dictionaries or hashes, but the way Nix writes them they look like assignment statements.
+The module system is what makes NixOS (and home-manager) composable.
+Every ~.nix~ file in this repo that has ~options~ and ~config~ blocks is
+a module. Understanding the split — ~options~ declares what can be set,
+~config~ sets it, ~lib.mkIf~ makes it conditional — unlocks reading any
+NixOS or home-manager config.
 
-   For example:
-   #+BEGIN_SRC
-   {
-     attr1 = value1;
-     attr2 = value2;
-   }
-   #+END_SRC
-   This is just a record / dictionary / etc... And of course, it is immutable, since Nix is a pure functional language.
-** Nix really leverages curried functions
-     I don't know how to explain this succinctly.
+- [[https://nixos.org/manual/nixos/stable/][NixOS Manual]] — the module system chapter is the essential read.
+- [[https://wiki.nixos.org/][NixOS Wiki]] — community wiki with practical examples. More
+  approachable than the manual for specific topics.
+- [[https://search.nixos.org/options][NixOS option search]] — indispensable for finding what options
+  exist and what they do.
+- [[https://search.nixos.org/packages][NixOS package search]] — find packages and their attribute names.
 
-     All functions in Nix take one argument.
+** Flakes
 
-     A nix argument can be a function itself
+Flakes are the de-facto way most people structure Nix projects today,
+though they have a controversial history — see [[https://jade.fyi/blog/flakes-arent-real/][Nix Flakes Aren't Real]]
+for context on what they are and aren't. They are not necessarily the
+right choice for purely Nix derivations, but they are very convenient
+for personal machine/user configurations like this one: they provide
+explicit dependency pinning via ~flake.lock~, a standard entry point
+in ~flake.nix~, and a clean way to wire together NixOS, nix-darwin,
+home-manager, and other inputs.
 
-     Nix functions are often written to take a function do something intermediate, and then return a derivation of that work and its one argument which is another function.
+The key mental model: ~inputs~ are versioned dependencies (other
+flakes), ~outputs~ are what this flake provides (system configs,
+packages, dev shells). Everything is pinned in ~flake.lock~.
 
-     Arguably, this is how _all_ nix functions work.
+- [[https://nixos-and-flakes.thiscute.world/][NixOS and Flakes Book]] by Ryan Yin — the best single resource for
+  learning NixOS + flakes + home-manager together. Book-length, clearly
+  written, and kept up to date. Start here for a structured path.
+- [[https://nix.dev/concepts/flakes][nix.dev flakes reference]] — concise reference once you have the
+  basics.
 
-     When you call a function that looks like ~myThreeArgumentFunction a b c~, is actually understood by the compiler as:
-     #+BEGIN_SRC
-       myThreeArgumentFunction a: b: c:
-         a + b + c
-     #+END_SRC
+** Home-manager
 
-     =(myThreeArgumentFunction a:= itself is a function that takes in some value =a= returns some magical intermediate function which takes in a value =b=, which returns a function that takes in some value =c= and returns the sum of all of these values.
+Home-manager applies the NixOS module system to user-level
+configuration: dotfiles, user packages, and user services. It uses
+exactly the same ~options~/~config~/~lib.mkIf~ patterns as NixOS —
+once you understand one, the other follows. In this repo, reusable
+modules live in ~home-manager/modules/~ and per-machine user config
+lives alongside the machine config in ~machines/<host>/~.
 
-     Since nix is a strongly typed language, if =a=, =b= and =c= were numbers, they will be numbers to all these respective intermediate functions.
+- [[https://nix-community.github.io/home-manager/][Home-manager manual]]
+- [[https://nix-community.github.io/home-manager/options.xhtml][Home-manager option reference]] — searchable list of every option.
+  Keep this open while writing home-manager config.
 
-     There's something funky involved here called a closure, where I know in haskell you can do something to take a function like this and break off one of the intermediate functions, which will inherently remember the parameter pass to it and do the right thing with that real value, but you still have to eventually call the intermediate function with the rest of the arguments, even piecemeal by piecemeal. It's like each of these is a partially concrete version of the general function?
+** Overlays
 
-     This is done transparently as far as you, a user of that function are concerned. So when just _using_ functions you don't have to think about it, or just go "hey, I guess I need to supply my own function here which maybe takes a function and I just have to invoke it in the right place."
+Overlays are how you extend or override the nixpkgs package set. The
+~final: prev:~ signature works like this:
 
-     But when writing the function in this style, you have to be aware of that. You have to think about that potential composition.
+- Use ~final~ when you are just /referencing/ a package — e.g. listing
+  it as a build input or dependency. ~final~ gives you the fully
+  resolved package set, so you get any version that other overlays may
+  have modified.
+- Use ~prev~ when you are /deriving something from/ a package — e.g.
+  calling ~overrideAttrs~ to modify it. You need the concrete base
+  implementation to build on, and using ~final~ here risks an infinite
+  loop if the package is defined in terms of itself.
 
-     I assume this is powerful, but honestly I don't know why. Maybe if I think of it as function composition?
-** No, those function signatures you made are really just one value.
-     A lot of times you will see something like
+This repo uses overlays to bring in ~emacs-overlay~ packages and
+override the ones it breaks.
 
-     #+BEGIN_SRC
-     myFunction = { argument1, argument2, argument3, ... }:
-       lib.doSomethingWith argument1 argument2 argument3
-     #+END_SRC
+- [[https://wiki.nixos.org/wiki/Overlays][NixOS Wiki: Overlays]] — practical intro with examples
+- [[https://nixos.org/manual/nixpkgs/stable/#chap-overlays][nixpkgs manual: Overlays]] — the authoritative reference
 
-     You would think that is a three argument function, right?
+** What This Repo Specifically Uses
 
-     No. In fact that function takes a single argument. Which contains /at least/ the three named arguments.
+These are the tools layered together here, each with its own docs:
 
-     There are ways to make those arguments optional via default values, and the "..." consumes any extra fields passed in. If you didn't have ..., passing "argument4" would cause an error because the function did not expect it.
+- [[https://github.com/LnL7/nix-darwin][nix-darwin]] — NixOS-style declarative config for macOS
+- [[https://github.com/nix-community/home-manager][home-manager]] — user-level config management
+- [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] — latest Emacs builds and MELPA/ELPA packages via Nix
+- [[https://github.com/ryantm/agenix][agenix]] — age-encrypted secrets for NixOS
+- [[https://github.com/oddlama/agenix-rekey][agenix-rekey]] — extends agenix with per-host rekeying and YubiKey
+  support
+- [[https://github.com/NixOS/nixos-hardware][nixos-hardware]] — community hardware configuration modules (this
+  repo uses the Framework 13 AMD module)
 
-     I feel like is is the easier and more readable code than explicitly curried functions, but I assume there is a limitation. Maybe functions can't be passed as arguments in a set/dictionary?
-** A derivation isn't magical. It is a convention
-     I don't really understand what a derivation is. I think it ultimately is what boils down to a "nix package."
+** This Repo's Patterns
 
-     But since this is a pure language, I bet this means that it's just an inert attribute set (i.e. dictionary) with some conventional field names and values. Which some part of the nix package manager uses to do stuff based on assuming what is in the data structure it is given.
+/~scanPaths~/ (~lib/scanPaths.nix~): automatically imports every ~.nix~
+file and subdirectory from a path. Used in ~home-manager/modules/~ so
+new modules are picked up without being added to an imports list
+manually.
 
-     All those places where I error out because nix is expecting a derivation, I possibly could just start by handing it something like:
+/System builders/ (~lib/nixosSystem.nix~, ~lib/darwinSystem.nix~):
+wrap ~nixpkgs.lib.nixosSystem~ / ~darwin.lib.darwinSystem~ to handle
+overlay composition, home-manager wiring, and ~specialArgs~ in one
+place. Each machine config just calls the builder with its modules.
 
-     #+BEGIN_SRC
-     {
-       name = "dummy";
-       builder = "dummy";
-       system = "dummy";
-     }
-     #+END_SRC
-
-     And it would work ... somehow. Possibly because the default values of the functions that handle that structure do nothing by default?
-** Overlays are an interesting concept
-   You often see places where you'll see these curried functions that look like the following:
-
-   #+BEGIN_SRC
-     final: prev:
-       <function body>
-
-     self: super:
-       <function body>
-   #+END_SRC
-   
-   These are called "overlays" a lot of the time, and they seem to be used for some math reason.
-
-   My understanding is that your function body here effectively adds a bit value (say some extra field values?) to the original function/value passed in as =prev= or =super=.
-
-   Because nix is a lazy language, you can do weird things with this. You may want to reference =prev= or =super= to access a value because it's going to be made real before =final= or =self= is. So that's faster.
-
-   But you might want to access something off =final= or =self= because, even though it isn't computed yet for you, you don't want an intermediate value. So you're willing to defer. But you have to make sure you aren't going to wind up producing some kind of dependency loop, so generally use the =prev= and =super= values unless you have to, so you don't have to worry about dependency issues?
-
-   I suspect where this becomes an issue in Nix is in derivations. So you might have these overlay chains constantly changing around a derivation, i.e. a description of what you're actually changing on your NixOS or other system. But you don't have access to the actual changes until they finally happen. This allows you to safely access either an intermediate product if you don't care about the concrete aspect, or easily access the final product with some care?
-
-   The alternative in an eager programming language would be some indirect concept like a promise or a thunk, which requires you to write it out more explictly (and in some ways, that makes it harder to reason about since you have to juggle it explicitly each and every time.) But the cost here is that you have to understand, indirectly, implicitly, what's going on.
-** with and inherit
-
-   ~{ inherit blah }~ is just a fancy way of saying ~{ blah = blah }~, where blah is some pre-existing binding you have previously defined.
-
-   ~with someDictionary;~ pulls all fields from that dictionary (one layer deep) into your current context, so you don't have to type it qualified all the time. This really pollutes the current data structure you are defining.
-
-   An alternative is ~with (someDictionary) oneField anotherField;~ which only pulls specific fields into your current context.
-*** Implications
-   Hmm, I wonder if doing this inside a dictionary you return means you are exposing those fields as well in your return value. Maybe this is why you use a ~let~ to produce local bindings that won't be exported (so that's where your inherit or with statements might go) because they don't carry over into your returned object.
-** There is no magic, nothing is special.
-   I spent too much time thinking that keywords like "nixpkgs", "import", etc... are special and that I had to understand them. In many ways, I didn't.
-
-   I came to Nix (like a lot of people do) as a system configuration tool but it is key to understand that it is first and foremost a programming language.
-
-   When you "import" something, that just means that something is a function (which maybe some expectations of what fields are inside that object.)
-
-   You also have to supply a dictionary containing named parameters.
-
-   The only magic might be that ~import bob {}~ assumes a directory called bob with a file called =default.nix= inside it.
-   You can also do ~import ./somedir/bob.nix {}~ if you want.
-   
-   If you want to wrap a part of your nix configuration in a new file, just put it in a new file, inside a funcion that returns whatever value you want it to return, passing whatever input parameters you need to.
-
-   Don't think you are beholden to magical standards. There are best practices you will see, but chances are nix pills will explain it to you in some section. If it doesn't you can probably reverse engineer the implied pattern by looking at the next code in question. But nothing is special, it's just code.
-** Nix is ultimately about package management
-   I am constantly frustrated at how random configuration management choices are embedded with generating data structures. It makes it harder to figure out the /configuration choices/ people have made in the source I am reading.
-
-   But there's probably a reason for this, given that ultimately every object I pass around *is* a configuration object. Might as well change it while you are visiting it, rather than building things to pass inert data objects around and change them all in one go, possibly requiring unnecessary data mangling in the process.
-
-   TODO Is there a pattern to make this more visible?
-** People attach things to =self= to remove the need for as many bindings
-   A common pattern I see is people referencing attributes on =final= and =self=.
-
-   The reason I think they do this is because if they are things you want to re-use all over the place, you can leverage lazy evaluation to get at them even if you are still in the module that defines these things.
-
-   The alternative are things like recursive data structures, which have worse implications, or a lot of =let=/=in= bindings, which produces boilerplate. 
-** A lot of terlar's magic is for DRY
-   A thing I notice, and possibly find compelling, is how much of the less obvious nix code terlar has written is to avoid route additions like adding filenames to a list for importing. For example, [[https://github.com/terlar/nix-config/blob/39b24dc8ead4b74660c7631e86665532bcd2f983/flake.nix#L56][importDirToAttrs]] exists so that every file in a subdirectory will be imported in as a module.
-
-   There can be costs to this; one of the reasons all of terlar's =lib= members hasn't been moved into a separate nix module is so that imports don't have to be passed in (and thus referenced explicitly?)
-
-   The aforementioned =importDirToAttrs= function means means that nix modules aren't loaded in via a =default.nix= that loads them in explicitly. Each file becomes its own module, effectively. That doesn't feel idiomatic. But do I care?
+/~@args~ forwarding/: ~lib/default.nix~ accepts its arguments as
+~{ lib, nixpkgs, ... }@args~ and passes ~args~ wholesale to the system
+builders. Each builder extracts only what it declares. This avoids
+threading every argument manually through the call chain.
 * Influences
 - https://github.com/ryan4yin/nix-config (also, Ryan Yin's [[https://github.com/ryan4yin/nixos-and-flakes-book][guide to Nix and Flakes]] is an essential read if you are getting started)
 - https://github.com/yomaq/nix-config
