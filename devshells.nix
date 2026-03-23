@@ -27,35 +27,34 @@ forAllSystems (
         statix
 
         # Development helper scripts
-        (writeShellScriptBin "lint" ''
-          echo "🔍 Running all linting checks..."
-          nix build .#checks.${system}.lint-check --no-link
-          echo "✅ All linting checks passed!"
+
+        (writeShellScriptBin "build-arrakis" ''
+          echo "Building arrakis (NixOS laptop)..."
+          nix build \
+            .#nixosConfigurations.arrakis.config.system.build.toplevel \
+            --no-link
+          echo "✅ arrakis build successful!"
         '')
 
-        (writeShellScriptBin "fmt" ''
-          echo "📝 Formatting all Nix files..."
-          find . -name "*.nix" ! -name "hardware-configuration.nix" -exec nixfmt {} \;
-          echo "✅ All files formatted!"
-        '')
-
-        (writeShellScriptBin "check" ''
-          echo "🔍 Running flake checks..."
-          nix flake check
-          echo "✅ Flake checks passed!"
+        (writeShellScriptBin "build-darktower" ''
+          echo "Building darktower (NixOS server)..."
+          nix build \
+            .#nixosConfigurations.darktower.config.system.build.toplevel \
+            --no-link
+          echo "✅ darktower build successful!"
         '')
 
         (writeShellScriptBin "build-test" ''
           echo "🔨 Testing all system builds..."
-          echo "Building arrakis (NixOS)..."
-          nix build .#nixosConfigurations.arrakis.config.system.build.toplevel --no-link
-          echo "Building darktower (NixOS)..."
-          nix build .#nixosConfigurations.darktower.config.system.build.toplevel --no-link
+          build-arrakis
+          build-darktower
           ${
             if stdenv.isDarwin then
               ''
                 echo "Building fountain-of-ahmed-iii (macOS)..."
-                nix build .#darwinConfigurations.fountain-of-ahmed-iii.system --no-link
+                nix build \
+                  .#darwinConfigurations.fountain-of-ahmed-iii.system \
+                  --no-link
               ''
             else
               ""
@@ -82,7 +81,7 @@ forAllSystems (
 
         (writeShellScriptBin "apply" ''
           echo "🚀 Applying system configuration..."
-          read -p "Are you sure you want to apply the configuration? (y/N) " -n 1 -r
+          read -p "Are you sure you want to apply? (y/N) " -n 1 -r
           echo
           if [[ $REPLY =~ ^[Yy]$ ]]; then
             ${
@@ -98,6 +97,34 @@ forAllSystems (
           fi
         '')
 
+        (writeShellScriptBin "apply-darktower" ''
+          echo "Deploying to darktower via SSH..."
+          sudo nixos-rebuild switch --flake .#darktower \
+            --target-host darktower \
+            --build-host localhost \
+            --use-remote-sudo
+          echo "✅ darktower deployment successful!"
+        '')
+
+        (writeShellScriptBin "lint" ''
+          echo "🔍 Running all linting checks..."
+          nix build .#checks.${system}.lint-check --no-link
+          echo "✅ All linting checks passed!"
+        '')
+
+        (writeShellScriptBin "fmt" ''
+          echo "📝 Formatting all Nix files..."
+          find . -name "*.nix" ! -name "hardware-configuration.nix" \
+            -exec nixfmt {} \;
+          echo "✅ All files formatted!"
+        '')
+
+        (writeShellScriptBin "check" ''
+          echo "🔍 Running flake checks..."
+          nix flake check
+          echo "✅ Flake checks passed!"
+        '')
+
         (writeShellScriptBin "update" ''
           echo "📦 Updating flake inputs..."
           nix flake update --commit-lock-file
@@ -107,21 +134,24 @@ forAllSystems (
         (writeShellScriptBin "dev-help" ''
           echo "🔧 Available development commands:"
           echo ""
-          echo "  lint        - Run all linting checks"
-          echo "  fmt         - Format all Nix files"
-          echo "  check       - Run flake checks"
-          echo "  build-test  - Test build all system configurations"
-          echo "  test-switch - Test system switch (safe, can rollback)"
-          echo "  apply       - Apply system configuration (permanent)"
-          echo "  update      - Update and commit flake inputs"
+          echo "Build verification:"
+          echo "  build-arrakis    Build arrakis (NixOS laptop)"
+          echo "  build-darktower  Build darktower (NixOS server)"
+          echo "  build-test       Build all NixOS systems"
           echo ""
-          echo "Development workflow:"
-          echo "  1. Edit configs"
-          echo "  2. fmt (format files)"
-          echo "  3. lint (check for issues)"
-          echo "  4. build-test (verify builds)"
-          echo "  5. test-switch (test runtime)"
-          echo "  6. apply (when confident)"
+          echo "Local apply (run on arrakis):"
+          echo "  test-switch      Test config, no permanent change"
+          echo "  apply            Apply config permanently (prompts)"
+          echo ""
+          echo "Remote deploy:"
+          echo "  apply-darktower  Deploy to darktower via SSH"
+          echo ""
+          echo "Maintenance:"
+          echo "  fmt              Format all Nix files"
+          echo "  lint             Run all linting checks"
+          echo "  check            Run flake checks"
+          echo "  update           Update and commit flake inputs"
+          echo "  dev-help         Show this help"
         '')
       ];
 
