@@ -7,7 +7,7 @@
 }:
 
 let
-  emacsPackage = pkgs.callPackage ./package.nix { };
+  emacsPackage = pkgs.callPackage ../../packages/emacs { };
   emacsConfig =
     pkgs.runCommand "emacs-config"
       {
@@ -15,7 +15,7 @@ let
       }
       ''
         mkdir -p $out
-        cp ${./init.org} init.org
+        cp ${../../packages/emacs/init.org} init.org
         emacs --batch --load org init.org --funcall org-babel-tangle
         cp *.el $out/
       '';

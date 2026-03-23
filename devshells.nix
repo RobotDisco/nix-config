@@ -26,6 +26,9 @@ forAllSystems (
         nixfmt
         statix
 
+        # Task runner
+        just
+
         # Development helper scripts
 
         (writeShellScriptBin "build-arrakis" ''
@@ -146,6 +149,12 @@ forAllSystems (
           echo "Remote deploy:"
           echo "  apply-darktower  Deploy to darktower via SSH"
           echo ""
+          echo "Emacs fast iteration (run 'just --list' for commands):"
+          echo "  tangle           Tangle init.org without a full rebuild"
+          echo "  emacs-dev        Test tangled config in isolation"
+          echo "  emacs-dev-package  Test with a freshly built emacs binary"
+          echo "  build-emacs      Build emacs package standalone"
+          echo ""
           echo "Maintenance:"
           echo "  fmt              Format all Nix files"
           echo "  lint             Run all linting checks"
@@ -156,6 +165,10 @@ forAllSystems (
       ];
 
       shellHook = ''
+        # Store paths for use by justfile recipes
+        export EMACS_NOX="${pkgs.emacs-nox}/bin/emacs"
+        export SYSTEM="${system}"
+
         # Set up git pre-commit hook
         if [ ! -f .git/hooks/pre-commit ]; then
           echo "Setting up git pre-commit hook..."

@@ -38,6 +38,10 @@ update
 
 # Show all available commands
 dev-help
+
+# Emacs config iteration (no full rebuild needed for elisp changes):
+just emacs-dev          # tangle init.org and launch isolated emacs
+just emacs-dev-package  # as above, with a freshly built emacs binary
 #+END_SRC
 
 * Installation
@@ -101,6 +105,23 @@ nix flake lock --update-input <input> --commit-lock-file
 # Use local development version of input
 nix flake lock --override-input <input> path:../<input-path>
 #+END_SRC
+
+** Emacs Fast Iteration
+Emacs config lives in ~packages/emacs/init.org~. Changes fall into two
+categories with different costs:
+
+| Change | Command | Cost |
+|---|---|---|
+| Elisp settings, keybindings | ~just emacs-dev~ | Seconds |
+| New package (new ~use-package~) | ~just emacs-dev-package~ | Minutes |
+| Verify package build only | ~just build-emacs~ | Minutes |
+
+Both ~emacs-dev~ and ~emacs-dev-package~ tangle ~init.org~ to
+~$XDG_RUNTIME_DIR/emacs-dev/~ and launch an isolated emacs with
+~--init-directory~, leaving ~~/.config/emacs/~ untouched. The
+difference is which binary is used: ~emacs-dev~ uses the system-
+installed binary (already has all packages); ~emacs-dev-package~
+builds and launches from the Nix store result.
 
 ** Pre-commit Hooks
 Pre-commit hooks run automatically and include:

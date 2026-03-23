@@ -23,21 +23,39 @@ lint         # Check for issues
 build-test   # Verify all systems build
 test-switch  # Test runtime safely
 apply        # Apply when confident
+
+# For emacs config (via just, after nix develop):
+just tangle          # Tangle init.org to temp dir
+just emacs-dev       # Tangle and test in isolation
+just emacs-dev-package  # As above, with freshly built emacs
 ```
 
 ## Development Commands
 
 All commands are available after running `nix develop`:
 
-### **Core Workflow**
-- **`fmt`** - Format all Nix files
-- **`lint`** - Run all linting checks
-- **`check`** - Run basic flake validation
-- **`build-test`** - Test build all system configurations
+### **Build Verification**
+- **`build-arrakis`** - Build arrakis (NixOS laptop)
+- **`build-darktower`** - Build darktower (NixOS server)
+- **`build-test`** - Build all NixOS systems
+
+### **Local Apply** (run on arrakis)
 - **`test-switch`** - Safe runtime testing (can rollback)
 - **`apply`** - Apply configuration permanently (with confirmation)
 
+### **Remote Deploy**
+- **`apply-darktower`** - Deploy to darktower via SSH
+
+### **Emacs Fast Iteration**
+- **`just tangle`** - Tangle init.org to .el files locally
+- **`just emacs-dev`** - Tangle and launch system emacs with dev init.org
+- **`just emacs-dev-package`** - As above, using freshly built derivation
+- **`just build-emacs`** - Build emacs derivation standalone
+
 ### **Maintenance**
+- **`fmt`** - Format all Nix files
+- **`lint`** - Run all linting checks
+- **`check`** - Run basic flake validation
 - **`update`** - Update flake inputs and commit changes
 - **`dev-help`** - Show all commands and workflow guide
 
@@ -54,6 +72,30 @@ nix flake update --commit-lock-file
 # Use local input during development
 nix flake lock --override-input <input> path:../<input-path>
 ```
+
+## Emacs Development Workflow
+
+Three workflows depending on what changed. All run inside `nix develop`.
+
+**Elisp-only changes** (keybindings, settings, use-package config):
+1. Edit `packages/emacs/init.org`
+2. `just emacs-dev` — tangles to `$XDG_RUNTIME_DIR/emacs-dev/` and
+   launches an isolated emacs instance (seconds)
+3. Iterate; when satisfied, commit and `apply`
+
+**New package** (adding a new use-package with `:ensure t`):
+1. Edit `packages/emacs/init.org`
+2. `just emacs-dev-package` — builds a fresh emacs derivation, tangles,
+   and launches from the built binary (minutes)
+3. When satisfied, `apply` to install system-wide
+
+**Verify package resolution only** (no launch):
+- `just build-emacs` — builds the derivation standalone, no launch
+
+The `emacs-dev` session uses the system-installed emacs binary (already
+has all packages on its load-path) but reads init files from the temp
+dir, not from `~/.config/emacs/`. The `emacs-dev-package` session uses
+the freshly built store binary instead.
 
 ## Secrets Management (agenix-rekey)
 
@@ -92,7 +134,7 @@ The flake defines configurations for three hosts:
 
 - **home-manager/modules/**: User-level home-manager modules
   - Automatically imported for all users via `myLib.scanPaths`
-  - Major modules: `wayland/`, `emacs/`, `budget/`, `development-environment.nix`, `shells.nix`
+  - Major modules: `wayland/`, `emacs.nix`, `budget/`, `development-environment.nix`, `shells.nix`
 
 - **lib/**: Helper functions and system builders
   - `default.nix`: Main library entry point that re-exports all helper functions
@@ -106,6 +148,11 @@ The flake defines configurations for three hosts:
   - `overlays/emacs/`: Emacs configuration overlay
 
 - **packages/**: Custom package definitions
+  - **`packages/emacs/`** — Emacs build: `default.nix` (the derivation
+    via `emacsWithPackagesFromUsePackage`) and `init.org` (the literate
+    config source). Exposed as `packages.x86_64-linux.emacs`.
+    Use `just build-emacs` to verify package resolution without a full
+    system rebuild.
 
 - **secrets/**: Secrets managed by agenix-rekey
   - `secrets/agenix-rekey.nix`: Secrets configuration
