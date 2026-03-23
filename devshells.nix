@@ -182,16 +182,7 @@ let
             echo "✅ Git pre-commit hook installed"
           fi
 
-          echo "🔧 Development environment loaded"
-          echo ""
-          echo "🚀 Quick commands:"
-          echo "  dev-help    - Show all available commands"
-          echo "  lint        - Run all linting checks"
-          echo "  fmt         - Format all Nix files"
-          echo "  build-test  - Test build all configurations"
-          echo "  apply       - Apply system configuration"
-          echo ""
-          echo "Run 'dev-help' for full command list and workflow guide"
+          dev-help
         '';
       };
     };
