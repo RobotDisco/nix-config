@@ -1023,7 +1023,7 @@ Support LaTeX
 * Finance?
 Let's use Emacs for accounting now. Let's try Ledget
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package ledger-mode
     :ensure t
     :mode ("\\.\\(h?ledger\\|journal\\)\\'" . ledger-mode)
