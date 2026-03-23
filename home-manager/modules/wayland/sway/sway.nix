@@ -24,24 +24,9 @@ in
 
       wrapperFeatures.gtk = true;
 
-      # extraSessionCommands = ''
-      # # Fix for some Java AWT applications (e.g. Android Studio),
-      # # use this if they aren't displayed properly:
-      #   export _JAVA_AWT_WM_NONREPARENTING=1
-      # # Make Chrome/Electron-based applications work in Wayland.
-      #   export NIXOS_OZONE_WL="1"
-      # '';
-
       config = {
         modifier = "Mod4";
-        #        left = "h";
-        #        down = "j";
-        #        up = "p";
-        #        right = "f";
-        #        splitv = "v";
-        #        splith = "h";
-        #        terminal = "${pkgs.emacs}/bin/emacsclient -c";
-        #        menu = "${pkgs.dmenu}/bin/dmenu_run | ${pkgs.dmenu}/bin/dmenu | ${pkgs.fileutils}/bin/xargs swaymsg exec --";
+        terminal = "uwsm app -- emacsclient -c";
         input."type:keyboard".xkb_options = "ctrl:nocaps";
 
         keybindings = lib.mkOptionDefault {
