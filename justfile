@@ -27,14 +27,16 @@ emacs-dev *args: tangle
     fi
     echo "Starting emacs with dev config from {{emacs_dev_dir}}"
     echo "(~/.config/emacs/ is not affected)"
-    exec emacs --init-directory "{{emacs_dev_dir}}" {{args}}
+    exec emacs --init-directory "{{emacs_dev_dir}}" \
+        --eval "(load-theme 'misterioso t)" {{args}}
 
 # Tangle and launch a freshly built emacs derivation (new packages)
 emacs-dev-package *args: tangle
     #!/usr/bin/env bash
     set -euo pipefail
     result=$(nix build ".#packages.$SYSTEM.emacs" --no-link --print-out-paths)
-    exec "$result/bin/emacs" --init-directory "{{emacs_dev_dir}}" {{args}}
+    exec "$result/bin/emacs" --init-directory "{{emacs_dev_dir}}" \
+        --eval "(load-theme 'misterioso t)" {{args}}
 
 # Build the emacs derivation standalone (verify package resolution)
 build-emacs:

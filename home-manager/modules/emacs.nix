@@ -55,6 +55,8 @@ in
       texlive.combined.scheme-full
       # ePub support
       unzip
+      # Typeface
+      nerd-fonts.anonymice
     ];
     shellAliases = {
       erecovers = "find ~/Documents/brain -name '#*#' -print";

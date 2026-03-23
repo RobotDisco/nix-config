@@ -16,6 +16,8 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 
 ** Key package choices
 - package management :: [[https://github.com/jwiegley/use-package][use-package]]
+- theme :: [[https://github.com/doomemacs/themes][doom-themes]] (doom-shades-of-purple)
+- typeface :: AnonymicePro Nerd Font Mono
 - completion
   - Completion-in-buffer :: [[https://github.com/minad/corfu][corfu]]
   - Completion-in-minibuffer :: [[https://github.com/minad/vertico][vertico]]
@@ -325,17 +327,26 @@ Show a line indicating the end of the page, as it were
   (global-display-fill-column-indicator-mode +1)
 #+END_SRC
 ** Colour Theme
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package rebecca-theme
+Enable treemacs and org integrations; laserwave available as alternative.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package doom-themes
     :ensure t
     :demand t
     :config
-    (if (daemonp)
-	(add-hook 'after-make-frame-functions
-		  (lambda (frame)
-		    (with-selected-frame frame
-		      (load-theme 'rebecca t))))
-      (load-theme 'rebecca t)))
+    (load-theme 'doom-shades-of-purple t)
+    ;; (load-theme 'doom-laserwave t)
+    (doom-themes-treemacs-config)
+    (doom-themes-org-config))
+#+END_SRC
+** Typeface
+Height 105 = 14pt on this HiDPI display (higher DPI than Emacs's assumed 96).
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-hook 'after-make-frame-functions
+	    (lambda (frame)
+	      (with-selected-frame frame
+		(set-face-attribute 'default nil
+				    :family "AnonymicePro Nerd Font Mono"
+				    :height 105))))
 #+END_SRC
 ** Highlight parentheses
 Visually separate nested delimiter pairs
