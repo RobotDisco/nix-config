@@ -42,6 +42,11 @@ dev-help
 # Emacs config iteration (no full rebuild needed for elisp changes):
 just emacs-dev          # tangle init.org and launch isolated emacs
 just emacs-dev-package  # as above, with a freshly built emacs binary
+
+# Home-manager iteration (no nixos-rebuild needed):
+just build-home <host>    # verify config evaluates, no activation
+just inspect-home <host>  # build + ./result to browse before applying
+just switch-home <host>   # apply (rollback via home-manager generations)
 #+END_SRC
 
 * Installation
@@ -105,6 +110,19 @@ nix flake lock --update-input <input> --commit-lock-file
 # Use local development version of input
 nix flake lock --override-input <input> path:../<input-path>
 #+END_SRC
+
+** Home-manager Fast Iteration
+Home-manager changes can be applied without a full ~nixos-rebuild~ or
+~darwin-rebuild~. Commands take a ~<host>~ argument:
+
+| Command | Effect |
+|---|---|
+| ~just build-home <host>~ | Verify config evaluates, no activation |
+| ~just inspect-home <host>~ | Build + link ~./result~ for inspection |
+| ~just switch-home <host>~ | Apply; rollback via ~home-manager generations~ |
+
+Hosts: ~arrakis~ (NixOS laptop), ~fountain-of-ahmed-iii~ (work macOS).
+The ~nixos-rebuild~ / ~darwin-rebuild~ paths are unaffected.
 
 ** Emacs Fast Iteration
 Emacs config lives in ~packages/emacs/init.org~. Changes fall into two

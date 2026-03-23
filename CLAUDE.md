@@ -30,9 +30,9 @@ just emacs-dev       # Tangle and test in isolation
 just emacs-dev-package  # As above, with freshly built emacs
 
 # For home-manager config (via just, after nix develop):
-just build-home arrakis       # Verify config evaluates, no activation
-just inspect-home arrakis     # Build and link ./result for inspection
-just switch-home arrakis      # Apply (rollback via home-manager generations)
+just build-home <host>    # Verify config evaluates, no activation
+just inspect-home <host>  # Build and link ./result for inspection
+just switch-home <host>   # Apply (rollback via home-manager generations)
 ```
 
 ## Development Commands
@@ -97,10 +97,10 @@ run on that machine).
 **Any change** (shell alias, package, dotfile):
 1. Edit the relevant module in `home-manager/modules/` or the
    per-machine config in `machines/<host>/`
-2. `just build-home arrakis` — fast check, no side effects
-3. `just inspect-home arrakis` — optional: browse `./result/home-path/`
+2. `just build-home <host>` — fast check, no side effects
+3. `just inspect-home <host>` — optional: browse `./result/home-path/`
    before activating
-4. `just switch-home arrakis` — apply; previous generation available for
+4. `just switch-home <host>` — apply; previous generation available for
    rollback via `home-manager generations`
 
 ## Emacs Development Workflow

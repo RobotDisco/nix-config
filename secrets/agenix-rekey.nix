@@ -2,6 +2,8 @@
   config,
   # osConfig is our NixOS config, when in home-manager
   osConfig ? null,
+  # hostName fallback for standalone home-manager (no osConfig available)
+  hostName ? null,
   lib,
   pkgs,
   robotdisco-secrets,
@@ -30,8 +32,10 @@ lib.mkMerge [
       localStorageDir = ../secrets/rekeyed/${
         if (config ? networking.hostName) then
           config.networking.hostName
-        else
+        else if osConfig != null then
           "${osConfig.networking.hostName}-${config.home.username}"
+        else
+          "${hostName}-${config.home.username}"
       };
 
       storageMode = "local";

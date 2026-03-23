@@ -138,6 +138,48 @@
         nixosConfigurations = self.nixosConfigurations // self.darwinConfigurations;
       };
 
+      homeConfigurations = {
+        "gaelan@arrakis" = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+            overlays = [
+              emacs-overlay.overlays.default
+              (final: _prev: {
+                sunsama = final.callPackage ./packages/sunsama.nix { };
+              })
+            ];
+          };
+          modules = [
+            ./home-manager/modules
+            ./home-manager/profiles/gaelan-personal
+            inputs.agenix.homeManagerModules.default
+            inputs.agenix-rekey.homeManagerModules.default
+          ];
+          extraSpecialArgs = inputs // {
+            inherit myLib;
+            hostName = "arrakis";
+          };
+        };
+        "gaelan@fountain-of-ahmed-iii" = inputs.home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs {
+            system = "aarch64-darwin";
+            config.allowUnfree = true;
+            overlays = [ emacs-overlay.overlays.default ];
+          };
+          modules = [
+            ./home-manager/modules
+            ./home-manager/profiles/gaelan-work
+            inputs.agenix.homeManagerModules.default
+            inputs.agenix-rekey.homeManagerModules.default
+          ];
+          extraSpecialArgs = inputs // {
+            inherit myLib;
+            hostName = "fountain-of-ahmed-iii";
+          };
+        };
+      };
+
       devShells = import ./devshells.nix { inherit nixpkgs inputs; };
 
       # Run ~nix fmt~ to use this package to format nix files

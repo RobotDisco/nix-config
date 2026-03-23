@@ -41,3 +41,17 @@ emacs-dev-package *args: tangle
 # Build the emacs derivation standalone (verify package resolution)
 build-emacs:
     nix build ".#packages.$SYSTEM.emacs" --no-link
+
+# Build home-manager config without activating (verify it evaluates)
+build-home host:
+    nix build '.#homeConfigurations."gaelan@{{host}}".activationPackage' \
+        --no-link
+
+# Build home-manager config and link ./result for inspection
+inspect-home host:
+    nix build '.#homeConfigurations."gaelan@{{host}}".activationPackage'
+    @echo "Inspect with: ls result/home-path/bin/"
+
+# Apply home-manager config (previous generation available for rollback)
+switch-home host:
+    home-manager switch --flake '.#gaelan@{{host}}'
