@@ -51,7 +51,7 @@ jobs:
           extra-conf: ${{ env.NIX_EXTRA_CONF }}
 
       - name: Setup Cachix
-        uses: cachix/cachix-action@v16
+        uses: cachix/cachix-action@v17
         with:
           name: robot-disco
           authToken: '${{ secrets.CACHIX_KEY }}'
@@ -77,7 +77,7 @@ jobs:
           extra-conf: ${{ env.NIX_EXTRA_CONF }}
       
       - name: Setup Cachix
-        uses: cachix/cachix-action@v16
+        uses: cachix/cachix-action@v17
         with:
           name: robot-disco
           authToken: '${{ secrets.CACHIX_KEY }}'
@@ -98,7 +98,7 @@ jobs:
           extra-conf: ${{ env.NIX_EXTRA_CONF }}
       
       - name: Setup Cachix
-        uses: cachix/cachix-action@v16
+        uses: cachix/cachix-action@v17
         with:
           name: robot-disco
           authToken: '${{ secrets.CACHIX_KEY }}'
