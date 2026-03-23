@@ -59,12 +59,11 @@
           inputs
           ;
       };
-      inherit (myLib) forAllSystems darwinSystem nixosSystem;
+      inherit (myLib) darwinSystem nixosSystem;
     in
     ### HERE ENDS MY HELPER FUNCTION LIBRARY ###
     {
       checks = import ./checks.nix {
-        inherit forAllSystems;
         nixpkgs = inputs.nixpkgs-unstable;
       };
       darwinConfigurations = {
@@ -139,10 +138,13 @@
         nixosConfigurations = self.nixosConfigurations // self.darwinConfigurations;
       };
 
-      devShells = import ./devshells.nix { inherit nixpkgs inputs forAllSystems; };
+      devShells = import ./devshells.nix { inherit nixpkgs inputs; };
 
       # Run ~nix fmt~ to use this package to format nix files
-      formatter = forAllSystems (system: nixpkgs.legacyPackages."${system}".nixfmt);
+      formatter = {
+        x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt;
+        aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt;
+      };
 
       packages."x86_64-linux" =
         let

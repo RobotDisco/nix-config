@@ -8,9 +8,6 @@
   ...
 }@args: # @args captures the ENTIRE input argument set for forwarding
 
-let
-  systems = import ./systems.nix { inherit lib; };
-in
 {
   /*
     Auto-discover .nix files and directories for module importing.
@@ -24,18 +21,6 @@ in
       imports = myLib.scanPaths ./.;
   */
   scanPaths = import ./scanPaths.nix { inherit lib; };
-
-  /*
-    Apply a function across multiple system architectures.
-    See lib/systems.nix for full documentation.
-  */
-  inherit (systems) forEachSystem;
-
-  /*
-    Apply a function across all supported system architectures.
-    See lib/systems.nix for full documentation.
-  */
-  inherit (systems) forAllSystems;
 
   /*
     Build NixOS system configuration with sensible defaults.

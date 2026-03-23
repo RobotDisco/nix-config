@@ -28,6 +28,11 @@ apply        # Apply when confident
 just tangle          # Tangle init.org to temp dir
 just emacs-dev       # Tangle and test in isolation
 just emacs-dev-package  # As above, with freshly built emacs
+
+# For home-manager config (via just, after nix develop):
+just build-home arrakis       # Verify config evaluates, no activation
+just inspect-home arrakis     # Build and link ./result for inspection
+just switch-home arrakis      # Apply (rollback via home-manager generations)
 ```
 
 ## Development Commands
@@ -45,6 +50,12 @@ All commands are available after running `nix develop`:
 
 ### **Remote Deploy**
 - **`apply-darktower`** - Deploy to darktower via SSH
+
+### **Home-manager Fast Iteration**
+All commands take a `<host>` argument (`arrakis` or `fountain-of-ahmed-iii`):
+- **`just build-home <host>`** - Build without activating (fast check)
+- **`just inspect-home <host>`** - Build and link `./result` for browsing
+- **`just switch-home <host>`** - Apply (previous generation for rollback)
 
 ### **Emacs Fast Iteration**
 - **`just tangle`** - Tangle init.org to .el files locally
@@ -72,6 +83,25 @@ nix flake update --commit-lock-file
 # Use local input during development
 nix flake lock --override-input <input> path:../<input-path>
 ```
+
+## Home-manager Development Workflow
+
+Home-manager changes can be iterated without a full `nixos-rebuild` or
+`darwin-rebuild`. The flake exposes `homeConfigurations."gaelan@<host>"`
+as standalone outputs — `nixos-rebuild` and `darwin-rebuild` still work
+and include home-manager as before.
+
+Hosts: `arrakis` (NixOS laptop), `fountain-of-ahmed-iii` (work macOS,
+run on that machine).
+
+**Any change** (shell alias, package, dotfile):
+1. Edit the relevant module in `home-manager/modules/` or the
+   per-machine config in `machines/<host>/`
+2. `just build-home arrakis` — fast check, no side effects
+3. `just inspect-home arrakis` — optional: browse `./result/home-path/`
+   before activating
+4. `just switch-home arrakis` — apply; previous generation available for
+   rollback via `home-manager generations`
 
 ## Emacs Development Workflow
 
@@ -141,7 +171,6 @@ The flake defines configurations for three hosts:
   - `nixosSystem.nix`: Self-contained NixOS system builder with overlay composition
   - `darwinSystem.nix`: Self-contained macOS system builder with overlay composition
   - `emacs-overrides.nix`: Handles broken emacs-overlay packages by overriding with stable versions
-  - `systems.nix`: Cross-platform helper functions (`forEachSystem`, `forAllSystems`)
   - `scanPaths.nix`: Auto-imports all `.nix` files (except `default.nix`) and directories from a path
 
 - **overlays/**: Nixpkgs overlays

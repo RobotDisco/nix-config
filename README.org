@@ -154,7 +154,6 @@ The ~lib/~ directory contains self-contained helper functions and system builder
 - ~nixosSystem.nix~ - Self-contained NixOS system builder with automatic overlay composition
 - ~darwinSystem.nix~ - Self-contained macOS system builder with automatic overlay composition  
 - ~emacs-overrides.nix~ - Handles broken emacs-overlay packages by overriding with stable versions
-- ~systems.nix~ - Cross-platform helper functions (~forEachSystem~, ~forAllSystems~)
 - ~scanPaths.nix~ - Auto-imports all ~.nix~ files and directories from a path
 
 ** System Builder Design
