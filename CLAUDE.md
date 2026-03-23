@@ -11,8 +11,8 @@ This is a NixOS/nix-darwin flake configuration for managing multiple systems (Ni
 ## Quick Start
 
 ```zsh
-# Enter development environment
-nix develop
+# Enter development environment (automatic if direnv is enabled)
+nix develop   # or just cd into the repo with direnv active
 
 # Show all available commands
 dev-help

@@ -7,9 +7,10 @@ The configuration features self-contained system builders with automatic overlay
 
 * Quick Start
 
-Enter the development shell to access all tools and helper commands:
+Enter the development shell to access all tools and helper commands.
+If direnv is enabled, this happens automatically on ~cd~:
 #+BEGIN_SRC sh
-nix develop
+nix develop   # or just cd into the repo with direnv active
 #+END_SRC
 
 Once in the dev shell, use these commands for daily development:
@@ -69,6 +70,7 @@ just switch-home <host>   # apply (rollback via home-manager generations)
 ** Setup Development Environment
 #+BEGIN_SRC sh
 # Enter development shell with all tools
+# (automatic on cd if direnv is active — .envrc uses use_flake)
 nix develop
 
 # Add project caches (first time only)
