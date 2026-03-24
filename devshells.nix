@@ -17,12 +17,18 @@ let
           # Secrets management
           agenix-rekey
 
-          # Linting and formatting tools
+          ## Linting and formatting tools
+          # Lint github actions
           actionlint
+          # Check for unused inputs
           deadnix
+          # Are we using outdated flakes?
           flake-checker
-          nil
+          # Nix LSPs (nixd can complete nixpkgs, options, config)
+          nixd
+          # Nix formatter
           nixfmt
+          # Nix static analysis
           statix
 
           # Task runner

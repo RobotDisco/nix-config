@@ -8,7 +8,6 @@ let
         actionlint = "${pkgs.actionlint}/bin/actionlint";
         deadnix = "${pkgs.deadnix}/bin/deadnix";
         flake-checker = "${pkgs.flake-checker}/bin/flake-checker";
-        nil = "${pkgs.nil}/bin/nil";
         nixfmt = "${pkgs.nixfmt}/bin/nixfmt";
         statix = "${pkgs.statix}/bin/statix";
       };
@@ -21,7 +20,6 @@ let
               actionlint
               deadnix
               flake-checker
-              nil
               nixfmt
               statix
             ];
