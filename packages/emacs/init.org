@@ -543,7 +543,7 @@ This is part of the vertico stack.
 ** Marginalia
 Add annotations to minibuffer completions to provide you with more information about the displayed options
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package marginalia
     :demand t
     :ensure t
