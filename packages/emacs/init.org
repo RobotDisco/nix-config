@@ -783,7 +783,7 @@ A editor-agnostic way to maintain project coding styles
 ** Just task runner
 Like Make, but less warts
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; Language support
   (use-package just-mode
     :ensure t

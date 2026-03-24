@@ -33,6 +33,7 @@ let
 
           # Task runner
           just
+          just-lsp
 
           # Development helper scripts
 
