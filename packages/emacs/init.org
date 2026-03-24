@@ -307,6 +307,11 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
        (setq mac-option-modifier 'super
              mac-command-modifier 'meta))
    #+END_SRC
+
+   Attempt completion if I press TAB on a line that's already indented. This is a more accessible binding than =C-M-i= and looks more like modern UI; alternatives are =M-Tab= but completion and (elastic) indenting are often things I want to brute-force as safe and useful actions.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq tab-always-indent 'complete)
+   #+END_SRC
 * Appearance
 ** Mode line
 *** Position
@@ -509,16 +514,16 @@ Enhance emacs commands based on completion
     :ensure t)
 #+END_SRC
 ** Corfu
-Completion popups in the regular buffer
-
-#+BEGIN_SRC emacs-lisp :tangle no
+Completion popups in the regular buffer. Note that I am also enabling popups to render after some (possibly default) delay if enough prefix characters in a code segment are typed.
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package corfu
     :defer 1
-    :commands (corfu-mode global-corfu-mode)
     :ensure t
-    :hook ((eshell-mode-hook . (lambda ()
-				 (setq-local corfu-auto nil)
-				 (corfu-mode))))
+    ;; :hook ((eshell-mode-hook . (lambda ()
+    ;; 				 (setq-local corfu-auto nil)
+    ;; 				 (corfu-mode))))
+    :custom
+    (corfu-auto 1)
     :config
     (global-corfu-mode))
 #+END_SRC
