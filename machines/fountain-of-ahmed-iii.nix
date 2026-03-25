@@ -38,6 +38,36 @@
         # swapLeftCommandAndLeftAlt = true;
       };
       primaryUser = "gaelan";
+
+      # Disable macOS default Spotlight shortcuts (Cmd+Space and
+      # Cmd+Option+Space) so aerospace can use those key chords freely.
+      # aerospace binds alt-d to open Spotlight instead.
+      defaults.CustomUserPreferences."com.apple.symbolichotkeys".AppleSymbolicHotKeys = {
+        # Spotlight Search (Cmd+Space)
+        "64" = {
+          enabled = false;
+          value = {
+            parameters = [
+              32
+              49
+              1048576
+            ];
+            type = "standard";
+          };
+        };
+        # Spotlight Window (Cmd+Option+Space)
+        "65" = {
+          enabled = false;
+          value = {
+            parameters = [
+              32
+              49
+              1572864
+            ];
+            type = "standard";
+          };
+        };
+      };
     };
 
     programs = {

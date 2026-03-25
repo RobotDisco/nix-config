@@ -61,6 +61,14 @@ in
           "$mod SHIFT, 8, movetoworkspace, 8"
           "$mod SHIFT, 9, movetoworkspace, 9"
           "$mod SHIFT, 0, movetoworkspace, 10"
+
+          # Focus monitor
+          "$mod, comma, focusmonitor, -1"
+          "$mod, period, focusmonitor, +1"
+
+          # Move window to monitor
+          "$mod SHIFT, comma, movewindow, mon:-1"
+          "$mod SHIFT, period, movewindow, mon:+1"
         ];
         # Work when locked, repeat when held
         bindel = [

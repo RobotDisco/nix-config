@@ -36,6 +36,14 @@ in
           XF86MonBrightnessDown = "exec brightnessctl set 5%-";
           XF86MonBrightnessUp = "exec brightnessctl set 5%+";
           XF86RFKill = "exec rfkill toggle 0; rfkill toggle all";
+
+          # Focus monitor
+          "Mod4+comma" = "focus output prev";
+          "Mod4+period" = "focus output next";
+
+          # Move window to monitor
+          "Mod4+Shift+comma" = "move container to output prev";
+          "Mod4+Shift+period" = "move container to output next";
         };
       };
     };
