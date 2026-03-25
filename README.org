@@ -290,6 +290,14 @@ These are the tools layered together here, each with its own docs:
   support
 - [[https://github.com/NixOS/nixos-hardware][nixos-hardware]] — community hardware configuration modules (this
   repo uses the Framework 13 AMD module)
+- [[https://github.com/hraban/mac-app-util][mac-app-util]] — makes Nix-installed macOS apps visible to Spotlight
+  and the Dock. Nix installs apps into the store under
+  ~/nix/store/...~, which Spotlight does not index. mac-app-util
+  creates a small wrapper ~.app~ bundle (a "trampoline" — an
+  intermediate that immediately redirects to the real target) in
+  ~~/Applications/~ for each installed app. Spotlight indexes
+  ~~/Applications/~, so the trampoline makes the app discoverable
+  without Spotlight needing to know about the Nix store.
 
 ** This Repo's Patterns
 
@@ -307,6 +315,19 @@ place. Each machine config just calls the builder with its modules.
 ~{ lib, nixpkgs, ... }@args~ and passes ~args~ wholesale to the system
 builders. Each builder extracts only what it declares. This avoids
 threading every argument manually through the call chain.
+
+/~inputs.nixpkgs.follows~/ convention: every flake input that itself
+depends on nixpkgs should declare ~inputs.nixpkgs.follows = "nixpkgs"~
+(see ~flake.nix~). Without this, each input brings its own pinned
+nixpkgs into the closure — multiple versions get downloaded, evaluated,
+and potentially built. Pinning all inputs to the same nixpkgs keeps the
+dependency graph consistent and avoids redundant work. There are two
+exceptions: ~nixpkgs-unstable~, which is intentionally a different
+channel, and ~nix-darwin~, which does /not/ follow the flake's main
+~nixpkgs~. The ~nix-darwin~ input implicitly pins its own nixpkgs to a
+branch that has validated testing on macOS, so overriding it with
+~follows~ could pull in a nixpkgs revision that hasn't passed Darwin
+CI.
 * Influences
 - https://github.com/ryan4yin/nix-config (also, Ryan Yin's [[https://github.com/ryan4yin/nixos-and-flakes-book][guide to Nix and Flakes]] is an essential read if you are getting started)
 - https://github.com/yomaq/nix-config

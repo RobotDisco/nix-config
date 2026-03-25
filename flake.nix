@@ -15,7 +15,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    darwin.url = "github:lnl7/nix-darwin/nix-darwin-25.11";
+    darwin = {
+      url = "github:lnl7/nix-darwin/nix-darwin-25.11";
+    };
 
     emacs-overlay.url = "github:nix-community/emacs-overlay";
     emacs-overlay.inputs.nixpkgs.follows = "nixpkgs";
@@ -23,7 +25,14 @@
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    mac-app-utils = {
+      url = "github:hraban/mac-app-util";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware/master";
+    };
 
     # My private secrets repository.
     # use ssh protocol to authenticate via ssh-agent/ssh-key
@@ -72,6 +81,7 @@
           modules = [
             ./machines/fountain-of-ahmed-iii.nix
             inputs.agenix.darwinModules.default
+            inputs.mac-app-utils.darwinModules.default
             inputs.agenix-rekey.nixosModules.default
           ];
           specialArgs = {
@@ -81,6 +91,7 @@
           homeModules = [
             inputs.agenix.homeManagerModules.default
             inputs.agenix-rekey.homeManagerModules.default
+            inputs.mac-app-utils.homeManagerModules.default
           ];
           homeSpecialArgs = {
             inherit myLib;
@@ -172,6 +183,7 @@
             ./home-manager/profiles/gaelan-work
             inputs.agenix.homeManagerModules.default
             inputs.agenix-rekey.homeManagerModules.default
+            inputs.mac-app-utils.homeManagerModules.default
           ];
           extraSpecialArgs = inputs // {
             inherit myLib;
