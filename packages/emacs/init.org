@@ -344,14 +344,17 @@ Enable treemacs and org integrations; laserwave available as alternative.
     (doom-themes-org-config))
 #+END_SRC
 ** Typeface
-Height 105 = 14pt on this HiDPI display (higher DPI than Emacs's assumed 96).
+On Linux HiDPI: height 105 = 14pt (display DPI > Emacs's assumed 96).
+On Darwin: height 140 = 14pt at standard DPI.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (add-hook 'after-make-frame-functions
 	    (lambda (frame)
 	      (with-selected-frame frame
 		(set-face-attribute 'default nil
 				    :family "AnonymicePro Nerd Font Mono"
-				    :height 105))))
+				    :height (if (eq system-type 'darwin)
+					       140
+					     105)))))
 #+END_SRC
 ** Highlight parentheses
 Visually separate nested delimiter pairs
