@@ -524,6 +524,7 @@ Completion popups in the regular buffer. Note that I am also enabling popups to 
     ;; 				 (corfu-mode))))
     :custom
     (corfu-auto 1)
+    (corfu-auto-delay 0.5)
     :config
     (global-corfu-mode))
 #+END_SRC
