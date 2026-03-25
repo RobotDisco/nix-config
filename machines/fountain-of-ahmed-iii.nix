@@ -73,12 +73,6 @@
     programs = {
       # Create /etc/zshrc that loads the nix-darwin environment.
       zsh.enable = true;
-
-      # Alas, home-manager doesn't support gnupg agent via launchd currently.
-      gnupg.agent = {
-        enable = true;
-        enableSSHSupport = true;
-      };
     };
 
     # A lot of packages need to be installed by homebrew; integrate with Nix.
