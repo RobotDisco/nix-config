@@ -33,6 +33,10 @@ Things I should do eventually
 - After getting github/CI to automatically update flakes, pin nix/darwin autoupgrades to flake
   https://discourse.nixos.org/t/flakes-and-autoupgrade/12994
 - make a service for uhk-agent
+- Switch from Hyprland to SwayFX for better multi-monitor stability while
+  keeping compositor effects (blur, transparency). Goal: Emacs as primary
+  environment with semi-transparent frame over wallpaper (swww/swaybg +
+  pgtk Emacs alpha-background + SwayFX window blur rules).
 - Set up home-manager for darktower using gaelan-personal.nix base profile
   so that shell, ssh, dev tools, and yubikey config apply on the server.
 - Revisit aerospace keybindings with intention: audit the full sway/i3
