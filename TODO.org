@@ -33,6 +33,8 @@ Things I should do eventually
 - After getting github/CI to automatically update flakes, pin nix/darwin autoupgrades to flake
   https://discourse.nixos.org/t/flakes-and-autoupgrade/12994
 - make a service for uhk-agent
+- Set up home-manager for darktower using gaelan-personal.nix base profile
+  so that shell, ssh, dev tools, and yubikey config apply on the server.
 - Revisit aerospace keybindings with intention: audit the full sway/i3
   default binding list against what aerospace can and can't do, and make
   deliberate choices for each gap (e.g. Return in resize mode, scratchpad

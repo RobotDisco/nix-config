@@ -169,7 +169,7 @@
             inherit pkgs;
             modules = [
               ./home-manager/modules
-              ./home-manager/profiles/gaelan-personal
+              ./home-manager/profiles/gaelan-personal.nix
               inputs.agenix.homeManagerModules.default
               inputs.agenix-rekey.homeManagerModules.default
             ];

@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
@@ -16,8 +15,9 @@ in
     signCommits = lib.mkEnableOption "Sign git commits with GPG key";
 
     gpgKey = lib.mkOption {
-      description = "Public key to sign all git commits with.";
-      type = lib.types.str;
+      description = "Public key to sign git commits with. Required when signCommits is enabled.";
+      type = lib.types.nullOr lib.types.str;
+      default = null;
     };
     fullname = lib.mkOption {
       description = "Full name to put in git commits.";
@@ -36,6 +36,14 @@ in
 
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
+      {
+        assertions = [
+          {
+            assertion = !cfg.signCommits || cfg.gpgKey != null;
+            message = "robot-disco.development-environment.gpgKey must be set when signCommits is enabled";
+          }
+        ];
+      }
       {
         # Let's create a user directory for my helper scripts
         home.sessionPath = [ "~/bin" ];
@@ -172,11 +180,10 @@ in
         };
       })
       {
-        programs.jq.enable = true;
-        home.packages = [
-          # Better than grep
-          pkgs.ripgrep
-        ];
+        programs = {
+          jq.enable = true;
+          ripgrep.enable = true;
+        };
       }
       {
         programs.direnv = {
