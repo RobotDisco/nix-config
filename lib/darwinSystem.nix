@@ -7,7 +7,7 @@
   darwin,
   emacs-overlay,
   home-manager,
-  inputs,
+  nixpkgs-unstable,
   ...
 }:
 
@@ -27,6 +27,13 @@ let
     # Include the community emacs overlay for latest packages
     emacs-overlay.overlays.default
   ];
+
+  # Instantiate nixpkgs for this system
+  # We know we'll need to allow unfree packages.
+  pkgs-unstable = import nixpkgs-unstable {
+    inherit system;
+    config.allowUnfree = true;
+  };
 in
 darwin.lib.darwinSystem {
   inherit system;
@@ -55,9 +62,15 @@ darwin.lib.darwinSystem {
     }
     {
       # Supply home-manager with special arguments. Always include flake inputs.
-      home-manager.extraSpecialArgs = inputs // homeSpecialArgs;
+      home-manager.extraSpecialArgs = {
+        inherit pkgs-unstable;
+      }
+      // homeSpecialArgs;
     }
   ]
   ++ modules;
-  specialArgs = inputs // specialArgs;
+  specialArgs = {
+    inherit pkgs-unstable;
+  }
+  // specialArgs;
 }

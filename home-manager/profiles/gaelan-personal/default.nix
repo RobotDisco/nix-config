@@ -6,7 +6,6 @@ in
 {
   imports = [
     ./bitwarden.nix
-    ./claude.nix
     ./games.nix
     ./gammastep.nix
     ./keyboard.nix
@@ -30,6 +29,8 @@ in
 
     robot-disco = {
       cdrip.enable = true;
+
+      claude-code.enable = true;
 
       development-environment = {
         enable = true;

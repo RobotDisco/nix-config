@@ -4,10 +4,10 @@
 # integration, and module setup automatically. You just provide the basic
 # system configuration.
 {
-  nixpkgs,
   emacs-overlay,
   home-manager,
-  inputs,
+  nixpkgs,
+  nixpkgs-unstable,
   ...
 }:
 
@@ -32,6 +32,13 @@ let
       sunsama = final.callPackage ../packages/sunsama.nix { };
     })
   ];
+
+  # Instantiate nixpkgs for this system
+  # We know we'll need to allow unfree packages.
+  pkgs-unstable = import nixpkgs-unstable {
+    inherit system;
+    config.allowUnfree = true;
+  };
 in
 nixpkgs.lib.nixosSystem {
   inherit system;
@@ -60,9 +67,15 @@ nixpkgs.lib.nixosSystem {
     }
     {
       # Supply home-manager with special arguments. Always include flake inputs.
-      home-manager.extraSpecialArgs = inputs // homeSpecialArgs;
+      home-manager.extraSpecialArgs = {
+        inherit pkgs-unstable;
+      }
+      // homeSpecialArgs;
     }
   ]
   ++ modules;
-  specialArgs = inputs // specialArgs;
+  specialArgs = {
+    inherit pkgs-unstable;
+  }
+  // specialArgs;
 }

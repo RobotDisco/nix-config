@@ -55,17 +55,15 @@
       ...
     }:
     let
-      inherit (nixpkgs) lib;
-
       # My custom functions with all required inputs
       myLib = import ./lib {
-        inherit
-          lib
+        inherit (nixpkgs) lib;
+        inherit (inputs)
           darwin
           nixpkgs
+          nixpkgs-unstable
           emacs-overlay
           home-manager
-          inputs
           ;
       };
       inherit (myLib) darwinSystem nixosSystem;
@@ -150,46 +148,64 @@
       };
 
       homeConfigurations = {
-        "gaelan@arrakis" = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs {
-            system = "x86_64-linux";
-            config.allowUnfree = true;
-            overlays = [
-              emacs-overlay.overlays.default
-              (final: _prev: {
-                sunsama = final.callPackage ./packages/sunsama.nix { };
-              })
+        "gaelan@arrakis" =
+          let
+            pkgs = import nixpkgs {
+              system = "x86_64-linux";
+              config.allowUnfree = true;
+              overlays = [
+                emacs-overlay.overlays.default
+                (final: _prev: {
+                  sunsama = final.callPackage ./packages/sunsama.nix { };
+                })
+              ];
+            };
+            pkgs-unstable = import inputs.nixpkgs-unstable {
+              system = "x86_64-linux";
+              config.allowUnfree = true;
+            };
+          in
+          inputs.home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
+            modules = [
+              ./home-manager/modules
+              ./home-manager/profiles/gaelan-personal
+              inputs.agenix.homeManagerModules.default
+              inputs.agenix-rekey.homeManagerModules.default
             ];
+            extraSpecialArgs = {
+              inherit myLib pkgs-unstable;
+              inherit (inputs) robotdisco-secrets;
+              hostName = "arrakis";
+            };
           };
-          modules = [
-            ./home-manager/modules
-            ./home-manager/profiles/gaelan-personal
-            inputs.agenix.homeManagerModules.default
-            inputs.agenix-rekey.homeManagerModules.default
-          ];
-          extraSpecialArgs = inputs // {
-            inherit myLib;
-            hostName = "arrakis";
+        "gaelan@fountain-of-ahmed-iii" =
+          let
+            pkgs = import nixpkgs {
+              system = "aarch64-darwin";
+              config.allowUnfree = true;
+              overlays = [ emacs-overlay.overlays.default ];
+            };
+            pkgs-unstable = import inputs.nixpkgs-unstable {
+              system = "aarch64-darwin";
+              config.allowUnfree = true;
+            };
+          in
+          inputs.home-manager.lib.homeManagerConfiguration {
+            inherit pkgs;
+            modules = [
+              ./home-manager/modules
+              ./home-manager/profiles/gaelan-work.nix
+              inputs.agenix.homeManagerModules.default
+              inputs.agenix-rekey.homeManagerModules.default
+              inputs.mac-app-utils.homeManagerModules.default
+            ];
+            extraSpecialArgs = {
+              inherit myLib pkgs-unstable;
+              inherit (inputs) robotdisco-secrets;
+              hostName = "fountain-of-ahmed-iii";
+            };
           };
-        };
-        "gaelan@fountain-of-ahmed-iii" = inputs.home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs {
-            system = "aarch64-darwin";
-            config.allowUnfree = true;
-            overlays = [ emacs-overlay.overlays.default ];
-          };
-          modules = [
-            ./home-manager/modules
-            ./home-manager/profiles/gaelan-work
-            inputs.agenix.homeManagerModules.default
-            inputs.agenix-rekey.homeManagerModules.default
-            inputs.mac-app-utils.homeManagerModules.default
-          ];
-          extraSpecialArgs = inputs // {
-            inherit myLib;
-            hostName = "fountain-of-ahmed-iii";
-          };
-        };
       };
 
       devShells = import ./devshells.nix { inherit nixpkgs inputs; };

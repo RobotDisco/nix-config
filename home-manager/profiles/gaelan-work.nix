@@ -10,14 +10,20 @@ let
   emacsclient = "${config.home.profileDirectory}/bin/emacsclient";
 in
 {
-  imports = [
-    ./claude.nix
-  ];
-
   config = {
     age.rekey.hostPubkey = "${robotdisco-secrets}/users/gaelan-work.pub";
 
     robot-disco = {
+      claude-code = {
+        enable = true;
+
+        settings.enabledPlugins = {
+          "atlassian@claude-plugins-official" = true;
+          "gitlab@claude-plugins-official" = true;
+          "slack@claude-plugins-official" = true;
+        };
+      };
+
       development-environment = {
         enable = true;
 
@@ -39,6 +45,10 @@ in
       # The state version is required and should stay at the version you
       # originally installed.
       stateVersion = "22.11";
+
+      # I sometimes want to run claude using my personal account. To do this,
+      # I switch what claude considers the home directory.
+      shellAliases.claude-personal = "CLAUDE_CONFIG_DIR=~/.claude-personal claude";
     };
 
     programs = {

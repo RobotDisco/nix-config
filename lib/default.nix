@@ -3,7 +3,7 @@
 # passing the full argument set (@args) to other functions.
 {
   lib,
-  # The "..." means "accept any otheremacs arguments and ignore them"
+  # The "..." means "accept any other arguments and ignore them"
   # This is safe and allows us to pass extra arguments without errors
   ...
 }@args: # @args captures the ENTIRE input argument set for forwarding
