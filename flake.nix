@@ -7,7 +7,7 @@
 
     # Secrets management
     agenix = {
-      url = "github:ryantm/agenix";
+      url = "github:yaxitech/ragenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     agenix-rekey = {
