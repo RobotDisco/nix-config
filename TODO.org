@@ -3,6 +3,63 @@
 
 Things I should do eventually
 
+* Emacs Learning Curriculum
+
+** Phase 1: Core Emacs Fluency
+- [ ] Window management: =C-x 2/3=, =winner-mode=, =C-x o=
+- [ ] Mark ring: =C-SPC= to set, =C-u C-SPC= to travel back
+- [ ] Keyboard macros: =C-x (=, =C-x )=, =C-x e=
+- [ ] Registers: store/recall positions, text, rectangles
+- [ ] Rectangles: =C-x r k/y= for column editing
+
+** Phase 2: Completion Stack
+- [X] vertico
+- [X] orderless
+- [X] marginalia
+- [ ] consult
+- [ ] embark
+
+** Phase 3: Project & File Navigation
+- [ ] projectile: =C-c p f= (find file), =C-c p s r= (ripgrep project)
+- [ ] dired: mark files with =m=, operate with =D/R/C=
+- [ ] consult-ripgrep: live project-wide search with preview
+
+** Phase 4: Version Control
+- [ ] magit deeply: interactive rebase, blame, log (2-3 focused sessions)
+- [ ] forge: =forge-list-pullreqs=, PRs and issues without leaving Emacs
+
+** Phase 5: IDE Features
+- [ ] xref: =M-.= go-to-definition, =M-,= pop back, =M-?= find references
+- [ ] flymake: =M-n=/ =M-p= to navigate diagnostics
+- [ ] apheleia: format-on-save per mode
+- [ ] tree-sitter: better highlighting and structural navigation
+- [ ] eglot per language: pyright (Python), solargraph (Ruby), Lisp server
+
+** Phase 6: Zettelkasten / Org
+- [ ] org-capture: =C-c c= to capture without breaking flow
+- [ ] org-agenda: =C-c a= entry point
+- [ ] org-roam core loop: node-find, node-insert, backlinks buffer
+- [ ] citar: =citar-insert-citation=
+- [ ] org-babel: execute code blocks inline; run kubectl from notes
+
+** Phase 7: DevOps / Kubernetes / SSH
+- [ ] tramp: =C-x C-f /ssh:host:/path= — edit remote files as if local
+- [ ] vterm: =vterm-copy-mode=, multiple vterm buffers per project
+- [ ] kubernetes.el: kubectl UI — browse pods, logs, describe resources
+- [ ] ob-shell: run kubectl from org runbooks, capture output inline
+- [ ] tramp + dired: browse remote filesystems over SSH
+
+** Phase 8: Power Features
+- [ ] avy: jump to any visible character in 2 keystrokes
+- [ ] embark: =embark-act= on anything in a completion list or at point
+- [ ] iedit: edit all occurrences of a symbol simultaneously
+- [ ] which-key: turn on, teaches Emacs passively
+
+** Phase 9: Language Depth
+- [ ] Lisp: deepen smartparens; sly (Common Lisp) or geiser (Scheme/Racket)
+- [ ] Python: eglot + pyright + apheleia (black)
+- [ ] Ruby: eglot + solargraph
+
 - Explain the difference between my concept of profiles and modules (as internalized from https://www.reddit.com/r/NixOS/comments/um1ohu/how_do_you_write_custom_nixos_modules/)
 - [X] Make my home-manager config work on both MacOS and Linux
 - Figure out seamless way to run nix tasks from emacs and/or simple shell commands (devShell?)
