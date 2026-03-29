@@ -12,20 +12,12 @@ let
   okta = pkgs.okta-aws-cli;
 in
 lib.mkIf cfg.enable {
-  age.secrets.okta-yaml.rekeyFile = "${robotdisco-secrets}/okta-aws-cli.yaml.age";
+  age.secrets.okta-yaml = {
+    rekeyFile = "${robotdisco-secrets}/okta-aws-cli.yaml.age";
+    path = "${config.home.homeDirectory}/.okta/okta.yaml";
+  };
 
   home = {
-    # In home-manager, the .path attribute relies on the nix config
-    # eventually resolving environment variables and command subshells.
-    #
-    # Apparently using mkOutOfStoreSymlink doesn't work, because it doesn't
-    # evaluate the .path attribute including resolutions.
-    #
-    # So instead, use an activation hook.
-    activation.linkOktaYaml = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      run ln -sf $VERBOSE_ARG "${config.age.secrets.okta-yaml.path}" "${config.home.homeDirectory}/.okta/okta.yaml" 
-    '';
-
     packages = with pkgs; [
       # AWS binaries
       awscli2

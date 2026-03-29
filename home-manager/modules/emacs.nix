@@ -1,6 +1,5 @@
 {
   config,
-  lib,
   pkgs,
   robotdisco-secrets,
   ...
@@ -29,14 +28,6 @@ in
   };
 
   home = {
-    activation = {
-      linkEmacsAuthinfo = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        run ln -sf $VERBOSE_ARG "${config.age.secrets.emacs-authinfo.path}" "${config.home.homeDirectory}/.authinfo";
-      '';
-      linkEmacsXoauth2El = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        run ln -sf $VERBOSE_ARG "${config.age.secrets.emacs-xoauth2-el.path}" "${config.xdg.configHome}/emacs/xoauth2.el";
-      '';
-    };
     packages = with pkgs; [
       emacsPackage
       # Dictionary support for emacs spellchecking
@@ -75,8 +66,14 @@ in
   };
 
   age.secrets = {
-    emacs-authinfo.rekeyFile = "${robotdisco-secrets}/emacs-authinfo.age";
-    emacs-xoauth2-el.rekeyFile = "${robotdisco-secrets}/emacs-xoauth2-el.age";
+    emacs-authinfo = {
+      rekeyFile = "${robotdisco-secrets}/emacs-authinfo.age";
+      path = "${config.home.homeDirectory}/.authinfo";
+    };
+    emacs-xoauth2-el = {
+      rekeyFile = "${robotdisco-secrets}/emacs-xoauth2-el.age";
+      path = "${config.xdg.configHome}/emacs/xoauth2.el";
+    };
   };
 
   xdg = {
