@@ -39,23 +39,24 @@
       };
       primaryUser = "gaelan";
 
-      # Disable macOS default Spotlight shortcuts (Cmd+Space and
-      # Cmd+Option+Space) so aerospace can use those key chords freely.
-      # aerospace binds alt-d to open Spotlight instead.
+      # Remap Spotlight to Opt+D (matching sway's $mod+d for
+      # app launcher). This must be a system-level shortcut
+      # because aerospace can't trigger Spotlight directly.
+      # Cmd+Option+Space Spotlight Window is disabled.
       defaults.CustomUserPreferences."com.apple.symbolichotkeys".AppleSymbolicHotKeys = {
-        # Spotlight Search (Cmd+Space)
+        # Spotlight Search → Opt+D
         "64" = {
-          enabled = false;
+          enabled = true;
           value = {
             parameters = [
-              32
-              49
-              1048576
+              100
+              2
+              524288
             ];
             type = "standard";
           };
         };
-        # Spotlight Window (Cmd+Option+Space)
+        # Spotlight Window (Cmd+Option+Space) — disabled
         "65" = {
           enabled = false;
           value = {

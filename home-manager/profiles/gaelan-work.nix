@@ -137,9 +137,6 @@ in
                 # Toggle floating (sway: $mod+Shift+space)
                 "alt-shift-space" = "layout floating tiling";
 
-                # App launcher (sway: $mod+d)
-                "alt-d" = "exec-and-forget open -a Spotlight";
-
                 # Reload config (sway: $mod+Shift+c)
                 "alt-shift-c" = "reload-config";
 
