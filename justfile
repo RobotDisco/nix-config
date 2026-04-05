@@ -17,6 +17,13 @@ tangle:
     ls "{{emacs_dev_dir}}"/*.el 2>/dev/null \
         || echo "  (none produced)"
 
+# Check tangled init.el for syntax errors (paren balance etc.)
+check-emacs: tangle
+    "$EMACS_NOX" --batch \
+        --eval "(progn (find-file \"{{emacs_dev_dir}}/init.el\") \
+                       (check-parens) \
+                       (message \"Syntax OK\"))"
+
 # Tangle init.org and launch emacs with the result (elisp changes)
 emacs-dev *args: tangle
     #!/usr/bin/env bash
