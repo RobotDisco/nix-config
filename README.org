@@ -26,7 +26,7 @@ lint
 check
 
 # Test switch (build without applying)
-build-test
+build-all
 
 # Test switch to new configuration
 test-switch
@@ -92,7 +92,7 @@ lint
 check
 
 # Test configuration without applying
-build-test
+build-all
 
 # Test switch to verify configuration
 test-switch

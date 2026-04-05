@@ -62,3 +62,7 @@ inspect-home host:
 # Apply home-manager config (previous generation available for rollback)
 switch-home host:
     home-manager switch --flake '.#gaelan@{{host}}'
+
+# Apply nix-darwin config (previous generation available for rollback)
+switch-darwin host:
+    darwin-rebuild switch --flake '.#{{host}}'

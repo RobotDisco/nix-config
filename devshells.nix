@@ -53,21 +53,19 @@ let
             echo "✅ darktower build successful!"
           '')
 
-          (writeShellScriptBin "build-test" ''
+          (writeShellScriptBin "build-fountain-of-ahmed-iii" ''
+            echo "Building fountain-of-ahmed-iii (macOS)..."
+            nix build \
+              .#darwinConfigurations.fountain-of-ahmed-iii.system \
+              --no-link
+            echo "✅ fountain-of-ahmed-iii build successful!"
+          '')
+
+          (writeShellScriptBin "build-all" ''
             echo "🔨 Testing all system builds..."
             build-arrakis
             build-darktower
-            ${
-              if stdenv.isDarwin then
-                ''
-                  echo "Building fountain-of-ahmed-iii (macOS)..."
-                  nix build \
-                    .#darwinConfigurations.fountain-of-ahmed-iii.system \
-                    --no-link
-                ''
-              else
-                ""
-            }
+            ${if stdenv.isDarwin then "build-fountain-of-ahmed-iii" else ""}
             echo "✅ All system builds successful!"
           '')
 
@@ -144,9 +142,10 @@ let
             echo "🔧 Available development commands:"
             echo ""
             echo "Build verification:"
-            echo "  build-arrakis    Build arrakis (NixOS laptop)"
-            echo "  build-darktower  Build darktower (NixOS server)"
-            echo "  build-test       Build all NixOS systems"
+            echo "  build-arrakis              Build arrakis (NixOS laptop)"
+            echo "  build-darktower            Build darktower (NixOS server)"
+            echo "  build-fountain-of-ahmed-iii  Build fountain-of-ahmed-iii (macOS)"
+            echo "  build-all                  Build all system configs"
             echo ""
             echo "Local apply (run on arrakis):"
             echo "  test-switch      Test config, no permanent change"
