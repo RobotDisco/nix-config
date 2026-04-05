@@ -6,11 +6,10 @@ workflows, and architecture overview.
 
 # Development Workflow
 
-Run `dev-help` (after `nix develop` or direnv) for all available commands.
-Run `just --list` for fast-iteration commands (emacs, home-manager).
+Run `just --list` (after `nix develop` or direnv) for all available commands.
 
 Key workflows:
-- System changes: `build-all` → `test-switch` → `apply`
+- System changes: `just build-all` → `just test-switch` → `just apply`
 - Home-manager: `just build-home <host>` → `just switch-home <host>`
 - Emacs: `just emacs-dev` or `just emacs-dev-package`
 
