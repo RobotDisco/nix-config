@@ -56,7 +56,8 @@ flags. GROOM exists to mirror the JIRA grooming workflow.
 ### org-roam
 
 - `org-roam-directory`: `~/Documents/brain/notes`
-- Daily journal: `journal/` subdirectory
+  - Zettelkasten notes: `~/Documents/brain/notes/` (root)
+  - Daily journal: `~/Documents/brain/notes/journal/` subdirectory
 - Project notes: `projects/` subdirectory (also in agenda-files)
 - `C-c n r` — random node review (excludes journal and literature)
 - `C-c j j` — bullet journal entry (today)

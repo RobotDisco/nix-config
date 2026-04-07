@@ -1194,103 +1194,124 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
 #+END_SRC
 ** Org
 #+BEGIN_SRC emacs-lisp :tangle yes
-      (use-package org
-        :ensure t
-        :hook (org-mode-hook . (lambda ()
-         			   (setq-local fill-column 80)
-         			   (visual-line-mode +1)))
-        :mode ("\\.org\\'" . org-mode)
-        :bind (("C-c a" . org-agenda)
-         	 ("C-c c" . org-capture)
-         	 ("C-c l" . org-store-link))
-        :config
-        ;; Enable org habits
-        (add-to-list 'org-modules 'org-habit t)
-        :custom
-        (org-agenda-custom-commands
-         '(("." "Now (unified)"
-            ((todo "DOING"
-                   ((org-agenda-overriding-header "── DOING (max 3) ──")
-                    (org-agenda-files
-                     (list "~/Documents/gtd/personal.org"
-                           "~/Documents/brain/notes/projects/"
-                           "~/Documents/gtd/jira/CLOUD.org"))))
-             (agenda ""
-                     ((org-agenda-span 3)
-                      (org-agenda-overriding-header "── Next 3 days ──")
-                      (org-agenda-skip-function
-                       '(org-agenda-skip-entry-if
-                         'todo '("DONE" "HALTED" "GROOM")))))
-             (todo "NEXT"
-                   ((org-agenda-overriding-header "── On Deck ──")
-                    (org-agenda-files
-                     (list "~/Documents/gtd/personal.org"
-                           "~/Documents/brain/notes/projects/"
-                           "~/Documents/gtd/jira/CLOUD.org"))))))
-           ("W" "Work view"
-            ((todo "DOING|NEXT"
-                   ((org-agenda-overriding-header "── JIRA: Active ──")
-                    (org-agenda-files
-                     '("~/Documents/gtd/jira/CLOUD.org"))))
-             (agenda ""
-                     ((org-agenda-span 5)
-                      (org-agenda-overriding-header "── Work week ──")
-                      (org-agenda-files
-                       (list "~/Documents/gtd/gcal/work.org"
-                             "~/Documents/gtd/jira/CLOUD.org"
-                             "~/Documents/gtd/personal.org"))
-                      (org-agenda-tag-filter-preset '("+@work"))))))
-           ("P" "Personal view"
-            ((todo "DOING|NEXT"
-                   ((org-agenda-overriding-header "── Personal: Active ──")
-                    (org-agenda-files
-                     (list "~/Documents/gtd/personal.org"))
-                    (org-agenda-tag-filter-preset '("-@work"))))
-             (agenda ""
-                     ((org-agenda-span 7)
-                      (org-agenda-overriding-header "── Personal week ──")
-                      (org-agenda-files
-                       (list "~/Documents/gtd/gcal/personal.org"
-                             "~/Documents/gtd/personal.org"))
-                      (org-agenda-tag-filter-preset '("-@work"))))))
-           ("i" "Inbox (triage)" todo ""
-            ((org-agenda-files '("~/Documents/gtd/inbox.org"))
-             (org-agenda-overriding-header
-              "── Inbox: schedule, refile, or delete ──")))))
-        (org-agenda-files '("~/Documents/gtd/inbox.org"
-                            "~/Documents/gtd/personal.org"
-                            "~/Documents/brain/notes/projects/"
-                            "~/Documents/gtd/gcal/personal.org"
-                            "~/Documents/gtd/gcal/work.org"
-                            "~/Documents/gtd/jira/CLOUD.org"))
-        (org-capture-templates
-         '(("t" "Task → Inbox" entry
-            (file "~/Documents/gtd/inbox.org")
-            "* TODO %?\n%i"
-            :empty-lines 1)
-           ("s" "Scheduled task (personal)" entry
-            (file "~/Documents/gtd/inbox.org")
-            "* TODO %?\nSCHEDULED: %^t\n%i"
-            :empty-lines 1)
-           ("e" "Work note → Inbox" entry
-            (file "~/Documents/gtd/inbox.org")
-            "* TODO %? :@work:\n%i"
-            :empty-lines 1)
-           ("a" "Action from note" entry
-            (file "~/Documents/gtd/inbox.org")
-            "* TODO %?\n%a\n%i"
-            :empty-lines 1)))
-        (org-refile-targets
-         '(("~/Documents/gtd/personal.org" . (:level . 1))))
-        (org-todo-keywords
-         ;; Sequence for individual items, extended for work jira workflow.
-         '((sequence "TODO(q)" "GROOM(g)" "NEXT(w)" "DOING(e)"
-                    "WAIT(r@/!)" "|" "DONE(t!)" "HALTED(y@)")
-           ;; Sequence for personal projects.
-           (sequence "PROJECT(p)" "ACTIVE(d)" "PAUSED(f@/!)"
-                     "|" "DONE(!)" "HALTED(@)"))))
-       (org-tag-alist '(("@work" . ?w)
-                        ("blocked" . ?b)))
+  (use-package org
+    :ensure t
+    :hook (org-mode-hook . (lambda ()
+     			   (setq-local fill-column 80)
+     			   (visual-line-mode +1)))
+    :mode ("\\.org\\'" . org-mode)
+    :bind (("C-c a" . org-agenda)
+     	 ("C-c c" . org-capture)
+     	 ("C-c l" . org-store-link))
+    :config
+    ;; Enable org habits
+    (add-to-list 'org-modules 'org-habit t)
+    :custom
+    (org-agenda-custom-commands
+     '(("." "Now (unified)"
+        ((todo "DOING"
+               ((org-agenda-overriding-header "── DOING (max 3) ──")
+                (org-agenda-files
+                 '("~/Documents/gtd/personal.org"
+  		 "~/Documents/brain/notes/projects/"
+  		 "~/Documents/gtd/jira/CLOUD.org"
+  		 "~/Documents/gtd/inbox.org"))))
+         (agenda ""
+                 ((org-agenda-span 7)
+                  (org-agenda-overriding-header "── Next 7 days ──")
+                  (org-agenda-skip-function
+                   '(org-agenda-skip-entry-if
+  		   'todo '("DONE" "HALTED" "GROOM")))))
+         (todo "NEXT"
+               ((org-agenda-overriding-header "── On Deck ──")
+                (org-agenda-files
+  	       '("~/Documents/gtd/personal.org"
+  		 "~/Documents/brain/notes/projects/"
+  		 "~/Documents/gtd/jira/CLOUD.org"
+  		 "~/Documents/gtd/inbox.org"))))))
+       ("W" "Work view"
+        ((todo "DOING|NEXT"
+               ((org-agenda-overriding-header "── JIRA: Active ──")
+                (org-agenda-files
+                 '("~/Documents/gtd/jira/CLOUD.org"
+  		 "~/Documents/gtd/inbox.org"))
+  	      (org-agenda-tag-filter-preset '("+@work"))))
+         (agenda ""
+                 ((org-agenda-span 5)
+                  (org-agenda-overriding-header "── Work week ──")
+                  (org-agenda-files
+  		 '("~/Documents/gtd/gcal/work.org"
+  		   "~/Documents/gtd/jira/CLOUD.org"
+  		   "~/Documents/gtd/personal.org"))
+                  (org-agenda-tag-filter-preset '("+@work"))))))
+       ("P" "Personal view"
+        ((todo "DOING|NEXT"
+               ((org-agenda-overriding-header "── Personal: Active ──")
+                (org-agenda-files
+                 '("~/Documents/gtd/personal.org"
+  		 "~/Documents/gtd/inbox.org"))
+                (org-agenda-tag-filter-preset '("-@work"))))
+         (agenda ""
+                 ((org-agenda-span 7)
+                  (org-agenda-overriding-header "── Personal week ──")
+                  (org-agenda-files
+                   (list "~/Documents/gtd/gcal/personal.org"
+  		       "~/Documents/gtd/personal.org"))
+                  (org-agenda-tag-filter-preset '("-@work"))))))
+       ("R" "Weekly Review"
+        ((todo "DOING|NEXT|TODO"
+               ((org-agenda-overriding-header "── Active & Queued ──")
+                (org-agenda-files
+                 '("~/Documents/gtd/personal.org"
+  		 "~/Documents/brain/notes/projects/"
+  		 "~/Documents/gtd/jira/CLOUD.org"
+  		 "~/Documents/gtd/inbox.org"))))
+         (agenda ""
+                 ((org-agenda-span 42)
+                  (org-agenda-start-day "-14d")
+                  (org-agenda-overriding-header
+                   "── -2 weeks → +4 weeks ──")
+                  (org-agenda-skip-function
+                   '(org-agenda-skip-entry-if
+  		   'todo '("DONE" "HALTED" "GROOM")))))))
+       ("i" "Inbox (triage)" todo ""
+        ((org-agenda-files '("~/Documents/gtd/inbox.org"))
+         (org-agenda-overriding-header
+          "── Inbox: schedule, refile, or delete ──")))))
+    (org-agenda-files '("~/Documents/gtd/inbox.org"
+                        "~/Documents/gtd/personal.org"
+                        "~/Documents/brain/notes/projects/"
+                        "~/Documents/gtd/gcal/personal.org"
+                        "~/Documents/gtd/gcal/work.org"
+                        "~/Documents/gtd/jira/CLOUD.org"))
+    (org-capture-templates
+     '(("t" "Task → Inbox" entry
+        (file "~/Documents/gtd/inbox.org")
+        "* TODO %?\n%i"
+        :empty-lines 1)
+       ("s" "Scheduled task (personal)" entry
+        (file "~/Documents/gtd/inbox.org")
+        "* TODO %?\nSCHEDULED: %^t\n%i"
+        :empty-lines 1)
+       ("e" "Work note → Inbox" entry
+        (file "~/Documents/gtd/inbox.org")
+        "* TODO %? :@work:\n%i"
+        :empty-lines 1)
+       ("a" "Action from note" entry
+        (file "~/Documents/gtd/inbox.org")
+        "* TODO %?\n%a\n%i"
+        :empty-lines 1)))
+    (org-refile-targets
+     '(("~/Documents/gtd/personal.org" . (:level . 1))))
+    (org-todo-keywords
+     ;; Sequence for individual items, extended for work jira workflow.
+     '((sequence "TODO(q)" "GROOM(g)" "NEXT(w)" "DOING(e)"
+                 "WAIT(r@/!)" "|" "DONE(t!)" "HALTED(y@)")
+       ;; Sequence for personal projects.
+       (sequence "PROJECT(p)" "ACTIVE(d)" "PAUSED(f@/!)"
+                 "|" "DONE(!)" "HALTED(@)")))
+    (org-tag-alist '(("@work" . ?w)
+                     ("blocked" . ?b))))
 #+END_SRC
 *** org-crypt
 Allow for partial encryption of org files (i.e. specific headers), using a special tag.
@@ -1351,7 +1372,6 @@ An implementation of Zettelkasten for org, inspired by org-roam
   			(interactive)
   			(org-roam-node-random nil (lambda (node)
   						    (and
-  						     (member "journal" (org-roam-node-tags node))
   						     (not (member "literature" (org-roam-node-tags node)))))))))
     :custom
     (org-roam-directory "~/Documents/brain/notes")
