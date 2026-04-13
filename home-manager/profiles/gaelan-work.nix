@@ -1,6 +1,5 @@
 {
   config,
-  lib,
   robotdisco-secrets,
   ...
 }:
@@ -80,90 +79,105 @@ in
             };
           };
 
+          on-window-detected = [
+            {
+              "if".app-name-regex-substring = "Emacs";
+              run = "move-node-to-workspace focus";
+            }
+            {
+              "if".app-name-regex-substring = "Vivaldi";
+              run = "move-node-to-workspace web";
+            }
+            {
+              "if".app-name-regex-substring = "Slack";
+              run = "move-node-to-workspace comms";
+            }
+            {
+              "if".app-name-regex-substring = "Tidal";
+              run = "move-node-to-workspace fun";
+            }
+            {
+              "if".app-name-regex-substring = "Discord";
+              run = "move-node-to-workspace fun";
+            }
+          ];
+
           mode = {
-            main.binding =
-              # Workspace switching (sway: $mod+N) and
-              # moving windows to workspaces (sway: $mod+Shift+N)
-              builtins.listToAttrs (
-                builtins.concatMap (
-                  n:
-                  let
-                    s = builtins.toString n;
-                  in
-                  [
-                    {
-                      name = "alt-${s}";
-                      value = "workspace ${s}";
-                    }
-                    {
-                      name = "alt-shift-${s}";
-                      value = "move-node-to-workspace ${s}";
-                    }
-                  ]
-                ) (lib.range 1 9)
-              )
-              // {
-                # Launch emacsclient (sway: $mod+Return = terminal)
-                "alt-enter" = "exec-and-forget ${emacsclient} -nc";
+            main.binding = {
+              # Workspace switching
+              "alt-1" = "workspace focus";
+              "alt-2" = "workspace web";
+              "alt-3" = "workspace comms";
+              "alt-4" = "workspace fun";
 
-                # Close window (sway: $mod+Shift+q)
-                "alt-shift-q" = "close";
+              # Move windows to workspaces
+              "alt-shift-1" = "move-node-to-workspace focus";
+              "alt-shift-2" = "move-node-to-workspace web";
+              "alt-shift-3" = "move-node-to-workspace comms";
+              "alt-shift-4" = "move-node-to-workspace fun";
+            }
+            // {
+              # Launch emacsclient (sway: $mod+Return = terminal)
+              "alt-enter" = "exec-and-forget ${emacsclient} -nc";
 
-                # Focus movement (sway: $mod+h/j/k/l)
-                "alt-h" = "focus left";
-                "alt-j" = "focus down";
-                "alt-k" = "focus up";
-                "alt-l" = "focus right";
+              # Close window (sway: $mod+Shift+q)
+              "alt-shift-q" = "close";
 
-                # Move windows (sway: $mod+Shift+h/j/k/l)
-                "alt-shift-h" = "move left";
-                "alt-shift-j" = "move down";
-                "alt-shift-k" = "move up";
-                "alt-shift-l" = "move right";
+              # Focus movement (sway: $mod+h/j/k/l)
+              "alt-h" = "focus left";
+              "alt-j" = "focus down";
+              "alt-k" = "focus up";
+              "alt-l" = "focus right";
 
-                # Toggle split direction (sway: $mod+e)
-                "alt-e" = "layout tiles horizontal vertical";
+              # Move windows (sway: $mod+Shift+h/j/k/l)
+              "alt-shift-h" = "move left";
+              "alt-shift-j" = "move down";
+              "alt-shift-k" = "move up";
+              "alt-shift-l" = "move right";
 
-                # Explicit split direction (sway: $mod+b / $mod+v)
-                "alt-b" = "layout tiles horizontal";
-                "alt-v" = "layout tiles vertical";
+              # Toggle split direction (sway: $mod+e)
+              "alt-e" = "layout tiles horizontal vertical";
 
-                # Accordion/stacking layout (sway: $mod+s)
-                "alt-s" = "layout accordion horizontal vertical";
+              # Explicit split direction (sway: $mod+b / $mod+v)
+              "alt-b" = "layout tiles horizontal";
+              "alt-v" = "layout tiles vertical";
 
-                # Fullscreen (sway: $mod+f)
-                "alt-f" = "fullscreen";
+              # Accordion/stacking layout (sway: $mod+s)
+              "alt-s" = "layout accordion horizontal vertical";
 
-                # Toggle floating (sway: $mod+Shift+space)
-                "alt-shift-space" = "layout floating tiling";
+              # Fullscreen (sway: $mod+f)
+              "alt-f" = "fullscreen";
 
-                # Reload config (sway: $mod+Shift+c)
-                "alt-shift-c" = "reload-config";
+              # Toggle floating (sway: $mod+Shift+space)
+              "alt-shift-space" = "layout floating tiling";
 
-                # Resize (quick smart resize)
-                "alt-minus" = "resize smart -50";
-                "alt-equal" = "resize smart +50";
+              # Reload config (sway: $mod+Shift+c)
+              "alt-shift-c" = "reload-config";
 
-                # Enter resize mode (sway: $mod+r)
-                "alt-r" = "mode resize";
+              # Resize (quick smart resize)
+              "alt-minus" = "resize smart -50";
+              "alt-equal" = "resize smart +50";
 
-                # Switch between current and last workspace
-                "alt-tab" = "workspace-back-and-forth";
+              # Enter resize mode (sway: $mod+r)
+              "alt-r" = "mode resize";
 
-                # Focus monitor (sway: $mod+comma / $mod+period)
-                "alt-comma" = "focus-monitor prev";
-                "alt-period" = "focus-monitor next";
+              # Switch between current and last workspace
+              "alt-tab" = "workspace-back-and-forth";
 
-                # Move window to monitor (sway: $mod+Shift+comma / $mod+Shift+period)
-                "alt-shift-comma" = "move-node-to-monitor prev";
-                "alt-shift-period" = "move-node-to-monitor next";
+              # Focus monitor (sway: $mod+comma / $mod+period)
+              "alt-comma" = "focus-monitor prev";
+              "alt-period" = "focus-monitor next";
 
-                # Move workspace to next monitor
-                "alt-shift-tab" = "move-workspace-to-monitor --wrap-around next";
+              # Move window to monitor (sway: $mod+Shift+comma / $mod+Shift+period)
+              "alt-shift-comma" = "move-node-to-monitor prev";
+              "alt-shift-period" = "move-node-to-monitor next";
 
-                # Enter layout mode (for join-with operations)
-                "alt-shift-semicolon" = "mode layout";
-              };
+              # Move workspace to next monitor
+              "alt-shift-tab" = "move-workspace-to-monitor --wrap-around next";
+
+              # Enter layout mode (for join-with operations)
+              "alt-shift-semicolon" = "mode layout";
+            };
 
             resize.binding = {
               # Directional resize (sway resize mode: h/j/k/l)
