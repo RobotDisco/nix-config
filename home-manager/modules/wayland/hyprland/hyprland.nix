@@ -31,7 +31,7 @@ in
         # Vanilla bindings
         bind = [
           "$mod, Return, exec, emacsclient -c"
-          "$mod, D, exec, rofi -show drun"
+          "$mod, D, exec, dmenu_run"
           "$mod SHIFT, K, killactive"
           "$mod SHIFT, C, exit"
 
