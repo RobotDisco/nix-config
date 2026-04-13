@@ -168,12 +168,9 @@ in
               "alt-comma" = "focus-monitor prev";
               "alt-period" = "focus-monitor next";
 
-              # Move window to monitor (sway: $mod+Shift+comma / $mod+Shift+period)
-              "alt-shift-comma" = "move-node-to-monitor prev";
-              "alt-shift-period" = "move-node-to-monitor next";
-
-              # Move workspace to next monitor
-              "alt-shift-tab" = "move-workspace-to-monitor --wrap-around next";
+              # Move workspace to monitor (sway: $mod+Shift+comma / $mod+Shift+period)
+              "alt-shift-comma" = "move-workspace-to-monitor --wrap-around prev";
+              "alt-shift-period" = "move-workspace-to-monitor --wrap-around next";
 
               # Enter layout mode (for join-with operations)
               "alt-shift-semicolon" = "mode layout";
