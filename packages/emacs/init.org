@@ -1413,24 +1413,24 @@ An implementation of Zettelkasten for org, inspired by org-roam
         :target (file "~/Documents/brain/notes/projects/%<%Y%m%d%H%M%S>-${slug}.org")
         :unnarrowed t)))
     (org-roam-dailies-capture-templates
-     '(("j" "Daily Bullet" plain
+     '(("j" "Daily Bullet" entry
         "** %<%0H:%M> %?"
         :target (file+head+olp "%<%Y>/%<%0m>/%<%Y-%m-%d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:" ("Log"))
         :unnarrowed t)
-       ("d" "Morning Planning" plain
+       ("d" "Morning Planning" entry
         "* Morning Reflection\n** What are my most important tasks today?\n- %?\n"
         :target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:")
         :unnarrowed t)
-       ("w" "Weekly Reflection" plain
+       ("w" "Weekly Reflection" entry
         (file "~/Documents/brain/templates/weekly.org")
         :target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org"
                             "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:")
         :unnarrowed t)
-       ("m" "Monthly Reflection" plain
+       ("m" "Monthly Reflection" entry
         "* Monthly Reflection\n** What were my biggest wins this month?\n- %?\n** What did I learn this month?\n- \n** What tensions did I remove this month?\n- \n** What was I most grateful for this month?\n- \n** How have I grown this month?\n- \n"
         :target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:")
         :unnarrowed t)
-       ("y" "Yearly Reflection" plain
+       ("y" "Yearly Reflection" entry
         "* Yearly Reflection\n** What were my biggest wins this year?\n- %?\n** What did I learn this year?\n- \n** What tensions did I remove this year?\n- \n** What was I most grateful for this year?\n- \n** How have I grown this year?\n- \n"
         :target (file+head "%<%Y>/%<%0m>/%<%Y-%0m-%0d>.org" "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:")
         :unnarrowed t)))
