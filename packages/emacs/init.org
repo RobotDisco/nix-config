@@ -1576,7 +1576,7 @@ I use JIRA at work; let's see if I can feed these into my task management flow
     (org-jira-custom-jqls
      '((:jql
         " project = CLOUD and status = Open order by created DESC "
-        :limit 100 :filename "open-tasks"))
+        :limit 100 :filename "open-tasks")))
      (org-jira-jira-status-to-org-keyword-alist '(("To Do" . "TODO")
   						("Open" . "TODO")
   						("To Groom" . "GROOM")
@@ -1587,7 +1587,7 @@ I use JIRA at work; let's see if I can feed these into my task management flow
      (org-jira-update-issue-details-include-reporter nil)
      (org-jira-working-dir "~/Documents/gtd/jira")
      ;; Work doesn't use Jira's time tracker, so don't clobber my local clocking.
-     (org-jira-worklog-sync-p nil)))
+     (org-jira-worklog-sync-p nil))
 #+END_SRC
 
 Also, I use slack; get at least important messages
