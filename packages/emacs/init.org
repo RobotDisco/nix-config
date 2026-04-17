@@ -758,6 +758,20 @@ Support encryption as the basis of a number of functions
     (setq epg-file-encrypt-to '("gdcosta@gmail.com"
   				"gaelan@tulip.com")))
 #+END_SRC
+
+** Snippets
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package yasnippet
+    :ensure t
+    :defer 2
+    :config
+    (yas-global-mode))
+
+  (use-package yasnippet-snippets
+    :ensure t
+    :after (yasnippet))
+#+END_SRC
+
 * Software Development
 ** envrc
 Project-specific environment variables via =direnv=
