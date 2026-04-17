@@ -20,6 +20,7 @@ in
           "atlassian@claude-plugins-official" = true;
           "gitlab@claude-plugins-official" = true;
           "slack@claude-plugins-official" = true;
+          "terraform@claude-plugins-official" = true;
         };
       };
 
