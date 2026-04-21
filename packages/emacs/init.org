@@ -1563,7 +1563,7 @@ Be able to fetch (and even set) events in my google calendar.
 
 Because org-gcal is stupid and because work is paranoid, I can only control one calendar at a time. As such I've set my work calendar to control my personal one.
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package plstore
     :ensure nil
     :defer 2
