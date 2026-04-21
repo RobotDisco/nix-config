@@ -511,10 +511,19 @@ DBUS or OSX' notifier framework
 * Completion / Minibuffer
 ** Consult
 Enhance emacs commands based on completion
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package consult
-    :demand t
+    :defer 1
     :ensure t)
+#+END_SRC
+Add org-roam functionality
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package consult-org-roam
+    :defer 1
+    :after (consult org-roam)
+    :ensure t
+    :config
+    (consult-org-roam-mode +1))
 #+END_SRC
 ** Corfu
 Completion popups in the regular buffer. Note that I am also enabling popups to render after some (possibly default) delay if enough prefix characters in a code segment are typed.
