@@ -1399,14 +1399,14 @@ An implementation of Zettelkasten for org, inspired by org-roam
     :custom
     (org-roam-directory "~/Documents/brain/notes")
     (org-roam-dailies-directory "journal/")
-    ;; (org-roam-node-display-template
-    ;;  (concat
-    ;; Org-roam template format
+    (org-roam-node-display-template
+     (concat
+      ;; Org-roam template format
     ;; ${title:*} -- print the title, using up as much free space as possible
-    ;;  "${title:*}"
+      "${title:*}"
     ;; We use emacs properties to attach font colouring to our tag list
     ;; We give a fixed amount of width to our node's tag list.
-    ;;  (propertize "${tags:20}" 'face 'org-tag)))
+      (propertize "${tags:20}" 'face 'org-tag)))
     (org-roam-capture-templates
      '(("a" "author" plain "%?"
         :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
