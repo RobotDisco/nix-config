@@ -16,11 +16,28 @@ in
       claude-code = {
         enable = true;
 
-        settings.enabledPlugins = {
-          "atlassian@claude-plugins-official" = true;
-          "gitlab@claude-plugins-official" = true;
-          "slack@claude-plugins-official" = true;
-          "terraform@claude-plugins-official" = true;
+        settings = {
+          enabledPlugins = {
+            "atlassian@claude-plugins-official" = true;
+            "slack@claude-plugins-official" = true;
+            "terraform@claude-plugins-official" = true;
+          };
+          permissions = {
+            deny = [
+              "mcp__GitLab__manage_pipeline"
+            ];
+            ask = [
+              "mcp__GitLab__create_issue"
+              "mcp__GitLab__create_workitem_note"
+            ];
+          };
+        };
+
+        mcpServers = {
+          GitLab = {
+            type = "http";
+            url = "https://git.internal.tulip.io/api/v4/mcp";
+          };
         };
       };
 

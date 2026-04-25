@@ -18,10 +18,16 @@ in
       default = { };
       description = "Settings passed through to programs.claude-code.settings.";
     };
+
+    mcpServers = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+      description = "MCP servers passed through to programs.claude-code.mcpServers.";
+    };
   };
 
   config.programs.claude-code = {
-    inherit (cfg) enable settings;
+    inherit (cfg) enable settings mcpServers;
 
     # Always use the latest
     package = pkgs-unstable.claude-code;
