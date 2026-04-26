@@ -53,9 +53,9 @@ in
 
           criticalPowerAction = "Hibernate";
 
-          percentageLow = 15;
-          percentageCritical = 12;
-          percentageAction = 10;
+          percentageLow = 50;
+          percentageCritical = 45;
+          percentageAction = 40;
         };
         # Logind governs what happens when the laptop lid is closed.
         #
