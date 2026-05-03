@@ -66,10 +66,9 @@ apply:
 
 # Deploy to darktower via SSH
 apply-darktower:
-    sudo nixos-rebuild switch --flake .#darktower \
-        --target-host darktower \
-        --build-host localhost \
-        --use-remote-sudo
+    nixos-rebuild switch --flake .#darktower \
+        --target-host 192.168.10.3 \
+        --sudo --ask-sudo-password
 
 # --- Home-manager ---
 
