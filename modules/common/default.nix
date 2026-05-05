@@ -1,10 +1,7 @@
 { myLib, ... }:
 
 {
-  imports = [
-    ../../secrets/agenix-rekey.nix
-  ]
-  ++ (myLib.scanPaths ./.);
+  imports = myLib.scanPaths ./.;
 
   config = {
     # Enable ZSH, my preferred shell.

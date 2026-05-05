@@ -1,16 +1,13 @@
-{ robotdisco-secrets, ... }:
+{ ... }:
 
 {
   imports = [
     ../modules/darwin/nix.nix
-    ../secrets/agenix-rekey.nix
   ];
 
   config = {
     networking.computerName = "Fountain of Ahmed III";
     networking.hostName = "fountain-of-ahmed-iii";
-
-    age.rekey.hostPubkey = "${robotdisco-secrets}/hosts/Fountain-of-Ahmed-III.pub";
 
     # Used for backwards compatibility, please read the changelog before
     # changing.

@@ -2,8 +2,8 @@
 
 {
   age.secrets = {
-    upsmon-primary.rekeyFile = "${robotdisco-secrets}/ups-user-primary.age";
-    upsmon-secondary.rekeyFile = "${robotdisco-secrets}/ups-user-secondary.age";
+    upsmon-primary.file = "${robotdisco-secrets}/ups-user-primary.age";
+    upsmon-secondary.file = "${robotdisco-secrets}/ups-user-secondary.age";
   };
 
   power.ups = {

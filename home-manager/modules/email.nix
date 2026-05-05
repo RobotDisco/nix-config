@@ -15,7 +15,7 @@ let
   oauth2l = "${pkgs.oauth2l}/bin/oauth2l";
 in
 {
-  age.secrets.google-oauth.rekeyFile = "${robotdisco-secrets}/google-credentials.json.age";
+  age.secrets.google-oauth.file = "${robotdisco-secrets}/google-credentials.json.age";
 
   accounts.email = {
     accounts.personal = {

@@ -18,7 +18,7 @@ in
 
   config = lib.mkIf cfg.enable {
     age.secrets.u2f_keys = {
-      rekeyFile = "${robotdisco-secrets}/u2f_keys.age";
+      file = "${robotdisco-secrets}/u2f_keys.age";
       path = "${config.home.homeDirectory}/.config/Yubico/u2f_keys";
     };
 

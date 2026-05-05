@@ -13,7 +13,7 @@ let
 in
 lib.mkIf cfg.enable {
   age.secrets.okta-yaml = {
-    rekeyFile = "${robotdisco-secrets}/okta-aws-cli.yaml.age";
+    file = "${robotdisco-secrets}/okta-aws-cli.yaml.age";
     path = "${config.home.homeDirectory}/.okta/okta.yaml";
   };
 

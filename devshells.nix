@@ -1,6 +1,5 @@
 {
   nixpkgs,
-  inputs,
 }:
 let
   mkShells =
@@ -8,15 +7,11 @@ let
     let
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [ inputs.agenix-rekey.overlays.default ];
       };
     in
     {
       default = pkgs.mkShell {
         packages = with pkgs; [
-          # Secrets management
-          agenix-rekey
-
           ## Linting and formatting tools
           # Lint github actions
           actionlint

@@ -1,13 +1,9 @@
-{ robotdisco-secrets, ... }:
+_:
 
 let
   username = "gaelan";
 in
 {
-  # in home-manager, we use our public user SSH key for decrypting sensitive
-  # files.
-  age.rekey.hostPubkey = "${robotdisco-secrets}/users/gaelan-personal.pub";
-
   home = {
     inherit username;
     homeDirectory = "/home/${username}";

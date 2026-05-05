@@ -67,11 +67,11 @@ in
 
   age.secrets = {
     emacs-authinfo = {
-      rekeyFile = "${robotdisco-secrets}/emacs-authinfo.age";
+      file = "${robotdisco-secrets}/emacs-authinfo.age";
       path = "${config.home.homeDirectory}/.authinfo";
     };
     emacs-xoauth2-el = {
-      rekeyFile = "${robotdisco-secrets}/emacs-xoauth2-el.age";
+      file = "${robotdisco-secrets}/emacs-xoauth2-el.age";
       path = "${config.xdg.configHome}/emacs/xoauth2.el";
     };
   };

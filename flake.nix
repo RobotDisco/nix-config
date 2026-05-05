@@ -10,10 +10,6 @@
       url = "github:yaxitech/ragenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    agenix-rekey = {
-      url = "github:oddlama/agenix-rekey";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     darwin = {
       url = "github:lnl7/nix-darwin/nix-darwin-25.11";
@@ -47,7 +43,6 @@
 
   outputs =
     inputs@{
-      self,
       nixpkgs,
       darwin,
       emacs-overlay,
@@ -80,7 +75,6 @@
             ./machines/fountain-of-ahmed-iii.nix
             inputs.agenix.darwinModules.default
             inputs.mac-app-utils.darwinModules.default
-            inputs.agenix-rekey.nixosModules.default
           ];
           specialArgs = {
             inherit myLib;
@@ -88,7 +82,6 @@
           };
           homeModules = [
             inputs.agenix.homeManagerModules.default
-            inputs.agenix-rekey.homeManagerModules.default
             inputs.mac-app-utils.homeManagerModules.default
           ];
           homeSpecialArgs = {
@@ -105,7 +98,6 @@
             inputs.nixos-hardware.nixosModules.framework-13-7040-amd
             ./machines/arrakis
             inputs.agenix.nixosModules.default
-            inputs.agenix-rekey.nixosModules.default
           ];
           specialArgs = {
             inherit myLib;
@@ -113,7 +105,6 @@
           };
           homeModules = [
             inputs.agenix.homeManagerModules.default
-            inputs.agenix-rekey.homeManagerModules.default
           ];
           homeSpecialArgs = {
             inherit myLib;
@@ -124,9 +115,7 @@
           system = "x86_64-linux";
           modules = [
             ./machines/darktower
-            # Secure secret injection
             inputs.agenix.nixosModules.default
-            inputs.agenix-rekey.nixosModules.default
           ];
           specialArgs = {
             inherit myLib;
@@ -134,17 +123,6 @@
           };
           homeModules = [ ];
         };
-      };
-
-      # Expose the necessary information in your flake as an output so
-      # agenix-rekey knows where it has to look for secrets and paths.
-      #
-      # Make sure that the pkgs passed here comes from the same nixpkgs version
-      # as the pkgs used on your hosts in `nixosConfigurations`, otherwise the
-      # rekeyed derivations will not be found!
-      agenix-rekey = inputs.agenix-rekey.configure {
-        userFlake = self;
-        nixosConfigurations = self.nixosConfigurations // self.darwinConfigurations;
       };
 
       homeConfigurations = {
@@ -171,7 +149,6 @@
               ./home-manager/modules
               ./home-manager/profiles/gaelan-personal.nix
               inputs.agenix.homeManagerModules.default
-              inputs.agenix-rekey.homeManagerModules.default
             ];
             extraSpecialArgs = {
               inherit myLib pkgs-unstable;
@@ -197,7 +174,6 @@
               ./home-manager/modules
               ./home-manager/profiles/gaelan-work.nix
               inputs.agenix.homeManagerModules.default
-              inputs.agenix-rekey.homeManagerModules.default
               inputs.mac-app-utils.homeManagerModules.default
             ];
             extraSpecialArgs = {
@@ -208,7 +184,7 @@
           };
       };
 
-      devShells = import ./devshells.nix { inherit nixpkgs inputs; };
+      devShells = import ./devshells.nix { inherit nixpkgs; };
 
       # Run ~nix fmt~ to use this package to format nix files
       formatter = {

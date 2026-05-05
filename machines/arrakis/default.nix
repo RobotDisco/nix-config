@@ -1,4 +1,4 @@
-{ robotdisco-secrets, ... }:
+{ ... }:
 
 {
   imports = [
@@ -16,8 +16,6 @@
     # Enable dynamic configuration of primary NIC
     interfaces.wlp1s0.useDHCP = true;
   };
-
-  age.rekey.hostPubkey = "${robotdisco-secrets}/hosts/arrakis.pub";
 
   boot = {
     # Simple password-based Full Disk Encryption

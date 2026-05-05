@@ -1,6 +1,5 @@
 {
   config,
-  robotdisco-secrets,
   ...
 }:
 
@@ -10,8 +9,6 @@ let
 in
 {
   config = {
-    age.rekey.hostPubkey = "${robotdisco-secrets}/users/gaelan-work.pub";
-
     robot-disco = {
       claude-code = {
         enable = true;
