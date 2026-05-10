@@ -21,6 +21,10 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-/c4vOql13au/mcOP8kICgRg+6ZAJjpLKcKikVbnXYws=";
 
+  # Fix all-mail query when notmuch DB path == maildir path
+  # (per-account-DB layout). See patch header for details.
+  patches = [ ./mujmap-fix-empty-path-query.patch ];
+
   buildInputs = [
     notmuch
   ];
