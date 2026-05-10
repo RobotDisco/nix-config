@@ -238,8 +238,13 @@ Overlays are how you extend or override the nixpkgs package set. The
   implementation to build on, and using ~final~ here risks an infinite
   loop if the package is defined in terms of itself.
 
-This repo uses overlays to bring in ~emacs-overlay~ packages and
-override the ones it breaks.
+This repo uses overlays for two purposes: pulling in third-party
+package sets (e.g. ~emacs-overlay~), and injecting local package
+derivations from ~packages/~ — either because a package isn't in
+nixpkgs, or because the nixpkgs version is out of date. Both system
+builders (~lib/nixosSystem.nix~ and ~lib/darwinSystem.nix~) compose
+these overlays in one place so all machines and home-manager
+configurations see a consistent package set.
 
 - [[https://wiki.nixos.org/wiki/Overlays][NixOS Wiki: Overlays]] — practical intro with examples
 - [[https://nixos.org/manual/nixpkgs/stable/#chap-overlays][nixpkgs manual: Overlays]] — the authoritative reference
@@ -294,6 +299,21 @@ channel, and ~nix-darwin~, which does /not/ follow the flake's main
 branch that has validated testing on macOS, so overriding it with
 ~follows~ could pull in a nixpkgs revision that hasn't passed Darwin
 CI.
+* Custom Packages
+
+Some packages in ~packages/~ are local derivations rather than stock
+nixpkgs packages. Each one exists for a specific reason:
+
+- *mujmap* (~packages/mujmap.nix~): Bridges JMAP (Fastmail's native
+  protocol) with notmuch. The upstream repo ([[https://github.com/elizagamedev/mujmap][elizagamedev/mujmap]]) is
+  effectively abandoned at v0.2.0 and broken with current Fastmail
+  auth. This package tracks the [[https://github.com/Lyndeno/mujmap][Lyndeno/mujmap]] fork, which fixes
+  missing JMAP ~Core~ capability declarations that cause Fastmail to
+  return 403s.
+
+- *sunsama* (~packages/sunsama.nix~): Task management app with no
+  nixpkgs package. Packaged locally as an Electron app wrapper.
+
 * Influences
 - https://github.com/ryan4yin/nix-config (also, Ryan Yin's [[https://github.com/ryan4yin/nixos-and-flakes-book][guide to Nix and Flakes]] is an essential read if you are getting started)
 - https://github.com/yomaq/nix-config

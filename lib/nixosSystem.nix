@@ -27,10 +27,7 @@ let
     # Include the community emacs overlay for latest packages
     emacs-overlay.overlays.default
 
-    # Add our custom packages
-    (final: _prev: {
-      sunsama = final.callPackage ../packages/sunsama.nix { };
-    })
+    (import ../packages/overlay.nix)
   ];
 
   # Instantiate nixpkgs for this system

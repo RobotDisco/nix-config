@@ -26,6 +26,8 @@ let
   overlays = [
     # Include the community emacs overlay for latest packages
     emacs-overlay.overlays.default
+
+    (import ../packages/overlay.nix)
   ];
 
   # Instantiate nixpkgs for this system

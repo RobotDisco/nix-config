@@ -1,84 +1,80 @@
 {
   config,
+  lib,
   pkgs,
   robotdisco-secrets,
   ...
 }:
 
-let
-  # Google demands I use XOAUTH, and this means I have to configure a convoluted
-  # SASL thing via some library called gssasl.
-  gs_mbsync = pkgs.isync.override {
-    withCyrusSaslXoauth2 = true;
-  };
-
-  oauth2l = "${pkgs.oauth2l}/bin/oauth2l";
-in
 {
-  age.secrets.google-oauth.file = "${robotdisco-secrets}/google-credentials.json.age";
-
+  age.secrets = {
+    fastmail-mujmap-pass.file = "${robotdisco-secrets}/fastmail-mujmap-pass.age";
+    google-oauth.file = "${robotdisco-secrets}/google-credentials.json.age";
+  };
   accounts.email = {
-    accounts.personal = {
-      address = "gdcosta@gmail.com";
-      flavor = "gmail.com";
-      maildir.path = "personal";
-      mbsync = {
-        enable = true;
-        create = "both";
-        expunge = "both";
-        remove = "both";
-        extraConfig.account = {
-          AuthMechs = "XOAUTH2";
+    accounts = {
+      personal = {
+        primary = true;
+        address = "gaelan@fastmail.ca";
+        aliases = [
+          "gaelan.dcosta@fastmail.com"
+          "gaelan@robot-disco.net"
+        ];
+        flavor = "fastmail.com";
+        maildir.path = "personal";
+        mu.enable = true;
+        notmuch.enable = true;
+        mujmap = {
+          enable = true;
+          settings = {
+            username = "gaelan@fastmail.ca";
+            password_command = "cat ${config.age.secrets.fastmail-mujmap-pass.path}";
+          };
+        };
+        realName = "Gaelan D'costa";
+        signature = {
+          showSignature = "append";
+          text = ":wqwqwq!";
         };
       };
-      mu.enable = true;
-      passwordCommand = [
-        "${oauth2l} fetch"
-        "--credentials ${config.age.secrets.google-oauth.path}"
-        "--scope https://mail.google.com"
-        # Since I'm authing two different accounts, different cache for each line
-        "--cache ~/.oauth2l-personal.cache"
-        # Use refresh token if I can.
-        "--refresh"
-      ];
-      primary = true;
-      realName = "Gaelan D'costa";
-      signature = {
-        showSignature = "append";
-        text = ":wqwqwq!";
-      };
-      userName = "gdcosta";
-    };
-    accounts.work = {
-      address = "gaelan@tulip.com";
-      aliases = [
-        "gaelan@tulip.io"
-        "gaelan.dcosta@tulip.com"
-      ];
-      flavor = "gmail.com";
-      maildir.path = "work";
-      mbsync = {
-        enable = true;
-        create = "both";
-        expunge = "both";
-        remove = "both";
-        extraConfig.account = {
-          AuthMechs = "XOAUTH2";
+      # Frozen archive of the old gdcosta@gmail.com account: indexed
+      # locally by mu/notmuch but no longer synced. New mail goes to
+      # Fastmail.
+      personal-old = {
+        address = "gdcosta@gmail.com";
+        flavor = "gmail.com";
+        lieer = {
+          enable = true;
+          sync.enable = false;
         };
+        maildir.path = "personal-old";
+        mu.enable = true;
+        notmuch.enable = true;
+        realName = "Gaelan D'costa";
+        signature = {
+          showSignature = "append";
+          text = ":wqwqwq!";
+        };
+        userName = "gdcosta";
       };
-      mu.enable = true;
-      passwordCommand = [
-        "${oauth2l} fetch"
-        "--credentials ${config.age.secrets.google-oauth.path}"
-        "--scope https://mail.google.com"
-        # Since I'm authing two different accounts, different cache for each line
-        "--cache ~/.oauth2l-work.cache"
-        # Use refresh token if I can.
-        "--refresh"
-      ];
-      realName = "Gaelan D'costa";
-      #signature = {};
-      userName = "gaelan@tulip.com";
+      work = {
+        address = "gaelan@tulip.com";
+        aliases = [
+          "gaelan@tulip.io"
+          "gaelan.dcosta@tulip.com"
+        ];
+        flavor = "gmail.com";
+        lieer = {
+          enable = true;
+          sync.enable = false;
+        };
+        maildir.path = "work";
+        mu.enable = true;
+        notmuch.enable = true;
+        realName = "Gaelan D'costa";
+        #signature = {};
+        userName = "gaelan@tulip.com";
+      };
     };
 
     maildirBasePath = "mail";
@@ -90,29 +86,37 @@ in
   # If I want these to automatically run eventually, I will have to move them
   # into their respective `services` sections.
   programs = {
-    # IMAP mail fetcher
-    mbsync = {
+    # Install fetcher binaries; the services block below decides
+    # which ones auto-sync.
+    ## Gmail
+    lieer.enable = true;
+    ## Fastmail
+    # Override the broken upstream mujmap in nixpkgs (v0.2.0) with
+    # our pinned Lyndeno fork. Done here rather than via overlay so
+    # the override stays scoped to its only consumer.
+    mujmap = {
       enable = true;
-      package = gs_mbsync;
-
-      groups.inboxes = {
-        personal = [
-          "INBOX"
-          "[Gmail]/Starred"
-        ];
-        work = [
-          "INBOX"
-          "[Gmail]/Starred"
-        ];
-      };
+      package = pkgs.callPackage ../../packages/mujmap.nix { };
     };
 
-    # Mail indexer for local mail processing.
+    # Mail indexers I'm trying out for local mail processing.
     mu.enable = true;
-  };
+    notmuch = {
+      enable = true;
 
-  home.shellAliases = {
-    "mbsa" = "mbsync -a && mu index";
-    "mbsi" = "mbsync inboxes && mu index";
+      new.tags = [ "new" ];
+      maildir.synchronizeFlags = true;
+      search.excludeTags = [
+        "deleted"
+        "spam"
+      ];
+    };
+  };
+  # Auto-sync, gated to Linux: home-manager's services.lieer is a
+  # systemd service module and refuses non-Linux platforms.
+  # Fastmail/mujmap has no home-manager service module — run manually.
+  services = lib.mkIf pkgs.stdenv.isLinux {
+    # Gmail
+    lieer.enable = true;
   };
 }

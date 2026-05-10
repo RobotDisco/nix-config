@@ -29,8 +29,9 @@ who provides the package:
 
 **Home-manager modules vs profiles**: `home-manager/modules/` contains
 reusable option-based modules (all should have `enable` options).
-Per-machine user config lives in `machines/<host>/` alongside the NixOS
-config, not in a separate profiles directory.
+`home-manager/profiles/` contains per-user/per-machine compositions of
+those modules. `machines/<host>/` holds NixOS hardware and system
+config only — not home-manager config.
 
 **Auto-importing modules**: `myLib.scanPaths` automatically imports all
 `.nix` files and directories from a path. Used in
@@ -40,6 +41,15 @@ config, not in a separate profiles directory.
 handle overlay composition, home-manager integration, and specialArgs
 forwarding. `lib/default.nix` forwards its full argument set to them
 via `@args` so each builder extracts only what it needs.
+
+**Custom packages**: Local package derivations live in `packages/`.
+To add a new package: create `packages/<name>.nix`, then add it to
+`packages/overlay.nix` (composed by both system builders and
+`homeConfigurations` in `flake.nix`) and `packages/default.nix`
+(for `nix build .#<name>`). Linux-only packages must be gated in
+both files. If a single home-manager module exposes a `package`
+option for the package, prefer setting that option there (see
+`mujmap` in `email.nix`).
 
 **Supported systems**: This flake targets exactly two systems:
 `x86_64-linux` and `aarch64-darwin`. These are always written as

@@ -133,9 +133,7 @@
               config.allowUnfree = true;
               overlays = [
                 emacs-overlay.overlays.default
-                (final: _prev: {
-                  sunsama = final.callPackage ./packages/sunsama.nix { };
-                })
+                (import ./packages/overlay.nix)
               ];
             };
             pkgs-unstable = import inputs.nixpkgs-unstable {
@@ -161,7 +159,10 @@
             pkgs = import nixpkgs {
               system = "aarch64-darwin";
               config.allowUnfree = true;
-              overlays = [ emacs-overlay.overlays.default ];
+              overlays = [
+                emacs-overlay.overlays.default
+                (import ./packages/overlay.nix)
+              ];
             };
             pkgs-unstable = import inputs.nixpkgs-unstable {
               system = "aarch64-darwin";
