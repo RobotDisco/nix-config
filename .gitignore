@@ -2,6 +2,8 @@
 /.direnv/
 # pre-commit-checks auto-generated config
 /.pre-commit-config.yaml
+# Claude Code session state (settings.local.json, etc.)
+/.claude/
 # nix build and nix-build results
 /result
 # Emacs backups
