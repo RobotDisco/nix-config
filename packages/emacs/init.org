@@ -1080,10 +1080,12 @@ Let's use Emacs for accounting now. Let's try Ledget
 #+END_SRC
 * Productivity
 ** Email handling
-Let's try out two different mail clients and see how I like them.
+Mail reader is notmuch via emacs's =notmuch.el= integration. Three accounts (=personal=, =work=, =old=) each have their own notmuch database under =~/mail/<account>/.notmuch=, selected via =NOTMUCH_PROFILE=. See =email.nix= in =home-manager/modules= for the per-account architecture.
 
-Note: These don't fetch mail from remote mail hosts like gmail. Instead, they browse and view mail from a local mail store.
-#+BEGIN_SRC emacs-lisp :tangle no
+Remote-host syncing happens out-of-band via =mujmap= (Fastmail) and =lieer= (Gmail), driven from the shell by =msync <account>=. emacs only reads from the local databases — it doesn't fetch from remote hosts.
+
+=notmuch.el= itself has no built-in profile concept (verified in =notmuch-lib.el=, no =--config= threading or =NOTMUCH_PROFILE= awareness). We work around this with an =:around= advice on =notmuch--call-process= — the chokepoint for every CLI invocation =notmuch.el= makes — that injects the active profile into =process-environment= for the call duration.
+#+BEGIN_SRC emacs-lisp :tangle yes
   ;; Google requires us to use XOAUTH2 for logging into IMAP and SMTP
   ;;
   ;; I use SMTP directly in emacs, so I will have to configure this.
@@ -1135,67 +1137,11 @@ Note: These don't fetch mail from remote mail hosts like gmail. Instead, they br
     ;; This actually means TLS, if the remote server supports it.
     (smtpmail-stream-type 'ssl))
 
-  (use-package mu4e
+  (use-package notmuch
     :ensure t
-    :commands (mu4e)
-    :custom
-    ;; Set mu4e as my mail user agent.
-    (mail-user-agent 'mu4e-user-agent)
-    (user-full-name "Gaelan D'costa")
-    ;; Apparently needed when using mbsync; see
-    ;; https://www.djcbsoftware.nl/code/mu/mu4e/Retrieving-mail.html#IMAP_002dsynchronization
-    ;; and https://pragmaticemacs.wordpress.com/2016/03/22/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
-    ;; Commonly used queries
-    (mu4e-bookmarks '(( :name "Inboxes" :query "maildir:/personal/Inbox OR maildir:/work/Inbox" :key 105)
-  		    (:name "Unread" :query "flag:unread AND (maildir:/personal/Inbox OR maildir:/work/Inbox)" :key 117 :favorite t :hide t)
-  		    (:name "Followup" :query "flag:flagged" :key 109)))
-    (mu4e-change-filenames-when-moving t)
-    ;; Use standard emacs completion function (i.e. vertico)
-    (mu4e-completing-read-function 'completing-read)
-    ;; Ask for context if it cannot be inferred from the message
-    (mu4e-compose-context-policy 'ask)
-    (mu4e-context-policy 'ask)
-    ;; Run this command when fetching mail
-    ;; To start, for speed, just get inbox messages
-    (mu4e-get-mail-command "mbsync inboxes")
-    ;; Gmail already saves sent messages, so don't bother.
-    (mu4e-sent-messages-behavior 'delete)
-    :config
-    ;; For whatever reason, this variable isn't customizable.
-    (setq mu4e-contexts
-  	(list
-  	 (make-mu4e-context
-      	  :name "personal"
-      	  ;; match-func is used to inspect the message in question and infer the
-      	  ;; string name of the mu4e context from it. We do this now by looking
-      	  ;; at the first-level directory in my maildir, since mbsync sets that
-      	  ;; up.
-      	  :match-func (lambda (msg)
-      			(when msg
-      			  (string-prefix-p "/personal"
-      					   (mu4e-message-field msg :maildir))))
-      	  :vars '(;; What is my email address in this context?
-    		  (user-mail-address . "gdcosta@gmail.com")
-  		  ;; SMTP username
-  		  (smtpmail-smtp-user . "gdcosta@gmail.com")
-      		  (mu4e-drafts-folder . "/personal/[Gmail]/Drafts")
-      		  (mu4e-refile-folder . "/personal/[Gmail]/All Mail")
-      		  (mu4e-sent-folder . "/personal/[Gmail]/Sent Mail")
-      		  (mu4e-trash-folder . "/personal/[Gmail]/Trash")))
-    	 (make-mu4e-context
-      	  :name "work"
-      	  :match-func (lambda (msg)
-      			(when msg
-      			  (string-prefix-p "/work"
-      					   (mu4e-message-field msg :maildir))))
-      	  :vars '(;; What is my email address in this context?
-    		  (user-mail-address . "gaelan@tulip.com")
-  		  ;; SMTP username
-  		  (smtpmail-smtp-user . "gaelan@tulip.com")
-      		  (mu4e-drafts-folder . "/work/[Gmail]/Drafts")
-      		  (mu4e-refile-folder . "/work/[Gmail]/All Mail")
-      		  (mu4e-sent-folder . "/work/[Gmail]/Sent Mail")
-      		  (mu4e-trash-folder . "/work/[Gmail]/Trash"))))))
+    :commands (notmuch)
+    :init
+    (setenv "NOTMUCH_PROFILE" "personal"))
 #+END_SRC
 ** Large Language Models
 If you can't beat them; join them. Lean on the stochastic parrot when I want to generate text without caring aout whatever I am crafting, or when I want something good enough because I don't know how to craft it myself.
