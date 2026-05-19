@@ -50,6 +50,8 @@ in
         pkgs.inetutils
         # constantly polling a url
         # pkgs.siege
+        # Gitlab integration
+        pkgs.glab
 
         (pkgs.writeShellScriptBin "kubesetup" (builtins.readFile ./kubesetup.sh))
       ];
