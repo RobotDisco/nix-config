@@ -1,14 +1,15 @@
 # Emacs Configuration
 
-`init.org` is a literate config — **never edit `init.el` directly**.
-All changes go in `init.org` and are tangled to produce `init.el`.
+`init.org` is a literate config — **never edit `init.el` or `early-init.el`
+directly**. Both are tangled outputs. All changes go in `init.org`.
 
 ## Workflow
 
 ```
-just check-emacs   # tangle + validate paren balance (fast)
-just emacs-dev     # tangle + launch sandboxed Emacs for testing
-just tangle        # tangle only
+just check-emacs        # tangle + validate paren balance (fast)
+just emacs-dev          # tangle + launch sandboxed Emacs (elisp iteration)
+just emacs-dev-package  # full Nix rebuild — use when adding new packages
+just tangle             # tangle only
 ```
 
 `just emacs-dev` uses an isolated config dir and does not affect

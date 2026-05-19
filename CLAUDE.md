@@ -10,8 +10,10 @@ Run `just --list` (after `nix develop` or direnv) for all available commands.
 
 Key workflows:
 - System changes: `just build-all` → `just test-switch` → `just apply`
+  (`test-switch` is non-destructive; `apply` is permanent — confirm before running)
 - Home-manager: `just build-home <host>` → `just switch-home <host>`
 - Emacs: `just emacs-dev` or `just emacs-dev-package`
+- Validation: `just check` (flake checks), `just lint` (all linting), `just fmt` (format Nix files)
 
 # Architecture
 
@@ -70,5 +72,5 @@ explicit attribute sets — no `forAllSystems` abstraction.
 # Agentic Code Hygiene
 
 - No trailing whitespace; no lines that are purely whitespace.
-- Always run `nixfmt` on `.nix` files as a last step.
+- Always run `just fmt` on `.nix` files as a last step (wraps `nixfmt`).
 - Text lines should be no more than 80 characters unless unavoidable.
