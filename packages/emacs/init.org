@@ -667,13 +667,16 @@ Automatically revert when a file changes on disk; this happens a lot given my fi
 				(global-auto-revert-mode +1)))))
 #+END_SRC
 ** Spellchecking
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package emacs
     :defer 2
+    :custom
+    (ispell-local-dictionary "british")
+    (ispell-program-name "aspell")
     :hook ((org-mode . (lambda ()
-			 (flyspell-mode +1)))
-	   (prog-mode . (lambda ()
-			(flyspell-prog-mode)))))
+  		       (flyspell-mode +1)))
+  	 (prog-mode . (lambda ()
+  			(flyspell-prog-mode)))))
 #+END_SRC
 ** Project Management
 
