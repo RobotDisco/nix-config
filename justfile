@@ -129,13 +129,13 @@ emacs-dev *args: tangle
 emacs-dev-package *args: tangle
     #!/usr/bin/env bash
     set -euo pipefail
-    result=$(nix build ".#packages.$SYSTEM.emacs" --no-link --print-out-paths)
+    result=$(nix build ".#emacs" --no-link --print-out-paths)
     exec "$result/bin/emacs" --init-directory "{{emacs_dev_dir}}" \
         --eval "(load-theme 'misterioso t)" {{args}}
 
 # Build the emacs derivation standalone (verify package resolution)
 build-emacs:
-    nix build ".#packages.$SYSTEM.emacs" --no-link
+    nix build ".#emacs" --no-link
 
 # --- Maintenance ---
 

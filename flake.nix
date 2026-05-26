@@ -193,15 +193,17 @@
         aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt;
       };
 
-      packages."x86_64-linux" =
+      packages = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-darwin" ] (
+        system:
         let
           pkgs = import nixpkgs {
-            system = "x86_64-linux";
+            inherit system;
             config.allowUnfree = true;
             overlays = [ emacs-overlay.overlays.default ];
           };
         in
-        import ./packages/default.nix { inherit pkgs; };
+        import ./packages/default.nix { inherit pkgs; }
+      );
     };
 
   # Supply a project-specific attribute set of nix configuration
