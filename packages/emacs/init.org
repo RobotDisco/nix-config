@@ -693,6 +693,29 @@ Projectile is a framework for managing (usually) software development projects i
 		("C-c p" . projectile-command-map)))
 #+END_SRC
 
+In order to manually visit them first. I'll just set up a custom binding that adds all files under my code directories into the project cache.
+
+It took too long on startup to refresh projects in known source directory roots. It locks the emacs loop, emacs is not multi-threaded, so trying to get this to work in the background isn't viable.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package project
+    :ensure nil
+    :bind ("C-c p P" . gaelan/refresh-known-projects))
+#+END_SRC
+*** Helper functions
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defvar gaelan/source-directory-roots '("~/code" "~/workspace")
+    "Root directories under which all my code projects live.
+
+  Project selection should allow me to choose any of these projects without me having to visit them explicitly first.")
+
+  (defun gaelan/refresh-known-projects ()
+    "Re-scan `gaelan/source-directory-roots' and proactively remember every project found."
+    (interactive)
+    (dolist (root gaelan/source-directory-roots)
+      ;; Recursively add all projects under this directory
+      (project-remember-projects-under root t)))
+#+END_SRC
 ** File Browsing
 A tree-based file browser for file navigation.
 
