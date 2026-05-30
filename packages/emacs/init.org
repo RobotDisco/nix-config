@@ -1187,7 +1187,17 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
   		   :stream t
   		   :models '(mistral:latest codellama:latest llama3.1))))
 #+END_SRC
-** Org
+** GTD
+
+Helper functions
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (defun gaelan/delete-done-todos ()
+    "Delete all DONE subtrees in current org buffer."
+    (interactive)
+    (org-map-entries #'org-cut-subtree "/DONE" 'file))
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org
     :ensure t
@@ -1196,6 +1206,7 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
      			   (visual-line-mode +1)))
     :mode ("\\.org\\'" . org-mode)
     :bind (("C-c a" . org-agenda)
+  	 ("C-c d" . gaelan/delete-done-todos)
      	 ("C-c c" . org-capture)
      	 ("C-c l" . org-store-link))
     :config
@@ -1284,14 +1295,6 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
         (file "~/Documents/gtd/inbox.org")
         "* TODO %?\n%i"
         :empty-lines 1)
-       ("s" "Scheduled task (personal)" entry
-        (file "~/Documents/gtd/inbox.org")
-        "* TODO %?\nSCHEDULED: %^t\n%i"
-        :empty-lines 1)
-       ("e" "Work note → Inbox" entry
-        (file "~/Documents/gtd/inbox.org")
-        "* TODO %? :@work:\n%i"
-        :empty-lines 1)
        ("a" "Action from note" entry
         (file "~/Documents/gtd/inbox.org")
         "* TODO %?\n%a\n%i"
@@ -1300,13 +1303,24 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
      '(("~/Documents/gtd/personal.org" . (:level . 1))))
     (org-todo-keywords
      ;; Sequence for individual items, extended for work jira workflow.
+     ;; GROOM is kept for Jira integration only — avoid for personal tasks.
      '((sequence "TODO(q)" "GROOM(g)" "NEXT(w)" "DOING(e)"
-                 "WAIT(r@/!)" "|" "DONE(t!)" "HALTED(y@)")
-       ;; Sequence for personal projects.
-       (sequence "PROJECT(p)" "ACTIVE(d)" "PAUSED(f@/!)"
-                 "|" "DONE(!)" "HALTED(@)")))
-    (org-tag-alist '(("@work" . ?w)
-                     ("blocked" . ?b))))
+                 "WAITING(r@/!)" "|" "DONE(t!)" "CANCELLED(y@)")
+       ;; Sequence for personal projects (lives in projects.org).
+       ;; Terminal states are intentionally distinct from task sequence.
+       (sequence "PLAN(p)" "ACTIVE(d)" "PAUSED(f@/!)" "RETRO(s)"
+                 "|" "COMPLETED(c!)" "ABANDONED(a@)")))
+    (org-tag-alist '(("@errand" . ?e)
+                     ("@phone"  . ?p)
+                     ("@home"   . ?h)
+  		   ("@brain" . ?b)
+  		   ("project" . ?r)
+  		   ("work"    . ?w)
+                     ("jira"    . ?j)
+                     ("blocked")))
+    (org-global-properties
+     '(("Effort_ALL" . "0:15 0:30 1:00 2:00"))))
+#+END_SRC
 #+END_SRC
 *** org-crypt
 Allow for partial encryption of org files (i.e. specific headers), using a special tag.
