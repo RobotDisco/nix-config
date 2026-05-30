@@ -1183,9 +1183,9 @@ If you can't beat them; join them. Lean on the stochastic parrot when I want to 
     :custom
     (gptel-model "llama3.1")
     (gptel-backend (gptel-make-ollama "Ollama"
-  		   :host "localhost:11434"
-  		   :stream t
-  		   :models '(mistral:latest codellama:latest llama3.1))))
+                     :host "localhost:11434"
+                     :stream t
+                     :models '(mistral:latest codellama:latest llama3.1))))
 #+END_SRC
 ** GTD
 
@@ -1202,13 +1202,13 @@ Helper functions
   (use-package org
     :ensure t
     :hook (org-mode-hook . (lambda ()
-     			   (setq-local fill-column 80)
-     			   (visual-line-mode +1)))
+                             (setq-local fill-column 80)
+                             (visual-line-mode +1)))
     :mode ("\\.org\\'" . org-mode)
     :bind (("C-c a" . org-agenda)
-  	 ("C-c d" . gaelan/delete-done-todos)
-     	 ("C-c c" . org-capture)
-     	 ("C-c l" . org-store-link))
+           ("C-c d" . gaelan/delete-done-todos)
+           ("C-c c" . org-capture)
+           ("C-c l" . org-store-link))
     :config
     ;; Enable org habits
     (add-to-list 'org-modules 'org-habit t)
@@ -1219,59 +1219,59 @@ Helper functions
                ((org-agenda-overriding-header "── DOING (max 3) ──")
                 (org-agenda-files
                  '("~/Documents/gtd/personal.org"
-  		 "~/Documents/brain/notes/projects/"
-  		 "~/Documents/gtd/jira/CLOUD.org"
-  		 "~/Documents/gtd/inbox.org"))))
+                   "~/Documents/brain/notes/projects/"
+                   "~/Documents/gtd/jira/CLOUD.org"
+                   "~/Documents/gtd/inbox.org"))))
          (agenda ""
                  ((org-agenda-span 7)
                   (org-agenda-overriding-header "── Next 7 days ──")
                   (org-agenda-skip-function
                    '(org-agenda-skip-entry-if
-  		   'todo '("DONE" "HALTED" "GROOM")))))
+                     'todo '("DONE" "HALTED" "GROOM")))))
          (todo "NEXT"
                ((org-agenda-overriding-header "── On Deck ──")
                 (org-agenda-files
-  	       '("~/Documents/gtd/personal.org"
-  		 "~/Documents/brain/notes/projects/"
-  		 "~/Documents/gtd/jira/CLOUD.org"
-  		 "~/Documents/gtd/inbox.org"))))))
+                 '("~/Documents/gtd/personal.org"
+                   "~/Documents/brain/notes/projects/"
+                   "~/Documents/gtd/jira/CLOUD.org"
+                   "~/Documents/gtd/inbox.org"))))))
        ("W" "Work view"
         ((todo "DOING|NEXT"
                ((org-agenda-overriding-header "── JIRA: Active ──")
                 (org-agenda-files
                  '("~/Documents/gtd/jira/CLOUD.org"
-  		 "~/Documents/gtd/inbox.org"))
-  	      (org-agenda-tag-filter-preset '("+@work"))))
+                   "~/Documents/gtd/inbox.org"))
+                (org-agenda-tag-filter-preset '("+@work"))))
          (agenda ""
                  ((org-agenda-span 5)
                   (org-agenda-overriding-header "── Work week ──")
                   (org-agenda-files
-  		 '("~/Documents/gtd/gcal/work.org"
-  		   "~/Documents/gtd/jira/CLOUD.org"
-  		   "~/Documents/gtd/personal.org"))
+                   '("~/Documents/gtd/gcal/work.org"
+                     "~/Documents/gtd/jira/CLOUD.org"
+                     "~/Documents/gtd/personal.org"))
                   (org-agenda-tag-filter-preset '("+@work"))))))
        ("P" "Personal view"
         ((todo "DOING|NEXT"
                ((org-agenda-overriding-header "── Personal: Active ──")
                 (org-agenda-files
                  '("~/Documents/gtd/personal.org"
-  		 "~/Documents/gtd/inbox.org"))
+                   "~/Documents/gtd/inbox.org"))
                 (org-agenda-tag-filter-preset '("-@work"))))
          (agenda ""
                  ((org-agenda-span 7)
                   (org-agenda-overriding-header "── Personal week ──")
                   (org-agenda-files
                    (list "~/Documents/gtd/gcal/personal.org"
-  		       "~/Documents/gtd/personal.org"))
+                         "~/Documents/gtd/personal.org"))
                   (org-agenda-tag-filter-preset '("-@work"))))))
        ("R" "Weekly Review"
         ((todo "DOING|NEXT|TODO"
                ((org-agenda-overriding-header "── Active & Queued ──")
                 (org-agenda-files
                  '("~/Documents/gtd/personal.org"
-  		 "~/Documents/brain/notes/projects/"
-  		 "~/Documents/gtd/jira/CLOUD.org"
-  		 "~/Documents/gtd/inbox.org"))))
+                   "~/Documents/brain/notes/projects/"
+                   "~/Documents/gtd/jira/CLOUD.org"
+                   "~/Documents/gtd/inbox.org"))))
          (agenda ""
                  ((org-agenda-span 42)
                   (org-agenda-start-day "-14d")
@@ -1279,7 +1279,7 @@ Helper functions
                    "── -2 weeks → +4 weeks ──")
                   (org-agenda-skip-function
                    '(org-agenda-skip-entry-if
-  		   'todo '("DONE" "HALTED" "GROOM")))))))
+                     'todo '("DONE" "HALTED" "GROOM")))))))
        ("i" "Inbox (triage)" todo ""
         ((org-agenda-files '("~/Documents/gtd/inbox.org"))
          (org-agenda-overriding-header
@@ -1313,9 +1313,9 @@ Helper functions
     (org-tag-alist '(("@errand" . ?e)
                      ("@phone"  . ?p)
                      ("@home"   . ?h)
-  		   ("@brain" . ?b)
-  		   ("project" . ?r)
-  		   ("work"    . ?w)
+                     ("@brain" . ?b)
+                     ("project" . ?r)
+                     ("work"    . ?w)
                      ("jira"    . ?j)
                      ("blocked")))
     (org-global-properties
