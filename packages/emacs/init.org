@@ -1321,6 +1321,27 @@ Helper functions
     (org-global-properties
      '(("Effort_ALL" . "0:15 0:30 1:00 2:00"))))
 #+END_SRC
+
+Enable org-super-agenda for more powerful agenda views
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-super-agenda
+    :ensure t)
+#+END_SRC
+
+Enable org-timeblock to emulate sunsama's task planning over a day
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-timeblock
+    :ensure t)
+#+END_SRC
+
+Enable org-pomodoro for sustainable focus moderation
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-pomodoro
+    :ensure t)
+#+END_SRC
 *** org-crypt
 Allow for partial encryption of org files (i.e. specific headers), using a special tag.
 #+BEGIN_SRC emacs-lisp :tangle no

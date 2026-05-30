@@ -2,6 +2,8 @@
   emacsWithPackagesFromUsePackage,
   emacs-pgtk,
   fetchpatch,
+  fetchFromGitHub,
+  writeText,
   stdenv,
 }:
 
@@ -48,4 +50,30 @@ emacsWithPackagesFromUsePackage {
     # tree-sitter grammers Used by LSP mode
     epkgs.treesit-grammars.with-all-grammars
   ];
+
+  # Override upstream packages with custom forks/versions
+  override = _final: prev: {
+    # Upstream (PreciousChicken/org-timeblock) is broken; use ru2saig's
+    # maintained fork. melpaBuild (not trivialBuild) is required so that
+    # a proper -pkg.el descriptor is generated — without it package.el
+    # doesn't register the package as installed and use-package :ensure t
+    # tries to pull the broken upstream from MELPA instead.
+    org-timeblock = prev.melpaBuild {
+      pname = "org-timeblock";
+      version = "20250521.0";
+      src = fetchFromGitHub {
+        owner = "ru2saig";
+        repo = "org-timeblock";
+        rev = "f9190b4b1277b95a527ad14291eaf810cd964161";
+        hash = "sha256-A78WviqFAl5pXrxJrqSIEDSXW0K7Vdm49tZU1mwM9d4=";
+      };
+      recipe = writeText "org-timeblock" ''
+        (org-timeblock :fetcher github :repo "ru2saig/org-timeblock")
+      '';
+      packageRequires = with prev; [
+        org
+        svg-lib
+      ];
+    };
+  };
 }
