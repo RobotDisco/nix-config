@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   pkgs-unstable,
   ...
 }:
@@ -46,6 +47,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    home.packages = [
+      # Claude constantly wants to use python, so install it
+      pkgs.python3
+    ];
+
     programs.claude-code = {
       enable = true;
 
