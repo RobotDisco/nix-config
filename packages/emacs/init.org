@@ -1264,6 +1264,20 @@ Helper functions
                    (list "~/Documents/gtd/gcal/personal.org"
                          "~/Documents/gtd/personal.org"))
                   (org-agenda-tag-filter-preset '("-@work"))))))
+       ("D" "Personal day"
+        ((agenda ""
+                 ((org-agenda-span 'day)
+                  (org-agenda-files
+                   (list "~/Documents/gtd/gcal/personal.org"
+                         "~/Documents/gtd/personal.org"))
+                  (org-super-agenda-groups
+                   '((:name "Habits" :habit t)
+                     (:name "Calendar" :time-grid t)
+                     (:name "Overdue" :deadline past :scheduled past)
+                     (:name "Today" :scheduled today :deadline today)
+                     (:name "Waiting" :todo "WAITING")
+                     (:name "Upcoming" :deadline future)
+                     (:discard (:anything t))))))))
        ("R" "Weekly Review"
         ((todo "DOING|NEXT|TODO"
                ((org-agenda-overriding-header "── Active & Queued ──")
@@ -1319,14 +1333,23 @@ Helper functions
                      ("jira"    . ?j)
                      ("blocked")))
     (org-global-properties
-     '(("Effort_ALL" . "0:15 0:30 1:00 2:00"))))
+     '(("Effort_ALL" . "0:15 0:30 1:00 2:00")))
+    (org-enforce-todo-dependencies t)
+    (org-stuck-projects
+     '("+project/-COMPLETED-ABANDONED-DONE-CANCELLED"
+       ("NEXT" "DOING")
+       nil
+       "")))
 #+END_SRC
 
 Enable org-super-agenda for more powerful agenda views
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-super-agenda
-    :ensure t)
+    :ensure t
+    :after org
+    :config
+    (org-super-agenda-mode 1))
 #+END_SRC
 
 Enable org-timeblock to emulate sunsama's task planning over a day
