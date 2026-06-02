@@ -48,8 +48,9 @@ in
 
   config = lib.mkIf cfg.enable {
     home.packages = [
-      # Claude constantly wants to use python, so install it
       pkgs.python3
+      pkgs.nodejs # provides npx, needed by many Claude plugins
+      pkgs.uv # provides uvx, the Python tool runner
     ];
 
     programs.claude-code = {
