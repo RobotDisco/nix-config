@@ -133,7 +133,6 @@
         "vivaldi"
         "whatsapp"
         "yubico-authenticator"
-        "yubico-yubikey-manager"
         "zotero"
       ];
 
