@@ -56,6 +56,29 @@
       # because aerospace can't trigger Spotlight directly.
       # Cmd+Option+Space Spotlight Window is disabled.
       defaults.CustomUserPreferences."com.apple.symbolichotkeys".AppleSymbolicHotKeys = {
+        # Input source toggle (C-SPC / C-Opt-SPC) — disabled so Emacs gets C-SPC
+        "60" = {
+          enabled = false;
+          value = {
+            parameters = [
+              32
+              49
+              262144
+            ];
+            type = "standard";
+          };
+        };
+        "61" = {
+          enabled = false;
+          value = {
+            parameters = [
+              32
+              49
+              786432
+            ];
+            type = "standard";
+          };
+        };
         # Spotlight Search → Opt+D
         "64" = {
           enabled = true;
