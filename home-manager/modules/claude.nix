@@ -59,7 +59,13 @@ in
       # Always use the latest
       package = pkgs-unstable.claude-code;
 
-      inherit (cfg) mcpServers;
+      mcpServers = {
+        Sunsama = {
+          type = "http";
+          url = "https://api.sunsama.com/mcp";
+        };
+      }
+      // cfg.mcpServers;
 
       settings = cfg.settings // {
         enabledPlugins = commonPlugins // (cfg.settings.enabledPlugins or { });
