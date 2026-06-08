@@ -1,0 +1,209 @@
+#+TITLE: Shell Module — Developer Guide
+#+OPTIONS: toc:2
+
+A developer-oriented guide to working in this module. Assumes basic zsh
+familiarity (typing commands, =$PATH=, =setopt=) but not power-user
+fluency. Focus: how to iterate, test, and extend the code in this folder.
+
+* Layout
+
+#+begin_example
+shells/
+├── default.nix              # home-manager wiring; ships rc.zsh + functions/
+├── README.org               # this file
+├── files/
+│   ├── rc.zsh               # all interactive zsh logic
+│   └── functions/           # one autoloaded function per file
+│       └── j                # jump-to-directory
+└── tests/                   # zsh unit tests (`just test-zsh`)
+    └── j.test.zsh
+#+end_example
+
+** Where to edit what
+
+| To change...                            | Edit                                |
+|-----------------------------------------+-------------------------------------|
+| a workspace root                        | =files/rc.zsh=, =cdpath=(...)=      |
+| a named bookmark (=~name=)              | =files/rc.zsh=, =hash -d= block     |
+| a =setopt= or =zstyle=                  | =files/rc.zsh=                      |
+| an existing function                    | =files/functions/<name>=            |
+| add a new function                      | drop a file under =files/functions/= |
+| syntax highlighting, history, dotDir    | =default.nix=, =programs.zsh.*=     |
+
+* Development loop
+
+The cycle is short because zsh re-applies sourced files immediately:
+
+1. Edit =files/rc.zsh= or =files/functions/<name>= in this repo.
+2. In any running shell:
+   #+begin_src zsh
+   source ~/.config/zsh/rc.zsh           # re-apply rc.zsh
+   unfunction j && autoload -Uz j        # reload an autoloaded function
+   #+end_src
+3. Try it interactively.
+4. When happy, =just switch-home <host>= to make it official via
+   home-manager.
+
+You do *not* need to rebuild between iterations. =~/.config/zsh/= is
+symlinked to the nix store, but during development you're sourcing the
+in-repo file directly.
+
+** Inspecting live state
+
+When something isn't behaving as expected, ask zsh:
+
+#+begin_src zsh
+print -l -- $cdpath                     # what cdpath is right now
+hash -d                                 # list named-dir bookmarks
+functions j                             # show j as zsh has loaded it
+print -l -- $precmd_functions           # who's registered as a precmd hook
+print -l -- $chpwd_functions            # same for chpwd
+zstyle -L ':completion:*' matcher-list  # what zstyles are set
+#+end_src
+
+** Debugging
+
+#+begin_src zsh
+zsh -n files/rc.zsh                     # syntax check only, no execution
+functions -T j                          # per-function trace (autoloaded ok)
+setopt xtrace; some_cmd; setopt no_xtrace   # trace one command
+#+end_src
+
+=functions -T= is the high-leverage one — targeted tracing without
+flooding the terminal. It works on autoloaded functions too; just call
+the function once first so zsh materializes it.
+
+* Testing
+
+** Running tests
+
+#+begin_src shell
+just test-zsh                           # syntax-check + run all .test.zsh
+zsh tests/j.test.zsh                    # run one test file directly
+#+end_src
+
+=zsh -n= on every =.zsh= file also runs as part of =just lint=, so PR
+checks catch parse errors without needing a separate test step.
+
+** Writing tests
+
+Tests are plain zsh — no framework. Each =tests/<name>.test.zsh=
+sources the function under test against a fixture, calls it, and asserts
+on observable state (usually =$PWD=).
+
+The harness is small enough to read top-to-bottom inside each test file.
+The pattern:
+
+#+begin_src zsh
+it "describes what should happen"
+cd $fixture
+my_function some-arg
+assert_pwd $fixture/expected
+#+end_src
+
+=it= sets the current test name and increments a counter. =assert_pwd=
+checks =$PWD= against an expected value, prints ✓ or ✗, and increments
+pass/fail counters.
+
+** TDD workflow
+
+For functions with real logic (like =j=), the cycle is:
+
+1. Add or uncomment an =it ...= block in =tests/<name>.test.zsh=
+   describing the behavior you want.
+2. =just test-zsh= — see it fail (red).
+3. Implement in =files/functions/<name>= until it passes (green).
+4. Refactor with the safety net of the now-green test.
+
+* Writing a new function
+
+Each file under =files/functions/= IS the function body — no wrapping
+=name() { ... }=. zsh's =autoload= mechanism synthesizes the wrapper.
+The file name = the function name.
+
+** Template
+
+#+begin_src zsh
+# brief description -- one line
+#
+# Longer description if needed.
+
+emulate -L zsh
+setopt local_options
+setopt warn_create_global err_return pipe_fail no_unset
+
+# local for every variable. local -a for arrays. local -A for assoc arrays.
+local arg=$1
+[[ -z $arg ]] && { print -u2 "usage: ..."; return 2 }
+
+# ... function body ...
+#+end_src
+
+=emulate -L zsh= + =setopt local_options= isolate the function from
+whatever options the caller's interactive shell has set. Without these,
+your function inherits the caller's state — including options you
+didn't expect.
+
+** Strict-mode options, briefly
+
+| Option              | Effect                                              |
+|---------------------+-----------------------------------------------------|
+| =warn_create_global= | warn if you assign to a variable without =local=    |
+| =err_return=         | return on first error (scoped =set -e=)             |
+| =pipe_fail=          | pipe fails if any stage fails                       |
+| =no_unset=           | error on expansion of an unset variable             |
+| =extended_glob=      | enables =^=, =~=, =#= operators and glob qualifiers |
+| =null_glob=          | unmatched globs expand to nothing (no error)        |
+
+*Gotcha:* =(( expr ))= returns SUCCESS when =expr= is non-zero and
+FAILURE when =expr= is zero (the "zero is false" rule, opposite of
+normal exit-code convention). So =(( counter++ ))= "fails" on its first
+call because post-increment returns the OLD value (0). Combined with
+=err_return=, this can unwind from places you don't expect — leading
+to silent early exits.
+
+Safe forms:
+  - =counter=$(( counter + 1 ))=  — plain assignment, always exit 0
+  - =: $(( counter++ ))=          — =:= no-op always exits 0
+  - =(( counter++ )) || true=    — explicitly swallow the "failure"
+
+Don't enable =err_return= in scripts that need to keep running past
+expected failures (e.g. test runners, error-collectors).
+
+* Common idioms cheat sheet
+
+| Idiom                          | What it does                                |
+|--------------------------------+---------------------------------------------|
+| =${(f)"$(cmd)"}=               | split command output into array by lines    |
+| =${array:#pattern}=            | filter array, removing matches              |
+| =${(M)array:#*pattern*}=       | filter array, keeping matches (M = match)   |
+| =${var:A:h}=                   | resolved absolute path, then dirname        |
+| =${var##*/}=                   | basename (strip up to last =/=)             |
+| =${var%/*}=                    | dirname (strip from last =/=)               |
+| =$path/**/$name(/N[1])=        | first matching directory recursively        |
+| =$dir/*(/N)=                   | only directories, no error if none          |
+| =print -rl -- $array=          | one-per-line, raw (no escape interpretation) |
+| =print -u2 "msg"=              | print to stderr                             |
+| =[[ -z $var ]]=                | is var empty (use =[[]]= not =[]= in zsh)   |
+| =add-zsh-hook precmd fn=       | register hook composably; never =precmd() { }= |
+
+When you'd reach for =sed=, =awk=, =cut=, or =basename= — check
+=man zshexpn= first. Most string ops have a parameter-expansion
+equivalent that avoids the subshell.
+
+* References
+
+| Resource                 | When to consult                                 |
+|--------------------------+-------------------------------------------------|
+| =man zshexpn=            | parameter expansion — re-read most often        |
+| =man zshmisc=            | conditionals, redirection, prompt expansion     |
+| =man zshoptions=         | every =setopt= name with full description       |
+| =man zshbuiltins=        | =autoload=, =zstyle=, =add-zsh-hook=, =print=   |
+| =man zshcontrib=         | =chpwd_recent_dirs=, =cdr=, =vcs_info=          |
+| [[https://wiki.archlinux.org/title/Zsh][Arch Wiki: Zsh]]   | practical recipes, more readable than manpages  |
+| [[https://github.com/zsh-users/zsh-syntax-highlighting][zsh-syntax-highlighting source]] | reading idiomatic zsh teaches faster than docs |
+
+The single highest-leverage skill: get comfortable with =man zshexpn=.
+Parameter expansion is a small language of its own — once =${(f)...}=,
+=${(M)array:#pattern}=, =${var:A:h}= are reflex, half of "I'd write a
+script for this" moments become one-liners.

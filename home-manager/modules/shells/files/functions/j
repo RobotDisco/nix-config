@@ -1,0 +1,59 @@
+# j -- jump to a directory by fuzzy basename match in the workspace.
+#
+# Recursively searches $J_ROOTS for directories whose basename contains
+# the query (case-insensitive). On a single match, cd to it. On many
+# matches, present a numbered picker (`select`). On none, error.
+#
+# Override the roots from the calling environment:
+#
+#   J_ROOTS=( $HOME/workspace $HOME/code )
+#
+# Default: $HOME/workspace.
+#
+# Known limitations to evolve later:
+#   - No recency weighting; matches come out alphabetically. To prefer
+#     recent dirs, consult `cdr -l` output and re-sort $matches before
+#     the picker.
+#   - Walks every dir under the roots, including node_modules and other
+#     vendored trees. Hidden dirs (.git/) are skipped by zsh's ** by
+#     default. If walking gets slow, prune with patterns like
+#     ^(node_modules|target|build)/.
+
+emulate -L zsh
+setopt local_options extended_glob null_glob
+
+local query=$1
+if [[ -z $query ]]; then
+  print -u2 'usage: j <query>'
+  return 2
+fi
+
+local -a roots
+if (( ${#J_ROOTS} )); then
+  roots=( $J_ROOTS )
+else
+  roots=( $HOME/workspace )
+fi
+
+# $^roots distributes the path operation across the array (rc-expansion).
+# (#i) makes the following pattern case-insensitive.
+# ${~query} expands the variable's contents as a glob pattern.
+# (/N) qualifier: directories only (/), null_glob (N) -- no error if empty.
+local -a matches
+matches=( $^roots/**/(#i)*${~query}*(/N) )
+
+case $#matches in
+  0)
+    print -u2 "j: no match for '$query'"
+    return 1
+    ;;
+  1)
+    cd -- $matches[1]
+    ;;
+  *)
+    local pick
+    select pick in $matches; do
+      [[ -n $pick ]] && { cd -- $pick; break }
+    done
+    ;;
+esac

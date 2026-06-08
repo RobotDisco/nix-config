@@ -10,6 +10,7 @@ let
         flake-checker = "${pkgs.flake-checker}/bin/flake-checker";
         nixfmt = "${pkgs.nixfmt}/bin/nixfmt";
         statix = "${pkgs.statix}/bin/statix";
+        zsh = "${pkgs.zsh}/bin/zsh";
       };
     in
     {
@@ -22,6 +23,7 @@ let
               flake-checker
               nixfmt
               statix
+              zsh
             ];
           }
           ''
@@ -44,6 +46,13 @@ let
 
             echo "🛡️  Running Nix static analysis..."
             ${lintTools.statix} check . --ignore hardware-configuration.nix
+
+            # 4. zsh syntax check on every file we ship to the shell
+            echo "🐚 Syntax-checking zsh files..."
+            find home-manager/modules/shells/files -type f -print0 \
+              | while IFS= read -r -d "" f; do
+                  ${lintTools.zsh} -n "$f" || exit 1
+                done
 
             echo "✅ All lint checks passed!"
             touch $out
