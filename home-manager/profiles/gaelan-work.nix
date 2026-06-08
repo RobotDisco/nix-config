@@ -189,6 +189,10 @@ in
               "alt-shift-comma" = "move-workspace-to-monitor --wrap-around prev";
               "alt-shift-period" = "move-workspace-to-monitor --wrap-around next";
 
+              # Screenshots (sway: $mod+p / $mod+Shift+p)
+              "alt-p" = "exec-and-forget screencapture ~/Desktop/$(date +%Y%m%d-%H%M%S).png";
+              "alt-shift-p" = "exec-and-forget screencapture -i ~/Desktop/$(date +%Y%m%d-%H%M%S).png";
+
               # Enter layout mode (for join-with operations)
               "alt-shift-semicolon" = "mode layout";
             };
