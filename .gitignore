@@ -6,6 +6,9 @@
 /.claude/
 # nix build and nix-build results
 /result
-# Emacs backups
+# Emacs backups and lock files
 *~
 \#*#
+.#*
+# Tangled outputs (generated from packages/emacs/init.org)
+packages/emacs/*.el
