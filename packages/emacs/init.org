@@ -363,6 +363,8 @@ Visually separate nested delimiter pairs
     :ensure t
     :hook ((cider-repl-mode-hook
 	    clojure-mode-hook
+	    clojurec-mode-hook
+	    clojurescript-mode-hook
 	    emacs-lisp-mode-hook
 	    geiser-repl-mode-hook
 	    ielm-mode-hook
@@ -618,6 +620,8 @@ navigating by sexp.
     :ensure t
     :hook ((cider-repl-mode-hook
 	    clojure-mode-hook
+	    clojurec-mode-hook
+	    clojurescript-mode-hook
 	    emacs-lisp-mode-hook
 	    geiser-repl-mode-hook
 	    ielm-mode-hook
@@ -795,15 +799,18 @@ Overlay ~C-x C-e~ evaluation results inline rather than in the echo area.
 
 Support flycheck syntax checking
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package flycheck-clj-kondo
     :after (clojure-mode flycheck)
-    :hook (clojure-mode-hook . (lambda ()
-				 (require 'flycheck-clj-kondo)))
+    :hook ((clojure-mode-hook
+	    clojurec-mode-hook
+	    clojurescript-mode-hook)
+	   . (lambda ()
+	       (require 'flycheck-clj-kondo)))
     :ensure t)
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package clojure-mode
     :mode (("\\.\\(clj\\|bb\\)\\'" . clojure-mode)
 	   ("\\.cljs\\'" . clojurescript-mode)
@@ -811,18 +818,24 @@ Support flycheck syntax checking
     :ensure t)
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package cider
     :ensure t
-    :bind ("C-c C-x C-j C-j" . cider-jack-in))
+    :bind (("C-c M-j" . cider-jack-in)
+	   ("C-c M-J" . cider-jack-in-cljs)))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package clojure-snippets
+    :ensure t
+    :after (clojure-mode yasnippet))
+
   (use-package clj-refactor
     :commands clj-refactor-mode
     :after (cider)
     :hook (cider-mode . (lambda ()
-			  (clj-refactor-mode 1)))
+			  (clj-refactor-mode 1)
+			  (cljr-add-keybindings-with-prefix "C-c r")))
     :ensure t)
 #+END_SRC
 ** PHP
