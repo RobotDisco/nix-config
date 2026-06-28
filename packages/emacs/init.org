@@ -922,6 +922,26 @@ Have nicer integrations with online git sites like gitlab and github
      (append org-babel-load-languages '((aider . t)))))
 #+END_SRC
 * Programming Language support / environments
+** Emacs Lisp
+Richer help buffers with source, examples, and callers.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package helpful
+    :ensure t
+    :bind (("C-h f" . helpful-callable)
+	   ("C-h v" . helpful-variable)
+	   ("C-h k" . helpful-key)
+	   ("C-h x" . helpful-command)
+	   ("C-c C-d" . helpful-at-point)
+	   ("C-h F" . helpful-function)))
+#+END_SRC
+
+Overlay ~C-x C-e~ evaluation results inline rather than in the echo area.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package eros
+    :ensure t
+    :hook (emacs-lisp-mode-hook . eros-mode))
+#+END_SRC
+
 ** C/C++
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package ccls
