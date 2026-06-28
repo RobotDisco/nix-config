@@ -355,7 +355,7 @@ intelligence without expending unnecessary effort.
 
 #+BEGIN_SRC elisp :tangle yes
   (use-package orderless
-    :defer 1
+    :demand t
     :ensure t
     :custom
     ;; Fallback to basic for completions that depend on dynamic completion
@@ -378,7 +378,6 @@ contorting your input to match what you want.
 
 #+BEGIN_SRC elisp :tangle yes
   (use-package vertico
-    :commands vertico-mode
     :defer 1
     :ensure t
     :custom
@@ -516,7 +515,6 @@ Project-specific environment variables via =direnv=
   (use-package direnv
     :ensure t
     :defer 1
-    :commands (direnv-mode)
     :config
     (direnv-mode))
 #+END_SRC
@@ -597,7 +595,6 @@ Have nicer integrations with online git sites like gitlab and github
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package forge
     :ensure t
-    :defer 2
     :after magit
     :config
     ;; Tulip's gitlab instance
