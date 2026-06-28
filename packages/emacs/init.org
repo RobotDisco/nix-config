@@ -29,178 +29,58 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 - knowledge/idea management :: [[https://www.orgroam.com/][org-roam]]
 
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
-  ;; Disable unnecessary GUI chrome.
-  (setq inhibit-startup-screen t)
+  ;; Maximize GC threshold during startup to minimize collection pauses;
+  ;; restore to default after init completes.
+  (let ((normal-gc-cons-threshold gc-cons-threshold)
+        (normal-gc-cons-percentage gc-cons-percentage))
+    (setq gc-cons-threshold most-positive-fixnum
+  	gc-cons-percentage 1.0)
+    (add-hook 'emacs-startup-hook
+  	    (lambda ()
+  	      (setq gc-cons-threshold normal-gc-cons-threshold
+  		    gc-cons-percentage normal-gc-cons-percentage))))
+
+  ;; Disable file-name handlers during startup (skips regex matching on
+  ;; every file load); restore after so TRAMP and compressed files work.
+  (let ((normal-file-name-handler-alist file-name-handler-alist))
+    (setq file-name-handler-alist nil)
+    (add-hook 'emacs-startup-hook
+  	    (lambda ()
+  	      (setq file-name-handler-alist
+  		    normal-file-name-handler-alist))))
+
+  ;; Don't compact font caches on GC (relevant for long-running daemon).
+  (setq inhibit-compacting-font-caches t)
+
+  ;; Don't resize frame to accommodate font/bar changes at startup.
+  (setq frame-inhibit-implied-resize t)
+
+  ;; Disable unnecessary GUI chrome and popup dialogs.
+  (setq inhibit-startup-screen t
+        use-dialog-box nil)
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
 
-  ;; Startup profiling
+  ;; Report startup time to *Messages*.
   (add-hook 'emacs-startup-hook
-      	  (lambda ()
-      	    (message
-      	     "Emacs ready in %0.03f seconds with %d garbage collections"
-      	     (float-time (time-subtract after-init-time before-init-time))
-      	     gcs-done)))
-
-  (add-hook 'org-mode-hook
   	  (lambda ()
-  	    (visual-line-mode +1)))
+  	    (message
+  	     "Emacs ready in %0.03f seconds with %d garbage collections"
+  	     (float-time (time-subtract after-init-time before-init-time))
+  	     gcs-done)))
 
-  ;; Because we use NixOS' emacs overlay to install packages, don't configure
-  ;; any package sources
+  ;; Nix provides all packages; don't configure any package sources.
   (setq package-archives nil)
-#+END_SRC
-
-* Early Initialization
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  ;;; early-init.el --- Early Initialization -*- lexical-binding: t; -*-
-
-  ;; Author: Gaelan D'costa <gdcosta@gmail.com>
-  ;; Version: 2.0
-  ;; Package-Requires: ((emacs "29.1"))
-  ;; Keywords: configuration
-  ;; URL: https://github.com/RobotDisco/nix-config/packages/emacs
-
-  ;;; Commentary:
-
-  ;; This file contains early initialization settings for Emacs.
-  ;; These configurations are designed to optimize performance and
-  ;; minimize load time, and are run before our main configuration logic.
-
-  ;;; Code:
-
-#+END_SRC
-
-** Version Sentinal
-
-I am not sure if this config will work with older versions of emacs, so I'll abort if the running version of emacs is older than a known good version.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (let ((minver "29.1"))
-    (when (version< emacs-version minver)
-      (error "Your Emacs is too old -- this config requires v%s or higher" minver)))
-#+END_SRC
-
-** Startup Performance
-*** Garbage Collection speedup
-I saw a config where the author temporarily set garbage collection thresholds for speed during initialization, presumably to minimize GC overhead at startup.
-
-When emacs has finished initalizing, it runs a hook we've set up to restore a more aggressive threshold.
-
-This is a pattern I have seen various people use, so it seems like a good idea.
-#+BEGIN_SRC emacs-lisp :tangle no
-  (let (;; We will restore these values eventually.
-        (normal-gc-cons-threshold gc-cons-threshold)
-        (normal-gc-cons-percentage gc-cons-percentage)
-        ;; Set garbage collection threshold to infinity bytes during startup, to
-        ;; maximize performance and minimize collection freezes.
-        (init-gc-cons-threshold most-positive-fixnum)
-        (init-gc-cons-percentage 1.0))
-    (setq gc-cons-threshold init-gc-cons-threshold
-  	gc-cons-percentage init-gc-cons-percentage)
-    (add-hook 'startup-mode-hook
-  	    (lambda ()
-  	      (setq gc-cons-threshold normal-gc-cons-threshold
-  		    gc-cons-percentage normal-gc-cons-percentage))))
-#+END_SRC
-** Regex-based file logic
-In a similar way, let's temporarily disable emacs' builtin regex-based handler so we can lost files easier during configuration.
-
-We will have to restore it afterwards, otherwise we will lose core functionality.
-
-This is apparently the second-most impactful startup performance hack.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (let (;; Normally, when emacs loads a file, it runs some regexes on the file
-        ;; name to figure out what filename-based logic applies to the file being
-        ;; loaded. During startup, let's disable that, but we'll have to preserve
-        ;; the original hook otherwise we'll permanently break functionality.
-        (normal-file-name-handler-alist file-name-handler-alist))
-    (setq file-name-handler-alist nil)
-    (add-hook 'startup-mode-hook
-  	    (lambda ()
-  	      (setq file-name-handler-alist normal-file-name-handler-alist))))
-#+END_SRC
-
-** Inhibit startup screen and messages.
-Let's keep our startup clean by not displaying our startup message.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq inhibit-startup-screen t)
-#+END_SRC
-
-** UI speedups
-Disable implicit window resizing, that should only happen when the user explicitly resizes things
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq frame-inhibit-implied-resize nil)
-#+END_SRC
-
-Disable unnecessary GUI components on startup.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq
-   ;; Disable GUI elements
-   menu-bar-mode nil
-   scroll-bar-mode nil
-   tool-bar-mode nil)
-#+END_SRC
-
-Also, temporarily disable font cache compaction if triggered by garbage collection.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq inhibit-compacting-font-caches nil)
-  (add-hook 'emacs-startup-hook
-  	  (lambda ()
-  	    (setq inhibit-compacting-font-caches t)))
-#+END_SRC
-
-** Disable popup dialogs
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq use-dialog-box nil)
-#+END_SRC
-
-** Temporarily disable autosave and backups
-While we're starting up, don't autosave or backup files.
-
-We will restore autosaves after we finish loading configuration.  We won't restore backup files as they have currently proven to be more trouble than it's worth; where it matters, seafile handles the edit history.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq auto-save-default nil
-        make-backup-files nil)
-
-  (add-hook 'emacs-startup-hook
-            (lambda ()
-              (setq auto-save-default t
-                    make-backup-files nil)))
-#+END_SRC
-
-** Set location of custom file
-Emacs by default manages some forms for variables and faces and places them at the end of =init.el=. Since my =init.el= is generated, this would be difficult to manage.
-
-Why do I write to the null device? This keeps my config immutable.
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-#+END_SRC
-
-** Startup time profiling.
-Let's time and display the amount of time it takes to bring up my Emacs configuration
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (add-hook 'emacs-startup-hook
-	    (lambda ()
-	      (message "Emacs ready in %0.03f seconds with %d garbage collections."
-		       (float-time (time-subtract after-init-time
-						  before-init-time))
-		       gcs-done)))
 #+END_SRC
 
 * Base settings
 
-#+BEGIN_SRC emacs-lisp :tangle no
-  ;;; init.el --- Initialization -*- lexical-binding: t; -*-
+Redirect Emacs' custom system away from =init.el=, which is a
+generated tangle output and would be overwritten on the next tangle.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 #+END_SRC
 
 ** Variables
@@ -281,13 +161,15 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
 #+END_SRC
 
 *** Keep ~user-emacs-directory~ clean.
-#+BEGIN_SRC emacs-lisp :tangle no
+=no-littering= redirects scattered package files into =etc/= and =var/=
+subdirectories of =user-emacs-directory= rather than dumping them at
+the top level. Must load eagerly so paths are redirected before any
+other package writes its first file.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package no-littering
-    :defer 1
     :ensure t
-    :init
-    (setq no-littering-etc-directory gaelan/data-dir
-	  no-littering-var-directory gaelan/cache-dir))
+    :demand t)
 #+END_SRC
 
 ** UX
@@ -302,6 +184,29 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
    #+BEGIN_SRC emacs-lisp :tangle yes
      (setq tab-always-indent 'complete)
    #+END_SRC
+
+   Typing replaces the active region, matching standard editor behaviour.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (delete-selection-mode +1)
+   #+END_SRC
+
+   Smooth pixel scrolling for trackpad users (Emacs 29+).
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (pixel-scroll-precision-mode +1)
+   #+END_SRC
+
+   Disable expensive minor modes automatically in files with very long
+   lines (minified JS, large logs, etc.). Built-in since Emacs 27.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (global-so-long-mode +1)
+   #+END_SRC
+
+   Raise subprocess read limit from the 4 KB default. Eglot/LSP sends
+   large JSON responses; the small default causes excessive system calls.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq read-process-output-max (* 1024 1024))
+   #+END_SRC
+
 * Appearance
 ** Mode line
 *** Position
@@ -483,12 +388,18 @@ contorting your input to match what you want.
     :config
     (vertico-mode +1))
 
-  ;; Save sessionbuffer history
-  ;; Vertico uses this to prefer popular choices when listing.
+  ;; Save minibuffer history across sessions; vertico uses this to rank
+  ;; previously chosen candidates higher.
   (use-package savehist
     :defer 2
     :config
     (savehist-mode))
+
+  ;; Track recently visited files for consult-recent-file.
+  (use-package recentf
+    :defer 2
+    :config
+    (recentf-mode +1))
 
   ;; Some recommended vertico UX settings
   ;; A few more useful configurations...

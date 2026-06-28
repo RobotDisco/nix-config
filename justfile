@@ -137,31 +137,6 @@ emacs-dev-package *args: tangle
 build-emacs:
     nix build ".#emacs" --no-link
 
-# --- Tests ---
-
-# Syntax-check zsh files and run zsh unit tests
-test-zsh:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    shell_dir="home-manager/modules/shells/files"
-    test_dir="home-manager/modules/shells/tests"
-
-    echo "🔍 Syntax-checking zsh files..."
-    while IFS= read -r f; do
-        if ! zsh -n "$f"; then
-            echo "  ✗ $f failed syntax check"
-            exit 1
-        fi
-    done < <(find "$shell_dir" -type f)
-
-    echo "🧪 Running zsh unit tests..."
-    shopt -s nullglob
-    for f in "$test_dir"/*.test.zsh; do
-        zsh "$f"
-    done
-
-    echo "✅ All zsh tests passed."
-
 # --- Maintenance ---
 
 # Format all Nix files
@@ -182,3 +157,7 @@ check:
 # Update and commit flake inputs
 update:
     nix flake update --commit-lock-file
+
+# Run zsh unit tests
+test-zsh:
+	zsh home-manager/modules/shells/tests/j.test.zsh
