@@ -1,54 +1,28 @@
-#!/usr/bin/env zsh
-set -eu -o pipefail
+emulate -L zsh
+setopt extended_glob null_glob
 
-# Gotta source your function to use it.
-source "$(dirname $0)/../files/functions/j"
+# ${0:A:h}: absolute path of this script (:A), then its directory (:h)
+local script_dir=${0:A:h}
+local module_root=${script_dir:h}
+local functions_dir=${module_root}/files/functions
 
-export XDG_DATA_HOME=$(mktemp -d)
-data_dir="$XDG_DATA_HOME/j"
-histfile="$XDG_DATA_HOME/j/history"
+# Build fixture tree under a temp dir; clean up on any exit
+local fixture
+fixture=$(mktemp -d)
+trap "rm -rf '$fixture'" EXIT INT TERM
 
-mkdir -p "$data_dir"
+mkdir -p $fixture/alpha
+mkdir -p $fixture/beta
+mkdir -p $fixture/nested/charlie
 
-printf "0 1 /bob\n1 2 /sally\n2 3 /jill\n" > "$histfile"
+# Point j at the fixture instead of $HOME/workspace
+J_ROOTS=( $fixture )
 
-actual=$(j)
-expected=$'2 3 /jill\n1 2 /sally\n0 1 /bob'
-if [[ "$actual" != "$expected" ]]; then
-    print "FAIL: expected '$expected', got '$actual'"
-    exit 1
-fi
+# Prepend the in-repo functions dir so autoload finds our source, not
+# whatever home-manager installed
+fpath=( $functions_dir $fpath )
+autoload -Uz j
 
+print "j() tests:"
 
-printf "2 3 /bob\n1 2 /sally\n0 1 /jill\n" > "$histfile"
-
-actual=$(j)
-expected=$'2 3 /bob\n1 2 /sally\n0 1 /jill'
-if [[ "$actual" != "$expected" ]]; then
-    print "FAIL: expected '$expected', got '$actual'"
-    exit 1
-fi
-
-dir1="$XDG_DATA_HOME/fixtures/bob1"
-mkdir -p "$dir1"
-
-printf "0 1 %s\n" "$dir1" > "$histfile"
-
-j bob
-if [[ "$PWD" != "$dir1" ]]; then
-    print "FAIL: expected PWD=$dir1, got $PWD"
-    exit 1
-fi
-
-dir2="$XDG_DATA_HOME/fixtures/bob2"
-mkdir -p "$dir2"
-
-j "$dir2"
-if ! grep -q "$dir2" "$histfile"; then
-    print "FAIL: expected $dir2 in histfile"
-    exit 1
-fi
-if [[ "$PWD" != "$dir2" ]]; then
-    print "FAIL: expected PWD=$dir2, got $PWD"
-    exit 1
-fi
+# TODO(human): write your first test here
