@@ -942,38 +942,6 @@ Overlay ~C-x C-e~ evaluation results inline rather than in the echo area.
     :hook (emacs-lisp-mode-hook . eros-mode))
 #+END_SRC
 
-** C/C++
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package ccls
-    :ensure t
-    :after lsp
-    :hook ((c-mode c++-mode objc-mode cuda-mode) . (lambda ()
-						      (require 'ccls)
-						      (lsp-deferred))))
-#+END_SRC
-
-** Elm
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package elm-mode
-    :ensure t
-    :mode "\\.elm\\'")
-#+END_SRC
-
-** Java
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package lsp-java
-    :ensure t
-    :mode "\\.java\\'"
-    :after lsp)
-#+END_SRC
-
-** Kotlin
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package kotlin-mode
-    :ensure t
-    :mode "\\.kts?\\'")
-#+END_SRC
-
 ** Nix
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package nix-mode
@@ -1013,13 +981,6 @@ Support flycheck syntax checking
     :hook (cider-mode . (lambda ()
 			  (clj-refactor-mode 1)))
     :ensure t)
-#+END_SRC
-** Idris
-#+BEGIN_SRC emacs-lisp :tangle no
-  ;; The book "Type-Driven Development with Idris" still uses Idris 1
-  (use-package idris-mode
-      :ensure t
-      :mode "\\.idr\\'")
 #+END_SRC
 ** PHP
 #+BEGIN_SRC emacs-lisp :tangle no
