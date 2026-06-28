@@ -545,23 +545,6 @@ Automatically revert when a file changes on disk; this happens a lot given my fi
 #+END_SRC
 ** Project Management
 
-Projectile is a framework for managing (usually) software development projects in a standard way, so that the same keybindings can be used to test projects, compile them, etc...
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package projectile
-    :ensure t
-    :defer 2
-    :commands projectile-mode
-    :config
-    (projectile-mode +1)
-    :bind (:map projectile-mode-map
-		("C-c p" . projectile-command-map)))
-#+END_SRC
-
-In order to manually visit them first. I'll just set up a custom binding that adds all files under my code directories into the project cache.
-
-It took too long on startup to refresh projects in known source directory roots. It locks the emacs loop, emacs is not multi-threaded, so trying to get this to work in the background isn't viable.
-
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package project
     :ensure nil
