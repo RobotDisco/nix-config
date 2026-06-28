@@ -372,144 +372,6 @@ Visually separate nested delimiter pairs
 	    scheme-mode-hook)
 	   . rainbow-delimiters-mode))
 #+END_SRC
-* Operating System
-I love Emacs so much, I use it as my primary computing environment :)
-** Window Manager
-*** exwm
-#+BEGIN_SRC emacs-lisp :tangle no
-  ;; Assume that if exwm is installed, then we want emacs to handle all
-  ;; pinentry input
-  (use-package pinentry
-    :after (exwm)
-    :ensure t
-    :config
-    (pinentry-start))
-
-  (use-package exwm
-    :defer 0
-    :ensure t
-    :if (eq system-type 'gnu/linux)
-    :custom
-    ;; Set window management key bindings
-    (exwm-input-global-keys
-     `(
-       ;; Reset to line-mode
-       ([?\s-r] . exwm-reset)
-       ;; Switch workspaces
-       ([?\s-w] . exwm-workspace-switch)
-       ;; s-0 is inconvenient, map to s-` and s-esc as well
-       ([?\s-`] . (lambda ()
-		    (interactive)
-		    (exwm-workspace-switch-create 0)))
-       ([s-escape] . (lambda ()
-		       (interactive)
-		       (exwm-workspace-switch-create 0)))
-       ;; Launch application a la dmenu
-       ([?\s-p] . (lambda (command)
-		    (interactive (list (read-shell-command "$ ")))
-		    (start-process-shell-command command nil command)))
-       ;; Switch to numbered workspace.
-       ,@(mapcar (lambda (i)
-		   `(,(kbd (format "s-%d" i)) .
-		     (lambda ()
-		       (interactive)
-		       (exwm-workspace-switch-create ,i))))
-		 (number-sequence 0 9))))
-    ;; translate emacs keybindings into CUA ones for X applications. This allows
-    ;; some uniformity between emacs and most X apps.
-    (exwm-input-simulation-keys
-     '(;; movement
-       ([?\C-b] . [left])
-       ([?\M-b] . [C-left])
-       ([?\C-f] . [right])
-       ([?\M-f] . [C-right])
-       ([?\C-p] . [up])
-       ([?\C-n] . [down])
-       ([?\C-a] . [home])
-       ([?\C-e] . [end])
-       ([?\M-v] . [prior])
-       ([?\C-v] . [next])
-       ([?\C-d] . [delete])
-       ([?\C-k] . [S-end delete])
-       ;; cut/paste
-       ([?\C-w] . [?\C-x])
-       ([?\M-w] . [?\C-c])
-       ([?\C-y] . [?\C-v])))
-    ;; Start with four workspaces on start
-    (exwm-workspace-number 4)
-    ;; Handle specific apps in particular window management ways.
-    (exwm-manage-configurations '(((string= exwm-instance-name "brave-browser") workspace 2)
-				  ((string= exwm-instance-name "signal") workspace 3)
-				  ((string= exwm-instance-name "slack") workspace 3)
-				  ((string= exwm-instance-name "whatsapp-for-linux") workspace 3)))
-    :hook ((exwm-update-class-hook .
-				   (lambda ()
-				     "rename buffer names to their associated X class name."
-				     (exwm-workspace-rename-buffer exwm-class-name)))))
-
-  (use-package exwm-randr
-    :ensure nil
-    :defer 0
-    :after (exwm)
-    :init
-    (defun gaelan/exwm-randr-screen-change-hook ()
-      "Run autorandr whenever exwm detects a screen change"
-      )
-    ;; Assign particular workspaces to particular monitors by default
-    (setq exwm-randr-workspace-monitor-plist
-	  '(0 "DP-2-2-1" 1 "DP-2-2-1" 2 "DP-1-1-1" 3 "DP-1-1-1"))
-    :hook ((exwm-randr-screen-change-hook .
-					  (lambda ()
-					    "Run autorandr whenever exwm detects a screen change"
-					    (start-process-shell-command
-					     "autorandr" nil "autorandr --change"))))
-    :config
-    (exwm-randr-enable))
-#+END_SRC
-*** ediff workaround
-ediff doesn't render correctly in exwm; fix by creating "Ediff Control Panel"
-in a floating frame rather than an Emacs window.
-#+BEGIN_SRC emacs-lisp :tangle no
-  (with-eval-after-load 'ediff-wind
-    (eval-when-compile
-      (require 'ediff-wind))
-    (setq ediff-control-frame-parameters
-	  (cons '(unsplittable . t) ediff-control-frame-parameters)))
-#+END_SRC
-** Multimedia keys
-Emacs should handle keyboard media shortcuts
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package desktop-environment
-    :ensure t
-    :defer 1
-    :after (exwm)
-    :init
-    (setq desktop-environment-screenlock-command "i3lock -n -c 746542")
-    :config
-    (desktop-environment-mode))
-#+END_SRC
-
-** Clipboard management
-Integrate with external programs that handle X11/Wayland clipboards
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package xclip
-    :ensure t
-    :defer 2
-    :config
-    (xclip-mode +1))
-#+END_SRC
-** System messeger
-Sometimes emacs wants to tell us something; we can integrate this with Linux'
-DBUS or OSX' notifier framework
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package alert
-    :ensure t
-    :custom (alert-default-style (if (eq system-type 'darwin)
-  				   'osx-notifier
-  				 'notifications)))
-#+END_SRC
 * Completion / Minibuffer
 ** Consult
 Enhance emacs commands based on completion
@@ -903,24 +765,6 @@ Have nicer integrations with online git sites like gitlab and github
     ;; Tulip's gitlab instance
     (add-to-list 'forge-alist '("git.internal.tulip.io" "git.internal.tulip.io/api/v4" "git.internal.tulip.io" forge-gitlab-repository)))
 #+END_SRC
-** Vibe Coding
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package aidermacs
-    :ensure t
-    :bind ("C-c v" . aidermacs-transient-menu))
-
-  (use-package aider
-    :ensure t
-    :bind ("C-c z" . aider-transient-menu))
-
-  (use-package ob-aider
-    :ensure t
-    :after (org)
-    :config
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     (append org-babel-load-languages '((aider . t)))))
-#+END_SRC
 * Programming Language support / environments
 ** Emacs Lisp
 Richer help buffers with source, examples, and callers.
@@ -1147,24 +991,6 @@ Remote-host syncing happens out-of-band via =mujmap= (Fastmail) and =lieer= (Gma
     :commands (notmuch)
     :init
     (setenv "NOTMUCH_PROFILE" "personal"))
-#+END_SRC
-** Large Language Models
-If you can't beat them; join them. Lean on the stochastic parrot when I want to generate text without caring aout whatever I am crafting, or when I want something good enough because I don't know how to craft it myself.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package ellama
-    :ensure t
-    :commands ellama-transient-main-menu)
-
-  (use-package gptel
-    :ensure t
-    :commands gptel
-    :custom
-    (gptel-model "llama3.1")
-    (gptel-backend (gptel-make-ollama "Ollama"
-                     :host "localhost:11434"
-                     :stream t
-                     :models '(mistral:latest codellama:latest llama3.1))))
 #+END_SRC
 ** GTD
 
