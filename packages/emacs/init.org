@@ -27,6 +27,10 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 - citation Management :: [[https://github.com/emacs-citar/citar][citar]]
 - knowledge/idea management :: [[https://www.orgroam.com/][org-roam]]
 
+#+BEGIN_SRC emacs-lisp :tangle early-init.el :padline no
+;;; early-init.el --- Early initialization -*- lexical-binding: t -*-
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
   ;; Maximize GC threshold during startup to minimize collection pauses;
   ;; restore to default after init completes.
@@ -77,6 +81,10 @@ This configuration is built as a nix package; as such, it assumes that nix has p
 
 Redirect Emacs' custom system away from =init.el=, which is a
 generated tangle output and would be overwritten on the next tangle.
+
+#+BEGIN_SRC emacs-lisp :tangle yes :padline no
+;;; init.el --- Emacs configuration -*- lexical-binding: t -*-
+#+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -1461,7 +1469,7 @@ Because org-gcal is stupid and because work is paranoid, I can only control one 
     :after plstore
     :custom
     (org-gcal-remove-cancelled-events t)
-    :config
+    :init
     (require 'auth-source)
     (when-let* ((credential (car (auth-source-search :host "gcal-oauth-service"
   						   :type 'netrc
