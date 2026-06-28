@@ -581,34 +581,6 @@ It took too long on startup to refresh projects in known source directory roots.
       ;; Recursively add all projects under this directory
       (project-remember-projects-under root t)))
 #+END_SRC
-** File Browsing
-A tree-based file browser for file navigation.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package treemacs
-    :ensure t
-    :commands treemacs)
-#+END_SRC
-
-Handle projects managed by projectile as well.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package treemacs-projectile
-    :ensure t
-    :after (treemacs projectile)
-    :commands treemacs-projectile)
-#+END_SRC
-
-Use treemacs for code navigation as well.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package lsp-treemacs
-    :after (treemacs lsp)
-    :ensure t
-    :defer 2
-    :config
-    (lsp-treemacs-sync-mode 1))
-#+END_SRC
 ** Structured Editing
 We use paredit for structural editing of Lisp s-expressions. It enforces
 balanced parentheses and provides commands for slurping, barfing, and
@@ -714,27 +686,24 @@ Like Make, but less warts
     :commands (justl))
 #+END_SRC
 ** Language Server Protocol
-IDE-like functionality such as intellisense, debugging
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package lsp-mode
+IDE-like functionality: completion, go-to-definition, diagnostics, and
+hover docs via language-specific servers. We use Eglot (built into
+Emacs 29+) rather than lsp-mode — it delegates to existing Emacs
+infrastructure (corfu, xref, eldoc) instead of reinventing it.
+~flycheck-eglot~ pipes LSP diagnostics into flycheck to keep all
+linting in one place.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package flycheck-eglot
     :ensure t
-    :commands (lsp lsp-deferred)
-    :init
-    (defun gaelan/lsp-mode-setup-completion ()
-  	;; Set LSP up to use orderless
-  	(setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-  	      '(orderless)))
-    :custom
-    (lsp-completion-provider :none) ;; we use Corfu
-    :hook ((lsp-completion-mode . gaelan/lsp-mode-setup-completion)
-  	 (lsp-mode . lsp-enable-which-key-integration)
-  	 (prog-mode . lsp-deferred)))
+    :after (flycheck eglot)
+    :config
+    (global-flycheck-eglot-mode 1))
 
-  (use-package lsp-ui
-    :ensure t
-    :defer 2
-    :after (lsp-mode))
+  (use-package eglot
+    :hook ((php-mode-hook
+	    terraform-mode-hook
+	    yaml-mode-hook)
+	   . eglot-ensure))
 #+END_SRC
 ** Version Control
 Nicer Git support
@@ -837,7 +806,7 @@ Support flycheck syntax checking
     :ensure t)
 #+END_SRC
 ** PHP
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package php-mode
     :ensure t
     :mode "\\.php\\'")
@@ -855,20 +824,20 @@ implementations used in [[https://github.com/appleby/Lisp-In-Small-Pieces][Lisp 
     :ensure t)
 #+END_SRC
 ** Terraform
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package terraform-mode
-      :ensure t
-      :mode "\\.tf\\'")
+    :ensure t
+    :mode "\\.tf\\'")
 #+END_SRC
 ** YAML
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package yaml-mode
     :ensure t
     :mode "\\.ya?ml\\'")
 #+END_SRC
 * SRE / Devops
 ** Kubernetes
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package kubernetes
     :ensure t
     :commands kubernetes-overview)
