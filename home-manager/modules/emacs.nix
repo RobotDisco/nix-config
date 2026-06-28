@@ -7,6 +7,13 @@
 
 let
   emacsPackage = pkgs.callPackage ../../packages/emacs { };
+  aspellWithDicts = pkgs.aspellWithDicts (
+    dicts: with dicts; [
+      en
+      en-science
+      en-computers
+    ]
+  );
   emacsConfig =
     pkgs.runCommand "emacs-config"
       {
@@ -16,6 +23,10 @@ let
         mkdir -p $out
         cp ${../../packages/emacs/init.org} init.org
         emacs --batch --load org init.org --funcall org-babel-tangle
+        substituteInPlace init.el \
+          --replace-fail "@ripgrep@" "${pkgs.ripgrep}" \
+          --replace-fail "@aspell@" "${aspellWithDicts}" \
+          --replace-fail "@gpgconf@" "${pkgs.gnupg}"
         cp *.el $out/
       '';
 in
@@ -31,13 +42,7 @@ in
     packages = with pkgs; [
       emacsPackage
       # Dictionary support for emacs spellchecking
-      (aspellWithDicts (
-        dicts: with dicts; [
-          en
-          en-science
-          en-computers
-        ]
-      ))
+      aspellWithDicts
       # org-roam graph support
       graphviz
       # Image displaying/modification support

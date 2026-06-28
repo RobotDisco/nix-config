@@ -94,6 +94,36 @@ Habits tracked in org (streak graph):
 - Physio, Cardio, 5x Cobra Pose, Evening capture sweep,
   Weekly Review, Slept by midnight
 
+### Completion & navigation stack
+
+The minad stack replaces most default Emacs completion/search UIs:
+
+- **vertico** — minibuffer completion UI
+- **orderless** — fuzzy/multi-token matching for all completion
+- **marginalia** — annotations in minibuffer (file sizes, doc strings, etc.)
+- **consult** — structured sources and live search
+- **embark** — context-sensitive actions on completion candidates
+- **corfu** — in-buffer completion popup (auto-triggers after 0.5s)
+
+Key remapped bindings (differ from Emacs defaults):
+
+| Key | Command |
+|-----|---------|
+| `C-x b` | `consult-buffer` |
+| `C-x f` | `consult-recent-file` |
+| `M-y` | `consult-yank-pop` |
+| `M-g g` | `consult-goto-line` |
+| `M-g o` | `consult-outline` |
+| `M-g i` | `consult-imenu` |
+| `M-s l` | `consult-line` |
+| `M-s r` | `consult-ripgrep` |
+| `C-.` | `embark-act` |
+| `C-;` | `embark-dwim` |
+| `C-c [` / `C-c ]` | `winner-undo` / `winner-redo` |
+
+`embark-export` during any consult search exports results to a
+persistent grep-mode/occur-mode buffer.
+
 ### Known design decisions
 
 - `j` capture template targets `projects/` not the main ZK root,
@@ -106,3 +136,8 @@ Habits tracked in org (streak graph):
   Agenda filters use `+@work` / `-@work`.
 - `blocked` tag (key: `b`) is used on JIRA tasks instead of `WAIT`
   state, since JIRA uses a flag rather than a status for blocked work.
+- `rg.el` is intentionally absent — `consult-ripgrep` (`M-s r`) covers
+  the same use case with consult integration. The `rg` binary is
+  resolved to an absolute Nix store path via `@ripgrep@` substitution
+  in `emacs.nix` so it works from the systemd Emacs service where
+  `$PATH` is not fully initialized.
