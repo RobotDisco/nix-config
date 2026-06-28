@@ -370,7 +370,6 @@ Visually separate nested delimiter pairs
 	    ielm-mode-hook
 	    lisp-interaction-mode-hook
 	    lisp-mode-hook
-	    racket-mode-hook
 	    scheme-mode-hook)
 	   . rainbow-delimiters-mode))
 #+END_SRC
@@ -627,7 +626,6 @@ navigating by sexp.
 	    ielm-mode-hook
 	    lisp-interaction-mode-hook
 	    lisp-mode-hook
-	    racket-mode-hook
 	    scheme-mode-hook)
 	   . enable-paredit-mode))
 #+END_SRC
@@ -844,31 +842,17 @@ Support flycheck syntax checking
     :ensure t
     :mode "\\.php\\'")
 #+END_SRC
-** Racket / Scheme
-#+BEGIN_SRC emacs-lisp :tangle no
-  ;; Core REPL environment
+** Scheme
+Geiser provides REPL and evaluation support. Gambit and Guile cover the
+implementations used in [[https://github.com/appleby/Lisp-In-Small-Pieces][Lisp in Small Pieces]].
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package geiser
     :commands (run-geiser)
-    :ensure t)
-
-  ;; Anticipated Scheme runtimes
-  (use-package geiser-racket
-    :after (geiser)
-    :ensure t)
-
-  ;; Used by Lisp in Small Pieces textbook
-  (use-package geiser-gambit
-    :after (geiser)
     :ensure t)
 
   (use-package geiser-guile
     :after (geiser)
     :ensure t)
-
-  ;; Racket language support
-  (use-package racket-mode
-    :ensure t
-    :mode "\\.rkt\\'")
 #+END_SRC
 ** Terraform
 #+BEGIN_SRC emacs-lisp :tangle no
