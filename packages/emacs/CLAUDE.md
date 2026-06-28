@@ -3,6 +3,11 @@
 `init.org` is a literate config — **never edit `init.el` or `early-init.el`
 directly**. Both are tangled outputs. All changes go in `init.org`.
 
+**After making significant changes to keybindings, packages, or
+workflows, update `packages/emacs/README.org`** — it is the user-facing
+manual covering all configured workflows and key bindings. Keep it in
+sync so it remains a reliable quick-reference.
+
 ## Workflow
 
 ```
