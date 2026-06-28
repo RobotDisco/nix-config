@@ -270,16 +270,82 @@ Visually separate nested delimiter pairs
 #+END_SRC
 * Completion / Minibuffer
 ** Consult
-Enhance emacs commands based on completion
+Richer versions of standard Emacs commands: =consult-buffer= groups
+and previews buffers, =consult-line= searches the current buffer with
+live preview, =consult-ripgrep= searches the project. Acts as the
+candidate-source layer — vertico/orderless handle presentation and
+filtering.
+
+Press =<= inside =consult-buffer= then a letter to narrow by type
+(=b= buffers, =f= recent files, =p= project files, etc.).
+
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package consult
-    :defer 1
-    :ensure t)
-#+END_SRC
-Add org-roam functionality
-#+BEGIN_SRC emacs-lisp :tangle yes
+    :ensure t
+    :bind (;; Buffer / file navigation
+           ("C-x b"   . consult-buffer)
+           ("C-x 4 b" . consult-buffer-other-window)
+           ("C-x 5 b" . consult-buffer-other-frame)
+           ("C-x t b" . consult-buffer-other-tab)
+           ("C-x p b" . consult-project-buffer)
+           ("C-x r b" . consult-bookmark)
+           ("C-x f"   . consult-recent-file)
+           ("C-x M-:" . consult-complex-command)
+           ;; Mode-specific commands (discovery)
+           ("C-c M-x" . consult-mode-command)
+           ;; Kill ring
+           ("M-y"     . consult-yank-pop)
+           ;; Goto (M-g prefix map)
+           ("M-g g"   . consult-goto-line)
+           ("M-g M-g" . consult-goto-line)
+           ("M-g o"   . consult-outline)
+           ("M-g i"   . consult-imenu)
+           ("M-g I"   . consult-imenu-multi)
+           ("M-g m"   . consult-mark)
+           ("M-g k"   . consult-global-mark)
+           ("M-g e"   . consult-compile-error)
+           ("M-g f"   . consult-flycheck)
+           ;; Search (M-s prefix map)
+           ("M-s l"   . consult-line)
+           ("M-s L"   . consult-line-multi)
+           ("M-s r"   . consult-ripgrep)
+           ("M-s g"   . consult-grep)
+           ("M-s G"   . consult-git-grep)
+           ("M-s d"   . consult-find)
+           ("M-s k"   . consult-keep-lines)
+           ("M-s u"   . consult-focus-lines)
+           ;; Info / help
+           ("C-c m"   . consult-man)
+           ("C-c i"   . consult-info)
+           ([remap Info-search] . consult-info)
+           ;; Minibuffer history
+           :map minibuffer-local-map
+           ("M-s" . consult-history)
+           ("M-r" . consult-history)
+           ;; Isearch integration — switch from isearch to consult-line
+           :map isearch-mode-map
+           ("M-e"   . consult-isearch-history)
+           ("M-s e" . consult-isearch-history)
+           ("M-s l" . consult-line)
+           ("M-s L" . consult-line-multi))
+    :custom
+    (consult-narrow-key "<")
+    :config
+    ;; Debounce preview for expensive sources so rapid keystrokes
+    ;; don't thrash disk or network.
+    (consult-customize
+     consult-theme
+     :preview-key '(:debounce 0.2 any)
+     consult-ripgrep consult-grep consult-git-grep
+     consult-bookmark consult-recent-file
+     :preview-key '(:debounce 0.4 any)))
+
+  ;; Searchable flycheck error list via consult.
+  (use-package consult-flycheck
+    :ensure t
+    :after (consult flycheck))
+
   (use-package consult-org-roam
-    :defer 1
     :after (consult org-roam)
     :ensure t
     :config
@@ -295,23 +361,46 @@ Completion popups in the regular buffer. Note that I am also enabling popups to 
     ;; 				 (setq-local corfu-auto nil)
     ;; 				 (corfu-mode))))
     :custom
-    (corfu-auto 1)
+    (corfu-auto t)
     (corfu-auto-delay 0.5)
     :config
     (global-corfu-mode))
 #+END_SRC
 ** Embark
-Run commands based on selections in the completion buffer.
+Context-sensitive action menu for anything Emacs can see. In the
+minibuffer, =C-.= opens an action menu for the current candidate
+instead of committing to the default action — e.g. kill a buffer
+while browsing =consult-buffer=, or copy a file path during
+=consult-ripgrep=. At point in a buffer, =C-.= recognises what's
+under the cursor (URL, file path, symbol, org heading) and offers
+relevant actions. =C-;= runs the single most useful action directly.
+=C-h B= replaces =describe-bindings= with a searchable list.
 
-This is part of the vertico stack.
+=embark-consult= wires embark to consult candidate types; notably,
+=embark-export= during =consult-ripgrep= exports all results to a
+=grep-mode= buffer for navigation or mass editing with =wgrep=.
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package embark
     :ensure t
     :bind (("C-." . embark-act)
   	 ("C-;" . embark-dwim)
-  	 ;; A better describe-bindings
-  	 ("C-h B" . embark-bindings)))
+  	 ("C-h B" . embark-bindings))
+    :init
+    ;; Replace C-h after a prefix key with a completing-read of
+    ;; available bindings, filtered by vertico/orderless.
+    (setq prefix-help-command #'embark-prefix-help-command)
+    :config
+    ;; Hide the mode line in Embark collect/completions buffers —
+    ;; it shows nothing useful in a temporary candidate list.
+    (add-to-list 'display-buffer-alist
+  	       '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+  		 nil
+  		 (window-parameters (mode-line-format . none)))))
+
+  (use-package embark-consult
+    :ensure t
+    :after (embark consult))
 #+END_SRC
 ** Marginalia
 Add annotations to minibuffer completions to provide you with more information about the displayed options
@@ -320,10 +409,9 @@ Add annotations to minibuffer completions to provide you with more information a
   (use-package marginalia
     :demand t
     :ensure t
-    :commands (marginalia-mode)
     :bind (:map minibuffer-local-map
 		("M-A" . marginalia-cycle))
-    :init
+    :config
     (marginalia-mode))
 #+END_SRC
 ** Orderless
@@ -386,6 +474,17 @@ contorting your input to match what you want.
     (vertico-preselect 'prompt)
     :config
     (vertico-mode +1))
+
+  ;; Bundled vertico extension: DEL deletes a whole path component when
+  ;; navigating file paths, rather than one character at a time.
+  (use-package vertico-directory
+    :after vertico
+    :ensure nil
+    :bind (:map vertico-map
+                ("RET"   . vertico-directory-enter)
+                ("DEL"   . vertico-directory-delete-char)
+                ("M-DEL" . vertico-directory-delete-word))
+    :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
   ;; Save minibuffer history across sessions; vertico uses this to rank
   ;; previously chosen candidates higher.
