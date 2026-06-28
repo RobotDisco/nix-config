@@ -835,12 +835,36 @@ implementations used in [[https://github.com/appleby/Lisp-In-Small-Pieces][Lisp 
     :ensure t
     :mode "\\.ya?ml\\'")
 #+END_SRC
+** Dockerfile
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package dockerfile-mode
+    :ensure t
+    :mode "Dockerfile\\'")
+#+END_SRC
+** JSON
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package json-mode
+    :ensure t
+    :mode "\\.json\\'")
+#+END_SRC
 * SRE / Devops
 ** Kubernetes
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package kubernetes
     :ensure t
     :commands kubernetes-overview)
+
+  (use-package kubel
+    :ensure t
+    :commands kubel)
+#+END_SRC
+** restclient
+Execute HTTP requests from a buffer — useful for exploring AWS/GCloud
+APIs, ArgoCD REST endpoints, and Kubernetes webhooks.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package restclient
+    :ensure t
+    :mode ("\\.http\\'" . restclient-mode))
 #+END_SRC
 ** VTerm
 A more performant terminal that can handle interactive programs
