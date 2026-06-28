@@ -104,6 +104,7 @@ The minad stack replaces most default Emacs completion/search UIs:
 - **consult** — structured sources and live search
 - **embark** — context-sensitive actions on completion candidates
 - **corfu** — in-buffer completion popup (auto-triggers after 0.5s)
+- **cape** — completion sources for corfu: dabbrev (seen words) + file paths
 
 Key remapped bindings (differ from Emacs defaults):
 
@@ -119,10 +120,40 @@ Key remapped bindings (differ from Emacs defaults):
 | `M-s r` | `consult-ripgrep` |
 | `C-.` | `embark-act` |
 | `C-;` | `embark-dwim` |
+| `C-'` | `avy-goto-char-timer` |
+| `M-g j` | `avy-goto-line` |
+| `C-c e s` | `consult-eglot-symbols` (in eglot buffers) |
 | `C-c [` / `C-c ]` | `winner-undo` / `winner-redo` |
 
 `embark-export` during any consult search exports results to a
-persistent grep-mode/occur-mode buffer.
+persistent grep-mode/occur-mode buffer. `wgrep` (`C-c C-p` in that
+buffer) makes it editable; `C-c C-c` commits changes across all files.
+
+### Format on save (apheleia)
+
+Apheleia formats on save using absolute Nix store paths. Current
+formatter → mode assignments:
+
+| Mode | Formatter |
+|------|-----------|
+| `nix-mode` | `nixfmt` |
+| `clojure-mode`, `clojurec-mode`, `clojurescript-mode` | `zprint` |
+| `yaml-mode`, `json-mode` | `prettier` |
+| `terraform-mode` | `terraform fmt -` |
+
+### Store path pattern
+
+Emacs runs as a systemd service with no `$PATH`. Any package that
+shells out to an external binary needs an absolute Nix store path.
+Pattern:
+
+1. In `init.org`: use `@pkgname@/bin/binary` as the path string
+2. In `home-manager/modules/emacs.nix`: add a `--replace-fail`
+   line to the `substituteInPlace` block in the `emacsConfig`
+   `runCommand` derivation
+
+Current binaries using this pattern: `rg`, `aspell`, `gpgconf`,
+`nixfmt`, `zprint`, `prettier`, `terraform`.
 
 ### Known design decisions
 
@@ -137,7 +168,4 @@ persistent grep-mode/occur-mode buffer.
 - `blocked` tag (key: `b`) is used on JIRA tasks instead of `WAIT`
   state, since JIRA uses a flag rather than a status for blocked work.
 - `rg.el` is intentionally absent — `consult-ripgrep` (`M-s r`) covers
-  the same use case with consult integration. The `rg` binary is
-  resolved to an absolute Nix store path via `@ripgrep@` substitution
-  in `emacs.nix` so it works from the systemd Emacs service where
-  `$PATH` is not fully initialized.
+  the same use case with better consult integration.
