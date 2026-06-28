@@ -28,15 +28,19 @@ Things I should do eventually
 ** Phase 4: Version Control
 - [ ] magit deeply: interactive rebase, blame, log (2-3 focused sessions)
 - [ ] forge: =forge-list-pullreqs=, PRs and issues without leaving Emacs
+- [X] diff-hl: git diff indicators in fringe, updates on magit refresh
 
 ** Phase 5: IDE Features
 - [ ] xref: =M-.= go-to-definition, =M-,= pop back, =M-?= find references
 - [ ] flymake: =M-n=/ =M-p= to navigate diagnostics
-- [ ] apheleia: format-on-save per mode
+- [ ] apheleia: format-on-save per mode (needs per-language formatter config)
+- [ ] consult-eglot: workspace symbol search via consult (=xref-find-apropos= covers most of it already)
+- [ ] dape: DAP debugger (more modern than dap-mode; wait until you want step-debugging)
 - [ ] tree-sitter: better highlighting and structural navigation
 - [ ] eglot per language: pyright (Python), solargraph (Ruby), Lisp server
 
 ** Phase 6: Zettelkasten / Org
+- [ ] org-modern: cleaner org visuals (unicode bullets, aligned tables) — purely aesthetic
 - [ ] org-capture: =C-c c= to capture without breaking flow
 - [ ] org-agenda: =C-c a= entry point
 - [ ] org-roam core loop: node-find, node-insert, backlinks buffer
@@ -51,8 +55,10 @@ Things I should do eventually
 - [ ] tramp + dired: browse remote filesystems over SSH
 
 ** Phase 8: Power Features
-- [ ] avy: jump to any visible character in 2 keystrokes
+- [X] avy: =C-'= jump to any visible character, =M-g j= goto line
 - [X] embark: =C-.= embark-act, =C-;= embark-dwim, =embark-export= to grep buffer
+- [X] wgrep: edit embark-exported grep buffers in-place across files
+- [X] cape: dabbrev + file path completion sources for corfu
 - [ ] iedit: edit all occurrences of a symbol simultaneously
 - [X] which-key: built-in Emacs 30, enabled
 

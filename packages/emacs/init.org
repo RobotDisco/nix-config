@@ -367,6 +367,15 @@ Completion popups in the regular buffer. Note that I am also enabling popups to 
     (corfu-auto-delay 0.5)
     :config
     (global-corfu-mode))
+
+  ;; Additional completion sources for corfu. Adds dabbrev (words seen
+  ;; in open buffers) and file paths alongside LSP/mode completions.
+  (use-package cape
+    :ensure t
+    :defer 1
+    :config
+    (add-hook 'completion-at-point-functions #'cape-dabbrev)
+    (add-hook 'completion-at-point-functions #'cape-file))
 #+END_SRC
 ** Embark
 Context-sensitive action menu for anything Emacs can see. In the
@@ -403,6 +412,14 @@ relevant actions. =C-;= runs the single most useful action directly.
   (use-package embark-consult
     :ensure t
     :after (embark consult))
+
+  ;; Edit grep/occur results in-place. Use embark-export during
+  ;; consult-ripgrep to get a wgrep-able buffer, then C-c C-p to
+  ;; enable editing, C-c C-c to commit changes across all files.
+  (use-package wgrep
+    :ensure t
+    :custom
+    (wgrep-auto-save-buffer t))
 #+END_SRC
 ** Marginalia
 Add annotations to minibuffer completions to provide you with more information about the displayed options
@@ -692,6 +709,29 @@ Have nicer integrations with online git sites like gitlab and github
     :config
     ;; Tulip's gitlab instance
     (add-to-list 'forge-alist '("git.internal.tulip.io" "git.internal.tulip.io/api/v4" "git.internal.tulip.io" forge-gitlab-repository)))
+
+  ;; Git diff indicators in the fringe. Integrates with magit so
+  ;; the fringe updates immediately after staging/unstaging.
+  (use-package diff-hl
+    :ensure t
+    :defer 1
+    :config
+    (global-diff-hl-mode)
+    (add-hook 'magit-pre-refresh-hook #'diff-hl-magit-pre-refresh)
+    (add-hook 'magit-post-refresh-hook #'diff-hl-magit-post-refresh))
+#+END_SRC
+* Navigation
+** Avy
+Jump to any visible character on screen in 2-3 keystrokes. =C-'=
+prompts for a character then overlays jump labels on every match;
+press the label to teleport point there instantly.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package avy
+    :ensure t
+    :bind (("C-'" . avy-goto-char-timer)
+           ("M-g j" . avy-goto-line))
+    :custom
+    (avy-timeout-seconds 0.3))
 #+END_SRC
 * Programming Language support / environments
 ** Emacs Lisp
