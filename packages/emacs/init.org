@@ -413,7 +413,7 @@ This is part of the vertico stack.
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package embark
     :ensure t
-    :bind (("C-." . emback-act)
+    :bind (("C-." . embark-act)
   	 ("C-;" . embark-dwim)
   	 ;; A better describe-bindings
   	 ("C-h B" . embark-bindings)))
@@ -867,7 +867,7 @@ A more performant terminal that can handle interactive programs
 ** LaTeX
 Support LaTeX
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package auctex
     :ensure t
     :mode "\\.tex\\'")
@@ -1138,7 +1138,7 @@ Enable org-pomodoro for sustainable focus moderation
 #+END_SRC
 *** org-crypt
 Allow for partial encryption of org files (i.e. specific headers), using a special tag.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org-crypt
     :ensure nil
     :after (org)
@@ -1278,13 +1278,30 @@ Also enable a UI that makes overseeing my knowledge base easier.
 	  org-roam-ui-open-on-start t))
 #+END_SRC
 
-navigating my org-roam corpus will involve me clicking through a bunch of links and then realizing I need to back-track. =winner-mode= is a simple way of implementing browser-like history, by allowing me to keep track of and navigate backwards and forwards through a history of what buffers were shown in each window.
-#+BEGIN_SRC emacs-lisp :tangle no
+** Window Management
+
+=winner-mode= records every window configuration change in a ring
+buffer, so you can undo and redo layout changes. Useful any time
+magit, cider, or a help buffer rearranges your layout unexpectedly.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package winner
+    :ensure nil
+    :bind (("C-c [" . winner-undo)
+           ("C-c ]" . winner-redo))
+    :config
+    (winner-mode 1))
+#+END_SRC
+
+=tab-bar-mode= gives each Emacs frame named tabs, each with its own
+independent window layout. =C-x t 2= clones your current tab into a
+new one, =C-x t r= renames it, =C-x t 0= closes it.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package emacs
     :ensure nil
-    :demand 2
     :config
-    (winner-mode +1))
+    (tab-bar-mode 1))
 #+END_SRC
 
 
@@ -1417,7 +1434,7 @@ I use JIRA at work; let's see if I can feed these into my task management flow
 
 Also, I use slack; get at least important messages
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package slack
     :ensure t
     :config
