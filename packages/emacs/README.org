@@ -1,0 +1,239 @@
+#+TITLE: Emacs Configuration — User Manual
+#+AUTHOR: Gaelan D'costa
+
+Quick reference for the workflows this config is built around. Covers
+things that differ from stock Emacs or that are easy to forget.
+
+* Completion & Search
+
+** The Stack
+
+| Package     | Role                                                      |
+|-------------+-----------------------------------------------------------|
+| vertico     | Vertical minibuffer completion UI                         |
+| orderless   | Fuzzy/multi-token matching — space separates filters      |
+| marginalia  | Annotations (file sizes, docstrings) in minibuffer        |
+| consult     | Structured sources: buffers, files, grep, outline, etc.   |
+| embark      | Context-sensitive actions on any candidate or thing       |
+| corfu       | In-buffer completion popup (auto after 0.5s)              |
+| cape        | Extra corfu sources: dabbrev (seen words) + file paths    |
+
+** Key Bindings
+
+| Key         | Command                                                   |
+|-------------+-----------------------------------------------------------|
+| ~C-x b~     | ~consult-buffer~ — buffers, recent files, bookmarks       |
+| ~C-x f~     | ~consult-recent-file~                                     |
+| ~M-y~       | ~consult-yank-pop~ — searchable kill ring                 |
+| ~M-g g~     | ~consult-goto-line~                                       |
+| ~M-g o~     | ~consult-outline~ — jump to heading                       |
+| ~M-g i~     | ~consult-imenu~ — jump to symbol                         |
+| ~M-s l~     | ~consult-line~ — live search current buffer               |
+| ~M-s r~     | ~consult-ripgrep~ — live project-wide search              |
+| ~M-s g~     | ~consult-grep~                                            |
+| ~C-'~       | ~avy-goto-char-timer~ — jump to visible character         |
+| ~M-g j~     | ~avy-goto-line~ — jump to visible line                    |
+| ~C-.~       | ~embark-act~ — action menu on thing at point / candidate  |
+| ~C-;~       | ~embark-dwim~ — default embark action                     |
+| ~C-h B~     | ~embark-bindings~ — searchable keybinding list            |
+| ~C-c e s~   | ~consult-eglot-symbols~ — workspace symbol search (eglot) |
+
+** Narrowing in consult-buffer
+
+Press ~<~ inside ~consult-buffer~, then a letter to filter by type:
+- ~b~ — open buffers
+- ~f~ — recent files
+- ~p~ — project files
+
+** The embark-export / wgrep workflow
+
+The most powerful search-and-replace flow in this config:
+
+1. ~M-s r~ — start ~consult-ripgrep~
+2. ~C-c C-e~ (or ~embark-export~) — export all results to a ~grep-mode~ buffer
+3. ~C-c C-p~ — make the grep buffer editable (wgrep)
+4. Edit freely — changes apply across all matched files
+5. ~C-c C-c~ — commit all edits; ~C-c C-k~ to abort
+
+* Task Management (GTD)
+
+** Files
+
+| File                              | Purpose                              |
+|-----------------------------------+--------------------------------------|
+| ~~/Documents/gtd/inbox.org~       | All captures land here               |
+| ~~/Documents/gtd/personal.org~    | Habits, someday, self-directed tasks |
+| ~~/Documents/gtd/jira/CLOUD.org~  | Work tasks via org-jira (read-only)  |
+| ~~/Documents/gtd/gcal/*.org~      | Calendar events via org-gcal         |
+
+** Capture Keys
+
+| Key       | Template                                      |
+|-----------+-----------------------------------------------|
+| ~C-c c t~ | Task → inbox                                  |
+| ~C-c c s~ | Scheduled task → inbox (prompts for date)     |
+| ~C-c c e~ | Work note → inbox (tagged ~:@work:~)          |
+| ~C-c c a~ | Action from current note → inbox (with link)  |
+| ~C-c n p~ | New project note (org-roam, ~j~ template)     |
+
+** Agenda Views
+
+| Key       | View                                          |
+|-----------+-----------------------------------------------|
+| ~C-c a .~ | Unified: DOING / 7-day agenda / On Deck       |
+| ~C-c a W~ | Work view (JIRA + work week, ~:@work:~)       |
+| ~C-c a P~ | Personal view (personal week, ~:-@work:~)     |
+| ~C-c a i~ | Inbox triage                                  |
+
+** TODO Keyword Flow
+
+#+BEGIN_EXAMPLE
+TODO → GROOM → NEXT → DOING → WAIT → DONE / HALTED
+PROJECT → ACTIVE → PAUSED → DONE / HALTED
+#+END_EXAMPLE
+
+WIP limit: max 3 ~DOING~ at any time. Use ~NEXT~ for "ready to start"
+and ~DOING~ only for active work. ~GROOM~ mirrors the JIRA grooming
+workflow. ~HALTED~ is for abandoned items (not deleted, for the record).
+
+** Tags
+
+- ~:@work:~ — work context. Agenda views filter on this.
+- ~:@errand:~, ~:@home:~, ~:@computer:~ — GTD context tags.
+- ~:blocked:~ — used on JIRA tasks instead of ~WAIT~ state.
+
+* Note-taking (org-roam)
+
+** Directory Layout
+
+- ~~/Documents/brain/notes/~ — Zettelkasten root
+- ~~/Documents/brain/notes/journal/~ — daily journal entries
+- ~~/Documents/brain/notes/projects/~ — active project notes (also in agenda-files)
+- ~~/Documents/brain/REFERENCES.bib~ — bibliography (citar)
+
+** Core Loop
+
+| Key         | Command                                       |
+|-------------+-----------------------------------------------|
+| ~C-c n f~   | Find or create a node                         |
+| ~C-c n i~   | Insert a link to a node (while writing)       |
+| ~C-c n b~   | Toggle backlinks buffer                       |
+| ~C-c n c~   | Assign an org-id to the current heading       |
+| ~C-c n r~   | Open a random node (excludes journal/lit)     |
+| ~C-c n n~   | New literature note from bibliography (citar) |
+| ~C-c n a~   | Add org-transclusion block at point           |
+| ~C-c n t~   | Toggle org-transclusion mode                  |
+
+** Daily Journal
+
+| Key           | Command                                     |
+|---------------+---------------------------------------------|
+| ~C-c j j~     | Bullet journal entry — today (quick log)    |
+| ~C-c j T~     | Capture today; choose ~w~ for weekly review |
+| ~C-c j n/p~   | Next / previous journal note                |
+
+* Development
+
+** Language Server (eglot)
+
+Eglot is configured for: PHP, Terraform, YAML.
+Clojure uses CIDER instead of eglot.
+
+| Key       | Command                                       |
+|-----------+-----------------------------------------------|
+| ~M-.~     | Go to definition (~xref-find-definitions~)    |
+| ~M-,~     | Pop back after jump                           |
+| ~M-?~     | Find all references                           |
+| ~C-c e s~ | Workspace symbol search (consult-eglot)       |
+
+** Format on Save (apheleia)
+
+Runs automatically on save for configured modes. Formats a copy of the
+buffer and applies a patch — point and undo history are preserved.
+
+| Mode                                      | Formatter      |
+|-------------------------------------------+----------------|
+| ~nix-mode~                                | nixfmt         |
+| ~clojure-mode~, ~clojurec-mode~, ~clojurescript-mode~ | zprint |
+| ~yaml-mode~, ~json-mode~                  | prettier       |
+| ~terraform-mode~                          | terraform fmt  |
+
+To disable for a single save: ~M-x apheleia-mode~ toggles it off for
+the current buffer.
+
+** Diagnostics (flycheck)
+
+| Key       | Command                                       |
+|-----------+-----------------------------------------------|
+| ~M-n~     | Next error                                    |
+| ~M-p~     | Previous error                                |
+| ~C-c ! l~ | List all errors in buffer                     |
+| ~M-g f~   | ~consult-flycheck~ — searchable error list    |
+
+** Clojure (CIDER)
+
+| Key         | Command                                     |
+|-------------+---------------------------------------------|
+| ~C-c C-k~   | Compile/load current buffer                 |
+| ~C-c C-e~   | Eval expression before point                |
+| ~C-c C-z~   | Switch to REPL                              |
+| ~C-c M-j~   | Jack in (start REPL)                        |
+
+** Structural Editing (paredit)
+
+Active in Lisp, Clojure, Emacs Lisp buffers.
+
+| Key         | Command                                     |
+|-------------+---------------------------------------------|
+| ~C-M-f/b~   | Forward/backward sexp                       |
+| ~C-)~       | Slurp forward                               |
+| ~C-(~       | Slurp backward                              |
+| ~C-}~       | Barf forward                                |
+| ~M-s~       | Splice (remove surrounding parens)          |
+| ~M-r~       | Raise (replace parent with current sexp)    |
+
+* Version Control (magit)
+
+| Key       | Command                                       |
+|-----------+-----------------------------------------------|
+| ~C-x g~   | ~magit-status~                                |
+| ~C-c g~   | ~magit-dispatch~                              |
+| ~C-c f~   | ~magit-file-dispatch~                         |
+
+diff-hl shows per-line git status in the fringe; updates on magit
+refresh. ~magit-wip-mode~ is on — working tree snapshots are saved
+to ~refs/wip/*~ on every commit/checkout. To clean them up:
+
+#+BEGIN_SRC sh
+git for-each-ref --format='%(refname)' refs/wip/ | xargs -r git update-ref -d
+#+END_SRC
+
+** forge (GitHub / GitLab)
+
+~M-x forge-list-pullreqs~, ~forge-list-issues~ to browse without
+leaving Emacs. Tulip's GitLab instance is registered.
+
+* Window Management
+
+| Key         | Command                                     |
+|-------------+---------------------------------------------|
+| ~C-c [~     | ~winner-undo~ — restore previous layout     |
+| ~C-c ]~     | ~winner-redo~                               |
+| ~C-x t 2~   | Clone current tab                           |
+| ~C-x t r~   | Rename current tab                          |
+| ~C-x t 0~   | Close current tab                           |
+
+* Email (notmuch)
+
+~M-x notmuch~ to open. Uses ~NOTMUCH_PROFILE=personal~ by default.
+Auth via ~xoauth2~ (Fastmail). ~mujmap~ syncs mail in the background.
+
+* Help
+
+| Key         | Command                                     |
+|-------------+---------------------------------------------|
+| ~C-h f~     | ~helpful-callable~ — describe function      |
+| ~C-h v~     | ~helpful-variable~ — describe variable      |
+| ~C-h k~     | ~helpful-key~ — describe key binding        |
+| ~C-c C-d~   | ~helpful-at-point~                          |
+| ~C-h B~     | ~embark-bindings~ — all bindings, searchable |
