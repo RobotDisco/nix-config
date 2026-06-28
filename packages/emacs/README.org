@@ -213,6 +213,65 @@ git for-each-ref --format='%(refname)' refs/wip/ | xargs -r git update-ref -d
 ~M-x forge-list-pullreqs~, ~forge-list-issues~ to browse without
 leaving Emacs. Tulip's GitLab instance is registered.
 
+* Modeline
+
+** What's in it
+
+- ~mood-line~ provides the base layout
+- ~minions~ collapses all minor-mode lighters into a ~⊞~ menu (click to see list)
+- kubectl current context, refreshed every 60s from ~~/.kube/config~
+- Slack unread channels via ~tracking-mode~ (appears when a channel has activity)
+
+** Learning mode-line-format
+
+The modeline is intentionally built on ~mood-line~ rather than a heavier
+framework so the source is readable. Use it as a learning reference:
+
+#+BEGIN_SRC sh
+# Find mood-line's source in the Nix store
+find /nix/store -name "mood-line.el" 2>/dev/null | grep -v drv | head -3
+#+END_SRC
+
+Key concepts in ~mode-line-format~:
+
+- It is a *list* — Emacs evaluates each element left to right and
+  concatenates the results into the modeline string.
+- *Strings* are displayed literally: ~"hello"~ → ~hello~
+- *Symbols* are looked up as variables: ~mode-name~ expands to the
+  current major mode's display name.
+- *~%~-constructs* inside strings are format codes: ~%b~ = buffer name,
+  ~%l~ = line number, ~%c~ = column, ~%p~ = position percentage,
+  ~%*~ = modified indicator (~*~ / ~-~ / ~%%~).
+- *~(:eval FORM)~* evaluates FORM each redraw and inserts the result.
+  This is how custom segments work — return a propertized string or ~""~.
+- *~(:propertize STR PROPS...)~* applies text properties (face, help-echo,
+  mouse-face, keymap) to a string inline.
+- *~(CONDITION REST...)~* — if CONDITION is non-nil, include REST in the
+  modeline; otherwise skip. Used to make segments conditional.
+
+A minimal custom segment looks like this:
+
+#+BEGIN_SRC emacs-lisp
+(defvar my/thing ""
+  "Cached value for the modeline.")
+
+(defun my/thing-refresh ()
+  (setq my/thing
+        (if some-condition
+            (propertize " thing" 'face 'success)
+          "")))
+
+(run-with-timer 0 30 #'my/thing-refresh)
+(add-to-list 'global-mode-string '(:eval my/thing) t)
+#+END_SRC
+
+~global-mode-string~ is the standard place to inject custom segments —
+mood-line's misc-info segment includes it automatically, so you don't
+need to modify ~mode-line-format~ directly.
+
+The kubectl context segment in ~init.org~ (~** Mode line~) is a working
+example of this pattern — read it alongside the mood-line source.
+
 * Window Management
 
 | Key         | Command                                     |
@@ -237,3 +296,4 @@ Auth via ~xoauth2~ (Fastmail). ~mujmap~ syncs mail in the background.
 | ~C-h k~     | ~helpful-key~ — describe key binding        |
 | ~C-c C-d~   | ~helpful-at-point~                          |
 | ~C-h B~     | ~embark-bindings~ — all bindings, searchable |
+| ~C-c h e~   | Open this manual                            |

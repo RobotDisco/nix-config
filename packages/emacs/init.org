@@ -80,6 +80,13 @@ generated tangle output and would be overwritten on the next tangle.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+
+  ;; Quick access to the Emacs config user manual.
+  (defun my/open-emacs-manual ()
+    "Open the Emacs configuration user manual."
+    (interactive)
+    (find-file (expand-file-name "~/code/nix-config/packages/emacs/README.org")))
+  (global-set-key (kbd "C-c h e") #'my/open-emacs-manual)
 #+END_SRC
 
 ** Variables
@@ -208,10 +215,55 @@ other package writes its first file.
 
 * Appearance
 ** Mode line
-*** Position
+A minimal modeline intentionally chosen over doom-modeline: small
+enough to read the source and learn from, easy to fork and customise
+as understanding grows. Study =mood-line.el= in the Nix store to see
+how =mode-line-format= constructs work in practice.
+
+=minions= collapses all minor-mode lighters into a single =⊞= menu,
+which is the main reason people reach for heavy modeline frameworks.
+
 #+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Collapse minor-mode lighters into a single menu.
+  (use-package minions
+    :ensure t
+    :defer 1
+    :config
+    (minions-mode 1))
+
+  ;; Clean segmented modeline; readable source, good learning reference.
+  (use-package mood-line
+    :ensure t
+    :defer 1
+    :config
+    (mood-line-mode))
+
   (column-number-mode 1)
   (line-number-mode 1)
+
+  ;; kubectl current context — read ~/.kube/config directly rather than
+  ;; shelling out, so it's safe from a systemd service and instant.
+  ;; Refreshes every 60s in case you switch context outside Emacs.
+  (defvar my/kubectl-context ""
+    "Cached current kubectl context for the modeline.")
+
+  (defun my/kubectl-context-refresh ()
+    "Update kubectl context cache by reading ~/.kube/config."
+    (setq my/kubectl-context
+          (or (ignore-errors
+                (with-temp-buffer
+                  (insert-file-contents (expand-file-name "~/.kube/config"))
+                  (when (re-search-forward "^current-context: \\(.+\\)$" nil t)
+                    (concat " ⎈" (string-trim (match-string 1))))))
+              "")))
+
+  (run-with-timer 0 60 #'my/kubectl-context-refresh)
+  (add-to-list 'global-mode-string '(:eval my/kubectl-context) t)
+
+  ;; Slack unread — tracking-mode (a slack.el dependency) appends
+  ;; channel names to the modeline when they have unread activity.
+  (with-eval-after-load 'slack
+    (tracking-mode 1))
 #+END_SRC
 ** Margins
 Set the line length to 80 characters globally, and show a column

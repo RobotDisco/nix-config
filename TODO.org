@@ -62,7 +62,13 @@ Things I should do eventually
 - [ ] iedit: edit all occurrences of a symbol simultaneously
 - [X] which-key: built-in Emacs 30, enabled
 
-** Phase 9: Language Depth
+** Phase 9: Startup & Personal UX
+- [X] =C-c h e= opens =packages/emacs/README.org= for quick recall
+- [ ] Open unified agenda view on startup instead of splash screen —
+  =org-agenda-list= or =(org-agenda nil ".")= in =emacs-startup-hook=;
+  skip dashboard package entirely since GTD flow covers the same need
+
+** Phase 10: Language Depth
 - [ ] Lisp: deepen paredit; geiser-guile configured (Racket dropped)
 - [ ] Python: eglot + pyright + apheleia (black)
 - [ ] Ruby: eglot + solargraph
