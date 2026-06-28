@@ -7,7 +7,7 @@ Gaelan D'costa's GNU emacs config; there are many like it, but this one is mine.
 
 Eventually I will understand my own config enough to explain it in a cohesive way.
 
-This configuration is built as a nix package; as such, it assumes that nix has pre-supplied all necessary packages (which ironically, are parsed out of this file.) As such, it is also paired with whatever version of emacs that this package includes. Currently, this is GNU Emacs 28.1
+This configuration is built as a nix package; as such, it assumes that nix has pre-supplied all necessary packages (which ironically, are parsed out of this file.) As such, it is also paired with whatever version of emacs that this package includes. Currently, this is GNU Emacs 30.
 
 ** Inspirations
 - [[https://github.com/daviwil/emacs-from-scratch/][Emacs from Scratch]] is a great series of youtube videos where the author clearly puts a lot of thoughts and well-principled thought into his configuration principles.
@@ -24,7 +24,6 @@ This configuration is built as a nix package; as such, it assumes that nix has p
   - regex / fuzzy / multi-segment searching :: [[https://github.com/oantolin/orderless][orderless]]
 - version control (git) :: [[https://magit.vc/][magit]]
 - structured editing :: [[https://paredit.org/][paredit]]
-- project management :: [[https://github.com/bbatsov/projectile][projectile]]
 - citation Management :: [[https://github.com/emacs-citar/citar][citar]]
 - knowledge/idea management :: [[https://www.orgroam.com/][org-roam]]
 
@@ -574,14 +573,6 @@ navigating by sexp.
 	    scheme-mode-hook)
 	   . enable-paredit-mode))
 #+END_SRC
-** grepping
-[[https://blog.burntsushi.net/ripgrep/][ripgrep]] is a grep replacement written in Rust. It is more performant and more powertful than grep.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package rg
-    :bind (("C-c s" . rg-menu))
-    :ensure t)
-#+END_SRC
 ** Encryption
 Route GPG passphrase prompts through the Emacs minibuffer rather than
 a system pinentry dialog. Requires =allow-loopback-pinentry= in
@@ -643,7 +634,7 @@ Like Make, but less warts
   ;; Language support
   (use-package just-mode
     :ensure t
-    :mode "\\[Jj\\]ustfile")
+    :mode "[Jj]ustfile\\'")
 
   ;; Run targets from within Emacs
   (use-package justl
@@ -1246,17 +1237,18 @@ An implementation of Zettelkasten for org, inspired by org-roam
 Also enable a UI that makes overseeing my knowledge base easier.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package websocket
+    :ensure t
     :after org-roam)
 
   (use-package org-roam-ui
     :ensure t
     :commands org-roam-ui-mode
     :after org-roam
-    :init
-    (setq org-roam-ui-sync-theme t
-	  org-roam-ui-follow t
-	  org-roam-ui-update-on-save t
-	  org-roam-ui-open-on-start t))
+    :custom
+    (org-roam-ui-sync-theme t)
+    (org-roam-ui-follow t)
+    (org-roam-ui-update-on-save t)
+    (org-roam-ui-open-on-start nil))
 #+END_SRC
 
 ** Window Management
@@ -1337,10 +1329,9 @@ Because org-gcal is stupid and because work is paranoid, I can only control one 
   (use-package org-gcal
     :ensure t
     :after plstore
-    :defer 2
     :custom
     (org-gcal-remove-cancelled-events t)
-    :init
+    :config
     (require 'auth-source)
     (when-let* ((credential (car (auth-source-search :host "gcal-oauth-service"
   						   :type 'netrc
@@ -1393,8 +1384,7 @@ Also, I use slack; get at least important messages
   		       :cookie (auth-source-pick-first-password
   				:host "tulip.slack.com"
   				:user "gaelan@tulip.com^cookie")
-  		       :subscribed-channels '(war-room peace-room))
-    (slack-start))
+  		       :subscribed-channels '(war-room peace-room)))
 #+END_SRC
 * Entertainment
 ** Play Solo RPGs
