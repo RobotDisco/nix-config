@@ -858,12 +858,6 @@ Support flycheck syntax checking
     :ensure t
     :mode "\\.rkt\\'")
 #+END_SRC
-** Rust
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package rustic
-    :ensure t
-    :mode (("\\.rs\\'" . rustic-mode)))
-#+END_SRC
 ** Terraform
 #+BEGIN_SRC emacs-lisp :tangle no
   (use-package terraform-mode
