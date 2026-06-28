@@ -29,7 +29,8 @@ let
           --replace-fail "@gpgconf@" "${pkgs.gnupg}" \
           --replace-fail "@nixfmt@" "${pkgs.nixfmt}" \
           --replace-fail "@zprint@" "${pkgs.zprint}" \
-          --replace-fail "@prettier@" "${pkgs.prettier}"
+          --replace-fail "@prettier@" "${pkgs.prettier}" \
+          --replace-fail "@terraform@" "${pkgs.terraform}"
         cp *.el $out/
       '';
 in

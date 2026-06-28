@@ -352,6 +352,14 @@ Press =<= inside =consult-buffer= then a letter to narrow by type
     :ensure t
     :config
     (consult-org-roam-mode +1))
+
+  ;; Workspace symbol search via consult. Complements M-. (xref) with
+  ;; a fuzzy-searchable list of all symbols in the project.
+  (use-package consult-eglot
+    :ensure t
+    :after (consult eglot)
+    :bind (:map eglot-mode-map
+                ("C-c e s" . consult-eglot-symbols)))
 #+END_SRC
 ** Corfu
 Completion popups in the regular buffer. Note that I am also enabling popups to render after some (possibly default) delay if enough prefix characters in a code segment are typed.
@@ -701,8 +709,11 @@ formatter binaries so it works from the Emacs systemd service.
     (setf (alist-get 'clojure-mode apheleia-mode-alist) 'zprint)
     (setf (alist-get 'clojurec-mode apheleia-mode-alist) 'zprint)
     (setf (alist-get 'clojurescript-mode apheleia-mode-alist) 'zprint)
+    (setf (alist-get 'terraform apheleia-formatters)
+          '("@terraform@/bin/terraform" "fmt" "-"))
     (setf (alist-get 'yaml-mode apheleia-mode-alist) 'prettier)
     (setf (alist-get 'json-mode apheleia-mode-alist) 'prettier)
+    (setf (alist-get 'terraform-mode apheleia-mode-alist) 'terraform)
     (apheleia-global-mode +1))
 #+END_SRC
 ** Version Control
