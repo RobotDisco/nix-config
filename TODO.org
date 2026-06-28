@@ -16,13 +16,14 @@ Things I should do eventually
 - [X] vertico
 - [X] orderless
 - [X] marginalia
-- [ ] consult
-- [ ] embark
+- [X] consult
+- [X] embark
 
 ** Phase 3: Project & File Navigation
-- [ ] projectile: =C-c p f= (find file), =C-c p s r= (ripgrep project)
+- [X] project.el (built-in, replaces projectile): =C-x p f= find file,
+  =C-x p b= project buffer (via consult), =M-s r= ripgrep project
 - [ ] dired: mark files with =m=, operate with =D/R/C=
-- [ ] consult-ripgrep: live project-wide search with preview
+- [X] consult-ripgrep: live project-wide search with preview (=M-s r=)
 
 ** Phase 4: Version Control
 - [ ] magit deeply: interactive rebase, blame, log (2-3 focused sessions)
@@ -51,12 +52,12 @@ Things I should do eventually
 
 ** Phase 8: Power Features
 - [ ] avy: jump to any visible character in 2 keystrokes
-- [ ] embark: =embark-act= on anything in a completion list or at point
+- [X] embark: =C-.= embark-act, =C-;= embark-dwim, =embark-export= to grep buffer
 - [ ] iedit: edit all occurrences of a symbol simultaneously
-- [ ] which-key: turn on, teaches Emacs passively
+- [X] which-key: built-in Emacs 30, enabled
 
 ** Phase 9: Language Depth
-- [ ] Lisp: deepen smartparens; sly (Common Lisp) or geiser (Scheme/Racket)
+- [ ] Lisp: deepen paredit; geiser-guile configured (Racket dropped)
 - [ ] Python: eglot + pyright + apheleia (black)
 - [ ] Ruby: eglot + solargraph
 
@@ -70,11 +71,8 @@ Things I should do eventually
 - Reconcile darktower and arrakis profiles so that I can use my nixos modules on both
 - [X] Get gpg-agent working in MacOS
 - [X] Re-evaluate nix-darwin for MacOS, see if it is worth it.
-- Add Makefile-like tasks (is this doable by the nix command itself?)
-  - testing nix configs
-  - testing home-manager configs
-  - testing emacs configs
-  - linting
+- [X] Add Makefile-like tasks: justfile with build-all, test-switch, apply,
+  check, lint, fmt, check-emacs, emacs-dev, emacs-dev-package, etc.
 - Rewrite apps section to encapsulate app definitions from the transformation code I use to minimize boilerplate
 - Lean on github actions for now for:
   - dependabot (or something for flake updates)
