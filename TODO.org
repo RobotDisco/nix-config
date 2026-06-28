@@ -6,7 +6,7 @@ Things I should do eventually
 * Emacs Learning Curriculum
 
 ** Phase 1: Core Emacs Fluency
-- [ ] Window management: =C-x 2/3=, =winner-mode=, =C-x o=
+- [ ] Window management: =C-x 2/3=, =C-x o= (winner-mode configured: =C-c [= / =C-c ]=)
 - [ ] Mark ring: =C-SPC= to set, =C-u C-SPC= to travel back
 - [ ] Keyboard macros: =C-x (=, =C-x )=, =C-x e=
 - [ ] Registers: store/recall positions, text, rectangles
@@ -32,8 +32,8 @@ Things I should do eventually
 
 ** Phase 5: IDE Features
 - [ ] xref: =M-.= go-to-definition, =M-,= pop back, =M-?= find references
-- [ ] flymake: =M-n=/ =M-p= to navigate diagnostics
-- [X] apheleia: format-on-save — nix (nixfmt), clojure (zprint), yaml/json (prettier)
+- [ ] flycheck: =M-n= / =M-p= to navigate diagnostics (flycheck + flycheck-eglot configured)
+- [X] apheleia: format-on-save — nix (nixfmt), clojure (zprint), yaml/json (prettier), terraform
 - [X] consult-eglot: =C-c e s= workspace symbol search via consult
 - [ ] dape: DAP debugger (more modern than dap-mode; wait until you want step-debugging)
 - [ ] tree-sitter: better highlighting and structural navigation
@@ -49,8 +49,8 @@ Things I should do eventually
 
 ** Phase 7: DevOps / Kubernetes / SSH
 - [ ] tramp: =C-x C-f /ssh:host:/path= — edit remote files as if local
-- [ ] vterm: =vterm-copy-mode=, multiple vterm buffers per project
-- [ ] kubernetes.el: kubectl UI — browse pods, logs, describe resources
+- [X] vterm: configured (=M-x vterm=, =M-x vterm-other-window=); learn =vterm-copy-mode=
+- [X] kubernetes.el + kubel: both installed; learn the UI workflows
 - [ ] ob-shell: run kubectl from org runbooks, capture output inline
 - [ ] tramp + dired: browse remote filesystems over SSH
 
