@@ -291,16 +291,6 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
 #+END_SRC
 
 ** UX
-   Always request confirmation before quitting emacs
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (setq confirm-kill-emacs #'y-or-n-p)
-   #+END_SRC
-
-   Use =y= and =n= for prompts instead of =yes= and =no=
-   #+BEGIN_SRC emacs-lisp :tangle no
-     (fset #'yes-or-no-p #'y-or-n-p)
-   #+END_SRC
-
    Set the default Mac modifier bindings to mirror Linux bindings
    #+BEGIN_SRC emacs-lisp :tangle early-init.el
      (when (eq system-type 'darwin)
@@ -320,16 +310,16 @@ The [[https://github.com/nix-community/emacs-overlay][emacs-overlay]] nix packag
   (line-number-mode 1)
 #+END_SRC
 ** Margins
-Set the line length to 80 characters. This has to be set via customize rather than seq for reasons I don't understand.
-#+BEGIN_SRC emacs-lisp :tangle no
+Set the line length to 80 characters globally, and show a column
+indicator in code buffers as a visual guide. Prose uses
+=visual-line-mode= instead and doesn't benefit from a hard ruler.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package emacs
+    :ensure nil
+    :hook (prog-mode . display-fill-column-indicator-mode)
     :custom
     (fill-column 80))
-#+END_SRC
-
-Show a line indicating the end of the page, as it were
-#+BEGIN_SRC emacs-lisp :tangle no
-  (global-display-fill-column-indicator-mode +1)
 #+END_SRC
 ** Colour Theme
 Enable treemacs and org integrations; laserwave available as alternative.
@@ -511,26 +501,17 @@ contorting your input to match what you want.
 
 #+END_SRC
 ** which-key
-When you start a keybinding, list possible completions are and what they do
-#+BEGIN_SRC emacs-lisp :tangle no
+When you start a keybinding, list possible completions and what they do.
+Built into Emacs 30+; pairs with =embark-bindings= (=C-h B=) for
+searchable full binding lists.
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package which-key
-    :ensure t
+    :ensure nil
     :defer 1
-    :commands (which-key-mode)
     :config
     (which-key-mode))
 #+END_SRC
 * Functionality
-** Reverting
-Automatically revert when a file changes on disk; this happens a lot given my files are managed in Seafile
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package emacs
-    :bind (("s-u" . revert-buffer))
-    :ensure nil
-    :hook ((after-load-hook . (lambda ()
-				(global-auto-revert-mode +1)))))
-#+END_SRC
 ** Spellchecking
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package emacs
@@ -593,22 +574,15 @@ navigating by sexp.
     :ensure t)
 #+END_SRC
 ** Encryption
-Support encryption as the basis of a number of functions
+Route GPG passphrase prompts through the Emacs minibuffer rather than
+a system pinentry dialog. Requires =allow-loopback-pinentry= in
+=gpg-agent.conf= (set in =home-manager/modules/gnupg.nix=).
 
-- encrypting and decrypting entire files
-- supporting encryption in other packages
-- supporting direct GnuPG pinentry in emacs
-
-
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (use-package emacs
     :ensure nil
     :custom
-    (epg-pinentry-mode 'loopback)
-    :config
-    (epa-file-enable)
-    (setq epg-file-encrypt-to '("gdcosta@gmail.com"
-  				"gaelan@tulip.com")))
+    (epg-pinentry-mode 'loopback))
 #+END_SRC
 
 ** Snippets
@@ -1305,40 +1279,6 @@ new one, =C-x t r= renames it, =C-x t 0= closes it.
 #+END_SRC
 
 
-Use deft for full-text search
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package deft
-    :ensure t
-    :after (org-roam)
-    :bind ("C-c n d" . deft)
-    :init
-    (defun gaelan/deft-parse-title (file contents)
-      (let ((re (concat
-		 ;; Match text of first headline found, strip away tags and
-		 ;; trailing whitespace
-		 "^\\*+\\s-+\\(.*?\\)\\s-*\\(?:\\s-:.*\\)?$"
-		 ;; or
-		 "\\|"
-		 ;; Match text of first #+TITLE: found
-		 "^\\s-*#\\+[Tt][Ii][Tt][Ll][Ee]:\\s-*\\(.*\\)$")))
-	(when (string-match re contents)
-	  (or (match-string 1 contents)
-	      (match-string 2 contents)))))
-    :config
-    (advice-add 'deft-parse-title :override #'gaelan/deft-parse-title)
-    :custom
-    (deft-default-extension "org")
-    (deft-directory org-roam-directory)
-    (deft-recursive t)
-    (deft-strip-summary-regexp (concat
-				;; Strip anything that looks like org property.
-				"^\\s-*:.*:\\s-*.*$"
-				;; Or
-				"\\|"
-				;; Strip anything that looks like #+KEYWORD
-				"^\\s-*#\\+.*:.*$"))
-    (deft-use-filename-as-title t))
-#+END_SRC
 *** org-noter
 A way to annotate PDF/ePubs using org mode
 #+BEGIN_SRC emacs-lisp :tangle yes
