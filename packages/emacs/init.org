@@ -681,6 +681,30 @@ linting in one place.
 	    yaml-mode-hook)
 	   . eglot-ensure))
 #+END_SRC
+** Formatting
+Format on save via apheleia. Uses absolute store paths for all
+formatter binaries so it works from the Emacs systemd service.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package apheleia
+    :ensure t
+    :config
+    ;; Override binaries with absolute Nix store paths — the Emacs
+    ;; service has no $PATH so bare commands won't resolve.
+    (setf (alist-get 'nixfmt apheleia-formatters)
+          '("@nixfmt@/bin/nixfmt" "-"))
+    (setf (alist-get 'zprint apheleia-formatters)
+          '("@zprint@/bin/zprint"))
+    (setf (alist-get 'prettier apheleia-formatters)
+          '("@prettier@/bin/prettier" "--stdin-filepath" filepath))
+    ;; Mode → formatter assignments
+    (setf (alist-get 'nix-mode apheleia-mode-alist) 'nixfmt)
+    (setf (alist-get 'clojure-mode apheleia-mode-alist) 'zprint)
+    (setf (alist-get 'clojurec-mode apheleia-mode-alist) 'zprint)
+    (setf (alist-get 'clojurescript-mode apheleia-mode-alist) 'zprint)
+    (setf (alist-get 'yaml-mode apheleia-mode-alist) 'prettier)
+    (setf (alist-get 'json-mode apheleia-mode-alist) 'prettier)
+    (apheleia-global-mode +1))
+#+END_SRC
 ** Version Control
 Nicer Git support
 *** magit

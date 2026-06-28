@@ -26,7 +26,10 @@ let
         substituteInPlace init.el \
           --replace-fail "@ripgrep@" "${pkgs.ripgrep}" \
           --replace-fail "@aspell@" "${aspellWithDicts}" \
-          --replace-fail "@gpgconf@" "${pkgs.gnupg}"
+          --replace-fail "@gpgconf@" "${pkgs.gnupg}" \
+          --replace-fail "@nixfmt@" "${pkgs.nixfmt}" \
+          --replace-fail "@zprint@" "${pkgs.zprint}" \
+          --replace-fail "@prettier@" "${pkgs.prettier}"
         cp *.el $out/
       '';
 in

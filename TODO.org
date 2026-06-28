@@ -33,7 +33,7 @@ Things I should do eventually
 ** Phase 5: IDE Features
 - [ ] xref: =M-.= go-to-definition, =M-,= pop back, =M-?= find references
 - [ ] flymake: =M-n=/ =M-p= to navigate diagnostics
-- [ ] apheleia: format-on-save per mode (needs per-language formatter config)
+- [X] apheleia: format-on-save — nix (nixfmt), clojure (zprint), yaml/json (prettier)
 - [ ] consult-eglot: workspace symbol search via consult (=xref-find-apropos= covers most of it already)
 - [ ] dape: DAP debugger (more modern than dap-mode; wait until you want step-debugging)
 - [ ] tree-sitter: better highlighting and structural navigation
