@@ -1082,9 +1082,9 @@ Helper functions
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package org
     :ensure t
-    :hook (org-mode-hook . (lambda ()
-                             (setq-local fill-column 80)
-                             (visual-line-mode +1)))
+    :hook (org-mode . (lambda ()
+                        (setq-local fill-column 80)
+                        (visual-line-mode +1)))
     :mode ("\\.org\\'" . org-mode)
     :bind (("C-c a" . org-agenda)
            ("C-c d" . gaelan/delete-done-todos)
