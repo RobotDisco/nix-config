@@ -625,7 +625,7 @@ searchable full binding lists.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package project
     :ensure nil
-    :bind ("C-c p P" . gaelan/refresh-known-projects))
+    :bind ("C-x p P" . gaelan/refresh-known-projects))
 #+END_SRC
 *** Helper functions
 #+BEGIN_SRC emacs-lisp :tangle yes
