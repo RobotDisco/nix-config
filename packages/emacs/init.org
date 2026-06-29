@@ -746,7 +746,8 @@ linting in one place.
   (use-package eglot
     :hook ((php-mode-hook
 	    terraform-mode-hook
-	    yaml-mode-hook)
+	    yaml-mode-hook
+	    elm-mode-hook)
 	   . eglot-ensure))
 #+END_SRC
 ** Formatting
@@ -774,6 +775,9 @@ formatter binaries so it works from the Emacs systemd service.
     (setf (alist-get 'yaml-mode apheleia-mode-alist) 'prettier)
     (setf (alist-get 'json-mode apheleia-mode-alist) 'prettier)
     (setf (alist-get 'terraform-mode apheleia-mode-alist) 'terraform)
+    (setf (alist-get 'elm-format apheleia-formatters)
+          '("@elm-format@/bin/elm-format" "--yes" "--stdin" "--output" "-"))
+    (setf (alist-get 'elm-mode apheleia-mode-alist) 'elm-format)
     (apheleia-global-mode +1))
 #+END_SRC
 ** Version Control
@@ -939,6 +943,14 @@ implementations used in [[https://github.com/appleby/Lisp-In-Small-Pieces][Lisp 
   (use-package json-mode
     :ensure t
     :mode "\\.json\\'")
+#+END_SRC
+** Elm
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package elm-mode
+    :ensure t
+    :mode "\\.elm\\'"
+    :custom
+    (elm-sort-imports-on-save t))
 #+END_SRC
 * SRE / Devops
 ** Kubernetes

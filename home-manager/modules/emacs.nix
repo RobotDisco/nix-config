@@ -30,7 +30,8 @@ let
           --replace-fail "@nixfmt@" "${pkgs.nixfmt}" \
           --replace-fail "@zprint@" "${pkgs.zprint}" \
           --replace-fail "@prettier@" "${pkgs.prettier}" \
-          --replace-fail "@terraform@" "${pkgs.terraform}"
+          --replace-fail "@terraform@" "${pkgs.terraform}" \
+          --replace-fail "@elm-format@" "${pkgs.elmPackages.elm-format}"
         cp *.el $out/
       '';
 in
