@@ -45,7 +45,7 @@ Enable settings that both help me profile startup, but also tweak settings to ma
   ;; Don't compact font caches on GC (relevant for long-running daemon).
   (setq inhibit-compacting-font-caches t)
 
-  ;; Don't resize frame to accommodate font/bar changes at startup.
+  ;; Don't resize frame to accommodate font/bar changes.
   (setq frame-inhibit-implied-resize t)
 
   ;; Disable unnecessary GUI chrome and popup dialogs.
