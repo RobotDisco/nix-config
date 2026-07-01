@@ -832,6 +832,39 @@ press the label to teleport point there instantly.
     :custom
     (avy-timeout-seconds 0.3))
 #+END_SRC
+* AI Assistance
+** claude-code.el
+Run Claude Code CLI sessions inside Emacs.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package claude-code
+    :ensure t
+    :bind-keymap ("C-c k" . claude-code-command-map)
+    :custom
+    (claude-code-terminal-backend 'vterm)
+    :config
+    (claude-code-mode +1))
+#+END_SRC
+
+** Monet
+IDE protocol bridge between Claude Code and Emacs via WebSocket. When a
+Claude session starts, Monet automatically starts a sidecar server that
+lets Claude see your current selection, pull Flymake/Flycheck/LSP
+diagnostics, and present proposed edits as a diff for you to
+accept/reject/edit before anything is written to disk.
+
+No manual setup needed — it starts automatically with each Claude session
+via the hook below.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package monet
+    :ensure t
+    :after claude-code
+    :hook (claude-code-process-environment-functions . monet-start-server-function)
+    :init
+    (monet-mode +1))
+#+END_SRC
+
 * Programming Language support / environments
 ** Emacs Lisp
 Richer help buffers with source, examples, and callers.

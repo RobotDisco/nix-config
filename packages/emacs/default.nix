@@ -53,6 +53,43 @@ emacsWithPackagesFromUsePackage {
 
   # Override upstream packages with custom forks/versions
   override = _final: prev: {
+    # nixpkgs "claude-code" is yuya373's fork, not stevemolitor's original.
+    # Override with stevemolitor's version which monet integrates with.
+    claude-code = prev.melpaBuild {
+      pname = "claude-code";
+      version = "20260430.0";
+      src = fetchFromGitHub {
+        owner = "stevemolitor";
+        repo = "claude-code.el";
+        rev = "03199df8b3a1e9cd4857f0851f7a912ba524aff3";
+        hash = "sha256-5QJrWIu4EgnHcOqMwlrs2JBBx7aI9OaSJswesr6Apfk=";
+      };
+      recipe = writeText "claude-code" ''
+        (claude-code :fetcher github :repo "stevemolitor/claude-code.el")
+      '';
+      packageRequires = with prev; [
+        inheritenv
+        transient
+        vterm
+      ];
+    };
+    # monet is not in nixpkgs; build from GitHub directly
+    monet = prev.melpaBuild {
+      pname = "monet";
+      version = "20250701.0";
+      src = fetchFromGitHub {
+        owner = "stevemolitor";
+        repo = "monet";
+        rev = "ee2e35557e8ae07de842c435486f7c152f3750e0";
+        hash = "sha256-C5t7pKcp8lqZUPiWAcrx2H7Gba2NSpojUPxG5AnrMJg=";
+      };
+      recipe = writeText "monet" ''
+        (monet :fetcher github :repo "stevemolitor/monet")
+      '';
+      packageRequires = with prev; [
+        websocket
+      ];
+    };
     # Upstream (PreciousChicken/org-timeblock) is broken; use ru2saig's
     # maintained fork. melpaBuild (not trivialBuild) is required so that
     # a proper -pkg.el descriptor is generated — without it package.el
