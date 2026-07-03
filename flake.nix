@@ -193,7 +193,7 @@
         aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt;
       };
 
-      packages = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-darwin" ] (
+      packages = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-darwin" "aarch64-linux" ] (
         system:
         let
           pkgs = import nixpkgs {
