@@ -3,6 +3,9 @@
 emacs_dev_dir := env_var_or_default("XDG_RUNTIME_DIR", "/tmp") \
     + "/emacs-dev"
 emacs_init_org := justfile_directory() / "packages/emacs/init.org"
+emacs_kata_src := justfile_directory() / "packages/emacs-kata"
+emacs_kata_dir := env_var_or_default("XDG_RUNTIME_DIR", "/tmp") \
+    + "/emacs-kata-dev"
 
 # --- System builds ---
 
@@ -136,6 +139,27 @@ emacs-dev-package *args: tangle
 # Build the emacs derivation standalone (verify package resolution)
 build-emacs:
     nix build ".#emacs" --no-link
+
+# Check kata .el files for syntax errors (paren balance). No tangle.
+check-emacs-kata:
+    "$EMACS_NOX" --batch \
+        --eval "(progn \
+                  (find-file \"{{emacs_kata_src}}/early-init.el\") \
+                  (check-parens) \
+                  (find-file \"{{emacs_kata_src}}/init.el\") \
+                  (check-parens) \
+                  (message \"Syntax OK\"))"
+
+# Launch a local emacs against the kata config for elisp iteration.
+# Copies the .el files to a temp dir so the repo stays clean.
+emacs-dev-kata *args:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p "{{emacs_kata_dir}}"
+    cp "{{emacs_kata_src}}"/*.el "{{emacs_kata_dir}}/"
+    echo "Starting emacs with kata config from {{emacs_kata_dir}}"
+    echo "(~/.config/emacs/ is not affected)"
+    exec emacs --init-directory "{{emacs_kata_dir}}" {{args}}
 
 # --- Maintenance ---
 
