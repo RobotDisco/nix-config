@@ -305,17 +305,18 @@ Visually separate nested delimiter pairs
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package rainbow-delimiters
     :ensure t
-    :hook ((cider-repl-mode-hook
-	    clojure-mode-hook
-	    clojurec-mode-hook
-	    clojurescript-mode-hook
-	    emacs-lisp-mode-hook
-	    geiser-repl-mode-hook
-	    ielm-mode-hook
-	    lisp-interaction-mode-hook
-	    lisp-mode-hook
-	    scheme-mode-hook)
-	   . rainbow-delimiters-mode))
+    :hook ((cider-repl-mode
+  	  clojure-mode
+  	  clojurec-mode
+  	  clojurescript-mode
+  	  emacs-lisp-mode
+  	  geiser-repl-mode
+  	  ielm-mode
+  	  lisp-data-mode
+  	  lisp-interaction-mode
+  	  lisp-mode
+  	  scheme-mode)
+  	 . rainbow-delimiters-mode))
 #+END_SRC
 * Completion / Minibuffer
 ** Consult
@@ -639,17 +640,18 @@ navigating by sexp.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package paredit
     :ensure t
-    :hook ((cider-repl-mode-hook
-	    clojure-mode-hook
-	    clojurec-mode-hook
-	    clojurescript-mode-hook
-	    emacs-lisp-mode-hook
-	    geiser-repl-mode-hook
-	    ielm-mode-hook
-	    lisp-interaction-mode-hook
-	    lisp-mode-hook
-	    scheme-mode-hook)
-	   . enable-paredit-mode))
+    :hook ((cider-repl-mode
+  	  clojure-mode
+  	  clojurec-mode
+  	  clojurescript-mode
+  	  emacs-lisp-mode
+  	  geiser-repl-mode
+  	  ielm-mode
+  	  lisp-data-mode
+  	  lisp-interaction-mode
+  	  lisp-mode
+  	  scheme-mode)
+  	 . enable-paredit-mode))
 #+END_SRC
 ** Encryption
 Route GPG passphrase prompts through the Emacs minibuffer rather than
