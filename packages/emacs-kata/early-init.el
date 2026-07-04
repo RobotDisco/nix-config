@@ -25,6 +25,9 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+;; cage doesn't manage window decorations, so GTK draws its own
+;; titlebar and close button. Tell it not to.
+(add-to-list 'default-frame-alist '(undecorated . t))
 
 (add-hook 'emacs-startup-hook
           (lambda ()
