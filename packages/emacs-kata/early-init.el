@@ -36,9 +36,3 @@
 
 ;; Nix supplies all packages; configure no archives.
 (setq package-archives nil)
-
-;; On the (darwin) dev machine used for config iteration, mirror the Linux
-;; modifier layout. Harmless on the aarch64-linux device.
-(when (eq system-type 'darwin)
-  (setq mac-option-modifier 'super
-        mac-command-modifier 'meta))

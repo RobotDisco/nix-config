@@ -195,7 +195,7 @@
   :config (which-key-mode))
 
 ;;; --- Project management ---
-(defvar gaelan/kata-roots '("~/katas")
+(defvar gaelan/kata-roots '("~/code" "~/katas")
   "Root directories under which kata projects live.")
 
 (defun gaelan/refresh-known-projects ()
