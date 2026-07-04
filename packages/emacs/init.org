@@ -22,16 +22,9 @@ Enable settings that both help me profile startup, but also tweak settings to ma
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle early-init.el
-  ;; Maximize GC threshold during startup to minimize collection pauses;
-  ;; restore to default after init completes.
-  (let ((normal-gc-cons-threshold gc-cons-threshold)
-        (normal-gc-cons-percentage gc-cons-percentage))
-    (setq gc-cons-threshold most-positive-fixnum
-  	gc-cons-percentage 1.0)
-    (add-hook 'emacs-startup-hook
-  	    (lambda ()
-  	      (setq gc-cons-threshold normal-gc-cons-threshold
-  		    gc-cons-percentage normal-gc-cons-percentage))))
+  ;; Suppress GC entirely during startup; gcmh takes over at runtime.
+  (setq gc-cons-threshold most-positive-fixnum
+        gc-cons-percentage 1.0)
 
   ;; Disable file-name handlers during startup (skips regex matching on
   ;; every file load); restore after so TRAMP and compressed files work.
@@ -65,6 +58,25 @@ Enable settings that both help me profile startup, but also tweak settings to ma
 
   ;; Nix provides all packages; don't configure any package sources.
   (setq package-archives nil)
+#+END_SRC
+
+** Runtime GC management
+
+[[https://github.com/emacsmirror/gcmh][gcmh]] raises =gc-cons-threshold= to =most-positive-fixnum= during
+interactive use so GC never fires mid-command, then triggers a
+collection after =gcmh-idle-delay= seconds of inactivity and resets
+the threshold. On a long-running 64 GB desktop session this keeps
+pauses out of the critical path entirely.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package gcmh
+    :ensure t
+    :demand t
+    :custom
+    (gcmh-high-cons-threshold most-positive-fixnum)
+    (gcmh-idle-delay 15)
+    :config
+    (gcmh-mode 1))
 #+END_SRC
 
 * Base settings

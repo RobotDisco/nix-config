@@ -1,14 +1,13 @@
 ;;; early-init.el --- uConsole kata early init -*- lexical-binding: t -*-
 
-;; Maximize GC threshold during startup; restore after init completes.
-(let ((normal-gc-cons-threshold gc-cons-threshold)
-      (normal-gc-cons-percentage gc-cons-percentage))
-  (setq gc-cons-threshold most-positive-fixnum
-        gc-cons-percentage 1.0)
-  (add-hook 'emacs-startup-hook
-            (lambda ()
-              (setq gc-cons-threshold normal-gc-cons-threshold
-                    gc-cons-percentage normal-gc-cons-percentage))))
+;; Suppress GC entirely during startup; settle at 32 MB afterward.
+;; 32 MB suits the uConsole: single-app, 4 GB RAM, slow ARM GC.
+(setq gc-cons-threshold most-positive-fixnum
+      gc-cons-percentage 1.0)
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (setq gc-cons-threshold (* 32 1024 1024)
+                  gc-cons-percentage 0.1)))
 
 ;; Disable file-name handlers during startup; restore after.
 (let ((normal-file-name-handler-alist file-name-handler-alist))
