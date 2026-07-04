@@ -1,0 +1,40 @@
+#+TITLE: uConsole Code-Kata Emacs
+#+AUTHOR: Gaelan D'costa
+
+* What this is
+A deliberately lean Emacs for a ClockworkPi uConsole repurposed as a
+code-kata device. It is a *separate, hand-written* config
+(=early-init.el= + =init.el=, no org/tangle), not a variant of the
+desktop =packages/emacs/init.org=. See the design spec at
+=docs/superpowers/specs/2026-07-03-uconsole-kata-emacs-design.md=.
+
+* Build & deploy
+- Package: =packages.aarch64-linux.emacs-kata= (aarch64-linux only; it
+  does not build on the dev machines — build it on the device or an
+  aarch64 builder).
+- Installed via =home-manager/profiles/gaelan-kata.nix=, which also
+  installs the language toolchains and the Iosevka font, and deploys the
+  two =.el= files verbatim (no substitution, no daemon).
+
+* Iterating on the config
+- =just check-emacs-kata= — paren/syntax check (no tangle).
+- =just emacs-dev-kata= — launch a local Emacs against the kata config in
+  an isolated init dir (=~/.config/emacs/= is untouched). Uses the local
+  =emacs= binary, so language toolchains/LSP may be absent — those are
+  exercised on-device.
+
+* Languages
+Guile (Geiser), Clojure/ClojureScript (CIDER, clj-kondo, zprint), Elm
+(eglot → elm-language-server, elm-format), zsh (sh-mode + shellcheck),
+Emacs Lisp (ielm, eros, helpful). Practice is *REPL-driven*; eglot's only
+client is Elm.
+
+* Intentionally absent (vs. desktop)
+Email, Slack, JIRA, GCal, org-roam, org-agenda/GTD, ledger, PDF/EPUB/
+LaTeX, kubernetes/restclient, AI assistance (claude-code/monet), forge,
+spellchecking, just-mode, nix-mode, org-pomodoro. Theme is the built-in
+=modus-vivendi=.
+
+* Tune on the hardware
+The default face =:height= (130) in =init.el= is a starting guess. The
+uConsole panel is ~294 DPI; adjust the height on the device.
