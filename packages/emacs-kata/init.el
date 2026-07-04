@@ -43,6 +43,10 @@
 
 (column-number-mode 1)
 (line-number-mode 1)
+(setq display-time-format "%H:%M"
+      display-time-default-load-average nil)
+(display-time-mode 1)
+(display-battery-mode 1)
 
 ;; Typeface. NOTE: :height is a TUNE-ON-DEVICE value — the uConsole panel
 ;; is ~294 DPI, so the right size can only be judged on the hardware.
