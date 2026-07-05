@@ -11,7 +11,6 @@
 
     ./services/fileserver.nix
     ./services/mysql.nix
-    ./services/orgnote.nix
     ./services/postgresql.nix
     ./services/reverseproxy.nix
     ./services/vaultwarden.nix
