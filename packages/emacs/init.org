@@ -658,7 +658,6 @@ navigating by sexp.
   	  clojurescript-mode
   	  emacs-lisp-mode
   	  geiser-repl-mode
-  	  ielm-mode
   	  lisp-data-mode
   	  lisp-interaction-mode
   	  lisp-mode
