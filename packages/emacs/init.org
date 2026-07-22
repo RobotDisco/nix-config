@@ -889,6 +889,12 @@ Overlay ~C-x C-e~ evaluation results inline rather than in the echo area.
     :hook (emacs-lisp-mode-hook . eros-mode))
 #+END_SRC
 
+=package-lint= checks buffer to ensure that any Emacs Lisp code in a buffer can actually run under the Package-Requires version constraints in its header.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package flycheck-package
+    :ensure t
+    :hook (emacs-lisp-mode-hook . flycheck-package-setup))
+#+END_SRC
 ** Nix
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package nix-mode
