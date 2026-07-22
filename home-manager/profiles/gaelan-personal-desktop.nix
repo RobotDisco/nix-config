@@ -35,7 +35,6 @@
         discord
         signal-desktop
         slack
-        wasistlos
 
         # Good terminal for focus and inspiration
         cool-retro-term
