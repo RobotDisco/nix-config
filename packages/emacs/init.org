@@ -747,11 +747,11 @@ linting in one place.
     (global-flycheck-eglot-mode 1))
 
   (use-package eglot
-    :hook ((php-mode-hook
-	    terraform-mode-hook
-	    yaml-mode-hook
-	    elm-mode-hook)
-	   . eglot-ensure))
+    :hook ((elm-mode
+  	  nix-mode
+  	  php-mode
+  	  terraform-mode
+  	  yaml-mode) . eglot-ensure))
 #+END_SRC
 ** Formatting
 Format on save via apheleia. Uses absolute store paths for all
