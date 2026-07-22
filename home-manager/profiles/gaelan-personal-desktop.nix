@@ -68,6 +68,7 @@
       gnupg.enable = true;
 
       services.seafile-client.enable = true;
+      services.uhk-agent.enable = true;
 
       wayland = {
         hyprland.enable = true;
