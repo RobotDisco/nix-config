@@ -64,6 +64,7 @@
           nixpkgs-unstable
           emacs-overlay
           home-manager
+          tarot-emacs
           ;
       };
       inherit (myLib) darwinSystem nixosSystem;
@@ -92,7 +93,6 @@
           homeSpecialArgs = {
             inherit myLib;
             inherit (inputs) agenix robotdisco-secrets;
-            emacsTarot = inputs.tarot-emacs.packages."aarch64-darwin".default;
           };
         };
       };
@@ -115,7 +115,6 @@
           homeSpecialArgs = {
             inherit myLib;
             inherit (inputs) agenix robotdisco-secrets;
-            emacsTarot = inputs.tarot-emacs.packages."x86_64-linux".default;
           };
         };
         darktower = nixosSystem {
@@ -133,67 +132,31 @@
       };
 
       homeConfigurations = {
-        "gaelan@arrakis" =
-          let
-            system = "x86_64-linux";
-            pkgs = import nixpkgs {
-              inherit system;
-              config.allowUnfree = true;
-              overlays = [
-                emacs-overlay.overlays.default
-                (import ./packages/overlay.nix)
-              ];
-            };
-            pkgs-unstable = import inputs.nixpkgs-unstable {
-              inherit system;
-              config.allowUnfree = true;
-            };
-          in
-          inputs.home-manager.lib.homeManagerConfiguration {
-            inherit pkgs;
-            modules = [
-              ./home-manager/modules
-              ./home-manager/profiles/gaelan-personal.nix
-              inputs.agenix.homeManagerModules.default
-            ];
-            extraSpecialArgs = {
-              inherit myLib pkgs-unstable;
-              inherit (inputs) robotdisco-secrets;
-              emacsTarot = inputs.tarot-emacs.packages."${system}".default;
-              hostName = "arrakis";
-            };
+        "gaelan@arrakis" = myLib.homeConfiguration {
+          system = "x86_64-linux";
+          hostName = "arrakis";
+          modules = [
+            ./home-manager/profiles/gaelan-personal.nix
+            inputs.agenix.homeManagerModules.default
+          ];
+          extraSpecialArgs = {
+            inherit myLib;
+            inherit (inputs) robotdisco-secrets;
           };
-        "gaelan@fountain-of-ahmed-iii" =
-          let
-            system = "aarch64-darwin";
-            pkgs = import nixpkgs {
-              inherit system;
-              config.allowUnfree = true;
-              overlays = [
-                emacs-overlay.overlays.default
-                (import ./packages/overlay.nix)
-              ];
-            };
-            pkgs-unstable = import inputs.nixpkgs-unstable {
-              inherit system;
-              config.allowUnfree = true;
-            };
-          in
-          inputs.home-manager.lib.homeManagerConfiguration {
-            inherit pkgs;
-            modules = [
-              ./home-manager/modules
-              ./home-manager/profiles/gaelan-work.nix
-              inputs.agenix.homeManagerModules.default
-              inputs.mac-app-utils.homeManagerModules.default
-            ];
-            extraSpecialArgs = {
-              inherit myLib pkgs-unstable;
-              inherit (inputs) robotdisco-secrets;
-              emacsTarot = inputs.tarot-emacs.packages."${system}".default;
-              hostName = "fountain-of-ahmed-iii";
-            };
+        };
+        "gaelan@fountain-of-ahmed-iii" = myLib.homeConfiguration {
+          system = "aarch64-darwin";
+          hostName = "fountain-of-ahmed-iii";
+          modules = [
+            ./home-manager/profiles/gaelan-work.nix
+            inputs.agenix.homeManagerModules.default
+            inputs.mac-app-utils.homeManagerModules.default
+          ];
+          extraSpecialArgs = {
+            inherit myLib;
+            inherit (inputs) robotdisco-secrets;
           };
+        };
       };
 
       devShells = import ./devshells.nix { inherit nixpkgs; };

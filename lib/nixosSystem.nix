@@ -8,6 +8,7 @@
   home-manager,
   nixpkgs,
   nixpkgs-unstable,
+  tarot-emacs,
   ...
 }:
 
@@ -36,6 +37,9 @@ let
     inherit system;
     config.allowUnfree = true;
   };
+
+  # Tarot's emacs package for whichever system we're building for.
+  emacsTarot = tarot-emacs.packages.${system}.default;
 in
 nixpkgs.lib.nixosSystem {
   inherit system;
@@ -65,7 +69,7 @@ nixpkgs.lib.nixosSystem {
     {
       # Supply home-manager with special arguments. Always include flake inputs.
       home-manager.extraSpecialArgs = {
-        inherit pkgs-unstable;
+        inherit pkgs-unstable emacsTarot;
       }
       // homeSpecialArgs;
     }

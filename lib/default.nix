@@ -42,4 +42,13 @@
     darwinSystem.nix extract what it needs.
   */
   darwinSystem = import ./darwinSystem.nix args;
+
+  /*
+    Build a standalone home-manager configuration with sensible defaults.
+    See lib/homeConfiguration.nix for full documentation.
+
+    Same pattern as nixosSystem/darwinSystem above - we pass all arguments
+    and let homeConfiguration.nix extract what it needs.
+  */
+  homeConfiguration = import ./homeConfiguration.nix args;
 }
