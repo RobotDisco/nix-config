@@ -1,12 +1,13 @@
 {
   config,
   pkgs,
+  emacsTarot,
   robotdisco-secrets,
   ...
 }:
 
 let
-  emacsPackage = pkgs.callPackage ../../packages/emacs { };
+  emacsPackage = pkgs.callPackage ../../packages/emacs { inherit emacsTarot; };
   aspellWithDicts = pkgs.aspellWithDicts (
     dicts: with dicts; [
       en

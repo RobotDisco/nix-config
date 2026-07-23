@@ -1570,3 +1570,9 @@ Also, I use slack; get at least important messages
     :ensure t
     :bind ("C-c r" . solo-rpg-menu))
 #+END_SRC
+** My Tarot Readings package
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package tarot
+    :ensure t
+    :commands (tarot-reading))
+#+END_SRC

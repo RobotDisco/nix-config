@@ -39,6 +39,11 @@
       #url = "path:/Users/gaelan/code/nix-secrets";
       flake = false;
     };
+
+    tarot-emacs = {
+      url = "github:RobotDisco/tarot-emacs/trunk";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -87,6 +92,7 @@
           homeSpecialArgs = {
             inherit myLib;
             inherit (inputs) agenix robotdisco-secrets;
+            emacsTarot = inputs.tarot-emacs.packages."aarch64-darwin".default;
           };
         };
       };
@@ -109,6 +115,7 @@
           homeSpecialArgs = {
             inherit myLib;
             inherit (inputs) agenix robotdisco-secrets;
+            emacsTarot = inputs.tarot-emacs.packages."x86_64-linux".default;
           };
         };
         darktower = nixosSystem {
@@ -128,8 +135,9 @@
       homeConfigurations = {
         "gaelan@arrakis" =
           let
+            system = "x86_64-linux";
             pkgs = import nixpkgs {
-              system = "x86_64-linux";
+              inherit system;
               config.allowUnfree = true;
               overlays = [
                 emacs-overlay.overlays.default
@@ -137,7 +145,7 @@
               ];
             };
             pkgs-unstable = import inputs.nixpkgs-unstable {
-              system = "x86_64-linux";
+              inherit system;
               config.allowUnfree = true;
             };
           in
@@ -151,13 +159,15 @@
             extraSpecialArgs = {
               inherit myLib pkgs-unstable;
               inherit (inputs) robotdisco-secrets;
+              emacsTarot = inputs.tarot-emacs.packages."${system}".default;
               hostName = "arrakis";
             };
           };
         "gaelan@fountain-of-ahmed-iii" =
           let
+            system = "aarch64-darwin";
             pkgs = import nixpkgs {
-              system = "aarch64-darwin";
+              inherit system;
               config.allowUnfree = true;
               overlays = [
                 emacs-overlay.overlays.default
@@ -165,7 +175,7 @@
               ];
             };
             pkgs-unstable = import inputs.nixpkgs-unstable {
-              system = "aarch64-darwin";
+              inherit system;
               config.allowUnfree = true;
             };
           in
@@ -180,6 +190,7 @@
             extraSpecialArgs = {
               inherit myLib pkgs-unstable;
               inherit (inputs) robotdisco-secrets;
+              emacsTarot = inputs.tarot-emacs.packages."${system}".default;
               hostName = "fountain-of-ahmed-iii";
             };
           };

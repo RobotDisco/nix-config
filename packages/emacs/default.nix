@@ -1,6 +1,7 @@
 {
   emacsWithPackagesFromUsePackage,
   emacs-pgtk,
+  emacsTarot,
   fetchpatch,
   fetchFromGitHub,
   writeText,
@@ -112,5 +113,7 @@ emacsWithPackagesFromUsePackage {
         svg-lib
       ];
     };
+    # Gaelan's home-grown tarot reader package.
+    tarot = emacsTarot;
   };
 }

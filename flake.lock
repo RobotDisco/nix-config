@@ -474,7 +474,8 @@
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_6",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "robotdisco-secrets": "robotdisco-secrets"
+        "robotdisco-secrets": "robotdisco-secrets",
+        "tarot-emacs": "tarot-emacs"
       }
     },
     "rust-overlay": {
@@ -555,6 +556,27 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default-darwin",
+        "type": "github"
+      }
+    },
+    "tarot-emacs": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1784755342,
+        "narHash": "sha256-aQG+OXTvYG1trxZYQBAlvzpn79I+2/+31lJOzdMO82Q=",
+        "owner": "RobotDisco",
+        "repo": "tarot-emacs",
+        "rev": "6887a44762ef10f2b3d0d21c441f54ca9b64c5aa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "RobotDisco",
+        "ref": "trunk",
+        "repo": "tarot-emacs",
         "type": "github"
       }
     },
