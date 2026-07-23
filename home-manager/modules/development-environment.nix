@@ -221,6 +221,11 @@ in
 
           # Python LSP
           basedpyright
+
+          # Shell script linter
+          shellcheck
+          # Bash/zsh LSP
+          bash-language-server
         ];
       }
     ]
