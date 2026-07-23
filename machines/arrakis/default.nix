@@ -53,6 +53,9 @@
       btrfs-options = [
         "compress=zstd"
         "noatime"
+        # This protects apparent timing issues that were introduced between
+        # luks and LVM in NixOS 26.05
+        "x-systemd.device-timeout=infinity"
       ];
     in
     {

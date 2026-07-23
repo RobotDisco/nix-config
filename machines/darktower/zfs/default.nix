@@ -9,9 +9,14 @@
     networking.hostId = "aa3d3177";
 
     # I don't care about specific mountpoints, so just mount the pools
-    boot.zfs.extraPools = [
-      "storagepool"
-      "backuppool"
-    ];
+    boot.zfs = {
+      # Proactively set this to false, which will be the default in 26.11
+      forceImportRoot = false;
+
+      extraPools = [
+        "storagepool"
+        "backuppool"
+      ];
+    };
   };
 }

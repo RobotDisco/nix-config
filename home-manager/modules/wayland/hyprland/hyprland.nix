@@ -20,6 +20,8 @@ in
       package = null;
       portalPackage = null;
 
+      configType = "hyprlang";
+
       settings = {
         "$mod" = "SUPER";
 

@@ -28,7 +28,7 @@
           # This machine has two DELL U2412M displays:
           #   (1) = portrait monitor — dedicated focus/Emacs screen
           #   (2) = landscape monitor (primary, has menu bar) — everything else
-          programs.aerospace.userSettings."workspace-to-monitor-force-assignment" = {
+          programs.aerospace.settings."workspace-to-monitor-force-assignment" = {
             focus = "DELL U2412M (1)";
             web = "DELL U2412M (2)";
             comms = "DELL U2412M (2)";

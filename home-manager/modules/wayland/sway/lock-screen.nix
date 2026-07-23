@@ -30,20 +30,11 @@ in
 
         enable = true;
 
-        events = [
-          {
-            event = "after-resume";
-            command = "${brightnessctl} -r";
-          }
-          {
-            event = "before-sleep";
-            command = "loginctl lock-session";
-          }
-          {
-            event = "lock";
-            command = "pidof swaylock || swaylock";
-          }
-        ];
+        events = {
+          after-resume = "${brightnessctl} -r";
+          before-sleep = "loginctl lock-session";
+          lock = "pidof swaylock || swaylock";
+        };
 
         timeouts = [
           # Dim brightness after a two minutes of idleness

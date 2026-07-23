@@ -25,11 +25,11 @@ in
       enable = true;
       # Default SSH configs have since been deprecated.
       enableDefaultConfig = false;
-      matchBlocks."*" = {
-        compression = true;
+      settings."*" = {
+        Compression = true;
         # Don't forward by default, it is insecure
         # Prefer proxyjumping if you can
-        forwardAgent = false;
+        ForwardAgent = false;
       };
     };
 

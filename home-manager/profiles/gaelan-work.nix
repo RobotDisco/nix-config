@@ -73,7 +73,7 @@ in
       aerospace = {
         enable = true;
         launchd.enable = true;
-        userSettings = {
+        settings = {
           # Home-manager sets start-at-login via launchd above.
           "start-at-login" = false;
 

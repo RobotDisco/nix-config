@@ -70,7 +70,7 @@ in
       };
 
       # Sleep for 20 minutes, then hibernate.
-      systemd.sleep.extraConfig = "HibernateDelaySec=20m";
+      systemd.sleep.settings.Sleep.HibernateDelaySec = "20m";
 
       # Enable wireless powersaving in network manager.
       networking.networkmanager.wifi.powersave = true;
