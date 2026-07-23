@@ -2,8 +2,14 @@
 
 {
   nixpkgs = {
-    # Enable nonfree software
-    config.allowUnfree = true;
+    config = {
+      # Enable nonfree software
+      allowUnfree = true;
+
+      # bitwarden-desktop is pinned to electron_39 upstream (EOL) in both
+      # nixpkgs stable and unstable; accept the risk until upstream bumps it.
+      permittedInsecurePackages = [ "electron-39.8.10" ];
+    };
   };
 
   nix = {
