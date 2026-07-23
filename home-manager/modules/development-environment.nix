@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -198,6 +199,29 @@ in
             enable = true;
           };
         };
+      }
+      {
+        # manually installed developer tools
+        home.packages = with pkgs; [
+          ## Nix ecosystem
+          # Nix LSP (nixd can complete nixpkgs, options, config)
+          nixd
+          # Nix formatter
+          nixfmt
+          # Nix static analysis
+          statix
+          # Nix dead code detection
+          deadnix
+
+          # General software project Task runner
+          just
+
+          # Terraform LSP
+          terraform-ls
+
+          # Python LSP
+          basedpyright
+        ];
       }
     ]
   );

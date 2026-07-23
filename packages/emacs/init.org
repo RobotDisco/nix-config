@@ -392,9 +392,6 @@ Press =<= inside =consult-buffer= then a letter to narrow by type
            ("M-s L" . consult-line-multi))
     :custom
     (consult-narrow-key "<")
-    ;; Use absolute store path so consult-ripgrep works from the
-    ;; Emacs systemd service, where PATH may not include rg.
-    (consult-ripgrep-args "@ripgrep@/bin/rg --null --line-buffered --color=never --max-columns=1000 --path-separator / --smart-case --no-heading --with-filename --line-number --search-zip")
     :config
     ;; Debounce preview for expensive sources so rapid keystrokes
     ;; don't thrash disk or network.
@@ -617,7 +614,7 @@ searchable full binding lists.
     :defer 2
     :custom
     (ispell-local-dictionary "british")
-    (ispell-program-name "@aspell@/bin/aspell")
+    (ispell-program-name "aspell")
     :hook ((org-mode . (lambda ()
   		       (flyspell-mode +1)))
   	 (prog-mode . (lambda ()
@@ -744,12 +741,17 @@ linting in one place.
     :ensure t
     :after (flycheck eglot)
     :config
+    (add-to-list 'eglot-server-programs
+                 '(python-mode . ("basedpyright-langserver" "--stdio")))
+    (add-to-list 'eglot-server-programs
+                 '(terraform-mode . ("terraform-ls" "serve")))
     (global-flycheck-eglot-mode 1))
 
   (use-package eglot
     :hook ((elm-mode
   	  nix-mode
   	  php-mode
+  	  python-mode
   	  terraform-mode
   	  yaml-mode) . eglot-ensure))
 #+END_SRC
@@ -760,27 +762,6 @@ formatter binaries so it works from the Emacs systemd service.
   (use-package apheleia
     :ensure t
     :config
-    ;; Override binaries with absolute Nix store paths — the Emacs
-    ;; service has no $PATH so bare commands won't resolve.
-    (setf (alist-get 'nixfmt apheleia-formatters)
-          '("@nixfmt@/bin/nixfmt" "-"))
-    (setf (alist-get 'zprint apheleia-formatters)
-          '("@zprint@/bin/zprint"))
-    (setf (alist-get 'prettier apheleia-formatters)
-          '("@prettier@/bin/prettier" "--stdin-filepath" filepath))
-    ;; Mode → formatter assignments
-    (setf (alist-get 'nix-mode apheleia-mode-alist) 'nixfmt)
-    (setf (alist-get 'clojure-mode apheleia-mode-alist) 'zprint)
-    (setf (alist-get 'clojurec-mode apheleia-mode-alist) 'zprint)
-    (setf (alist-get 'clojurescript-mode apheleia-mode-alist) 'zprint)
-    (setf (alist-get 'terraform apheleia-formatters)
-          '("@terraform@/bin/terraform" "fmt" "-"))
-    (setf (alist-get 'yaml-mode apheleia-mode-alist) 'prettier)
-    (setf (alist-get 'json-mode apheleia-mode-alist) 'prettier)
-    (setf (alist-get 'terraform-mode apheleia-mode-alist) 'terraform)
-    (setf (alist-get 'elm-format apheleia-formatters)
-          '("@elm-format@/bin/elm-format" "--yes" "--stdin" "--output" "-"))
-    (setf (alist-get 'elm-mode apheleia-mode-alist) 'elm-format)
     (apheleia-global-mode +1))
 #+END_SRC
 ** Version Control

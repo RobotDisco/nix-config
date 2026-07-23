@@ -146,19 +146,11 @@ formatter → mode assignments:
 | `yaml-mode`, `json-mode` | `prettier` |
 | `terraform-mode` | `terraform fmt -` |
 
-### Store path pattern
+### External binaries
 
-Emacs runs as a systemd service with no `$PATH`. Any package that
-shells out to an external binary needs an absolute Nix store path.
-Pattern:
-
-1. In `init.org`: use `@pkgname@/bin/binary` as the path string
-2. In `home-manager/modules/emacs.nix`: add a `--replace-fail`
-   line to the `substituteInPlace` block in the `emacsConfig`
-   `runCommand` derivation
-
-Current binaries using this pattern: `rg`, `aspell`, `gpgconf`,
-`nixfmt`, `zprint`, `prettier`, `terraform`.
+Home-manager's `services.emacs` module launches Emacs via a login
+shell, so the daemon has the user's full `$PATH` (`home.packages`
+included) — bare command names work.
 
 ### Known design decisions
 

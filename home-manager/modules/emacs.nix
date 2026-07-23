@@ -24,14 +24,7 @@ let
         cp ${../../packages/emacs/init.org} init.org
         emacs --batch --load org init.org --funcall org-babel-tangle
         substituteInPlace init.el \
-          --replace-fail "@ripgrep@" "${pkgs.ripgrep}" \
-          --replace-fail "@aspell@" "${aspellWithDicts}" \
-          --replace-fail "@gpgconf@" "${pkgs.gnupg}" \
-          --replace-fail "@nixfmt@" "${pkgs.nixfmt}" \
-          --replace-fail "@zprint@" "${pkgs.zprint}" \
-          --replace-fail "@prettier@" "${pkgs.prettier}" \
-          --replace-fail "@terraform@" "${pkgs.terraform}" \
-          --replace-fail "@elm-format@" "${pkgs.elmPackages.elm-format}"
+          --replace-fail "@gpgconf@" "${pkgs.gnupg}"
         cp *.el $out/
       '';
 in
