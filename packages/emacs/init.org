@@ -1563,12 +1563,18 @@ Also, I use slack; get at least important messages
 					       therealestcloudplatform
 					       cloudplatform-interrupts)))
 #+END_SRC
+** RSS Feeds
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package elfeed
+    :ensure t
+    :bind (("C-x r" . elfeed)))
+#+END_SRC
 * Entertainment
 ** Play Solo RPGs
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package solo-rpg
     :ensure t
-    :bind ("C-c r" . solo-rpg-menu))
+    :commands (solo-rpg-menu))
 #+END_SRC
 ** My Tarot Readings package
 #+BEGIN_SRC emacs-lisp :tangle yes
