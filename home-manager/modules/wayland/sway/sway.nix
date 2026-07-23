@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -28,6 +29,66 @@ in
         modifier = "Mod4";
         terminal = "uwsm app -- emacsclient -c";
         input."type:keyboard".xkb_options = "ctrl:nocaps";
+
+        # home-manager's default `bars` value hardcodes trayOutput =
+        # "primary", but sway/Wayland has no concept of a primary
+        # output, so the tray never renders:
+        # https://github.com/nix-community/home-manager/blob/3b0e6bbd65869af1beadf5963a99befc179d209f/modules/services/window-managers/i3-sway/lib/options.nix#L814
+        #
+        # Nix's module system can't merge into one field of a list
+        # item, so overriding `bars` at all discards that whole default
+        # record — this reproduces it verbatim, with only trayOutput
+        # changed. trayOutput is the only field in that record with
+        # sway-specific branching anywhere in options.nix (see `isI3`
+        # a few lines above L814); every other field here is either a
+        # generic enum/color/font value or already computed correctly
+        # for sway by home-manager itself, so none of them need the
+        # same treatment.
+        bars = [
+          {
+            mode = "dock";
+            hiddenState = "hide";
+            position = "bottom";
+            workspaceButtons = true;
+            workspaceNumbers = true;
+            statusCommand = "${pkgs.i3status}/bin/i3status";
+            fonts = {
+              names = [ "monospace" ];
+              size = 8.0;
+            };
+            trayOutput = "*";
+            colors = {
+              background = "#000000";
+              statusline = "#ffffff";
+              separator = "#666666";
+              focusedWorkspace = {
+                border = "#4c7899";
+                background = "#285577";
+                text = "#ffffff";
+              };
+              activeWorkspace = {
+                border = "#333333";
+                background = "#5f676a";
+                text = "#ffffff";
+              };
+              inactiveWorkspace = {
+                border = "#333333";
+                background = "#222222";
+                text = "#888888";
+              };
+              urgentWorkspace = {
+                border = "#2f343a";
+                background = "#900000";
+                text = "#ffffff";
+              };
+              bindingMode = {
+                border = "#2f343a";
+                background = "#900000";
+                text = "#ffffff";
+              };
+            };
+          }
+        ];
 
         assigns = {
           "focus" = [ { app_id = "emacs"; } ];
