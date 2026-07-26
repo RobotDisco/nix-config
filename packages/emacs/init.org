@@ -1425,6 +1425,20 @@ Also enable a UI that makes overseeing my knowledge base easier.
     (org-roam-ui-open-on-start nil))
 #+END_SRC
 
+*** org-note
+Someone made an interesting progressive web application that maybe lets me do org-roam based stuff on my phone
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(use-package orgnote
+  :ensure (:host github :repo "Artawower/orgnote.el" :branch "dev")
+  :bind
+  (("C-c n p" . orgnote-publish-file)
+   ("C-c n F" . orgnote-force-sync)
+   ("C-c n S" . orgnote-sync))
+  :hook (org-mode . orgnote-autosync-mode)
+  :custom
+  (orgnote-debug-p t))
+#+END_SRC
 ** Window Management
 
 =winner-mode= records every window configuration change in a ring
@@ -1567,7 +1581,7 @@ Also, I use slack; get at least important messages
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package elfeed
     :ensure t
-    :bind (("C-x r" . elfeed)))
+    :bind (("C-c r" . elfeed)))
 #+END_SRC
 * Entertainment
 ** Play Solo RPGs
