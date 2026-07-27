@@ -1135,10 +1135,9 @@ Helper functions
         ((todo "DOING"
                ((org-agenda-overriding-header "── DOING (max 3) ──")
                 (org-agenda-files
-                 '("~/Documents/gtd/personal.org"
-                   "~/Documents/brain/notes/projects/"
-                   "~/Documents/gtd/jira/CLOUD.org"
-                   "~/Documents/gtd/inbox.org"))))
+                 '("~/Documents/brain/notes/gtd/gtd.org"
+                   "~/Documents/brain/notes/gtd/jira/CLOUD.org"
+                   "~/Documents/brain/notes/gtd/inbox.org"))))
          (agenda ""
                  ((org-agenda-span 7)
                   (org-agenda-overriding-header "── Next 7 days ──")
@@ -1148,45 +1147,44 @@ Helper functions
          (todo "NEXT"
                ((org-agenda-overriding-header "── On Deck ──")
                 (org-agenda-files
-                 '("~/Documents/gtd/personal.org"
-                   "~/Documents/brain/notes/projects/"
-                   "~/Documents/gtd/jira/CLOUD.org"
-                   "~/Documents/gtd/inbox.org"))))))
+                 '("~/Documents/brain/notes/gtd/gtd.org"
+                   "~/Documents/brain/notes/gtd/jira/CLOUD.org"
+                   "~/Documents/brain/notes/gtd/inbox.org"))))))
        ("W" "Work view"
         ((todo "DOING|NEXT"
                ((org-agenda-overriding-header "── JIRA: Active ──")
                 (org-agenda-files
-                 '("~/Documents/gtd/jira/CLOUD.org"
-                   "~/Documents/gtd/inbox.org"))
-                (org-agenda-tag-filter-preset '("+@work"))))
+                 '("~/Documents/brain/notes/gtd/jira/CLOUD.org"
+                   "~/Documents/brain/notes/gtd/inbox.org"))
+                (org-agenda-tag-filter-preset '("+work"))))
          (agenda ""
                  ((org-agenda-span 5)
                   (org-agenda-overriding-header "── Work week ──")
                   (org-agenda-files
-                   '("~/Documents/gtd/gcal/work.org"
-                     "~/Documents/gtd/jira/CLOUD.org"
-                     "~/Documents/gtd/personal.org"))
-                  (org-agenda-tag-filter-preset '("+@work"))))))
+                   '("~/Documents/brain/notes/gtd/gcal/work.org"
+                     "~/Documents/brain/notes/gtd/jira/CLOUD.org"
+                     "~/Documents/brain/notes/gtd/personal.org"))
+                  (org-agenda-tag-filter-preset '("+work"))))))
        ("P" "Personal view"
         ((todo "DOING|NEXT"
                ((org-agenda-overriding-header "── Personal: Active ──")
                 (org-agenda-files
-                 '("~/Documents/gtd/personal.org"
-                   "~/Documents/gtd/inbox.org"))
-                (org-agenda-tag-filter-preset '("-@work"))))
+                 '("~/Documents/brain/notes/gtd/gtd.org"
+                   "~/Documents/brain/notes/gtd/inbox.org"))
+                (org-agenda-tag-filter-preset '("-work"))))
          (agenda ""
                  ((org-agenda-span 7)
                   (org-agenda-overriding-header "── Personal week ──")
                   (org-agenda-files
-                   (list "~/Documents/gtd/gcal/personal.org"
-                         "~/Documents/gtd/personal.org"))
+                   (list "~/Documents/brain/notes/gtd/gcal/personal.org"
+                         "~/Documents/brain/notes/gtd/gtd.org"))
                   (org-agenda-tag-filter-preset '("-@work"))))))
        ("D" "Personal day"
         ((agenda ""
                  ((org-agenda-span 'day)
                   (org-agenda-files
-                   (list "~/Documents/gtd/gcal/personal.org"
-                         "~/Documents/gtd/personal.org"))
+                   (list "~/Documents/brain/notes/gtd/gcal/personal.org"
+                         "~/Documents/brain/notes/gtd/personal.org"))
                   (org-super-agenda-groups
                    '((:name "Habits" :habit t)
                      (:name "Calendar" :time-grid t)
@@ -1199,10 +1197,9 @@ Helper functions
         ((todo "DOING|NEXT|TODO"
                ((org-agenda-overriding-header "── Active & Queued ──")
                 (org-agenda-files
-                 '("~/Documents/gtd/personal.org"
-                   "~/Documents/brain/notes/projects/"
-                   "~/Documents/gtd/jira/CLOUD.org"
-                   "~/Documents/gtd/inbox.org"))))
+                 '("~/Documents/brain/notes/gtd/gtd.org"
+                   "~/Documents/brain/notes/gtd/jira/CLOUD.org"
+                   "~/Documents/brain/notes/gtd/inbox.org"))))
          (agenda ""
                  ((org-agenda-span 42)
                   (org-agenda-start-day "-14d")
@@ -1212,26 +1209,25 @@ Helper functions
                    '(org-agenda-skip-entry-if
                      'todo '("DONE" "HALTED" "GROOM")))))))
        ("i" "Inbox (triage)" todo ""
-        ((org-agenda-files '("~/Documents/gtd/inbox.org"))
+        ((org-agenda-files '("~/Documents/brain/notes/gtd/inbox.org"))
          (org-agenda-overriding-header
           "── Inbox: schedule, refile, or delete ──")))))
-    (org-agenda-files '("~/Documents/gtd/inbox.org"
-                        "~/Documents/gtd/personal.org"
-                        "~/Documents/brain/notes/projects/"
-                        "~/Documents/gtd/gcal/personal.org"
-                        "~/Documents/gtd/gcal/work.org"
-                        "~/Documents/gtd/jira/CLOUD.org"))
+    (org-agenda-files '("~/Documents/brain/notes/gtd/inbox.org"
+                        "~/Documents/brain/notes/gtd/gtd.org"
+                        "~/Documents/brain/notes/gtd/gcal/personal.org"
+                        "~/Documents/brain/notes/gtd/gcal/work.org"
+                        "~/Documents/brain/notes/gtd/jira/CLOUD.org"))
     (org-capture-templates
      '(("t" "Task → Inbox" entry
-        (file "~/Documents/gtd/inbox.org")
+        (file "~/Documents/brain/notes/gtd/inbox.org")
         "* TODO %?\n%i"
         :empty-lines 1)
        ("a" "Action from note" entry
-        (file "~/Documents/gtd/inbox.org")
+        (file "~/Documents/brain/notes/gtd/inbox.org")
         "* TODO %?\n%a\n%i"
         :empty-lines 1)))
     (org-refile-targets
-     '(("~/Documents/gtd/personal.org" . (:level . 1))))
+     '(("~/Documents/brain/notes/gtd/gtd.org" . (:level . 1))))
     (org-todo-keywords
      ;; Sequence for individual items, extended for work jira workflow.
      ;; GROOM is kept for Jira integration only — avoid for personal tasks.
