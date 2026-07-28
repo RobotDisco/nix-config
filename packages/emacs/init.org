@@ -410,6 +410,8 @@ Press =<= inside =consult-buffer= then a letter to narrow by type
   (use-package consult-org-roam
     :after (consult org-roam)
     :ensure t
+    :custom
+    (consult-org-roam-buffer-after-buffers t)
     :config
     (consult-org-roam-mode +1))
 
