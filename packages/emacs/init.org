@@ -206,6 +206,14 @@ other package writes its first file.
      (delete-selection-mode +1)
    #+END_SRC
 
+   Let Emacs read/write the X11 (or Wayland's primary-selection
+   extension) =PRIMARY= selection, not just the clipboard. Needed to
+   pick up text merely highlighted (not explicitly copied) in other
+   apps via =mouse-yank-primary=; nil by default since Emacs 25.
+   #+BEGIN_SRC emacs-lisp :tangle yes
+     (setq select-enable-primary t)
+   #+END_SRC
+
    Smooth pixel scrolling for trackpad users (Emacs 29+).
    #+BEGIN_SRC emacs-lisp :tangle yes
      (pixel-scroll-precision-mode +1)
