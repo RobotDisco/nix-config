@@ -1535,8 +1535,8 @@ Because org-gcal is stupid and because work is paranoid, I can only control one 
       (setq org-gcal-client-id id
   	  org-gcal-client-secret secret
   	  org-gcal-fetch-file-alist
-  	  '(("gdcosta@gmail.com" .  "~/Documents/gtd/gcal/personal.org")
-  	    ("gaelan@tulip.com" . "~/Documents/gtd/gcal/work.org")))))
+  	  '(("gdcosta@gmail.com" .  "~/Documents/brain/notes/gtd/gcal/personal.org")
+  	    ("gaelan@tulip.com" . "~/Documents/brain/notes/gtd/gcal/work.org")))))
 #+END_SRC
 ** Tulip work integration
 I use JIRA at work; let's see if I can feed these into my task management flow
@@ -1559,7 +1559,7 @@ I use JIRA at work; let's see if I can feed these into my task management flow
   						("Canceled" . "HALTED")
   						("Done" . "DONE")))
      (org-jira-update-issue-details-include-reporter nil)
-     (org-jira-working-dir "~/Documents/gtd/jira")
+     (org-jira-working-dir "~/Documents/brain/notes/gtd/jira")
      ;; Work doesn't use Jira's time tracker, so don't clobber my local clocking.
      (org-jira-worklog-sync-p nil))
 #+END_SRC
