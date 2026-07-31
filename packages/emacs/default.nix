@@ -19,17 +19,12 @@ let
       # Enable rounded window with no decoration
       (fetchpatch {
         url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-30/round-undecorated-frame.patch";
-        sha256 = "uYIxNTyfbprx5mCqMNFVrBcLeo+8e21qmBE3lpcnd+4=";
+        sha256 = "fesZ0H3LO6T2AiRV8ASozKxZBpvVzwLEcLDy6rctR6c=";
       })
       # Make Emacs aware of OS-level light/dark mode
       (fetchpatch {
         url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-30/system-appearance.patch";
         sha256 = "3QLq91AQ6E921/W9nfDjdOUWR8YVsqBAT/W9c1woqAw=";
-      })
-      # Make Tree-sitter compatible with MacOS
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/d12frosted/homebrew-emacs-plus/master/patches/emacs-30/treesit-compatibility.patch";
-        sha256 = "zJHcQ604D7D3pCF+hNfbf8p1xW5490yzrMt1lUsyJQY=";
       })
     ];
   });
