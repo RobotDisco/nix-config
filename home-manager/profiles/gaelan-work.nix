@@ -19,7 +19,6 @@ in
             "php-lsp@claude-plugins-official" = true;
             "security-guidance@claude-plugins-official" = true;
             "slack@claude-plugins-official" = true;
-            "terraform@claude-plugins-official" = true;
           };
           permissions = {
             deny = [

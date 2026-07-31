@@ -13,6 +13,7 @@ lib.mkIf cfg.enable {
     (google-cloud-sdk.withExtraComponents (
       with google-cloud-sdk.components; [ gke-gcloud-auth-plugin ]
     ))
-    pkgs.docker-credential-gcr
+    google-cloud-sql-proxy
+    docker-credential-gcr
   ];
 }
