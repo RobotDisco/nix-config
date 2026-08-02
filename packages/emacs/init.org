@@ -1354,38 +1354,47 @@ An implementation of Zettelkasten for org, inspired by org-roam
     (org-roam-node-display-template
      (concat
       ;; Org-roam template format
-    ;; ${title:*} -- print the title, using up as much free space as possible
+      ;; ${title:*} -- print the title, using up as much free space as possible
       "${title:*}"
-    ;; We use emacs properties to attach font colouring to our tag list
-    ;; We give a fixed amount of width to our node's tag list.
+      ;; We use emacs properties to attach font colouring to our tag list
+      ;; We give a fixed amount of width to our node's tag list.
       (propertize "${tags:20}" 'face 'org-tag)))
     (org-roam-capture-templates
-     '(("a" "author" plain "%?"
-        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
-  			 "#+TITLE: ${title}\n#+FILETAGS: :author:")
-        :unnarrowed t)
-       ("b" "business" plain "%?"
+     '(("b" "business" plain "%?"
         :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
   			 "#+TITLE: ${title}\n#+FILETAGS: :business:")
         :unnarrowed t)
        ("f" "fleeting" plain "%?"
         :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
   			 "#+TITLE: ${title}\n#+FILETAGS: :fleeting:")
-        :unnarrowed t)     
+        :unnarrowed t)
+       ("j" "project" plain
+        (file "~/Documents/brain/templates/project.org")
+        :target (file "~/Documents/brain/notes/projects/%<%Y%m%d%H%M%S>-${slug}.org")
+        :unnarrowed t)
        ("l" "literature" plain
         (file "~/Documents/brain/templates/literature.org")
         :target (file "${citar-citekey}.org")
+        :unnarrowed t)
+       ("n" "person" plain "%?"
+        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+  			 "#+TITLE: ${title}\n#+FILETAGS: :person:")
         :unnarrowed t)
        ("p" "permanent" plain "%?"
         :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
   			 "#+TITLE: ${title}\n#+FILETAGS: :permanent:")
         :unnarrowed t)
-       ("r" "person" plain "%?"
-        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg"
-  			 "#+TITLE: ${title}\n#+FILETAGS: :person:"))
-       ("j" "project" plain
-        (file "~/Documents/brain/templates/project.org")
-        :target (file "~/Documents/brain/notes/projects/%<%Y%m%d%H%M%S>-${slug}.org")
+       ("r" "runbook" plain "%?"
+        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+  			 "#+TITLE: ${title}\n#+FILETAGS: :runbook:")
+        :unnarrowed t)
+       ("s" "list" plain "%?"
+        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+  			 "#+TITLE: ${title}\n#+FILETAGS: :list:")
+        :unnarrowed t)
+       ("_" "blank" plain "%?"
+        :target (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+  			 "#+TITLE: ${title}")
         :unnarrowed t)))
     (org-roam-dailies-capture-templates
      '(("j" "Daily Bullet" entry
@@ -1399,7 +1408,7 @@ An implementation of Zettelkasten for org, inspired by org-roam
        ("w" "Weekly Reflection" entry
         (file "~/Documents/brain/templates/weekly.org")
         :target (file+head "%<%Y>/%<%0m>/%<%0Y-%0m-%0d>.org"
-                            "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:")
+                           "#+TITLE: %<%Y-%0m-%0d, %A>\n#+FILETAGS: :journal:fleeting:")
         :unnarrowed t)
        ("m" "Monthly Reflection" entry
         "* Monthly Reflection\n** What were my biggest wins this month?\n- %?\n** What did I learn this month?\n- \n** What tensions did I remove this month?\n- \n** What was I most grateful for this month?\n- \n** How have I grown this month?\n- \n"
