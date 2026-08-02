@@ -443,6 +443,12 @@ Completion popups in the regular buffer. Note that I am also enabling popups to 
     :custom
     (corfu-auto t)
     (corfu-auto-delay 0.5)
+    ;; Don't preselect a candidate just because what I've typed
+    ;; happens to match one — only C-n/C-p should select. Otherwise
+    ;; RET/TAB silently commit the auto-preselected candidate instead
+    ;; of doing their normal thing (newline, indent) after the popup
+    ;; appears on idle.
+    (corfu-preselect 'prompt)
     :config
     (global-corfu-mode))
 
