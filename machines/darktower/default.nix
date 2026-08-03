@@ -10,6 +10,7 @@
     ../../modules/nixos/server
 
     ./services/fileserver.nix
+    ./services/freshrss.nix
     ./services/mysql.nix
     ./services/postgresql.nix
     ./services/reverseproxy.nix
