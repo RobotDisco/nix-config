@@ -185,7 +185,9 @@ other package writes its first file.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package no-littering
     :ensure t
-    :demand t)
+    :demand t
+    :config
+    (no-littering-theme-backups))
 #+END_SRC
 
 ** UX

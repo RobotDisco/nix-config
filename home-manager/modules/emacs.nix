@@ -46,6 +46,8 @@ in
       graphviz
       # Image displaying/modification support
       imagemagick
+      # a nicer gui for mobile org-roam navigation (https://org-note.com)
+      orgnote-cli
       # LaTeX support
       texlive.combined.scheme-full
       # ePub support
@@ -55,6 +57,8 @@ in
     ];
     shellAliases = {
       erecovers = "find ~/Documents/brain -name '#*#' -print";
+      notes-diff = "diff -rq ~/Documents/brain/notes ~/Documents/brain/notes/notes2";
+      notes-backup = "rsync -avh --delete ~/Documents/brain/notes ~/Documents/brain/notes/notes2";
     };
   };
 
