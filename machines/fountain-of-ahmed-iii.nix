@@ -26,13 +26,13 @@
         {
           # Pin AeroSpace workspaces to physical monitors.
           # This machine has two DELL U2412M displays:
-          #   (1) = portrait monitor — dedicated focus/Emacs screen
-          #   (2) = landscape monitor (primary, has menu bar) — everything else
+          #   1 = landscape monitor, on the left (primary, has menu bar)
+          #   2 = portrait monitor, on the right — dedicated focus/Emacs
           programs.aerospace.settings."workspace-to-monitor-force-assignment" = {
-            focus = "DELL U2412M (1)";
-            web = "DELL U2412M (2)";
-            comms = "DELL U2412M (2)";
-            fun = "DELL U2412M (2)";
+            focus = 2;
+            web = 1;
+            comms = 1;
+            fun = 1;
           };
         }
       ];
