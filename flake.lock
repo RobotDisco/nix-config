@@ -450,10 +450,10 @@
     "robotdisco-secrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1778945992,
-        "narHash": "sha256-blDX+rLbQ0Z3twQKroCIPutcABJykqJekyG/geNV+S0=",
+        "lastModified": 1785846925,
+        "narHash": "sha256-NpoXqw7qo7L12se9FekAMge9pKt8i9pPt95QalpeZZc=",
         "ref": "refs/heads/trunk",
-        "rev": "bff0351c6e02e6b9a51f62aba12463bf7c553e32",
+        "rev": "35d66b20cd65fb0770e38bf9c4911c000149ae8d",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/RobotDisco/nix-secrets.git"
