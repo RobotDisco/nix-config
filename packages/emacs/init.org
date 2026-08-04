@@ -1181,7 +1181,8 @@ Helper functions
                   (org-agenda-files
                    '("~/Documents/brain/notes/gtd/gcal/work.org"
                      "~/Documents/brain/notes/gtd/jira/CLOUD.org"
-                     "~/Documents/brain/notes/gtd/personal.org"))
+                     "~/Documents/brain/notes/gtd/gtd.org"
+                     "~/Documents/brain/notes/gtd/personal-old.org"))
                   (org-agenda-tag-filter-preset '("+work"))))))
        ("P" "Personal view"
         ((todo "DOING|NEXT"
@@ -1194,15 +1195,17 @@ Helper functions
                  ((org-agenda-span 7)
                   (org-agenda-overriding-header "── Personal week ──")
                   (org-agenda-files
-                   (list "~/Documents/brain/notes/gtd/gcal/personal.org"
-                         "~/Documents/brain/notes/gtd/gtd.org"))
-                  (org-agenda-tag-filter-preset '("-@work"))))))
+  		 '("~/Documents/brain/notes/gtd/gcal/personal.org"
+  		   "~/Documents/brain/notes/gtd/gcal/personal-old.org"
+  		   "~/Documents/brain/notes/gtd/gtd.org"))
+  		(org-agenda-tag-filter-preset '("-@work"))))))
        ("D" "Personal day"
         ((agenda ""
                  ((org-agenda-span 'day)
                   (org-agenda-files
-                   (list "~/Documents/brain/notes/gtd/gcal/personal.org"
-                         "~/Documents/brain/notes/gtd/personal.org"))
+                   '("~/Documents/brain/notes/gtd/gcal/personal.org"
+                     "~/Documents/brain/notes/gtd/gcal/personal-old.org"
+                     "~/Documents/brain/notes/gtd/gtd.org"))
                   (org-super-agenda-groups
                    '((:name "Habits" :habit t)
                      (:name "Calendar" :time-grid t)
@@ -1233,6 +1236,7 @@ Helper functions
     (org-agenda-files '("~/Documents/brain/notes/gtd/inbox.org"
                         "~/Documents/brain/notes/gtd/gtd.org"
                         "~/Documents/brain/notes/gtd/gcal/personal.org"
+                        "~/Documents/brain/notes/gtd/gcal/personal-old.org"
                         "~/Documents/brain/notes/gtd/gcal/work.org"
                         "~/Documents/brain/notes/gtd/jira/CLOUD.org"))
     (org-capture-templates
@@ -1525,8 +1529,8 @@ Allow citar to work with org-roam particulars, including the ability to work at 
     :config
     (citar-org-roam-mode))
 #+END_SRC
-** Google Calendar Integration
-Be able to fetch (and even set) events in my google calendar.
+** Calendar Integration
+Be able to fetch (and even set) events in my fastmail google calendars.
 
 Because org-gcal is stupid and because work is paranoid, I can only control one calendar at a time. As such I've set my work calendar to control my personal one.
 
@@ -1552,9 +1556,25 @@ Because org-gcal is stupid and because work is paranoid, I can only control one 
       (setq org-gcal-client-id id
   	  org-gcal-client-secret secret
   	  org-gcal-fetch-file-alist
-  	  '(("gdcosta@gmail.com" .  "~/Documents/brain/notes/gtd/gcal/personal.org")
+  	  '(("gdcosta@gmail.com" .  "~/Documents/brain/notes/gtd/gcal/personal-old.org")
   	    ("gaelan@tulip.com" . "~/Documents/brain/notes/gtd/gcal/work.org")))))
 #+END_SRC
+
+Fastmail, in comparison, uses standard CalDAV
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package org-caldav
+    :ensure t
+    :custom
+    (org-caldav-sync-direction 'cal->org)
+    (org-caldav-calendars
+     '((:url "https://caldav.fastmail.com/dav/calendars/user/gaelan@fastmail.ca"
+        :calendar-id "D85B418A-9771-11F0-9608-78340F360E0A"
+        :files '("~/Documents/brain/notes/gtd/gcal/personal.org")
+        :inbox "~/Documents/brain/notes/gtd/gcal/inbox.org"))))
+#+END_SRC
+
+
 ** Tulip work integration
 I use JIRA at work; let's see if I can feed these into my task management flow
 
