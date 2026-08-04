@@ -137,9 +137,9 @@ Add local and private libraries to ~load-path~.
 #+BEGIN_SRC emacs-lisp :tangle no
   (eval-and-compile
     (setq load-path
-	  (append (delete-dups load-path)
-		  (list (expand-file-name "lisp" user-emacs-directory)
-			(expand-file-name "private" user-emacs-directory)))))
+  	(append (delete-dups load-path)
+  		'((expand-file-name "lisp" user-emacs-directory)
+  		  (expand-file-name "private" user-emacs-directory)))))
 #+END_SRC
 
 *** use-package
@@ -909,18 +909,18 @@ Support flycheck syntax checking
   (use-package flycheck-clj-kondo
     :after (clojure-mode flycheck)
     :hook ((clojure-mode-hook
-	    clojurec-mode-hook
-	    clojurescript-mode-hook)
-	   . (lambda ()
-	       (require 'flycheck-clj-kondo)))
+            clojurec-mode-hook
+            clojurescript-mode-hook)
+           . (lambda ()
+               (require 'flycheck-clj-kondo)))
     :ensure t)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package clojure-mode
     :mode (("\\.\\(clj\\|bb\\)\\'" . clojure-mode)
-	   ("\\.cljs\\'" . clojurescript-mode)
-	   ("\\.cljc\\'" . clojurec-mode))
+           ("\\.cljs\\'" . clojurescript-mode)
+           ("\\.cljc\\'" . clojurec-mode))
     :ensure t)
 #+END_SRC
 
