@@ -1,4 +1,4 @@
-{ ... }:
+{ config, robotdisco-secrets, ... }:
 
 {
   imports = [
@@ -6,6 +6,14 @@
   ];
 
   config = {
+    age.secrets.darwin-deploy-key.file = "${robotdisco-secrets}/darwin-deploy-key.age";
+
+    environment.etc."ssh/ssh_config.d/gitlab.conf".text = ''
+      Host git.internal.tulip.io
+        IdentityFile ${config.age.secrets.darwin-deploy-key.path}
+        IdentitiesOnly yes
+    '';
+
     networking.computerName = "Fountain of Ahmed III";
     networking.hostName = "fountain-of-ahmed-iii";
 

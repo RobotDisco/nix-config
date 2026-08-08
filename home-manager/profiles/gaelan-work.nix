@@ -1,5 +1,6 @@
 {
   config,
+  pkgs,
   ...
 }:
 
@@ -19,6 +20,17 @@ in
             "php-lsp@claude-plugins-official" = true;
             "security-guidance@claude-plugins-official" = true;
             "slack@claude-plugins-official" = true;
+            "incident-investigator@tulip-agent-context" = true;
+          };
+          marketplaces = {
+            tulip = pkgs.fetchFromGitLab {
+              domain = "git.internal.tulip.io";
+              owner = "developer-tools/ai";
+              private = true;
+              repo = "agent-context";
+              rev = "10f72ec4f358431696963d10612b4b3921ea36fa";
+              sha256 = "C+Wt1Jl+exCpAyxL4gHJ9ejfnGOStB7PwD5EDKkKh7s=";
+            };
           };
           permissions = {
             deny = [
