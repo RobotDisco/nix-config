@@ -7,23 +7,19 @@
 
 rustPlatform.buildRustPackage {
   pname = "mujmap";
-  version = "Lyndeno-883e5c8";
+  version = "RobotDisco-15f99fb8aae870ab85b617bc4c07e5842b964f00";
 
   # Tracking Lyndeno's fork: upstream (elizagamedev) is abandoned at
   # v0.2.0 and missing the JMAP `Core` capability declaration that
   # current Fastmail requires (returns 403 without it).
   src = fetchFromGitHub {
-    owner = "Lyndeno";
+    owner = "RobotDisco";
     repo = "mujmap";
-    rev = "883e5c8cb5c2ea2e2b3ebfe430d7cb0adfa38d5d";
-    sha256 = "sha256-2v7lnoQ68DaorMOubnE++IvyYYdAqyMfKuA6cvmqAsI=";
+    rev = "15f99fb8aae870ab85b617bc4c07e5842b964f00";
+    sha256 = "sha256-0sYf6ijbM2NP/6TRdFVFsrsFdHlaMi/HE0CEkoNkDDM=";
   };
 
-  cargoHash = "sha256-/c4vOql13au/mcOP8kICgRg+6ZAJjpLKcKikVbnXYws=";
-
-  # Fix all-mail query when notmuch DB path == maildir path
-  # (per-account-DB layout). See patch header for details.
-  patches = [ ./mujmap-fix-empty-path-query.patch ];
+  cargoHash = "sha256-x3ef5RajIiZfImxwue9bTUmayTWu1PA08/bHiVH5ee4=";
 
   buildInputs = [
     notmuch
@@ -33,7 +29,6 @@ rustPlatform.buildRustPackage {
     description = "JMAP integration for notmuch mail";
     homepage = "https://github.com/elizagamedev/mujmap/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ RobotDisco ];
     mainProgram = "mujmap";
   };
 }
