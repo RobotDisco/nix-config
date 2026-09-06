@@ -60,10 +60,6 @@ in
       package = pkgs-unstable.claude-code;
 
       mcpServers = {
-        Sunsama = {
-          type = "http";
-          url = "https://api.sunsama.com/mcp";
-        };
       }
       // cfg.mcpServers;
 
