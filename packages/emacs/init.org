@@ -1451,11 +1451,10 @@ Also enable a UI that makes overseeing my knowledge base easier.
     (org-roam-ui-update-on-save t)
     (org-roam-ui-open-on-start nil))
 #+END_SRC
-
 *** org-note
 Someone made an interesting progressive web application that maybe lets me do org-roam based stuff on my phone
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package orgnote
   :ensure (:host github :repo "Artawower/orgnote.el" :branch "dev")
   :bind
