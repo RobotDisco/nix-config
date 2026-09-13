@@ -994,6 +994,16 @@ implementations used in [[https://github.com/appleby/Lisp-In-Small-Pieces][Lisp 
     :custom
     (elm-sort-imports-on-save t))
 #+END_SRC
+** Rust
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package rustic
+    :ensure t
+    :after (rust-mode)
+    :mode "\\.rs\\'"
+    :custom
+    (rust-mode-treesitter-derive t)
+    (rustic-lsp-client 'eglot))
+#+END_SRC
 * SRE / Devops
 ** Kubernetes
 #+BEGIN_SRC emacs-lisp :tangle yes
