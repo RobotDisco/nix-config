@@ -765,20 +765,22 @@ linting in one place.
     :after (flycheck eglot)
     :config
     (add-to-list 'eglot-server-programs
-                 '(python-mode . ("basedpyright-langserver" "--stdio")))
+                 '(python-ts-mode . ("basedpyright-langserver" "--stdio")))
     (add-to-list 'eglot-server-programs
-                 '(terraform-mode . ("terraform-ls" "serve")))
+                 '(nix-ts-mode . ("nixd")))
     (global-flycheck-eglot-mode 1))
 
   (use-package eglot
-    :hook ((elm-mode
-  	  nix-mode
-  	  php-mode
-  	  python-mode
+    :hook ((dockerfile-ts-mode
+  	  elm-mode
+  	  json-ts-mode
   	  kotlin-ts-mode
+  	  nix-ts-mode
+  	  php-ts-mode
+  	  python-ts-mode
   	  sh-mode
   	  terraform-mode
-  	  yaml-mode) . eglot-ensure))
+  	  yaml-ts-mode) . eglot-ensure))
 #+END_SRC
 ** Formatting
 Format on save via apheleia. Uses absolute store paths for all
@@ -924,7 +926,7 @@ Overlay ~C-x C-e~ evaluation results inline rather than in the echo area.
 #+END_SRC
 ** Nix
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package nix-mode
+  (use-package nix-ts-mode
     :ensure t
     :mode "\\.nix\\'")
 #+END_SRC
@@ -973,9 +975,15 @@ Support flycheck syntax checking
 #+END_SRC
 ** PHP
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package php-mode
-    :ensure t
+  (use-package php-ts-mode
+    :ensure nil
     :mode "\\.php\\'")
+#+END_SRC
+** Python
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package python-ts-mode
+    :ensure nil
+    :mode "\\.py\\'")
 #+END_SRC
 ** Scheme
 Geiser provides REPL and evaluation support. Gambit and Guile cover the
@@ -997,20 +1005,20 @@ implementations used in [[https://github.com/appleby/Lisp-In-Small-Pieces][Lisp 
 #+END_SRC
 ** YAML
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package yaml-mode
-    :ensure t
+  (use-package yaml-ts-mode
+    :ensure nil
     :mode "\\.ya?ml\\'")
 #+END_SRC
 ** Dockerfile
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package dockerfile-mode
-    :ensure t
+  (use-package dockerfile-ts-mode
+    :ensure nil
     :mode "Dockerfile\\'")
 #+END_SRC
 ** JSON
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package json-mode
-    :ensure t
+  (use-package json-ts-mode
+    :ensure nil
     :mode "\\.json\\'")
 #+END_SRC
 ** Elm
