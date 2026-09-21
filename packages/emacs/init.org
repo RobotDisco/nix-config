@@ -205,7 +205,7 @@ other package writes its first file.
 
    Don't insert tabs when indenting, use spaces only
    #+BEGIN_SRC emacs-lisp :tangle yes
-     (setq tab-indent-mode nil)
+     (setq indent-tabs-mode nil)
    #+END_SRC
 
    Typing replaces the active region, matching standard editor behaviour.
