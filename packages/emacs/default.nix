@@ -6,6 +6,7 @@
   fetchFromGitHub,
   writeText,
   stdenv,
+  tree-sitter-grammars,
 }:
 
 let
@@ -45,6 +46,7 @@ emacsWithPackagesFromUsePackage {
   extraEmacsPackages = epkgs: [
     # tree-sitter grammers Used by LSP mode
     epkgs.treesit-grammars.with-all-grammars
+    tree-sitter-grammars.tree-sitter-kotlin
   ];
 
   # Override upstream packages with custom forks/versions

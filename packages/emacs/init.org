@@ -775,6 +775,7 @@ linting in one place.
   	  nix-mode
   	  php-mode
   	  python-mode
+  	  kotlin-ts-mode
   	  sh-mode
   	  terraform-mode
   	  yaml-mode) . eglot-ensure))
@@ -871,6 +872,30 @@ Run Claude Code CLI sessions inside Emacs.
 #+END_SRC
 
 * Programming Language support / environments
+** Android Development
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package android-mode
+    :ensure t
+    :commands (android-mode android-start-emulator android-create-project))
+
+  (use-package gradle-mode
+    :ensure t
+    :mode "\\.gradle\\'")
+
+  (use-package flycheck-gradle
+    :ensure t
+    :after (flycheck)
+    :hook (gradle-mode . flycheck-gradle-setup))
+
+  (use-package kotlin-ts-mode
+    :ensure t
+    :mode "\\.kt\\'")
+
+  (use-package flycheck-kotlin
+    :ensure t
+    :after (flycheck)
+    :hook (kotlin-ts-mode . flycheck-mode))
+#+END_SRC
 ** Emacs Lisp
 Richer help buffers with source, examples, and callers.
 #+BEGIN_SRC emacs-lisp :tangle yes
