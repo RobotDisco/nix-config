@@ -874,6 +874,11 @@ Run Claude Code CLI sessions inside Emacs.
 #+END_SRC
 
 * Programming Language support / environments
+** Tree-sitter basics
+Enable as much syntax colouring as possible via tree-sitter
+#+BEGIN_SRC emacs-lisp :tangle yes
+(setq treesit-font-lock-level 4) ;; 4 is highest level of syntax highlighting
+#+END_SRC
 ** Android Development
 #+BEGIN_SRC emacs-lisp :tangle yes
   (use-package android-mode
