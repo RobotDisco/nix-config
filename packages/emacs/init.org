@@ -713,11 +713,9 @@ a system pinentry dialog. Requires =allow-loopback-pinentry= in
 ** envrc
 Project-specific environment variables via =direnv=
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (use-package direnv
+  (use-package envrc
     :ensure t
-    :defer 1
-    :config
-    (direnv-mode))
+    :hook (after-init . envrc-global-mode))
 #+END_SRC
 
 ** editorconfig
