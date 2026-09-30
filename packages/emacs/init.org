@@ -766,19 +766,22 @@ linting in one place.
                  '(python-ts-mode . ("basedpyright-langserver" "--stdio")))
     (add-to-list 'eglot-server-programs
                  '(nix-ts-mode . ("nixd")))
+    (add-to-list 'eglot-server-programs
+                 '(beancount-mode . ("beancount-language-server" "--stdio")))
     (global-flycheck-eglot-mode 1))
 
   (use-package eglot
-    :hook ((dockerfile-ts-mode
-  	  elm-mode
-  	  json-ts-mode
-  	  kotlin-ts-mode
-  	  nix-ts-mode
-  	  php-ts-mode
-  	  python-ts-mode
-  	  sh-mode
-  	  terraform-mode
-  	  yaml-ts-mode) . eglot-ensure))
+    :hook ((beancount-mode
+            dockerfile-ts-mode
+            elm-mode
+            json-ts-mode
+            kotlin-ts-mode
+            nix-ts-mode
+            php-ts-mode
+            python-ts-mode
+            sh-mode
+            terraform-mode
+            yaml-ts-mode) . eglot-ensure))
 #+END_SRC
 ** Formatting
 Format on save via apheleia. Uses absolute store paths for all
@@ -1091,9 +1094,13 @@ Support LaTeX
     :mode ("\\.pdf\\'" . pdf-view-mode))
 #+END_SRC
 * Finance?
-Let's use Emacs for accounting now. Let's try Ledget
+Let's use Emacs for accounting now. Let's try Ledger and Beancount
 
 #+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package beancount
+    :ensure t
+    :mode ("\\.beancount\\'" . beancount-mode))
+
   (use-package ledger-mode
     :ensure t
     :mode ("\\.\\(h?ledger\\|journal\\)\\'" . ledger-mode)
