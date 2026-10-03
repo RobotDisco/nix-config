@@ -1,6 +1,5 @@
 {
   config,
-  pkgs,
   ...
 }:
 
@@ -22,15 +21,12 @@ in
             "slack@claude-plugins-official" = true;
             "incident-investigator@tulip-agent-context" = true;
           };
-          marketplaces = {
-            tulip = pkgs.fetchFromGitLab {
-              domain = "git.internal.tulip.io";
-              owner = "developer-tools/ai";
-              private = true;
-              repo = "agent-context";
-              rev = "10f72ec4f358431696963d10612b4b3921ea36fa";
-              sha256 = "C+Wt1Jl+exCpAyxL4gHJ9ejfnGOStB7PwD5EDKkKh7s=";
+          extraKnownMarketplaces.tulip-agent-context = {
+            source = {
+              source = "git";
+              url = "git@git.internal.tulip.io:developer-tools/ai/agent-context.git";
             };
+            autoUpdate = true;
           };
           permissions = {
             deny = [

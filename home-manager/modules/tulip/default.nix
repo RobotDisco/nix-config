@@ -37,13 +37,28 @@ in
       email = lib.mkDefault "gaelan@tulip.com";
     };
 
-    # tulip has a custom .ssh/config that has made ... choices.
-    # until I need to, just symlink to it for now since we'll likely have that
-    # repo cloned.
-    home = {
-      file.".ssh/config".source =
-        config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/workspace/dotfiles/ssh/config";
+    # tulip has a shared .ssh/config that has made ... choices (e.g. an early
+    # `Host *` with `User welladmin`). ssh keeps the first value it sees, so
+    # our overrides go first and the shared config is included last.
+    programs.ssh = {
+      enable = true;
+      enableDefaultConfig = false;
 
+      settings = {
+        "git.internal.tulip.io" = {
+          User = "git";
+          IdentityFile = "~/.ssh/yubikey.pub";
+          IdentitiesOnly = true;
+        };
+
+        # Always-true block so the Include lands after our overrides.
+        "Match all" = lib.hm.dag.entryAfter [ "git.internal.tulip.io" ] {
+          Include = "~/workspace/shared/dotfiles/ssh/config";
+        };
+      };
+    };
+
+    home = {
       packages = [
         # Useful debugging tools
         # telnet, traceroute, etc...
