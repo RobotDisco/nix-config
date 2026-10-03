@@ -20,13 +20,22 @@ in
             "security-guidance@claude-plugins-official" = true;
             "slack@claude-plugins-official" = true;
             "incident-investigator@tulip-agent-context" = true;
+            "tulip-ops-skills@tulip-claude-skills" = true;
           };
-          extraKnownMarketplaces.tulip-agent-context = {
-            source = {
-              source = "git";
-              url = "git@git.internal.tulip.io:developer-tools/ai/agent-context.git";
+          extraKnownMarketplaces = {
+            tulip-agent-context = {
+              source = {
+                source = "git";
+                url = "git@git.internal.tulip.io:developer-tools/ai/agent-context.git";
+              };
+              autoUpdate = true;
             };
-            autoUpdate = true;
+            # My own checkout, loaded in place so local edits apply without
+            # a push or version bump.
+            tulip-claude-skills.source = {
+              source = "directory";
+              path = "${config.home.homeDirectory}/workspace/ops/claude-skills";
+            };
           };
           permissions = {
             deny = [
