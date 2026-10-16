@@ -69,6 +69,8 @@ in
       gnupg.enable = true;
 
       tulip.enable = true;
+
+      nix-gc.enable = true;
     };
 
     home = {

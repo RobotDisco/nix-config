@@ -18,6 +18,9 @@
 
     # Enable automatic garbage collection.
     gc.automatic = true;
+    # Drop old system generations too, or GC has almost nothing to free.
+    # Per-user profiles are handled by the home-manager nix-gc module.
+    gc.options = "--delete-older-than 30d";
     # Enable automatic nix store file deduplication.
     optimise.automatic = true;
 

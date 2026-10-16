@@ -41,6 +41,7 @@ in
 
   robot-disco = {
     yubikey.enable = true;
+    nix-gc.enable = true;
 
     # Let's assume I want to be able to use git on any machine I'm on, and commit as myself.
     development-environment = {
