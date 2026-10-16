@@ -1,4 +1,4 @@
-_:
+{ lib, ... }:
 
 let
   username = "gaelan";
@@ -25,11 +25,20 @@ in
       enable = true;
       # Default SSH configs have since been deprecated.
       enableDefaultConfig = false;
-      settings."*" = {
-        Compression = true;
-        # Don't forward by default, it is insecure
-        # Prefer proxyjumping if you can
-        ForwardAgent = false;
+      settings = {
+        # Forward only to my own NixOS hosts, so sudo there can
+        # authenticate with my YubiKey (security.pam.sshAgentAuth).
+        # ssh keeps the first value it sees, so this precedes "*".
+        "darktower" = {
+          ForwardAgent = true;
+        };
+
+        "*" = lib.hm.dag.entryAfter [ "darktower" ] {
+          Compression = true;
+          # Don't forward by default, it is insecure
+          # Prefer proxyjumping if you can
+          ForwardAgent = false;
+        };
       };
     };
 

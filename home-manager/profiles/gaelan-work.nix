@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   ...
 }:
 
@@ -87,6 +88,13 @@ in
 
     programs = {
       zsh.enable = true;
+
+      # Forward my YubiKey agent to my own NixOS hosts so sudo there can
+      # use it (security.pam.sshAgentAuth). Must precede tulip's
+      # "Match all" Include, since ssh keeps the first value it sees.
+      ssh.settings."darktower" = lib.hm.dag.entryBefore [ "Match all" ] {
+        ForwardAgent = true;
+      };
 
       aerospace = {
         enable = true;
