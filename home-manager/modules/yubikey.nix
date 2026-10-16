@@ -22,6 +22,10 @@ in
       path = "${config.home.homeDirectory}/.config/Yubico/u2f_keys";
     };
 
-    home.packages = lib.mkIf cfg.guiSupport [ pkgs.yubioath-flutter ];
+    home.packages = [
+      # ykman: CLI for managing the key (touch policies, PINs, slots)
+      pkgs.yubikey-manager
+    ]
+    ++ lib.optional cfg.guiSupport pkgs.yubioath-flutter;
   };
 }
