@@ -2,7 +2,6 @@
 {
   emacs = pkgs.callPackage ./emacs { };
   mujmap = pkgs.callPackage ./mujmap.nix { };
-  orgnote-cli = pkgs.callPackage ./orgnote.nix { };
 }
 // (pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
   sunsama = pkgs.callPackage ./sunsama.nix { };

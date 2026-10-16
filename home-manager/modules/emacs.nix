@@ -46,8 +46,6 @@ in
       graphviz
       # Image displaying/modification support
       imagemagick
-      # a nicer gui for mobile org-roam navigation (https://org-note.com)
-      orgnote-cli
       # LaTeX support
       texlive.combined.scheme-full
       # ePub support

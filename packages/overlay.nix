@@ -10,9 +10,6 @@
 # `final` from this overlay's output. Values can still use `final`
 # since they're forced lazily.
 final: prev:
-{
-  orgnote-cli = final.callPackage ./orgnote.nix { };
-}
-// prev.lib.optionalAttrs prev.stdenv.isLinux {
+prev.lib.optionalAttrs prev.stdenv.isLinux {
   sunsama = final.callPackage ./sunsama.nix { };
 }
