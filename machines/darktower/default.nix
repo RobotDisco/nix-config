@@ -21,6 +21,8 @@
     ./boot.nix
     ./network.nix
     ./zfs
+
+    ./auto-upgrade.nix
   ];
 
   networking.hostName = "darktower"; # Define your hostname.
