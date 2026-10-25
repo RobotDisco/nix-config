@@ -120,7 +120,7 @@
         "calibre"
         "chef-workstation"
         "discord"
-        "fujitsu-scansnap-home"
+        "scansnap-home"
         "kobo"
         "orbstack"
         "seadrive"
