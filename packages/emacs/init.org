@@ -78,6 +78,23 @@ pauses out of the critical path entirely.
     :config
     (gcmh-mode 1))
 #+END_SRC
+** Set PATH appropriately
+
+GUI Emacs launched from the Dock/Finder, launched from a Wayland/X launcher, or
+run as a daemon, inherits the environment of whatever started it rather than my
+login shell's, so paths are missing from =PATH= and =exec-path=. Import them
+from a login shell before anything spawns a subprocess.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (use-package exec-path-from-shell
+    :ensure t
+    :demand t
+    :if (or (daemonp) (memq window-system '(mac ns x pgtk)))
+    :custom
+    (exec-path-from-shell-arguments '("-l"))
+    :config
+    (exec-path-from-shell-initialize))
+#+END_SRC
 
 * Base settings
 
