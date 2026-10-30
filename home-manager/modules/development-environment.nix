@@ -47,7 +47,7 @@ in
       }
       {
         # Let's create a user directory for my helper scripts
-        home.sessionPath = [ "~/bin" ];
+        home.sessionPath = [ "$HOME/bin" ];
 
         home.file."/bin/.keep" = {
           text = "This file intentionally left blank";
