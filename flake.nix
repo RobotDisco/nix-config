@@ -40,6 +40,10 @@
       flake = false;
     };
 
+    # numtide's packaged LLM agents (claude-desktop, etc.). No nixpkgs
+    # follows: it tracks unstable, and not following keeps their cache usable.
+    llm-agents.url = "github:numtide/llm-agents.nix";
+
     tarot-emacs = {
       url = "github:RobotDisco/tarot-emacs/trunk";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -64,6 +68,7 @@
           nixpkgs-unstable
           emacs-overlay
           home-manager
+          llm-agents
           tarot-emacs
           ;
       };
@@ -191,10 +196,12 @@
     extra-substituters = [
       "https://nix-community.cachix.org"
       "https://robot-disco.cachix.org"
+      "https://cache.numtide.com"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "robot-disco.cachix.org-1:UOaR4+SF1stx8O/Z+bJD9ENNjumfabRNRvCnjwct0sg="
+      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
     ];
   };
 }

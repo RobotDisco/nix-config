@@ -7,6 +7,7 @@
   darwin,
   emacs-overlay,
   home-manager,
+  llm-agents,
   nixpkgs-unstable,
   tarot-emacs,
   ...
@@ -40,6 +41,9 @@ let
 
   # Tarot's emacs package for whichever system we're building for.
   emacsTarot = tarot-emacs.packages.${system}.default;
+
+  # numtide's LLM agent packages (claude-desktop, etc.) for this system.
+  llmAgents = llm-agents.packages.${system};
 in
 darwin.lib.darwinSystem {
   inherit system;
@@ -69,7 +73,7 @@ darwin.lib.darwinSystem {
     {
       # Supply home-manager with special arguments. Always include flake inputs.
       home-manager.extraSpecialArgs = {
-        inherit pkgs-unstable emacsTarot;
+        inherit pkgs-unstable emacsTarot llmAgents;
       }
       // homeSpecialArgs;
     }

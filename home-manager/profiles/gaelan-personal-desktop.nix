@@ -57,7 +57,10 @@
     robot-disco = {
       cdrip.enable = true;
       yubikey.guiSupport = true;
-      claude-code.enable = true;
+      claude-code = {
+        enable = true;
+        desktop.enable = true;
+      };
 
       development-environment = {
         gpgKey = "A517704FBD8D1018!";

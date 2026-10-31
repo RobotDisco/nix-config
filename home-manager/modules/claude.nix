@@ -2,7 +2,7 @@
   config,
   lib,
   pkgs,
-  pkgs-unstable,
+  llmAgents,
   ...
 }:
 
@@ -30,6 +30,8 @@ in
   options.robot-disco.claude-code = {
     enable = lib.mkEnableOption "Enable Claude Code";
 
+    desktop.enable = lib.mkEnableOption "Claude Desktop (numtide llm-agents)";
+
     settings = lib.mkOption {
       type = lib.types.attrsOf lib.types.anything;
       default = { };
@@ -51,13 +53,14 @@ in
       pkgs.python3
       pkgs.nodejs # provides npx, needed by many Claude plugins
       pkgs.uv # provides uvx, the Python tool runner
-    ];
+    ]
+    ++ lib.optional cfg.desktop.enable llmAgents.claude-desktop;
 
     programs.claude-code = {
       enable = true;
 
       # Always use the latest
-      package = pkgs-unstable.claude-code;
+      package = llmAgents.claude-code;
 
       mcpServers = {
       }
