@@ -24,27 +24,44 @@
   };
 
   virtualisation.oci-containers.containers = {
-    "seafile-memcached" = {
+    "seafile-redis" = {
       autoStart = true;
-      image = "memcached:1.6.29";
-      entrypoint = "memcached";
-      # In theory we can isolate our seafile pods into a seafile network.
-      # However, in practice, these don't allow for access to localhost ports
-      # TODO Debug this.
-      #networks = [ "seafile" ];
+      image = "redis";
       cmd = [
-        "-m"
-        "256"
+        "/bin/sh"
+        "-c"
+        "exec redis-server --requirepass \"$REDIS_PASSWORD\" --save \"\" --appendonly no"
       ];
+      environmentFiles = [ config.age.secrets.seafile-envs.path ];
+      #networks = [ "seafile" ];
     };
-    "seafile-mc" = {
+    "seafile" = {
       autoStart = true;
-      image = "seafileltd/seafile-mc:12.0-latest";
-      dependsOn = [ "seafile-memcached" ];
+      image = "seafileltd/seafile-mc:13.0-latest";
+      dependsOn = [
+        "seafile-redis"
+      ];
       environmentFiles = [ config.age.secrets.seafile-envs.path ];
       #networks = [ "seafile" ];
       volumes = [ "/srv/storagepool/data/webdav/shared:/shared" ];
       ports = [ "192.168.10.3:8001:80" ];
+      extraOptions = [
+        "--health-cmd=curl -f http://localhost:80 || exit 1"
+        "--health-interval=30s"
+        "--health-timeout=10s"
+        "--health-retries=3"
+        "--health-start-period=10s"
+      ];
+    };
+    "seafile-thumbnail" = {
+      autoStart = true;
+      image = "seafileltd/thumbnail-server:13.0-latest";
+      dependsOn = [
+        "seafile"
+      ];
+      volumes = [ "/srv/storagepool/data/webdav/shared:/shared" ];
+      environmentFiles = [ config.age.secrets.seafile-envs.path ];
+      #networks = [ "seafile" ];
     };
   };
 }
