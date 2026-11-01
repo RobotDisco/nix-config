@@ -19,8 +19,6 @@ let
     runtimeInputs = with pkgs; [
       networkmanager
       gnugrep
-      gawk
-      iproute2
     ];
     text = ''
                               iface=''${1-}
