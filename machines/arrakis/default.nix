@@ -3,6 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./wireguard.nix
 
     ../../modules/nixos/laptop
 
@@ -16,6 +17,10 @@
     # Enable dynamic configuration of primary NIC
     interfaces.wlp1s0.useDHCP = true;
   };
+
+  # openssh is off here, so agenix can't derive this from its host keys.
+  # This key is systems.arrakis in nix-secrets.
+  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
   boot = {
     # Simple password-based Full Disk Encryption
