@@ -30,6 +30,17 @@ let
     text = builtins.readFile ./road21-hosts.sh;
   };
 
+  road21Toggle = pkgs.writeShellApplication {
+    name = "road21-toggle";
+    # route, arp, ipconfig and dig come from macOS via launchd's PATH
+    runtimeInputs = with pkgs; [
+      wireguard-tools
+      wireguard-go
+      gawk
+    ];
+    text = builtins.readFile ./road21-toggle.sh;
+  };
+
   # Both profiles share one key and one stargate peer (192.168.21.4) and
   # are never up together; only the routes differ.
   profile = allowedIPs: dns: {
@@ -82,4 +93,13 @@ in
     ${lib.getExe road21Hosts} /etc/hosts ${darktower} ${lib.concatStringsSep " " darktowerNames}
     dscacheutil -flushcache
   '';
+
+  # Location toggle and DDNS follow-up (see road21-toggle.sh)
+  launchd.daemons.road21-toggle.serviceConfig = {
+    ProgramArguments = [ (lib.getExe road21Toggle) ];
+    StartInterval = 30;
+    RunAtLoad = true;
+    StandardOutPath = "/var/log/road21-toggle.log";
+    StandardErrorPath = "/var/log/road21-toggle.log";
+  };
 }
