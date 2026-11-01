@@ -37,3 +37,7 @@ WireGuard tunnel on stargate (pfSense). At home, the tunnel is off.
 
 - Work laptop (Fountain-of-Ahmed-III, macOS): separate plan.
 - Split-tunnel profile: add later if home upload proves too slow.
+- Captive-portal detection: portals rarely come up, and it needs NM's
+  connectivity check (off on arrakis; enabling it sends periodic requests
+  to a check URL). Until then the tunnel comes up behind a portal; bring
+  it down by hand to log in. TODO in `wireguard.nix`.
