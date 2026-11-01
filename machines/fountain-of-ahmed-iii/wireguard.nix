@@ -1,4 +1,10 @@
-{ config, robotdisco-secrets, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  robotdisco-secrets,
+  ...
+}:
 
 # Road-warrior WireGuard client for stargate (pfSense, tun_wg0), alongside
 # Jamf Trust's Private Access. road21 reaches darktower only; road21-full
@@ -7,6 +13,22 @@
 let
   # stargate's tun_wg0 public key. Public; plain text by choice here.
   stargatePublicKey = "REPLACE-WITH-STARGATE-TUNNEL-PUBLIC-KEY";
+
+  # darktower's address works everywhere (intranet at home, road21 away),
+  # so its names live in /etc/hosts rather than DNS
+  darktower = "192.168.50.99";
+  darktowerNames = [
+    "vaultwarden.robot-disco.net"
+    "fallcube.robot-disco.net"
+  ];
+
+  # Scripts live in their own files so the desk tests in ./tests can run
+  # them with fake commands
+  road21Hosts = pkgs.writeShellApplication {
+    name = "road21-hosts";
+    runtimeInputs = [ pkgs.gawk ];
+    text = builtins.readFile ./road21-hosts.sh;
+  };
 
   # Both profiles share one key and one stargate peer (192.168.21.4) and
   # are never up together; only the routes differ.
@@ -43,7 +65,7 @@ in
 
   networking.wg-quick.interfaces = {
     # darktower only; names come from /etc/hosts, so no DNS here
-    road21 = profile [ "192.168.50.99/32" ] [ ];
+    road21 = profile [ "${darktower}/32" ] [ ];
     # Everything home, DNS included so lookups can't leak to the local net
     road21-full =
       profile
@@ -53,4 +75,11 @@ in
         ]
         [ "192.168.21.1" ];
   };
+
+  # Keeps the darktower block in /etc/hosts; the rest of the file (IT or
+  # Jamf entries) is left alone
+  system.activationScripts.postActivation.text = lib.mkAfter ''
+    ${lib.getExe road21Hosts} /etc/hosts ${darktower} ${lib.concatStringsSep " " darktowerNames}
+    dscacheutil -flushcache
+  '';
 }
