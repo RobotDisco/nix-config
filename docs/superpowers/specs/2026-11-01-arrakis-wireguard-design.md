@@ -35,9 +35,18 @@ WireGuard tunnel on stargate (pfSense). At home, the tunnel is off.
 
 ## Non-goals
 
-- Work laptop (Fountain-of-Ahmed-III, macOS): separate plan.
+- Work laptop (Fountain-of-Ahmed-III, macOS): separate design,
+  `2026-11-01-fountain-wireguard-design.md`.
 - Split-tunnel profile: add later if home upload proves too slow.
 - Captive-portal detection: portals rarely come up, and it needs NM's
   connectivity check (off on arrakis; enabling it sends periodic requests
   to a check URL). Until then the tunnel comes up behind a portal; bring
   it down by hand to log in. TODO in `wireguard.nix`.
+
+## Follow-ups
+
+- DDNS endpoint changes: the plan's Task 2 Step 8 restarts `road21` by
+  hand. Find out whether NetworkManager re-resolves a WireGuard peer's
+  endpoint hostname on its own; if not, add a stale-handshake re-resolve
+  (as in `2026-11-01-fountain-wireguard-design.md`) to the dispatcher or a
+  timer.
