@@ -35,7 +35,7 @@ their own `.sh` files so desk tests can run them with fake commands.
   `withRecoveryPersonal [ systems.Fountain-of-Ahmed-III ]`
 - **No WireGuard private key or PSK printed in a shared/agent session.**
   Steps marked *(owner)* are done by the owner.
-- Branch `fountain-wireguard`, created from `arrakis-wireguard`. Stage by
+- Branch `arrakis-wireguard` (shared with the arrakis work). Stage by
   path; the working tree has unrelated uncommitted files.
 - Commit inside `nix develop` (pre-commit needs `flake-checker`); commits
   are GPG-signed with the YubiKey, so the owner may have to run them.

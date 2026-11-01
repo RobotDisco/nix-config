@@ -83,7 +83,7 @@
         fountain-of-ahmed-iii = darwinSystem {
           system = "aarch64-darwin";
           modules = [
-            ./machines/fountain-of-ahmed-iii.nix
+            ./machines/fountain-of-ahmed-iii
             inputs.agenix.darwinModules.default
             inputs.mac-app-utils.darwinModules.default
           ];

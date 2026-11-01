@@ -2,7 +2,8 @@
 
 {
   imports = [
-    ../modules/darwin/nix.nix
+    ../../modules/darwin/nix.nix
+    ./wireguard.nix
   ];
 
   config = {
@@ -20,7 +21,7 @@
     };
 
     home-manager = {
-      users."gaelan" = import ../home-manager/profiles/gaelan-work.nix;
+      users."gaelan" = import ../../home-manager/profiles/gaelan-work.nix;
 
       sharedModules = [
         {
