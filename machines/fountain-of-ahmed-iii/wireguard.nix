@@ -12,7 +12,7 @@
 # docs/superpowers/specs/2026-11-01-fountain-wireguard-design.md
 let
   # stargate's tun_wg0 public key. Public; plain text by choice here.
-  stargatePublicKey = "REPLACE-WITH-STARGATE-TUNNEL-PUBLIC-KEY";
+  stargatePublicKey = "rlmz8pRM1lNrkqGXrygiSS9suYH4vEc4igk9Qc9lkh0=";
 
   # darktower's address works everywhere (intranet at home, road21 away),
   # so its names live in /etc/hosts rather than DNS
