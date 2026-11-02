@@ -21,9 +21,11 @@
     home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    # Follows unstable: it's an SBCL program, and SBCL < 2.6.6 can't map
+    # its heap at 0x300000000 on macOS 27 (the dyld shared cache is there).
     mac-app-utils = {
       url = "github:hraban/mac-app-util";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     nixos-hardware = {

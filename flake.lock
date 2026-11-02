@@ -346,7 +346,7 @@
         "flake-compat": "flake-compat",
         "flake-utils": "flake-utils_2",
         "nixpkgs": [
-          "nixpkgs"
+          "nixpkgs-unstable"
         ],
         "systems": "systems_5",
         "treefmt-nix": "treefmt-nix_3"
