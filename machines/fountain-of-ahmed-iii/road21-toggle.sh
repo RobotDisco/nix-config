@@ -32,12 +32,29 @@ home_state() {
   fi
   local mac
   mac=$(arp -n "$gw" 2>/dev/null | awk '{ print $4 }' || true)
-  case $mac in
-    "$HOME_GW_MAC") echo home ;;
-    "" | "(incomplete)") echo unknown ;;
-    *) echo away ;;
-  esac
+  # Anything but a MAC ("(incomplete)", or "no" from "-- no entry" once
+  # the ARP entry expires) says nothing about where we are
+  if [ "$mac" = "$HOME_GW_MAC" ]; then
+    echo home
+  elif [[ $mac =~ ^[0-9a-f]{1,2}(:[0-9a-f]{1,2}){5}$ ]]; then
+    echo away
+  else
+    echo unknown
+  fi
 }
+
+# A profile whose wireguard-go has died leaves its .name file behind but
+# its utun is gone (the utun lives only as long as wireguard-go). Clear it
+# so it reads as down and gets brought up again.
+for profile in road21 road21-full; do
+  name_file=$WG_RUN_DIR/$profile.name
+  if [ -e "$name_file" ] && ! ifconfig "$(cat "$name_file")" >/dev/null 2>&1
+  then
+    log "$profile: interface is gone, clearing"
+    wg-quick down "$profile" || true
+    rm -f "$name_file"
+  fi
+done
 
 # Re-point a profile's peer at stargate's current address if the
 # handshake is stale

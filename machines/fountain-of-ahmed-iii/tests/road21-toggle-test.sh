@@ -31,6 +31,12 @@ case "$1 $3" in
   *) echo "wg $*" >> "$LOG" ;;
 esac'
 fake wg-quick 'echo "wg-quick $*" >> "$LOG"'
+# Interfaces in LIVE exist; any other is gone, as when wireguard-go dies
+fake ifconfig '
+case " $LIVE " in
+  *" $1 "*) echo "$1: flags=8051<UP,POINTOPOINT,RUNNING,MULTICAST> mtu 1412" ;;
+  *) echo "ifconfig: interface $1 does not exist" >&2; exit 1 ;;
+esac'
 fake ipconfig '[ -n "$DNS" ] && echo "$DNS" || exit 1'
 fake dig '[ -n "$DIG_IP" ] && printf "stargate.example.\n%s\n" "$DIG_IP"; exit 0'
 fake date 'echo "$NOW"'
@@ -41,7 +47,8 @@ run() { # name expected [VAR=value...]
   rm -rf "$tmp/run" && mkdir "$tmp/run"
   : > "$tmp/log"
   local -A env=([GW]=192.168.1.1 [IFC]=en0 [MAC]=aa:bb:cc:dd:ee:ff [UP]=""
-    [HANDSHAKE]=1000 [NOW]=1010 [DNS]=192.168.1.1 [DIG_IP]=203.0.113.7)
+    [HANDSHAKE]=1000 [NOW]=1010 [DNS]=192.168.1.1 [DIG_IP]=203.0.113.7
+    [LIVE]=utun9)
   local kv
   for kv in "$@"; do env[${kv%%=*}]=${kv#*=}; done
   local p
@@ -49,7 +56,8 @@ run() { # name expected [VAR=value...]
   local rc=0
   env GW="${env[GW]}" IFC="${env[IFC]}" MAC="${env[MAC]}" \
     HANDSHAKE="${env[HANDSHAKE]}" NOW="${env[NOW]}" DNS="${env[DNS]}" \
-    DIG_IP="${env[DIG_IP]}" LOG="$tmp/log" WG_RUN_DIR="$tmp/run" \
+    DIG_IP="${env[DIG_IP]}" LIVE="${env[LIVE]}" \
+    LOG="$tmp/log" WG_RUN_DIR="$tmp/run" \
     PATH="$tmp/bin:$PATH" bash -euo pipefail "$script" > /dev/null 2>&1 || rc=$?
   local got
   got=$(paste -sd';' "$tmp/log")
@@ -74,6 +82,14 @@ run "full stale" \
   UP=road21-full NOW=1200 GW=10.0.0.1
 run "no default route" "" GW=
 run "arp incomplete" "" "MAC=(incomplete)"
+run "arp no entry" "" MAC=
+run "arp no entry, road21 up" "" MAC= UP=road21
+run "home, road21 interface gone" "wg-quick down road21" \
+  MAC=$home UP=road21 LIVE=
+run "away, road21 interface gone" "wg-quick down road21;wg-quick up road21" \
+  UP=road21 LIVE=
+run "away, full interface gone" \
+  "wg-quick down road21-full;wg-quick up road21" UP=road21-full LIVE=
 run "no dhcp dns" "" UP=road21 NOW=1200 DNS=
 run "dig empty" "" UP=road21 NOW=1200 DIG_IP=
 
