@@ -157,6 +157,8 @@ in
       timerConfig = {
         OnBootSec = "1min";
         OnUnitActiveSec = "30s";
+        # systemd may otherwise delay each run by up to a minute
+        AccuracySec = "1s";
       };
     };
   };
