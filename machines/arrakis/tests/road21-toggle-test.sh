@@ -13,25 +13,47 @@ tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 fails=0
 
-# Fake nmcli. ACTIVE = newline-separated terse lines NAME:UUID:TYPE:DEVICE
 mkdir "$tmp/bin"
+# Fake nmcli. ACTIVE = newline-separated lines NAME:UUID:TYPE:DEVICE:STATE.
+# `connection show --active` prints the fields asked for with -f/--fields
+# (default NAME,UUID,TYPE,DEVICE, as the real nmcli does).
 # Absolute paths: the script runs with PATH=/var/empty, like the dispatcher
 printf '#!%s\n%s\n' "$(command -v bash)" '
 echo "nmcli $*" >> "$LOG"
+args=("$@")
+# Reject options the real nmcli does not know (it exits 2)
+for a in "$@"; do
+  case $a in
+    -t | --terse | -f | --fields | -g | --get-values | --wait | --active) ;;
+    -*) echo "Error: Option '"'"'$a'"'"' is unknown, try '"'"'nmcli -help'"'"'." >&2; exit 2 ;;
+  esac
+done
 case "$*" in
-  "-t -f NAME connection show --active") printf "%s\n" "$ACTIVE" | CUT -d: -f1 ;;
-  *"connection show --active"*) printf "%s\n" "$ACTIVE" ;;
+  *"connection show --active"*)
+    fields=NAME,UUID,TYPE,DEVICE
+    for i in "${!args[@]}"; do
+      case ${args[i]} in -f | --fields) fields=${args[i + 1]} ;; esac
+    done
+    printf "%s\n" "$ACTIVE" | AWK -F: -v want="$fields" '"'"'
+      BEGIN { n = split("NAME UUID TYPE DEVICE STATE", col, " ")
+              for (i = 1; i <= n; i++) idx[col[i]] = i
+              m = split(toupper(want), w, ",") }
+      { line = ""
+        for (i = 1; i <= m; i++) line = line (i > 1 ? ":" : "") $idx[w[i]]
+        print line }'"'"' ;;
   "networking connectivity") echo "${CONN:-full}" ;;
-esac' | sed "s#CUT#$(command -v cut)#" > "$tmp/bin/nmcli"
+esac' | sed "s#AWK#$(command -v awk)#" > "$tmp/bin/nmcli"
 chmod +x "$tmp/bin/nmcli"
 
 # The built script pins PATH; put the fake first
 sed "s#^export PATH=\"#export PATH=\"$tmp/bin:#" "$built" > "$tmp/toggle.sh"
 
-lo='lo:u0:loopback:lo'
-home='Anor Londovercourt:u1:802-11-wireless:wlp1s0'
-cafe='Cafe Wifi:u2:802-11-wireless:wlp1s0'
-tun='road21:u3:wireguard:road21'
+lo='lo:u0:loopback:lo:activated'
+home='Anor Londovercourt:u1:802-11-wireless:wlp1s0:activated'
+cafe='Cafe Wifi:u2:802-11-wireless:wlp1s0:activated'
+# Mid-switch: the new Wi-Fi is listed as active but has no DNS yet
+cafe_activating='Cafe Wifi:u2:802-11-wireless:wlp1s0:activating'
+tun='road21:u3:wireguard:road21:activated'
 
 run() { # label expected iface action active-lines...
   local label=$1 want=$2 iface=$3 action=$4
@@ -63,5 +85,8 @@ run "Wi-Fi off" none wlp1s0 down "$lo"
 run "Wi-Fi off, tunnel lingering" none wlp1s0 down "$tun" "$lo"
 run "road21 own event" none road21 up "$cafe" "$lo"
 run "irrelevant action" none wlp1s0 dhcp4-change "$cafe" "$lo"
+# Bringing road21 up now would resolve its endpoint without DNS and leave
+# it dead; wait for the up event once the new Wi-Fi is activated
+run "mid-switch, new Wi-Fi activating" none wlp1s0 down "$cafe_activating" "$lo"
 
 [ "$fails" = 0 ]

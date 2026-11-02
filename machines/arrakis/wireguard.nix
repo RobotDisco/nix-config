@@ -39,9 +39,9 @@ let
                               location() {
                                 local nmoutput;
 
-                                nmoutput="$(nmcli --terse connection show --active)";
+                                nmoutput="$(nmcli -f name,type,state --terse connection show --active)" || { echo offline; return; }
 
-      			        if ! grep -q -v "loopback" <<<"$nmoutput"; then
+      			        if ! echo "$nmoutput" | grep -v "loopback" | grep -e ":activated$" >/dev/null; then
                                   echo offline
             	                elif grep -q "Anor Londovercourt" <<<"$nmoutput"; then
                         	    echo home
