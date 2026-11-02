@@ -7,8 +7,8 @@
 }:
 
 # Road-warrior WireGuard client for stargate (pfSense, tun_wg0).
-# Full tunnel; toggled by location since the endpoint is unreachable from
-# home (no NAT reflection). See
+# Full tunnel, on only away from home: at home it would just send all
+# traffic out and back through stargate. See
 # docs/superpowers/specs/2026-11-01-arrakis-wireguard-design.md
 let
   # NM dispatcher hook, called as `road21-toggle <interface> <action>`.

@@ -11,8 +11,11 @@ WireGuard tunnel on stargate (pfSense). At home, the tunnel is off.
 - Endpoint `robot-disco.net:51820` (EasyDNS DDNS, dynamic WAN IP)
 - ROAD21 rules: DNS to 192.168.21.1, TCP/UDP 443 to 192.168.50.99,
   block self, block RFC1918, pass internet
-- No NAT reflection: at home, the endpoint resolves to the WAN IP and
-  the handshake cannot complete
+- From inside the home network the handshake does complete: stargate
+  accepts WireGuard on its own WAN address (NAT reflection only matters
+  for port-forwards to internal hosts). Corrected 2026-11-01; the earlier
+  "no handshake from home" was the dispatcher bringing road21 up before
+  the new network had DNS
 
 ## Decisions
 
@@ -30,7 +33,7 @@ WireGuard tunnel on stargate (pfSense). At home, the tunnel is off.
 | Key handling | Private key is generated on arrakis and goes straight into `agenix -e`; it is never printed in a shared session | The tunnel's private key leaked once already today |
 | Server public key | Stored in the secret as `WG_REMOTE_PUBLIC_KEY`; the peer section is named `wireguard-peer.$WG_REMOTE_PUBLIC_KEY`, which `envsubst` fills in at runtime (it substitutes section headers too). Decided 2026-11-01, replacing plain text in nix-config | Keeps the repo from revealing which key goes with the home endpoint. Cost: an undefined variable becomes an empty string with no error, so a missing or misspelled key only shows up at runtime (`nmcli connection show road21`, handshake), not at eval or build |
 | Firewall | Keep strict reverse-path filtering (`checkReversePath` default `true`); exempt UDP source port 51820 from the `nixos-fw-rpfilter` chain via `extraCommands`/`extraStopCommands` (iptables backend). No fwmark pin. Decided 2026-11-01, replacing `"loose"` | NM marks only WireGuard's own outgoing packets. stargate's encrypted replies arrive on Wi-Fi unmarked, the reverse lookup routes them to `road21`, so strict drops them. The port exemption is narrower than `"loose"`, which relaxes every interface, and WireGuard discards unauthenticated packets anyway. No rule matches the mark value, so pinning it buys nothing |
-| Autoconnect | `autoconnect = false`; a NM dispatcher script brings it up away from home and down at home | Full tunnel at home cuts off the internet (no NAT reflection) |
+| Autoconnect | `autoconnect = false`; a NM dispatcher script brings it up away from home and down at home | At home the tunnel adds nothing and would send all traffic out and back through stargate. (Corrected 2026-11-01 from "cuts off the internet (no NAT reflection)", which turned out to be wrong) |
 | Watchdog | A root systemd timer every 30 s checks `road21` while it's up. Unhealthy = up more than 60 s with no handshake, or last handshake older than 180 s. First time: reconnect once (`nmcli --wait 0 connection up road21`; NM re-resolves `robot-disco.net` on activation). Still unhealthy after that: `nmcli --wait 0 connection down road21`; the dispatcher tries again on the next network change. Decided 2026-11-01 | Without it, a full tunnel that can't handshake (phone routing through home, UDP 51820 blocked, DDNS change) takes all internet with it until a manual `down`. The single reconnect follows a DDNS change; giving up restores plain internet |
 | Home detection | Owner's choice: SSID, or SSID + gateway MAC | SSID is spoofable; the gateway MAC is harder to fake |
 
