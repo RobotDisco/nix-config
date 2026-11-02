@@ -32,7 +32,8 @@ let
 
   road21Toggle = pkgs.writeShellApplication {
     name = "road21-toggle";
-    # route, arp, ipconfig and dig come from macOS via launchd's PATH
+    # route, arp, ifconfig, ipconfig and dig come from macOS via launchd's
+    # PATH
     runtimeInputs = with pkgs; [
       wireguard-tools
       wireguard-go
@@ -99,6 +100,9 @@ in
     ProgramArguments = [ (lib.getExe road21Toggle) ];
     StartInterval = 30;
     RunAtLoad = true;
+    # wireguard-go and wg-quick's route monitor stay in this job's process
+    # group, which launchd otherwise kills as soon as the toggle exits
+    AbandonProcessGroup = true;
     StandardOutPath = "/var/log/road21-toggle.log";
     StandardErrorPath = "/var/log/road21-toggle.log";
   };
