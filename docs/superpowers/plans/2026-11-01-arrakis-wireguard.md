@@ -249,3 +249,51 @@ git commit -m "feat(arrakis): toggle WireGuard by network location"
 
 - [ ] **Step 1: Confirm with the owner, then `just apply`**
 - [ ] **Step 2: Reboot, then repeat Task 3 Step 4's first two rows**
+
+---
+
+### Task 5: Watchdog for a road21 that can't handshake
+
+Spec: Watchdog row. Added 2026-11-01 after the live hotspot tests.
+
+**Files:**
+- Create: `machines/arrakis/road21-watchdog.sh`
+- Create: `machines/arrakis/tests/road21-watchdog-test.sh`
+- Modify: `machines/arrakis/wireguard.nix`
+
+**Interfaces:**
+- Consumes: NM connection `road21`; `wg show road21 latest-handshakes`
+  (`<peer key>\t<epoch>`, `0` = never)
+- Produces: `systemd.services.road21-watchdog` (oneshot, root) and
+  `systemd.timers.road21-watchdog` (`OnBootSec = "1min"`,
+  `OnUnitActiveSec = "30s"`). State in `$STATE_DIR` (default
+  `/run/road21-watchdog`): `up-since` (epoch), `retried` (flag)
+
+Behaviour (one run): `road21` not active → clear state, exit. No
+`up-since` → write now, exit. Healthy (handshake within 180 s) → clear
+`retried`, exit. No handshake and up ≤ 60 s → exit. Otherwise unhealthy:
+no `retried` → set it, reset `up-since`, `nmcli --wait 0 connection up
+road21` (reconnect); `retried` set → `nmcli --wait 0 connection down
+road21`, clear state. Log one line per action.
+
+- [ ] **Step 1: Write the failing desk test** (fakes for `nmcli`, `wg`,
+  `date`; `STATE_DIR` in a temp dir; `bash -euo pipefail`):
+
+| Case | Setup | Expected action |
+|---|---|---|
+| not active | road21 not in active list, stale state present | none; state cleared |
+| first sight | active, no state | none; `up-since` written |
+| starting | active, up 30 s, handshake 0 | none |
+| healthy | handshake 10 s ago, `retried` set | none; `retried` cleared |
+| never handshook | up 90 s, handshake 0 | `nmcli --wait 0 connection up road21`; `retried` set |
+| still nothing after retry | up 90 s, handshake 0, `retried` | `nmcli --wait 0 connection down road21`; state cleared |
+| went stale | handshake 300 s ago | reconnect (`up`) |
+| stale after retry | handshake 300 s ago, `retried` | `down` |
+
+- [ ] **Step 2: Run it** — `nix shell nixpkgs#gawk -c bash machines/arrakis/tests/road21-watchdog-test.sh` → FAIL (script missing)
+- [ ] **Step 3: Implement `road21-watchdog.sh`**; constants `START_GRACE=60`, `STALE_AFTER=180`
+- [ ] **Step 4: Run test + shellcheck** → 8/8 PASS, silent
+- [ ] **Step 5: Wire service + timer** (`writeShellApplication`, `runtimeInputs` networkmanager, wireguard-tools, gawk, coreutils). Check:
+  `nix eval .#nixosConfigurations.arrakis.config.systemd.timers.road21-watchdog.timerConfig.OnUnitActiveSec` → `"30s"`
+- [ ] **Step 6 (owner): `just test-switch`, then live** — on the hotspot *with the phone on home Wi-Fi* (endpoint unreachable): within ~3 min the journal (`journalctl -u road21-watchdog`) shows one reconnect, then `down`, and internet works. With the phone on cellular: no watchdog actions.
+- [ ] **Step 7: Commit**

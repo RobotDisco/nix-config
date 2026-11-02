@@ -31,6 +31,7 @@ WireGuard tunnel on stargate (pfSense). At home, the tunnel is off.
 | Server public key | Stored in the secret as `WG_REMOTE_PUBLIC_KEY`; the peer section is named `wireguard-peer.$WG_REMOTE_PUBLIC_KEY`, which `envsubst` fills in at runtime (it substitutes section headers too). Decided 2026-11-01, replacing plain text in nix-config | Keeps the repo from revealing which key goes with the home endpoint. Cost: an undefined variable becomes an empty string with no error, so a missing or misspelled key only shows up at runtime (`nmcli connection show road21`, handshake), not at eval or build |
 | Firewall | Keep strict reverse-path filtering (`checkReversePath` default `true`); exempt UDP source port 51820 from the `nixos-fw-rpfilter` chain via `extraCommands`/`extraStopCommands` (iptables backend). No fwmark pin. Decided 2026-11-01, replacing `"loose"` | NM marks only WireGuard's own outgoing packets. stargate's encrypted replies arrive on Wi-Fi unmarked, the reverse lookup routes them to `road21`, so strict drops them. The port exemption is narrower than `"loose"`, which relaxes every interface, and WireGuard discards unauthenticated packets anyway. No rule matches the mark value, so pinning it buys nothing |
 | Autoconnect | `autoconnect = false`; a NM dispatcher script brings it up away from home and down at home | Full tunnel at home cuts off the internet (no NAT reflection) |
+| Watchdog | A root systemd timer every 30 s checks `road21` while it's up. Unhealthy = up more than 60 s with no handshake, or last handshake older than 180 s. First time: reconnect once (`nmcli --wait 0 connection up road21`; NM re-resolves `robot-disco.net` on activation). Still unhealthy after that: `nmcli --wait 0 connection down road21`; the dispatcher tries again on the next network change. Decided 2026-11-01 | Without it, a full tunnel that can't handshake (phone routing through home, UDP 51820 blocked, DDNS change) takes all internet with it until a manual `down`. The single reconnect follows a DDNS change; giving up restores plain internet |
 | Home detection | Owner's choice: SSID, or SSID + gateway MAC | SSID is spoofable; the gateway MAC is harder to fake |
 
 ## Non-goals
@@ -45,8 +46,9 @@ WireGuard tunnel on stargate (pfSense). At home, the tunnel is off.
 
 ## Follow-ups
 
-- DDNS endpoint changes: the plan's Task 2 Step 8 restarts `road21` by
-  hand. Find out whether NetworkManager re-resolves a WireGuard peer's
-  endpoint hostname on its own; if not, add a stale-handshake re-resolve
-  (as in `2026-11-01-fountain-wireguard-design.md`) to the dispatcher or a
-  timer.
+- DDNS endpoint changes: handled by the watchdog's single reconnect
+  (NM resolves the endpoint again on activation), so it no longer
+  matters whether NetworkManager re-resolves on its own.
+- Dispatcher calls must never wait on NetworkManager (`--wait 0`): a
+  blocking `nmcli connection up` from the dispatcher deadlocked with NM's
+  pre-up wait (found and fixed 2026-11-01).

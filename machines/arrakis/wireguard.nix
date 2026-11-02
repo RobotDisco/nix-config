@@ -65,6 +65,18 @@ let
                               esac
     '';
   };
+
+  # Brings road21 back down when it can't handshake (see road21-watchdog.sh)
+  road21Watchdog = pkgs.writeShellApplication {
+    name = "road21-watchdog";
+    runtimeInputs = with pkgs; [
+      networkmanager
+      wireguard-tools
+      gawk
+      coreutils
+    ];
+    text = builtins.readFile ./road21-watchdog.sh;
+  };
 in
 {
   # Env file with WG_LOCAL_PRIVATE_KEY, WG_REMOTE_PUBLIC_KEY and WG_PSK
@@ -129,6 +141,23 @@ in
       extraStopCommands = ''
         ip46tables -t mangle -D nixos-fw-rpfilter -p udp --sport 51820 -j RETURN || true
       '';
+    };
+  };
+
+  systemd = {
+    services.road21-watchdog = {
+      description = "Bring road21 down when it can't reach stargate";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = lib.getExe road21Watchdog;
+      };
+    };
+    timers.road21-watchdog = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnBootSec = "1min";
+        OnUnitActiveSec = "30s";
+      };
     };
   };
 }
