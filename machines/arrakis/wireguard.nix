@@ -56,10 +56,12 @@ let
                                 grep -qx road21 <<<"$(nmcli -t -f NAME connection show --active)"
                               }
 
-                              # Only act on a change, so re-runs never bounce the tunnel
+                              # Only act on a change, so re-runs never bounce the tunnel. --wait 0:
+                              # never wait on NetworkManager, which holds activations
+                              # until the dispatcher (busy running us) answers.
                               case $(location) in
-                                home) if active; then nmcli connection down road21; fi ;;
-                                away) if ! active; then nmcli connection up road21; fi ;;
+                                home) if active; then nmcli --wait 0 connection down road21; fi ;;
+                                away) if ! active; then nmcli --wait 0 connection up road21; fi ;;
                               esac
     '';
   };
