@@ -14,8 +14,9 @@
 
   networking = {
     hostName = "arrakis";
-    # Enable dynamic configuration of primary NIC
-    interfaces.wlp1s0.useDHCP = true;
+    # No interfaces.*.useDHCP: that starts dhcpcd alongside NetworkManager,
+    # which leases a second address and leaks the local DNS server into
+    # resolv.conf past road21's DNS. NetworkManager does DHCP itself.
   };
 
   # openssh is off here, so agenix can't derive this from its host keys.
