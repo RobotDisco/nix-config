@@ -74,7 +74,17 @@ reresolve() {
     log "$profile: stale handshake, no DHCP DNS server to ask"
     return
   fi
+  # An off-link DNS server (8.8.8.8, an ISP resolver) would be reached
+  # through road21-full's 0/1 + 128/1, i.e. the dead tunnel: route it via
+  # the real gateway for the lookup only
+  local via_gw=""
+  if [ "$(route -n get "$dns" 2>/dev/null | awk '/interface:/ { print $2 }')" = "$iface" ]; then
+    route -n add -host "$dns" "$gw" >/dev/null 2>&1 && via_gw=1
+  fi
   ip=$(dig +short @"$dns" "$ENDPOINT_HOST" A | grep -E '^[0-9.]+$' | tail -1 || true)
+  if [ -n "$via_gw" ]; then
+    route -n delete -host "$dns" >/dev/null 2>&1 || true
+  fi
   if [ -z "$ip" ]; then
     log "$profile: stale handshake, $ENDPOINT_HOST did not resolve"
     return

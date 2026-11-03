@@ -17,9 +17,11 @@ home=64:62:66:2f:7a:71
 mkdir "$tmp/bin"
 fake() { printf '#!/usr/bin/env bash\n%s\n' "$2" > "$tmp/bin/$1"; chmod +x "$tmp/bin/$1"; }
 fake route '
-if [ "$1 $2" = "-n get" ]; then
+if [ "$1 $2 $3" = "-n get default" ]; then
   [ -n "$GW" ] || { echo "route: writing to routing socket: not in table" >&2; exit 1; }
   printf "   route to: default\ndestination: default\n    gateway: %s\n  interface: %s\n" "$GW" "$IFC"
+elif [ "$1 $2" = "-n get" ]; then
+  printf "   route to: %s\n  interface: %s\n" "$3" "${DNS_IFACE:-$IFC}"
 else echo "route $*" >> "$LOG"; fi'
 fake arp '
 [ -n "$MAC" ] || { echo "$2 ($2) -- no entry"; exit 1; }
@@ -48,7 +50,7 @@ run() { # name expected [VAR=value...]
   : > "$tmp/log"
   local -A env=([GW]=192.168.1.1 [IFC]=en0 [MAC]=aa:bb:cc:dd:ee:ff [UP]=""
     [HANDSHAKE]=1000 [NOW]=1010 [DNS]=192.168.1.1 [DIG_IP]=203.0.113.7
-    [LIVE]=utun9)
+    [LIVE]=utun9 [DNS_IFACE]="")
   local kv
   for kv in "$@"; do env[${kv%%=*}]=${kv#*=}; done
   local p
@@ -56,7 +58,7 @@ run() { # name expected [VAR=value...]
   local rc=0
   env GW="${env[GW]}" IFC="${env[IFC]}" MAC="${env[MAC]}" \
     HANDSHAKE="${env[HANDSHAKE]}" NOW="${env[NOW]}" DNS="${env[DNS]}" \
-    DIG_IP="${env[DIG_IP]}" LIVE="${env[LIVE]}" \
+    DIG_IP="${env[DIG_IP]}" LIVE="${env[LIVE]}" DNS_IFACE="${env[DNS_IFACE]}" \
     LOG="$tmp/log" WG_RUN_DIR="$tmp/run" \
     PATH="$tmp/bin:$PATH" bash -euo pipefail "$script" > /dev/null 2>&1 || rc=$?
   local got
@@ -80,6 +82,12 @@ run "road21 stale" "wg set utun9 peer KEY endpoint 203.0.113.7:51820" \
 run "full stale" \
   "wg set utun9 peer KEY endpoint 203.0.113.7:51820;route -n add -host 203.0.113.7 10.0.0.1" \
   UP=road21-full NOW=1200 GW=10.0.0.1
+# An off-link DHCP DNS server (8.8.8.8, an ISP resolver) routes into the
+# dead tunnel under road21-full; it needs a host route via the real
+# gateway for the lookup, removed again afterwards
+run "full stale, off-link dns" \
+  "route -n add -host 8.8.8.8 10.0.0.1;route -n delete -host 8.8.8.8;wg set utun9 peer KEY endpoint 203.0.113.7:51820;route -n add -host 203.0.113.7 10.0.0.1" \
+  UP=road21-full NOW=1200 GW=10.0.0.1 DNS=8.8.8.8 DNS_IFACE=utun9
 run "no default route" "" GW=
 run "arp incomplete" "" "MAC=(incomplete)"
 run "arp no entry" "" MAC=
