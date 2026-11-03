@@ -87,8 +87,21 @@ and enter `WG_LOCAL_PRIVATE_KEY=` (contents of `/dev/shm/wg-arrakis.key`) and
 
 - [ ] **Step 5: Verify the secret's shape without revealing it**
 
-Run: `agenix -d wireguard-arrakis.age | cut -d= -f1`
-Expected: exactly `WG_LOCAL_PRIVATE_KEY` and `WG_PSK`, one per line.
+**Not** `agenix -d … | cut -d= -f1`: ragenix has no `-d`, and `cut` prints
+any line without `=` in full, which would show a key. In a real terminal
+(the YubiKey needs a PIN), with an `EDITOR` that prints only names and
+lengths, so the file is left unchanged:
+
+```sh
+cat > /dev/shm/shape.sh <<'SH'
+#!/bin/sh
+awk '{ if (index($0,"=")) print substr($0,1,index($0,"=")-1) " (value length " length($0)-index($0,"=") ")"; else print "<line without = : not shown>" } END { print NR " lines" }' "$1"
+SH
+chmod +x /dev/shm/shape.sh
+EDITOR=/dev/shm/shape.sh nix-shell --run 'agenix -i identities/personal.identity -e wireguard-arrakis.age'
+```
+Expected: `WG_LOCAL_PRIVATE_KEY`, `WG_REMOTE_PUBLIC_KEY` and `WG_PSK`, each
+`(value length 44)`, then `3 lines`.
 
 - [ ] **Step 6: Commit and push nix-secrets, then update the lock**
 
