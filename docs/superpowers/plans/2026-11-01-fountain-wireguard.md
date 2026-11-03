@@ -440,7 +440,14 @@ code and `tests/` are authoritative.
 - Removing the `/etc/hosts` block: set `darktowerNames = [ ]` and switch
   once before deleting the module (test `IP without names removes`).
 
-**Desk tests now:** hosts 7/7, toggle 18/18.
+**Later the same day**
+- Re-resolve skips the run when `wg show` fails or the peer looks wrong,
+  and does nothing (no `wg set`, no log line) when DNS still gives the
+  current endpoint, e.g. on a network that blocks WireGuard.
+- `/var/log/road21-toggle.log` is rotated by newsyslog
+  (`/etc/newsyslog.d/road21-toggle.conf`: 1 MB, keep 5, compressed).
+
+**Desk tests now:** hosts 7/7, toggle 22/22.
 
 **Still open:** the Task 5 Step 4 live matrix, including a network whose
 DHCP DNS server is off-link.

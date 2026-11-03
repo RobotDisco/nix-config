@@ -98,6 +98,13 @@ in
   '';
 
   # Location toggle and DDNS follow-up (see road21-toggle.sh)
+  # Rotate the toggle's log with macOS's newsyslog: at 1 MB, keep 5,
+  # bzip2-compressed (J)
+  environment.etc."newsyslog.d/road21-toggle.conf".text = ''
+    # logfilename                 mode count size(KB) when flags
+    /var/log/road21-toggle.log    644  5     1024     *    J
+  '';
+
   launchd.daemons.road21-toggle.serviceConfig = {
     ProgramArguments = [ (lib.getExe road21Toggle) ];
     StartInterval = 30;

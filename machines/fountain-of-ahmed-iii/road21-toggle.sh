@@ -100,6 +100,12 @@ reresolve() {
     return
   fi
 
+  # Same address as now (e.g. WireGuard blocked, not a DDNS change): nothing
+  # to repair, and nothing to log every 30 s
+  if [ "$(wg show "$iface" endpoints 2>/dev/null | awk '{ print $2 }')" = "$ip:$ENDPOINT_PORT" ]; then
+    return
+  fi
+
   log "$profile: stale handshake, endpoint now $ip"
   wg set "$iface" peer "$key" endpoint "$ip:$ENDPOINT_PORT"
   if [ "$profile" = road21-full ]; then

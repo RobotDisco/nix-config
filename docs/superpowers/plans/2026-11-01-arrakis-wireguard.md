@@ -342,11 +342,14 @@ testing changed several of them; the spec's Decisions table, the code and
   connection named "Anor Londovercourt" (SSID only).
 - Every `nmcli` change uses `--wait 0`: a blocking `nmcli connection up`
   from the dispatcher deadlocked with NetworkManager's pre-up wait.
-- Desk test: `machines/arrakis/tests/road21-toggle-test.sh`, run against
-  the built script (9/9).
+- The script lives in `machines/arrakis/road21-toggle.sh` (read with
+  `builtins.readFile`). Desk test: `machines/arrakis/tests/road21-toggle-test.sh`
+  runs the source directly, or the built script if given its path (9/9).
 
 **Added after the plan**
-- Task 5, the watchdog, with `AccuracySec = "1s"` (watchdog test 8/8).
+- Task 5, the watchdog, with `AccuracySec = "1s"`. Unreadable values
+  (`wg show` failing, a garbled handshake or state file) skip the run
+  rather than act (watchdog test 12/12).
 - Boot re-check: `NetworkManager-ensure-profiles` runs the toggle once
   after writing the profiles, in case Wi-Fi came up first (spec, Boot
   re-check row).

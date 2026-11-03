@@ -104,6 +104,10 @@ run "away, full interface gone" \
 run "no dhcp dns" "" UP=road21 NOW=1200 DNS=
 run "dig empty" "" UP=road21 NOW=1200 DIG_IP=
 # Unreadable values mean "skip this run", never "act"
+# Same address as now (e.g. WireGuard blocked, not a DDNS change):
+# nothing to repair, and nothing to log every 30 s
+run "road21 stale, endpoint unchanged" "" UP=road21 NOW=1200 CUR_EP=203.0.113.7:51820
+run "full stale, endpoint unchanged" "" UP=road21-full NOW=1200 GW=10.0.0.1 CUR_EP=203.0.113.7:51820
 run "wg show fails" "" UP=road21 NOW=1200 WG_FAIL=1
 run "garbled handshake" "" UP=road21 NOW=1200 HANDSHAKE=garbage
 
