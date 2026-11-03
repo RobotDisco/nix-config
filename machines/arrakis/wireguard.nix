@@ -145,6 +145,15 @@ in
   };
 
   systemd = {
+    # road21's profile is written after NetworkManager starts, possibly
+    # after Wi-Fi is already up, when the dispatcher's `up road21` found no
+    # such connection. Decide once more now that it exists; a synthetic
+    # "up" makes the script check where we are.
+    services.NetworkManager-ensure-profiles.serviceConfig.ExecStartPost = [
+      # "-": a failure here must not mark the profiles as failed
+      "-${lib.getExe road21Toggle} wlp1s0 up"
+    ];
+
     services.road21-watchdog = {
       description = "Bring road21 down when it can't reach stargate";
       serviceConfig = {
