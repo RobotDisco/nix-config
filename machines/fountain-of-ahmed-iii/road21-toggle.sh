@@ -61,8 +61,18 @@ done
 reresolve() {
   local profile=$1 iface key handshake dns ip
   iface=$(cat "$WG_RUN_DIR/$profile.name")
-  key=$(wg show "$iface" peers)
-  handshake=$(wg show "$iface" latest-handshakes | awk '{ print $2 }')
+  # Unreadable values mean "skip this run", never "act"
+  local handshakes
+  if ! key=$(wg show "$iface" peers 2>/dev/null) ||
+    ! handshakes=$(wg show "$iface" latest-handshakes 2>/dev/null); then
+    log "$profile: can't read the peer, skipping"
+    return
+  fi
+  handshake=$(awk '{ print $2 }' <<<"$handshakes")
+  if [ -z "$key" ] || ! [[ $handshake =~ ^[0-9]+$ ]]; then
+    log "$profile: unexpected peer state, skipping"
+    return
+  fi
   if [ $(($(date +%s) - handshake)) -le "$STALE_AFTER" ]; then
     return
   fi

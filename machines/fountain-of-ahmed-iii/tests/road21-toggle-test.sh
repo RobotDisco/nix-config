@@ -27,9 +27,11 @@ fake arp '
 [ -n "$MAC" ] || { echo "$2 ($2) -- no entry"; exit 1; }
 echo "? ($2) at $MAC on $IFC ifscope [ethernet]"'
 fake wg '
+[ "$1" != show ] || [ -z "$WG_FAIL" ] || exit 1
 case "$1 $3" in
   "show peers") echo KEY ;;
   "show latest-handshakes") printf "KEY\t%s\n" "$HANDSHAKE" ;;
+  "show endpoints") printf "KEY\t%s\n" "${CUR_EP:-(none)}" ;;
   *) echo "wg $*" >> "$LOG" ;;
 esac'
 fake wg-quick 'echo "wg-quick $*" >> "$LOG"'
@@ -50,7 +52,7 @@ run() { # name expected [VAR=value...]
   : > "$tmp/log"
   local -A env=([GW]=192.168.1.1 [IFC]=en0 [MAC]=aa:bb:cc:dd:ee:ff [UP]=""
     [HANDSHAKE]=1000 [NOW]=1010 [DNS]=192.168.1.1 [DIG_IP]=203.0.113.7
-    [LIVE]=utun9 [DNS_IFACE]="")
+    [LIVE]=utun9 [DNS_IFACE]="" [WG_FAIL]="" [CUR_EP]="")
   local kv
   for kv in "$@"; do env[${kv%%=*}]=${kv#*=}; done
   local p
@@ -59,6 +61,7 @@ run() { # name expected [VAR=value...]
   env GW="${env[GW]}" IFC="${env[IFC]}" MAC="${env[MAC]}" \
     HANDSHAKE="${env[HANDSHAKE]}" NOW="${env[NOW]}" DNS="${env[DNS]}" \
     DIG_IP="${env[DIG_IP]}" LIVE="${env[LIVE]}" DNS_IFACE="${env[DNS_IFACE]}" \
+    WG_FAIL="${env[WG_FAIL]}" CUR_EP="${env[CUR_EP]}" \
     LOG="$tmp/log" WG_RUN_DIR="$tmp/run" \
     PATH="$tmp/bin:$PATH" bash -euo pipefail "$script" > /dev/null 2>&1 || rc=$?
   local got
@@ -100,5 +103,8 @@ run "away, full interface gone" \
   "wg-quick down road21-full;wg-quick up road21" UP=road21-full LIVE=
 run "no dhcp dns" "" UP=road21 NOW=1200 DNS=
 run "dig empty" "" UP=road21 NOW=1200 DIG_IP=
+# Unreadable values mean "skip this run", never "act"
+run "wg show fails" "" UP=road21 NOW=1200 WG_FAIL=1
+run "garbled handshake" "" UP=road21 NOW=1200 HANDSHAKE=garbage
 
 [ "$fails" = 0 ]

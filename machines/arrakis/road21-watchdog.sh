@@ -21,21 +21,36 @@ if ! grep -qx road21 <<<"$(nmcli -t -f NAME connection show --active)"; then
   exit 0
 fi
 
+# Unreadable values mean "skip this run", never "act"
+is_number() { [[ $1 =~ ^[0-9]+$ ]]; }
+
 now=$(date +%s)
-if [ ! -e "$up_since" ]; then
+since=$(cat "$up_since" 2>/dev/null || true)
+if ! is_number "$since"; then
+  # First sight, or a garbled file: start counting from now
   echo "$now" > "$up_since"
   exit 0
 fi
 
-handshake=$(wg show road21 latest-handshakes | awk '{ print $2 }')
+if ! handshakes=$(wg show road21 latest-handshakes 2>/dev/null); then
+  log "can't read road21's handshake, skipping this run"
+  exit 0
+fi
+# No peer at all prints nothing: that's "never", which the checks below
+# treat like any other missing handshake
+handshake=$(awk '{ print $2 }' <<<"$handshakes")
 handshake=${handshake:-0}
+if ! is_number "$handshake"; then
+  log "unexpected handshake value, skipping this run"
+  exit 0
+fi
 
 if [ "$handshake" -gt 0 ] && [ $((now - handshake)) -le "$STALE_AFTER" ]; then
   rm -f "$retried"
   exit 0
 fi
 
-if [ "$handshake" -eq 0 ] && [ $((now - $(cat "$up_since"))) -le "$START_GRACE" ]; then
+if [ "$handshake" -eq 0 ] && [ $((now - since)) -le "$START_GRACE" ]; then
   exit 0
 fi
 

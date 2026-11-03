@@ -18,7 +18,7 @@ case "$*" in
   "-t -f NAME connection show --active") printf "lo\n"; [ "$ACTIVE" = yes ] && printf "road21\n"; exit 0 ;;
   *) echo "nmcli $*" >> "$LOG" ;;
 esac'
-fake wg 'printf "KEY\t%s\n" "$HANDSHAKE"'
+fake wg '[ -z "$WG_FAIL" ] || exit 1; printf "KEY\t%s\n" "$HANDSHAKE"'
 fake date 'echo "$NOW"'
 
 # run label expected-action expected-state [VAR=value...]
@@ -29,13 +29,13 @@ run() {
   local state=$tmp/state
   rm -rf "$state" && mkdir "$state"
   : > "$tmp/log"
-  local -A v=([ACTIVE]=yes [HANDSHAKE]=0 [NOW]=1000 [UP_SINCE]=- [RETRIED]=-)
+  local -A v=([ACTIVE]=yes [HANDSHAKE]=0 [NOW]=1000 [UP_SINCE]=- [RETRIED]=- [WG_FAIL]="")
   local kv
   for kv in "$@"; do v[${kv%%=*}]=${kv#*=}; done
   [ "${v[UP_SINCE]}" = - ] || echo "${v[UP_SINCE]}" > "$state/up-since"
   [ "${v[RETRIED]}" = - ] || touch "$state/retried"
   local rc=0
-  ACTIVE=${v[ACTIVE]} HANDSHAKE=${v[HANDSHAKE]} NOW=${v[NOW]} LOG=$tmp/log \
+  ACTIVE=${v[ACTIVE]} HANDSHAKE=${v[HANDSHAKE]} NOW=${v[NOW]} LOG=$tmp/log WG_FAIL=${v[WG_FAIL]} \
     STATE_DIR=$state PATH="$tmp/bin:$PATH" \
     bash -euo pipefail "$script" > /dev/null 2> "$tmp/err" || rc=$?
   local got got_state
@@ -61,5 +61,10 @@ run "never handshook" "$up" "1000 yes" UP_SINCE=910
 run "still nothing after retry" "$down" "- -" UP_SINCE=910 RETRIED=yes
 run "went stale" "$up" "1000 yes" UP_SINCE=100 HANDSHAKE=700
 run "stale after retry" "$down" "- -" UP_SINCE=100 HANDSHAKE=700 RETRIED=yes
+# Unreadable values mean "skip this run", never "act"
+run "wg show fails" none "910 -" UP_SINCE=910 WG_FAIL=1
+run "garbled handshake" none "910 -" UP_SINCE=910 HANDSHAKE=garbage
+run "empty up-since" none "1000 -" UP_SINCE=
+run "garbled up-since" none "1000 -" UP_SINCE=garbage
 
 [ "$fails" = 0 ]
