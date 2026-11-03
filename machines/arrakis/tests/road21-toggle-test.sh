@@ -2,13 +2,14 @@
 # Fake bodies are single-quoted on purpose: their $VARS expand when the
 # fake runs, not when it is written.
 # shellcheck disable=SC2016
-# Desk test for arrakis's road21 dispatcher script, run against the built
-# script with a fake nmcli:
+# Desk test for arrakis's road21 dispatcher script with a fake nmcli:
+#   bash machines/arrakis/tests/road21-toggle-test.sh
+# or against the built script (pinned PATH and all):
 #   bash machines/arrakis/tests/road21-toggle-test.sh "$(nix build --no-link --print-out-paths \
 #     .#nixosConfigurations.arrakis.config.system.build.toplevel)/etc/NetworkManager/dispatcher.d/03userscript0001"
 set -u
 
-built=$(readlink -f "$1")
+built=${1:+$(readlink -f "$1")}
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 fails=0
@@ -45,8 +46,18 @@ case "$*" in
 esac' | sed "s#AWK#$(command -v awk)#" > "$tmp/bin/nmcli"
 chmod +x "$tmp/bin/nmcli"
 
-# The built script pins PATH; put the fake first
-sed "s#^export PATH=\"#export PATH=\"$tmp/bin:#" "$built" > "$tmp/toggle.sh"
+if [ -n "$built" ]; then
+  # The built script pins PATH and sets the shell options; put the fake first
+  sed "s#^export PATH=\"#export PATH=\"$tmp/bin:#" "$built" > "$tmp/toggle.sh"
+else
+  # The source file, with what writeShellApplication adds: shell options
+  # and a PATH of the fake plus grep (runtimeInputs)
+  {
+    echo 'set -o errexit -o nounset -o pipefail'
+    echo "export PATH=\"$tmp/bin:$(dirname "$(command -v grep)")\""
+    cat "$(dirname "$0")/../road21-toggle.sh"
+  } > "$tmp/toggle.sh"
+fi
 
 lo='lo:u0:loopback:lo:activated'
 home='Anor Londovercourt:u1:802-11-wireless:wlp1s0:activated'
