@@ -310,3 +310,56 @@ road21`, clear state. Log one line per action.
   `nix eval .#nixosConfigurations.arrakis.config.systemd.timers.road21-watchdog.timerConfig.OnUnitActiveSec` → `"30s"`
 - [ ] **Step 6 (owner): `just test-switch`, then live** — on the hotspot *with the phone on home Wi-Fi* (endpoint unreachable): within ~3 min the journal (`journalctl -u road21-watchdog`) shows one reconnect, then `down`, and internet works. With the phone on cellular: no watchdog actions.
 - [ ] **Step 7: Commit**
+
+---
+
+## Addendum (2026-11-02): where the code ended up
+
+The tasks above are the plan as executed, kept for the record. Live
+testing changed several of them; the spec's Decisions table, the code and
+`machines/arrakis/tests/` are authoritative.
+
+**Secret and keys (Task 1)**
+- The secret holds three variables: `WG_LOCAL_PRIVATE_KEY`,
+  `WG_REMOTE_PUBLIC_KEY` (stargate's key, in the peer section name) and
+  `WG_PSK`. Check its shape with the names-and-lengths `EDITOR` script
+  (Step 5), never `cut`.
+- `age.identityPaths` is set explicitly in `machines/arrakis/default.nix`:
+  openssh is off, so agenix can't find the host key on its own.
+
+**Profile and firewall (Task 2)**
+- The connection and interface are called `road21` (pfSense's ROAD21),
+  not `wg-home`.
+- Strict reverse-path filtering stays on, with UDP source port 51820
+  exempted, instead of `checkReversePath = "loose"`.
+- `interfaces.wlp1s0.useDHCP` is gone: it ran dhcpcd alongside
+  NetworkManager and leaked the local DNS server into `resolv.conf`.
+
+**Dispatcher (Task 3)**
+- Built with `writeShellApplication` (pinned `PATH`, shellcheck at build
+  time). `location()` (owner's) counts only fully `activated`
+  connections and treats an `nmcli` failure as offline. Home = an active
+  connection named "Anor Londovercourt" (SSID only).
+- Every `nmcli` change uses `--wait 0`: a blocking `nmcli connection up`
+  from the dispatcher deadlocked with NetworkManager's pre-up wait.
+- Desk test: `machines/arrakis/tests/road21-toggle-test.sh`, run against
+  the built script (9/9).
+
+**Added after the plan**
+- Task 5, the watchdog, with `AccuracySec = "1s"` (watchdog test 8/8).
+- Boot re-check: `NetworkManager-ensure-profiles` runs the toggle once
+  after writing the profiles, in case Wi-Fi came up first (spec, Boot
+  re-check row).
+
+**Corrected premise:** the handshake does work from inside the home
+network. The tunnel stays off at home because it adds nothing there, not
+because it would fail.
+
+**Live results (2026-11-01):** on a cellular hotspot, the tunnel, DNS and
+IPv6 behave as specified. Home↔away switching is clean; the setup survives
+a reboot; with UDP 51820 blocked, the watchdog reconnects once and then
+restores internet within about 2 minutes.
+
+**Still open:** an IPv6 check on a dual-stack network, Task 2 Step 8
+(reconnect after an endpoint change), the firewall counter, and a reboot
+while away from home (to exercise the boot re-check).

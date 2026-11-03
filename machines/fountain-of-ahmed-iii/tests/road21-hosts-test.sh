@@ -49,6 +49,15 @@ hosts "$f" "${names[@]}"
 grep -q '^# BEGIN road21' "$f" && hosts "$f" && cmp -s "$f" "$tmp/rm.orig"
 check "removes" $?
 
+# The documented removal path: an empty darktowerNames makes activation
+# pass only the IP, which removes the block
+f=$tmp/rm-ip-only
+printf '%s' "$base" > "$f"
+cp "$f" "$tmp/rm-ip-only.orig"
+hosts "$f" "${names[@]}"
+grep -q '^# BEGIN road21' "$f" && hosts "$f" 192.168.50.99 && cmp -s "$f" "$tmp/rm-ip-only.orig"
+check "IP without names removes" $?
+
 f=$tmp/nonl
 printf '127.0.0.1 localhost' > "$f"
 hosts "$f" "${names[@]}"

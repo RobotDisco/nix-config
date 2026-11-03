@@ -413,3 +413,34 @@ uninstall WireGuard.app. `scutil --nc list` no longer shows
 git add machines/fountain-of-ahmed-iii/default.nix
 nix develop -c git commit -m "chore(fountain): drop the WireGuard App Store app"
 ```
+
+---
+
+## Addendum (2026-11-02): where the code ended up
+
+The tasks above are the plan as executed; these are the changes made
+afterwards, from the owner's Mac testing and the final branch review. The
+code and `tests/` are authoritative.
+
+**Owner fixes from live testing**
+- `AbandonProcessGroup` on the `road21-toggle` daemon: launchd killed
+  wireguard-go (and with it the utun) when the job exited.
+- Dead-interface recovery: a profile whose `.name` file outlives its utun
+  is brought down and its `.name` removed, so it reads as down and comes
+  back up.
+- Home detection: only a real MAC counts as away. `(incomplete)` and the
+  `no` from an expired ARP entry (`-- no entry`) read as unknown (Task 4
+  behaviour step 2 said only "empty or `(incomplete)`").
+- `mac-app-utils` follows nixpkgs-unstable (SBCL heap mapping on macOS 27).
+
+**From the final review**
+- Re-resolve under `road21-full`: when the DHCP DNS server is off-link it
+  would be reached through the dead tunnel, so it gets a host route via
+  the real gateway for the lookup only (test `full stale, off-link dns`).
+- Removing the `/etc/hosts` block: set `darktowerNames = [ ]` and switch
+  once before deleting the module (test `IP without names removes`).
+
+**Desk tests now:** hosts 7/7, toggle 18/18.
+
+**Still open:** the Task 5 Step 4 live matrix, including a network whose
+DHCP DNS server is off-link.

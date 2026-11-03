@@ -89,7 +89,9 @@ in
   };
 
   # Keeps the darktower block in /etc/hosts; the rest of the file (IT or
-  # Jamf entries) is left alone
+  # Jamf entries) is left alone. To remove the block before deleting this
+  # module, set darktowerNames = [ ] and switch once: with no names the
+  # script removes it.
   system.activationScripts.postActivation.text = lib.mkAfter ''
     ${lib.getExe road21Hosts} /etc/hosts ${darktower} ${lib.concatStringsSep " " darktowerNames}
     dscacheutil -flushcache
