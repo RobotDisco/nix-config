@@ -25,3 +25,13 @@ Until the complexity of managing nix without flakes outweighs the pros, I will a
 :DATE: 2026-11-21
 :END:
 I think [[https://www.conventionalcommits.org/en/v1.0.0/#specification][Conventional Commits]] provide a message style format that I appreciate. Place the main description of the commit in the first line, use additional lines to bring up points of interest in the commit.
+
+* 0004 Use REUSE tool to enforce our chosen 0BSD license
+:PROPERTIES:
+:DATE: 2026-11-21
+:END:
+We can use a tool to enforce that we have properly licensed all our files; this removes toil and allows for fast feedback.
+GitHub doesn't detect licenses via REUSE, so I also keep the LICENSE in the root folder even though it is redundant.
+For this rebuild, we will capture when the file first carried a copyright notice as we introduce them into the branch. If I am copying over a file from my main branch, we will treat the file as a continuation and denote the copyright years accordingly.
+Whenever we modify files, we will update the copyright range to reflect the year it was last updated as well.
+Our main branch uses 0BSD to operate as close to a global public domain as legally viable; we continue with that decision in our rebuild.
