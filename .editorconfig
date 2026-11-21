@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: 2022-2026 Gaelan D'costa <gaelan@fastmail.ca>
+# SPDX-License-Identifier: 0BSD
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.nix]
+indent_size = 2
+indent_style = space
+max_line_length = 80
+
+[*.org]
+# org-mode requires this
+tab_width = 8

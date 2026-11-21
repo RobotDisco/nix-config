@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: 2021-2026 Gaelan D'costa <gaelan@fastmail.ca>
+# SPDX-License-Identifier: 0BSD
+
+# vim swap files
+*.swp
+
+# emacs swap files
+*~
+\#*#
+.#*
+
+# nix build artifacts
+/result
+
+# direnv environment
+/.direnv/
