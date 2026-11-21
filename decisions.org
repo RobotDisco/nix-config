@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: 2026 Gaelan D'costa <gaelan@fastmail.ca>
+# SPDX-License-Identifier: 0BSD
+#+TITLE: Decisions
+
+* 0001 Fundamental values of rebuild
+:PROPERTIES:
+:DATE: 2026-11-21
+:END:
+1. The goal is to learn
+2. Logic should be intuitively easy to navigate to via the file structure
+3. Repeated tasks should be automated
+4. Boilerplate should be replaced with abstractions only if the abstractions are repeatedly used and clearly improve the simplicity of the codebase
+5. Feedback is fast, and leaned on heavily to inform development
+
+* 0002 We start without flakes
+:PROPERTIES:
+:DATE: 2026-11-21
+:END:
+Flakes make things easier, enforce purity, and provide a nicer CLI.
+Flakes come at the cost of implicit behaviour, a disliked coupling with git, and the loss of composability. Importantly to me, they rob me of the chance of learning fundamental core nix functionality.
+Until the complexity of managing nix without flakes outweighs the pros, I will avoid them for now.
+
+* 0003 Use conventional commit for git messages
+:PROPERTIES:
+:DATE: 2026-11-21
+:END:
+I think [[https://www.conventionalcommits.org/en/v1.0.0/#specification][Conventional Commits]] provide a message style format that I appreciate. Place the main description of the commit in the first line, use additional lines to bring up points of interest in the commit.
