@@ -13,7 +13,7 @@
     # Used for backwards compatibility, please read the changelog before
     # changing.
     # $ darwin-rebuild changelog
-    system.stateVersion = 4;
+    system.stateVersion = 7;
 
     # Set up user and home-manager configuration.
     users.users."gaelan" = {
