@@ -68,6 +68,15 @@ in
 
       settings = cfg.settings // {
         enabledPlugins = commonPlugins // (cfg.settings.enabledPlugins or { });
+        extraKnownMarketplaces = {
+          # My own checkout, loaded in place so local edits apply without
+          # a push or version bump.
+          adhd-skills.source = {
+            source = "directory";
+            path = "${config.home.homeDirectory}/code/adhd-skills";
+          };
+        }
+        // (cfg.settings.extraKnownMarketplaces or { });
       };
     };
   };
