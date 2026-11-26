@@ -77,9 +77,9 @@ in
     home = {
       inherit username;
       homeDirectory = "/Users/${username}";
-      # The state version is required and should stay at the version you
-      # originally installed.
-      stateVersion = "22.11";
+      # Set when this laptop's home directory was created fresh. Read the
+      # "State Version Changes" release notes before changing it.
+      stateVersion = "26.05";
 
       # I sometimes want to run claude using my personal account. To do this,
       # I switch what claude considers the home directory.

@@ -182,6 +182,9 @@ in
           signing = {
             signByDefault = true;
             key = cfg.gpgKey;
+            # gpgKey is always an OpenPGP key. Being explicit also pins
+            # git to the Nix gpg binary instead of whatever is on $PATH.
+            format = "openpgp";
           };
         };
       })
